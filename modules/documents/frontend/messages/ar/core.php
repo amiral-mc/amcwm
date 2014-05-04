@@ -1,0 +1,26 @@
+<?php
+
+return array(
+    'Documents' => 'الوثائق',
+    'Documents Categories' => 'تصنيفات الوثائق',
+    'Document Search' => 'البحث في الوثائق',
+    'Please select a category for fast search' => 'اختر تصنيف لتسريع عملية البحث',
+    'Found rows {count}' => 'تم ايجاد عدد {count} وثيقة',
+    'No Result found' => 'لم يتم إضافة اي وثيقة',
+    'File Language: {lang}' => 'لغة الملف : {lang}',
+    'View all' => 'عرض الكل',
+    'Download' => 'تحميل',
+    'Search' => 'بحث',
+    'Categories' => 'التصنيفات',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+);

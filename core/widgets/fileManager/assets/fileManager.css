@@ -1,0 +1,73 @@
+.filemanager{
+    background: #C9E0ED; 
+    /*height: 400px;*/
+}
+.filemanager .panel{
+    background: #52727E;
+    float: left;
+    width:180px;
+    text-align: center;
+    padding-top:5px;
+    color: #C9E0ED;
+}
+.filemanager .manage-area{    
+}
+.filemanager .file-container{    
+    border: 1px solid #c0c0c0;
+    padding: 2px;
+    display: inline-block;
+    margin: 3px;
+}
+.filemanager .file-box{
+    padding: 0px;
+    cursor: pointer;
+    display: inline-block;
+}
+.filemanager .file-preview{
+    padding: 0px;
+    min-height: 180px;
+    width: 160px;
+    border: 1px solid #c0c0c0;        
+    overflow: auto;
+}
+
+.filemanager .file-preview img{ 
+    height: 150px;
+}
+.filemanager .file-container .file-delete{
+    padding: 5px;
+}
+.filemanager .file-box .file-box-internal,
+.filemanager .file-box .file-box-img{    
+    width:60px;
+    height: 40px;
+    overflow: hidden;
+}
+.filemanager .file-box .file-box-img img{
+    border: none;
+    width:60px;
+}
+.filemanager .manage-area .file-box a{
+    text-decoration: none;
+    color: #52727E;
+    font-weight: bold;
+}
+
+.filemanager .manage-area .tools{
+    background-color: #52727E;
+    padding: 2px 10px 2px 10px;
+    
+    margin-bottom: 10px;
+}
+.filemanager .manage-area .tools div{
+    display: inline-block;
+    margin: 0 5px 0 5px;
+    cursor: pointer;
+}  
+.filemanager .manage-area .tools div img{
+    vertical-align: middle;
+}
+
+.filemanager .manage-area .tools div span{
+    color:#ffffff;
+}

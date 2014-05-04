@@ -1,0 +1,113 @@
+.slidercontainer{
+    direction: ltr; 
+/*    border: 1px solid #191919; */
+    width: 636px;
+    overflow: hidden;
+    position: relative;
+}
+
+.slider1{
+    direction: ltr;
+    height: 270px;
+    overflow: hidden;
+    width: 636px;
+    margin: 0;
+    padding: 0;
+}
+
+.slider1 a{
+    outline: none;
+}
+
+.slider1 li{
+    height: 270px;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+
+.media_slider{
+    float: left;
+    width: 450px;
+    height: 270px;
+    background: #333333;
+}
+
+.title_slider{
+    float: left;
+    width: 186px;
+    height: 270px;
+    background: #000000;
+    text-align: right;
+    padding-top: 10px;
+}
+
+.title_wrapper{
+    padding: 10px;
+}
+
+.title_wrapper a{
+    color: #FFFFFF;
+}
+
+.pager_container{
+    width: 220px;
+}
+
+.slider_pager{
+    width: 150px;
+    margin: 0 auto;
+}
+
+.bx-auto {
+    height: 18px;
+    width: 18px;
+    position: absolute;
+    top: 250px; 
+    right: 80px;
+    cursor: pointer;
+    z-index: 100000;
+}
+
+.bx-auto a{
+    color: #000;
+}
+
+.bx-pager {
+    text-align: center;
+    width: 185px;
+    top: 225px; 
+    right: 0px;
+    position: absolute;
+    z-index: 1000;
+}
+.bx-pager a {
+    color: #838383;
+    font-size: 16px;
+    padding: 0 2px;
+    margin: 2px;
+    margin: 0 auto;
+    text-decoration: none;
+}
+.bx-pager .pager-active, .bx-pager a:hover {
+    color: #DE312A;
+    text-decoration: none;
+}
+
+
+.bx-next,
+.bx-prev{
+    width: 18px;
+    height: 18px;
+    top: 250px; 
+    right: 50px;
+    position: absolute;
+    text-indent: -99999px;
+    background: url(images/carousel_next_bg.gif) no-repeat;
+    z-index: 10000;
+}
+
+.bx-prev{
+    margin-right: 60px; 
+    background: url(images/carousel_previous_bg.gif) no-repeat;
+}

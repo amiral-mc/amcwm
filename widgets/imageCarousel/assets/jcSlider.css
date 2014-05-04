@@ -1,0 +1,161 @@
+/*﻿.jcSlider{
+    overflow: hidden;
+    position: relative;
+
+}
+
+.jcSlider a{
+    outline: none;
+}
+
+.jcSlider .detail a{
+    color: #FFCC42;
+    font-size: 12px;
+}
+
+.jcSlider .detail h3{
+    color: #FFCC42;
+    margin-top: 2px;
+    font-size: 17px;
+}
+
+.jcSlider .detail{
+    width: 200px;
+    font-size: 15px;
+    float: right;
+    color: #FFF;
+    margin: 5px;
+    margin-right: 8px;
+    line-height:1.3em;
+}
+
+.jcSlider .item{
+        width: 415px;
+        float: right;
+    position: relative;
+    overflow: hidden;
+}
+
+.jcSlider .item img{
+    float: left;
+}
+
+.jcSlider .controllers{
+    position: absolute;
+}
+
+.jcSlider .controllers a{
+    background: url("images/slider_bullet_notactive.png") no-repeat scroll 0 0 transparent;
+    display: block;
+    float: right;
+    font-size: 0;
+    height: 11px;
+    margin: 2px;
+    width: 11px;
+}
+
+.jcSlider .controllers a.isActive{
+    background: url("images/slider_bullet_active.png") no-repeat scroll 0 0 transparent;
+}
+
+.jcSlider .controllers{
+    direction: ltr;
+}
+
+.jcSlider .controllers #startStop{
+    float: right;
+    width: 19px;
+    height: 15px;
+    margin-top: -1px;
+}
+
+.jcSliderStart{
+    background: url("images/slider_play.png") no-repeat !important;
+}
+
+.jcSliderStop{
+    background: url("images/slider_pause.png") no-repeat !important;
+}
+
+
+.jcSliderPlayBtn{
+    background: url("images/video-play.png") no-repeat;
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    top: 200px;
+    right: 20px;
+    cursor: pointer;
+}
+
+
+.jcSlider .carousel-prev { 
+        position:absolute;
+        top:40px;
+        z-index:3;
+        cursor:pointer; 
+        left:5px; 
+}
+
+.jcSlider .carousel-next { 
+        position:absolute;
+        top:40px;
+        z-index:3;
+        cursor:pointer; 
+        right:5px; 
+}*/
+
+/****************************************/
+.jcSlider{
+    overflow: hidden;
+    position: relative;
+    margin:8px auto;
+}
+
+.jcSliderInner{
+    overflow: hidden;
+    margin:0px auto;
+}
+
+.jcSlider a{
+    outline: none;
+}
+
+.jcSlider .carousel-list li { 
+    margin:0px;
+    /*width:79px;  img width is 75 px from flickr + a.border-left (1) + a.border-right(1) + 
+                   img.border-left (1) + img.border-right (1)*/
+    /*height:93px;  image + row of text (87) + border-top (1) + border-bottom(1) + margin-bottom(4) */
+    /*	margin-left: auto;*/ /* for testing IE auto issue */
+}
+
+.jcSlider .carousel-list li a { 
+    display:block;
+    border:1px solid #e2edfa;
+    outline:none;
+}
+
+.jcSlider .carousel-list li a:hover { 
+    border: 1px solid #aaaaaa; 
+}
+
+.jcSlider .carousel-list li img { 
+    border:1px solid #999;
+    display:block; 
+}
+
+.jcSlider .carousel-prev { 
+    position:absolute;
+    top:40px;
+    z-index:3;
+    cursor:pointer; 
+    left:5px; 
+}
+
+.jcSlider .carousel-next { 
+    position:absolute;
+    top:40px;
+    z-index:3;
+    cursor:pointer; 
+    right:5px; 
+}

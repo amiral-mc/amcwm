@@ -1,0 +1,115 @@
+/* JS-created definition list */
+.dropdownSelect {
+    /*position: absolute;*/
+    top: 13px;
+    right: 0;
+    width: 150px;
+}
+
+/* rought form styles for when JS is disabled */
+
+.dropdownSelect form {
+    width: 158px;
+    padding: 0;
+}
+
+.dropdownSelect select,
+.dropdownSelect input {
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
+
+
+.dropdown dd { position: relative; }
+
+.dropdown a {
+    text-decoration: none;
+    outline: 0;
+    font: 11px Tahoma, Arial, Helvetica, sans-serif;
+    display: block;
+    width: 115px;
+    overflow: hidden;
+}
+
+.dropdown dt a {
+    background: #F0F0F0;
+    border: 1px solid #CFCFCF;
+    padding: 3px 5px 4px 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    color: #8B8B8B;	
+}
+
+.dropdown dt a.active {
+    background: #C23F1B;
+    -webkit-border-bottom-left-radius: 0;
+    -webkit-border-bottom-right-radius: 0;
+    -moz-border-radius-bottomleft: 0;
+    -moz-border-radius-bottomright: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 1px dotted #CFCFCF;
+    -moz-box-shadow: 0 3px 7px rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 3px 7px rgba(0,0,0,.5);
+    box-shadow: 0 3px 7px rgba(0,0,0,.5);
+    color: #fff;
+}
+
+.dropdown dd{
+    margin-right: 1px;
+}
+
+.dropdown dd ul {
+    background: #097909;
+    border: 1px solid #676768;
+    color: #C5C0B0;
+    display: none;
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    /*left: 0;*/
+    padding: 2px 0 5px 0;
+    list-style: none;
+    border-top: none;
+    margin: 0;
+    -webkit-border-bottom-right-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    -moz-box-shadow: 0 3px 7px rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 3px 7px rgba(0,0,0,.5);
+    box-shadow: 0 3px 7px rgba(0,0,0,.5);
+}
+
+.dropdown dd ul li a {
+    padding: 2px 0px 2px 8px;
+}
+
+.dropdown dt a img,
+.dropdown dd ul li a img{
+    float: left;
+    width: 16px;
+    height: 11px;
+    margin: 2px 6px 0 0;
+    cursor: pointer;        
+}
+
+.dropdown dd ul li a em,
+.dropdown dt a em {
+    font-style: normal;
+    /*float: left;*/
+    width: 85px;
+    cursor: pointer;
+}
+
+.dropdown dd ul li a em {
+    color: #dbc3b5;
+}
+
+.dropdown dd ul li a:hover { background-color: rgba(255,255,255,.1); }
+.dropdown dd ul li a:hover em { color: #fff; }

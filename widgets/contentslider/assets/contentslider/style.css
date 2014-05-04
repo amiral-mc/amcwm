@@ -1,0 +1,73 @@
+
+/* Ticker Styling */
+.slider-title{
+    color: #CC0000;
+    font-size:1.1em;
+}
+.slider-controls {
+    padding:0;
+    margin-top: 3px;
+    list-style-type: none;
+    width:66px;
+}
+.slider-controls li {
+    padding: 0px;
+    margin-left: 2px;	
+    cursor: pointer;
+    height: 16px;
+    width: 16px;
+    float:left;
+}
+.slider-controls li.play-pause {
+    background-image: url('images/controls.png');
+    background-position: 32px 16px;
+}
+.slider-controls li.play-start {
+    background-image: url('images/controls.png');	
+    background-position: 48px 16px;
+}
+.slider-controls li.play-pause.over {
+    background-position: 32px 32px;
+}
+.slider-controls li.play-pause.down {
+    background-position: 32px 0px;
+}
+.slider-controls li.play-pause.paused {
+    background-image: url('images/controls.png');	
+    background-position: 48px 16px;
+}
+.slider-controls li.play-pause.paused.over {
+    background-position: 48px 32px;
+}
+.slider-controls li.play-pause.paused.down {
+    background-position: 48px 0px;
+}
+.slider-controls li.prev {
+    background-image: url('images/controls.png');
+    background-position: 0px 16px;		
+}
+.slider-controls li.prev.over {
+    background-position: 0px 32px;		
+}
+.slider-controls li.prev.down {
+    background-position: 0px 0px;		
+}
+.slider-controls li.next {
+    background-image: url('images/controls.png');	
+    background-position: 16px 16px;	
+}
+.slider-controls li.next.over {
+    background-position: 16px 32px;	
+}
+.slider-controls li.next.down {	
+    background-position: 16px 0px;	
+}
+/*.left .slider-controls {
+    float: left;
+    padding-left: 6px;
+}
+.right .slider-controls{
+    float: right;
+    padding-right: 6px;
+}*/
+

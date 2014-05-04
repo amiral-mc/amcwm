@@ -1,0 +1,287 @@
+
+* {
+    outline: none;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #4f5e67;
+    font-family: Tahoma , Arial, Verdana, sans-serif;
+    font-size: 11px;
+    color: #5f5f5f;
+}
+
+#wrapper {
+    height: 100%;
+    width:100%;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+#login_wrapper {
+    background:url(../../images/login_wrapper_bg.gif) repeat-x;
+    height: 396px;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    margin-top: -198px;
+}
+
+#login_wrapper form {
+    margin: 0;
+    padding: 0;
+    width: 336px;
+    margin: 0 auto;
+}
+
+#login_wrapper fieldset {
+    margin: 0;
+    padding: 80px 0 0;
+    border: 0;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+
+#logo {
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 336px;
+    height: 119px;
+}
+#logo a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    text-indent: -3000px;
+    background:url(../../images/logo.gif) no-repeat;
+    text-decoration:none;
+}
+
+.form {
+    width: 336px;
+    min-height: 117px;
+    background:url(../../images/form_bg.gif) no-repeat;
+
+}
+
+
+.form_inner {
+    width: 312px;
+    margin: 0 0 0 23px;
+    vertical-align: middle;
+    position: relative;
+    top: 0;
+    left: 0;	
+}
+
+.form label {
+    padding: 8px 4px 0px 0px;
+    font-weight: 600;
+    font-size: 11.33px;
+    margin-bottom:2px;
+    color : #5D676D;
+
+}
+
+.form label.inline {
+    width: auto;
+    margin: 0 0 0 86px;
+    padding: 6px 0 0;
+}
+
+.form label strong {
+    float: left;
+    white-space: nowrap;
+    color: #3a3a3a;
+    line-height: 19px;
+    font-size: 12px;
+    padding: 0px 0px 0px 4px;
+}
+
+input.checkbox {
+    vertical-align: middle;
+}
+
+.form_menu {
+    width: 193px;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 60px;
+    padding: 5px;
+}
+
+.form_menu li {
+    float: right;
+    list-style: none;
+}
+
+
+.form_menu a:link,
+.form_menu a:visited,
+.form_menu a:active
+{
+    display: block;
+    line-height: 16px;
+    color: #708592;
+    text-decoration: none;
+    float: left;
+    padding-right:5px;
+}
+
+.form_menu a:hover {
+    text-decoration: underline;
+}
+
+.form_menu a span {
+    display: block;
+    background:url(../../images/lk_left.gif) no-repeat;
+    float: left;
+}
+
+.form_menu a span span {
+    display: block;
+    background:url(../../images/lk_right.gif) no-repeat right top;
+    padding: 0 10px;
+    float: left;
+    cursor: pointer;
+
+}
+
+.top_error {
+    position: absolute;
+    top: 49px;
+    left: 50%;
+    margin-left: -164px;
+    height: 26px;
+    line-height: 26px;
+    background:url(../../images/error_bg.gif) no-repeat;
+    width: 328px;
+    color: #96a3a9;
+    text-align:right;
+    font-family: Tahoma , Arial, Verdana, sans-serif;
+    font-size: 11px;
+
+}
+
+.error_inner {
+    padding: 0px 24px 0px 0px;
+    background: url(../../images/error_ico.gif) no-repeat 307px center;
+}
+
+.top_error strong {
+    color: #f1b500;
+    font-size: 11.33px;
+    padding: 0 0px 0 0;
+}
+
+.error span {
+    padding: 0 0 0 0px;
+}
+
+
+input[type="submit"] {
+    background-color: #DB6600;
+    background-image: url("../../images/button_bg.jpg");
+    border: 1px solid #DB6600;
+    color: #FFFFFF;
+    padding: 1px 5px;
+    font-family: Tahoma , Arial, Verdana, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+
+}
+
+input[type="submit"]:hover {
+    background-color: #000000;
+    background-image: url("../../images/button_bg_over.jpg");
+    border: 1px solid #000000;
+    font-family: Tahoma , Arial, Verdana, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+}
+div.row{
+    padding-top: 2px;
+    padding-right: 25px;
+}
+div.form input[type="text"],
+div.form input[type="password"]{
+    background-image:url(../../images/txtbox_bg.jpg);
+    background-repeat:repeat-x;
+    border:1px solid #BBDBE8;
+    color:#333333;
+    padding:3px;
+    font-family: Tahoma, Arial, Verdana, sans-serif;
+    font-size: 11.33px;
+    width:260px;
+}
+div.form a,
+div.form a:active,
+div.form a:link,
+div.form a:visited{
+    color:#333333;
+    font-family: Tahoma, Arial, Verdana, sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+}
+div.form a:hover{    
+    text-decoration: underline;
+}
+div.form .hint
+{
+    margin: 0;
+    padding: 0;
+    color: #999;
+}
+
+div.form .errorMessage
+{
+    color: red;
+    font-size: 12px;
+    text-align: center;
+}
+div.form div.error label,
+div.form label.error,
+div.form span.error
+{
+    color: #C00;
+}
+
+div.form div.error input[type="text"],
+div.form div.error textarea,
+div.form div.error select,
+div.form input.error,
+div.form textarea.error,
+div.form select.error
+{
+    background: #FEE;
+    border-color: #C00;
+}
+
+div.form div.success input[type="text"],
+div.form div.success textarea,
+div.form div.success select,
+div.form input.success,
+div.form textarea.success,
+div.form select.success
+{
+    background: #E6EFC2;
+    border-color: #C6D880;
+}
+div.form span.required{
+    color: red;
+}
+div.form .buttons{
+    text-align: center;
+}

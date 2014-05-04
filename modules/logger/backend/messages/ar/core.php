@@ -1,0 +1,27 @@
+<?php
+
+return array(
+    'Action' => 'الحدث',
+    'Username' => 'اسم المستخدم',
+    'IP' => 'رقم IP',
+    'Refere Name' => 'مكان الحدث',
+    'Refere Title' => 'العنوان',
+    'USER_LOGGED' => 'تسجيل الدخول',
+    'ADD_RECORD' => 'اضافة جديد',
+    'EDIT_RECORD' => 'تعديل بند',
+    'DELETE_RECORD' => 'حذف بند',
+    'PUBLISH_RECORD' => 'نشر بند',
+    'Logger' => 'سجل احداث النظام',
+    'View system logs' => 'عرض الاحداث التي تمت علي النظام',
+    'Details' => 'التفاصيل',
+    'Please wait while generating the details' => 'جاري تجهيز التفاصيل ، يرجي الانتظار.',
+    'No details for this action' => 'لا توجد تفاصيل لهذا الحدث',
+    'Copy' => 'نسخ',
+    'Date' => 'التاريخ',
+    'Copy Content' => 'نسخ المحتوي',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+);

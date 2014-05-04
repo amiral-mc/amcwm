@@ -1,0 +1,95 @@
+﻿.jcSlider{
+    width: 635px;
+    height: 250px;
+    overflow: hidden;
+/*    padding: 5px;*/
+    background: #002345;
+    position: relative;
+
+}
+
+.jcSlider a{
+    outline: none;
+}
+
+.jcSlider .detail a{
+    color: #FFCC42;
+    font-size: 12px;
+}
+
+.jcSlider .detail h3{
+    color: #FFCC42;
+    margin-top: 2px;
+    font-size: 17px;
+}
+
+.jcSlider .detail{
+    width: 200px;
+    font-size: 15px;
+    float: right;
+    color: #FFF;
+    margin: 5px;
+    margin-right: 8px;
+    line-height:1.3em;
+}
+
+.jcSlider .item{
+    /*    width: 415px;*/
+    /*    float: right;*/
+    position: relative;
+    overflow: hidden;
+}
+
+.jcSlider .item img{
+    float: left;
+}
+
+.jcSlider .controllers{
+    position: absolute;
+    top: 220px;
+    right: 20px;
+}
+
+.jcSlider .controllers a{
+    background: url("images/slider_bullet_notactive.png") no-repeat scroll 0 0 transparent;
+    display: block;
+    float: right;
+    font-size: 0;
+    height: 11px;
+    margin: 2px;
+    width: 11px;
+}
+
+.jcSlider .controllers a.isActive{
+    background: url("images/slider_bullet_active.png") no-repeat scroll 0 0 transparent;
+}
+
+.jcSlider .controllers{
+    direction: ltr;
+}
+
+.jcSlider .controllers #startStop{
+    float: right;
+    width: 19px;
+    height: 15px;
+    margin-top: -1px;
+}
+
+.jcSliderStart{
+    background: url("images/slider_play.png") no-repeat !important;
+}
+
+.jcSliderStop{
+    background: url("images/slider_pause.png") no-repeat !important;
+}
+
+
+.jcSliderPlayBtn{
+    background: url("images/video-play.png") no-repeat;
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    top: 200px;
+    right: 20px;
+    cursor: pointer;
+}
