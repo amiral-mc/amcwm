@@ -28,7 +28,7 @@ class AmcGalleriesController extends MultimediaController {
      * @param GalleriesTranslation $contentModel
      * @access protected
      */
-    protected function save(GalleriesTranslation $contentModel) {
+    protected function save(ChildTranslatedActiveRecord $contentModel) {
         if (isset($_POST['Galleries']) && isset($_POST["GalleriesTranslation"])) {
             $model = $contentModel->getParentContent();
             if (isset($_POST["GalleriesTranslation"]["tags"]) && is_array($_POST["GalleriesTranslation"]["tags"])) {

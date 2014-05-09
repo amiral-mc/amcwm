@@ -17,7 +17,7 @@ class Html {
      * @param string $string
      * @return string escape string
      */
-    function escapeString($string) {
+    public static function escapeString($string) {
 //    $return = '';
 //    for($i = 0; $i < strlen($string); ++$i) {
 //        $char = $string[$i];
@@ -77,7 +77,7 @@ class Html {
                     }
                 }
                 $url = array($linkUrl . $urlTitle . $bookmark);
-            } else {
+            } else if (!is_array($url)) {
                 $linkUrl = $url . '/lang=' . Controller::getCurrentLanguage();
             }
         } else if (!is_array($url) && strpos($url, '?') === false) {
