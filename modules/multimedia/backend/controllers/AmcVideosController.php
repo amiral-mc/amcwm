@@ -72,7 +72,7 @@ class AmcVideosController extends AmcGalleriesController {
      * @param VideosTranslation $contentModel
      * @access protected
      */
-    protected function save(VideosTranslation $contentModel) {
+    protected function save(ChildTranslatedActiveRecord $contentModel) {
 
         if (Yii::app()->request->isPostRequest) {
             if (isset($_POST['Videos']) && isset($_POST["VideosTranslation"])) {
