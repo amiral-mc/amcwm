@@ -21,56 +21,64 @@ Yii::import('zii.widgets.jui.CJuiWidget');
 /**
  * Base class.
  */
-class Jcrop extends CJuiWidget
-{
-	/**
-	 * @var string URL of the picture to crop.
-	 */
-	public $url;
-        
-        public $sizesInfo = array();
-	/**
-	 * @var type Alternate text for the full size image image.
-	 */
-	public $alt;
-	/**
-	 * @var array to set buttons options
-	 */
-	public $buttons = array();
-	/**
-	 * @var string URL for the AJAX request
-	 */
-	public $ajaxUrl;
-	/**
-	 * @var array Extra parameters to send with the AJAX request.
-	 */
-	public $ajaxParams = array();
-        
-        /*
-         * @var string HTML id where image will be wrapped inside
-         */
-        public $container;
-        
-        /*
-         * Hidden field that stores the JSON object
-         */
-        public $hiddenField;
-        
-        public $width;
-        
-        public $height;
+class Jcrop extends CJuiWidget {
 
-	public function init()
-	{
-		$assets = Yii::app()->getAssetManager()->publish(dirname(__FILE__) . '/assets');
+    /**
+     * @var string URL of the picture to crop.
+     */
+    public $url;
 
-		if (!isset($this->htmlOptions['id'])) {
-			$this->htmlOptions['id'] = $this->getId();
-		}
-		$this->id = $id = $this->htmlOptions['id'];
-                
-		//echo CHtml::image($this->url, $this->alt, $this->htmlOptions);
-                
+    /*
+     * The sizes of images in different view modes, e.g. list view, grid view, etc...
+     */
+    public $sizesInfo = array();
+
+    /**
+     * @var type Alternate text for the full size image image.
+     */
+    public $alt;
+
+    /**
+     * @var array to set buttons options
+     */
+    public $buttons = array();
+
+    /**
+     * @var string URL for the AJAX request
+     */
+    public $ajaxUrl;
+
+    /**
+     * @var array Extra parameters to send with the AJAX request.
+     */
+    public $ajaxParams = array();
+
+    /*
+     * @var string HTML id where image will be wrapped inside
+     */
+    public $container;
+
+    /*
+     * Hidden field storing cropping information in a JSON object
+     */
+    public $hiddenField;
+
+    /*
+     * 
+     */
+
+//    public $width;
+//    public $height;
+
+    public function init() {
+        $assets = Yii::app()->getAssetManager()->publish(dirname(__FILE__) . '/assets');
+
+        if (!isset($this->htmlOptions['id'])) {
+            $this->htmlOptions['id'] = $this->getId();
+        }
+        $this->id = $id = $this->htmlOptions['id'];
+
+        //echo CHtml::image($this->url, $this->alt, $this->htmlOptions);
 //		if (!empty($this->buttons)) {
 //			echo '<div class="jcrop-buttons">' .
 //			CHtml::button($this->buttons['start']['label'], $this->getHtmlOptions('start', 'inline'));
@@ -85,26 +93,26 @@ class Jcrop extends CJuiWidget
 //		echo CHtml::hiddenField($this->url . '_x2', 0, array('class' => 'coords'));
 //		echo CHtml::hiddenField($this->url . '_y2', 0, array('class' => 'coords'));
 
-                
-                
-                
-		$cls = Yii::app()->getClientScript();
-		$cls->registerScriptFile($assets . '/js/jquery.Jcrop.min.js');
-                $cls->registerScriptFile($assets . '/js/jquery.color.js');
-		$cls->registerScriptFile($assets . '/js/jcrop.js', CClientScript::POS_HEAD);
-		//$cls->registerCssFile($assets . '/css/jquery.Jcrop.css');
-		$cls->registerCssFile($assets . '/css/jquery.Jcrop.min.css');
-		
+
+
+
+        $cls = Yii::app()->getClientScript();
+        $cls->registerScriptFile($assets . '/js/jquery.Jcrop.min.js');
+        $cls->registerScriptFile($assets . '/js/jquery.color.js');
+        $cls->registerScriptFile($assets . '/js/jcrop.js', CClientScript::POS_HEAD);
+        //$cls->registerCssFile($assets . '/css/jquery.Jcrop.css');
+        $cls->registerCssFile($assets . '/css/jquery.Jcrop.min.css');
+
 
 //		$this->options['onChange'] = "js:function(c) {"
 //                        . "jcrop_getCoords(c,'{$id}'); "
 //                        . "jcrop_showThumb(c,'{$id}', '{$this->container}');"
 //                        . "}";
-		$this->options['ajaxUrl'] = $this->ajaxUrl;
-		$this->options['ajaxParams'] = $this->ajaxParams;
+        $this->options['ajaxUrl'] = $this->ajaxUrl;
+        $this->options['ajaxParams'] = $this->ajaxParams;
 
-		$options = CJavaScript::encode($this->options);
-                //print_r($this->options); exit;               
+        $options = CJavaScript::encode($this->options);
+        //print_r($this->options); exit;               
 //               echo '<div id="container_' . $this->id .'"></div>';
 //		if (!empty($this->buttons)) {
 //			$js = "jcrop_initWithButtons('{$id}', {$options}, '{$this->container}');";
@@ -114,53 +122,53 @@ class Jcrop extends CJuiWidget
 //		}
 //                
 //		$cls->registerScript(__CLASS__ . '#' . $id, $js, CClientScript::POS_READY);
-                
-	}
-        
-        public function run(){
-//            print_r($this->sizesInfo); exit;
-            $widthSizes = array();
-            $heightSizes = array();
-            $sizes = array();
-            $jsCrop = 'function(){$("#' . $this->hiddenField . '").val(JSON.stringify(imageCropper.data.currentCoords)); $("#' . $this->id . '").dialog("close");}';
-            $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
-                    'id' => $this->id,
-                    'options' => array(
-                        'title' => 'Image Cropper',
-                        'autoOpen' => false,
-                        'modal' => true,
-                        'buttons' => array(
-                            AmcWm::t("amcBack", 'Crop') => 'js:' . $jsCrop,
-                            AmcWm::t("amcBack", 'Cancel') => 'js:function(){ $(this).dialog("close");}',
-                        ),
+    }
+
+    public function run() {
+        $yesIcon = AmcWm::app()->baseUrl . '/images/yes.png';
+        $noIcon = AmcWm::app()->baseUrl . '/images/no.png';
+        $widthSizes = array();
+        $heightSizes = array();
+        $sizes = array();
+        $jsCrop = 'function(){$("#' . $this->hiddenField . '").val(JSON.stringify(imageCropper.data.currentCoords)); $("#' . $this->id . '").dialog("close");}';
+        $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
+            'id' => $this->id,
+            'options' => array(
+                'title' => 'Image Cropper',
+                'autoOpen' => false,
+                'modal' => true,
+                'buttons' => array(
+                    AmcWm::t("amcBack", 'Crop') => 'js:' . $jsCrop,
+                    AmcWm::t("amcBack", 'Cancel') => 'js:function(){ $(this).dialog("close");}',
+                ),
 //                        'width' => 'js:function(){return imgWidth;}',
 //                        'height' => 'js:function(){return imgHeight;}',
-                        'width' => 800,
-                        'height' => 600,
-                    ),
-                    'htmlOptions' => array('class' => 'dialogBoxs',)
-            ));
-            echo '<div id="container_' . $this->id .'"></div>';
-            echo '<div id="container_sizes' . $this->id .'" dir="ltr">';
-            foreach($this->sizesInfo as $key => $value){
-                $widthSizes[] = $value['info']['width'];
-                $heightSizes[] = $value['info']['height'];
-                $sizes[$key]['width'] = $value['info']['width'];
-                $sizes[$key]['height'] = $value['info']['height'];
-                echo '<div><img id="icon_size_' . $key .'" src="' . AmcWm::app()->baseUrl.'/images/no.png"><span class="icon_size_label">' . $value['info']['width'] . 'X' . $value['info']['height'] . '</span></div>';
-            }
-            echo '</div>';
-//            echo '<img id="icon_' . $this->id .'" src=""></div>';
-            // draw info bar
-            $this->endWidget('zii.widgets.jui.CJuiDialog');
-            
-            $this->options['onSelect'] = 'js:showCoords';
-            $this->options['setSelect'] = array(100, 100, 50, 50);
-            $this->options['aspectRatio'] = 16 / 9;
-            $this->options['minSize'] = array(min($widthSizes), min($heightSizes));
-            // add min , max from sizesInfo;
-            $options = CJavaScript::encode($this->options);
-            Yii::app()->clientScript->registerScript('cropping', "
+                'width' => 800,
+                'height' => 600,
+            ),
+            'htmlOptions' => array('class' => 'dialogBoxs',)
+        ));
+        echo '<div id="container_' . $this->id . '"></div>';
+        echo '<div id="container_sizes' . $this->id . '" dir="ltr">';
+        foreach ($this->sizesInfo as $key => $value) {
+            $widthSizes[] = $value['info']['width'];
+            $heightSizes[] = $value['info']['height'];
+            $sizes[$key]['width'] = $value['info']['width'];
+            $sizes[$key]['height'] = $value['info']['height'];
+            echo '<div><img id="icon_size_' . $key . '" src="' . $noIcon . '"><span class="icon_size_label">' . $value['info']['width'] . ' x ' . $value['info']['height'] . '</span></div>';
+        }
+        echo '</div>';
+        $this->endWidget('zii.widgets.jui.CJuiDialog');
+
+        $this->options['onSelect'] = 'js:showCoords';
+        $this->options['setSelect'] = array(100, 100, 50, 50);
+        $this->options['aspectRatio'] = 16 / 9;
+        $this->options['minSize'] = array(min($widthSizes), min($heightSizes));
+        $this->options['maxSize'] = array(max($widthSizes), max($heightSizes));
+//        $this->options['onRelease'] = 'js:sizesValidation';
+
+        $options = CJavaScript::encode($this->options);
+        Yii::app()->clientScript->registerScript('cropping', "
                 var imgWidth;
                 var imgHeight;
                 var imageCropper = {
@@ -195,17 +203,13 @@ class Jcrop extends CJuiWidget
                         console.log(imgHeight);
                         $('#{$this->id}').dialog('open');
                         $('#container_{$this->id}').append(myImg);                        
-                        //$('#{$this->container}').append(myImg);
+//                        $('#{$this->container}').append(myImg);
                         $(myImg).Jcrop({$options});
 
                     };
                     reader.readAsDataURL(file);
                 }
 
-                function sizesValidation(c){
-                    imageCropper.sizes;
-                    
-                }
                 function showCoords(c) {
                     imageCropper.data.currentCoords.x = c.x
                     imageCropper.data.currentCoords.x2 = c.x2
@@ -215,51 +219,67 @@ class Jcrop extends CJuiWidget
                     imageCropper.data.currentCoords.x2 *= imageCropper.data.ratio;
                     imageCropper.data.currentCoords.y *= imageCropper.data.ratio;
                     imageCropper.data.currentCoords.y2 *= imageCropper.data.ratio;
-                    //console.log(imageCropper.data.currentCoords);
-                    if($('#{$this->hiddenField}').length){
-                        //$('#{$this->hiddenField}').val(JSON.stringify(imageCropper.data));
-                        //console.log($('#{$this->hiddenField}').val());
+//                    console.log(imageCropper.data.currentCoords);
+//                    if($('#{$this->hiddenField}').length){
+//                        $('#{$this->hiddenField}').val(JSON.stringify(imageCropper.data));
+//                        console.log($('#{$this->hiddenField}').val());
+//                    }
+//                    console.log(imageCropper.data.currentCoords);
+                    var cropWidth = imageCropper.data.currentCoords.x2 - imageCropper.data.currentCoords.x;
+                    var cropHeight = imageCropper.data.currentCoords.y2 - imageCropper.data.currentCoords.y;
+                    var path = '';
+//                    console.log(cropWidth);
+//                    console.log(cropHeight);
+                    
+                    $.each(imageCropper.sizes, checkSize);
+
+                    function checkSize(key, value) {
+                        var savepath = path;
+                        path = path ? (path + '.' + key) : key;
+                        if(value.width < cropWidth){
+                          $('#icon_size_' + key).attr('src', '$yesIcon');
+                        }
+                        else{
+                          $('#icon_size_' + key).attr('src', '$noIcon');
+                        }
+                        if (value !== null && typeof value === 'object') {
+                            $.each(value, checkSize);
+                        }
+                        path = savepath;
                     }
-                   
                 }
             "
-                        , CClientScript::POS_READY);
-        }
-        
-        
+                , CClientScript::POS_READY);
+    }
 
-	/**
-	 * Get the HTML options for the buttons.
-	 * 
-	 * @param string $name button name
-	 * @return array HTML options 
-	 */
-	protected function getHtmlOptions($name, $display='none')
-	{
-		if (isset($this->buttons[$name]['htmlOptions'])) {
-			if (isset($this->buttons[$name]['htmlOptions']['id'])) {
-				throw new CException("id for jcrop '{$name}' button may not be set manually.");
-			}
-			$options = $this->buttons[$name]['htmlOptions'];
-
-			if (isset($options['class'])) {
-				$options['class'] = $options['class'] . " jcrop-{$name}";
-			}
-			else {
-				$options['class'] = "jcrop-{$name}";
-			}
-			if (isset($options['style'])) {
-				$options['style'] = $options['style'] . " display:{$display};";
-			}
-			else {
-				$options['style'] = "display:{$display};";
-			}
-			$options['id'] = $name . '_' . $this->id;
-		}
-		else {
-			$options = array('id' => $name . '_' . $this->id, 'style' => "display:{$display};", 'class' => "jcrop-{$name}");
-		}
-		return $options;
-	}
+    /**
+     * Get the HTML options for the buttons.
+     * 
+     * @param string $name button name
+     * @return array HTML options 
+     */
+//    protected function getHtmlOptions($name, $display = 'none') {
+//        if (isset($this->buttons[$name]['htmlOptions'])) {
+//            if (isset($this->buttons[$name]['htmlOptions']['id'])) {
+//                throw new CException("id for jcrop '{$name}' button may not be set manually.");
+//            }
+//            $options = $this->buttons[$name]['htmlOptions'];
+//
+//            if (isset($options['class'])) {
+//                $options['class'] = $options['class'] . " jcrop-{$name}";
+//            } else {
+//                $options['class'] = "jcrop-{$name}";
+//            }
+//            if (isset($options['style'])) {
+//                $options['style'] = $options['style'] . " display:{$display};";
+//            } else {
+//                $options['style'] = "display:{$display};";
+//            }
+//            $options['id'] = $name . '_' . $this->id;
+//        } else {
+//            $options = array('id' => $name . '_' . $this->id, 'style' => "display:{$display};", 'class' => "jcrop-{$name}");
+//        }
+//        return $options;
+//    }
 
 }
