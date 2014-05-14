@@ -287,7 +287,7 @@ return array(
                 )
             ),
             'pageImage' => array(
-                'autoSave' => true,
+                'autoSave' => false,
                 'path' => 'multimedia/articles/pageImage',
                 'info' => array('width' => 800, 'height' => 600, 'exact' => false, 'allowedUploadRatio' => 1, 'crob' => false,),
             ),
