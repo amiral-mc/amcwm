@@ -95,7 +95,30 @@
             <?php echo $form->fileField($model, 'imageFile'); ?>
             <?php echo $form->error($model, 'imageFile'); ?>
         </div>
-
+        <?php
+//        $this->widget('amcwm.widgets.jcrop.Jcrop', array(
+//            //
+//            // Image URL
+//            //'url' => 'http://www.esba-europe.org/images/pages/large/SubSubSection-186.jpg',
+//            'url' => ucFirst($model->moduleTable) . "_imageFile",
+//            'container' => 'itemImageFile',
+//            'hiddenField' => 'coords',
+//            //
+//            // ALT text for the image
+//            'alt' => 'Crop This Image',
+//            //
+//            // options for the IMG element
+//            'htmlOptions' => array('id' => 'myimg'),
+//            'sizesInfo' => $imagesInfo,
+//            //
+//            // Jcrop options (see Jcrop documentation)
+//            'options' => array(
+//            //'onRelease' => "js:function() {jcrop_cancelCrop(this);}",
+//            ),
+//        ));
+        ?>
+        <div id="uploadedimg"></div>
+        <input id="coords" type="hidden">
         <div class="row">
             <?php echo $form->labelEx($contentModel, 'image_description'); ?>
             <?php echo $form->textField($contentModel, 'image_description', array('size' => 100, 'maxlength' => 100)); ?>
@@ -310,7 +333,7 @@
             'options' => array(
                 "dropdownCssClass" => "bigdrop",
                 "placeholder" => AmcWm::t('amcTools', 'Enter Search Keywords'),
-                'minimumInputLength'=>'3',
+                'minimumInputLength' => '3',
                 'ajax' => array(
                     'dataType' => "json",
                     "quietMillis" => 100,
@@ -334,7 +357,7 @@
             'htmlOptions' => array(
                 'style' => 'min-width:500px;',
             ),
-        ));  
+        ));
         ?>
         <div>
             <?php echo CHtml::checkBox("remove_parent") . " " . AmcWm::t($msgsBase, "Remove Parent Article"); ?>

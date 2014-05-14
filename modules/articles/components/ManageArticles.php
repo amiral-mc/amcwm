@@ -575,8 +575,9 @@ class ManageArticles extends ManageContent {
         $imageSizesInfo = $this->controller->getModule()->appModule->mediaPaths;
         if ($article->imageFile instanceof CUploadedFile) {
             $image = new Image($article->imageFile->getTempName());
-            foreach ($imageSizesInfo as $imageInfo) {
-                if ($imageInfo['autoSave']) {
+            foreach ($imageSizesInfo as $imageInfo) {                
+                $ok = true;
+                if ($imageInfo['autoSave'] && $ok) {
                     $imageFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $article->article_id . "." . $article->thumb;
                     $oldThumbFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $article->article_id . "." . $oldThumb;
                     if ($oldThumb != $article->thumb && $oldThumb && is_file($oldThumbFile)) {

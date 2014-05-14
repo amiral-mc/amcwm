@@ -230,10 +230,18 @@ class Image {
             $ySource = 0;
         }
         //echo "from : $xSource , $ySource | Crob: $width, $height, Scale: $iWidth, $iHeight\n";        
+//        imagecopyresampled($in, $im, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $this->info[self::IMAGE_WIDTH], $this->info[self::IMAGE_HEIGHT]);
+//        ImageDestroy($im);
+        
         $in = imageCreateTrueColor($width, $height);
         $bg = imagecolorallocate($in, $this->background[0], $this->background[1], $this->background[2]); 
         imagefilledrectangle($in, 0, 0, $width, $height, $bg);
+        // The cropped coordinates from original
 
+//        $crop = imageCreateTrueColor($cropWidth, $cropHeight);
+//        imagecopyresampled($crop, $im, 0, 0, $xSource, $ySource, $cropWidth, $cropHeight, $this->info[self::IMAGE_WIDTH], $this->info[self::IMAGE_HEIGHT]);        
+//        $im = $crop;
+        
         imagecopyresampled($in, $im, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $this->info[self::IMAGE_WIDTH], $this->info[self::IMAGE_HEIGHT]);
         ImageDestroy($im);
         if (!$saveTo) {
