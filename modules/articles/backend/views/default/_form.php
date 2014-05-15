@@ -96,29 +96,24 @@
             <?php echo $form->error($model, 'imageFile'); ?>
         </div>
         <?php
-//        $this->widget('amcwm.widgets.jcrop.Jcrop', array(
-//            //
-//            // Image URL
-//            //'url' => 'http://www.esba-europe.org/images/pages/large/SubSubSection-186.jpg',
-//            'url' => ucFirst($model->moduleTable) . "_imageFile",
-//            'container' => 'itemImageFile',
-//            'hiddenField' => 'coords',
-//            //
-//            // ALT text for the image
-//            'alt' => 'Crop This Image',
-//            //
-//            // options for the IMG element
-//            'htmlOptions' => array('id' => 'myimg'),
-//            'sizesInfo' => $imagesInfo,
-//            //
-//            // Jcrop options (see Jcrop documentation)
-//            'options' => array(
-//            //'onRelease' => "js:function() {jcrop_cancelCrop(this);}",
-//            ),
-//        ));
+        $this->widget('amcwm.widgets.jcrop.Jcrop', array(
+            'url' => ucFirst($model->moduleTable) . "_imageFile",
+            'container' => 'itemImageFile',
+            'hiddenField' => 'coords',
+            'htmlOptions' => array('id' => 'myimg'),
+            'sizesInfo' => $imagesInfo,
+            // Jcrop options (see Jcrop documentation)
+            'options' => array(
+//            'onRelease' => "js:function() {jcrop_cancelCrop(this);}",
+            ),
+//            'ajaxUrl' => 'create',
+//            'ajaxParams' => 'js:jQuery("#coords").val()',
+        ));
         ?>
         <div id="uploadedimg"></div>
-        <input id="coords" type="hidden">
+        <form id="cropForm" name="cropForm" method="post">
+            <input id="coords" name="coords" type="hidden">
+        </form>
         <div class="row">
             <?php echo $form->labelEx($contentModel, 'image_description'); ?>
             <?php echo $form->textField($contentModel, 'image_description', array('size' => 100, 'maxlength' => 100)); ?>

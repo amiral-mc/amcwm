@@ -571,22 +571,31 @@ class ManageArticles extends ManageContent {
      * @access protected
      */
     protected function saveThumb(ActiveRecord $article, $oldThumb) {
+        $coords = CJavaScript::jsonDecode(Yii::app()->request->getParam('coords'));
         $deleteImage = Yii::app()->request->getParam('deleteImage');
         $imageSizesInfo = $this->controller->getModule()->appModule->mediaPaths;
         if ($article->imageFile instanceof CUploadedFile) {
             $image = new Image($article->imageFile->getTempName());
-            foreach ($imageSizesInfo as $imageInfo) {                
-                $ok = true;
-                if ($imageInfo['autoSave'] && $ok) {
+            foreach ($imageSizesInfo as $imageInfo) {
+                //print_r($imageSizesInfo); exit;
+                $ok = false;
+                if ($imageInfo['autoSave']) {
+                    if ($imageInfo['info']['crob']) {
+                        $ok = ($imageInfo['info']['width'] <= ($coords['x2'] - $coords['x']) && $imageInfo['info']['height'] <= ($coords['y2'] - $coords['y'])) ? true : false;
+                    } else {
+                        $ok = ($imageInfo['info']['width'] <= ($coords['x2'] - $coords['x'])) ? true : false;
+                    }
+                }
+                if ($ok) {
                     $imageFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $article->article_id . "." . $article->thumb;
                     $oldThumbFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $article->article_id . "." . $oldThumb;
                     if ($oldThumb != $article->thumb && $oldThumb && is_file($oldThumbFile)) {
                         unlink($oldThumbFile);
                     }
                     if ($imageInfo['info']['crob']) {
-                        $image->resizeCrob($imageInfo['info']['width'], $imageInfo['info']['height'], $imageFile);
+                        $image->resizeCrob($imageInfo['info']['width'], $imageInfo['info']['height'], $imageFile, $coords);
                     } else {
-                        $image->resize($imageInfo['info']['width'], $imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $imageFile);
+                        $image->resize($imageInfo['info']['width'], $imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $imageFile, $coords);
                     }
                 }
             }
@@ -804,8 +813,7 @@ class ManageArticles extends ManageContent {
             if (!isset($_GET['ajax'])) {
                 $this->redirect(array('index'));
             }
-        }
-        else
+        } else
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
@@ -883,15 +891,14 @@ class ManageArticles extends ManageContent {
         $artId = (int) Yii::app()->request->getParam('artId');
         $title = Yii::app()->request->getParam('q');
         $page = Yii::app()->request->getParam('page');
-        $articles = Articles::getArticles($page, $title, $sectionId, false, $artId);        
-        if ($printResult) {            
+        $articles = Articles::getArticles($page, $title, $sectionId, false, $artId);
+        if ($printResult) {
             header('Content-type: application/json');
             echo json_encode($articles);
-        }        
-        else{
-            if($json){
+        } else {
+            if ($json) {
                 $articles = json_encode($articles);
-            }            
+            }
             return $articles;
         }
     }

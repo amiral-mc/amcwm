@@ -202,8 +202,7 @@ class Jcrop extends CJuiWidget {
                         imgHeight = myImg.height;
                         console.log(imgHeight);
                         $('#{$this->id}').dialog('open');
-                        $('#container_{$this->id}').append(myImg);                        
-//                        $('#{$this->container}').append(myImg);
+                        $('#container_{$this->id}').append(myImg);
                         $(myImg).Jcrop({$options});
 
                     };

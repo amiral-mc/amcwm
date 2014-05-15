@@ -14,22 +14,27 @@
  * @version 1.0
  */
 class Image {
+
     /**
      * index key for image width in array returned from getimagesize
      */
     const IMAGE_WIDTH = 0;
+
     /**
      * index key for image height in array returned from getimagesize
      */
     const IMAGE_HEIGHT = 1;
+
     /**
      * index key for image type in array returned from getimagesize
      */
     const IMAGE_TYPE = 2;
+
     /**
      * Resize according to image width
      */
     const RESIZE_BASED_ON_WIDTH = 1;
+
     /**
      * * Resize according to image height
      */
@@ -40,16 +45,17 @@ class Image {
      * @var array 
      */
     private $info = array();
+
     /**
      * Image file path
      * @var string
      */
     private $imageFile = null;
+
     /**
      * default background for images
      * @var array
      */
-    
     private $background = array(255, 255, 255,);
 
     /**
@@ -80,9 +86,20 @@ class Image {
      * @access public
      * @return bool
      */
-    public function resize($width, $height, $resizeOption = self::RESIZE_BASED_ON_WIDTH, $saveTo = null) {
+    public function resize($width, $height, $resizeOption = self::RESIZE_BASED_ON_WIDTH, $saveTo = null, $coords = array()) {
         $saveTo = str_replace("/", DIRECTORY_SEPARATOR, $saveTo);
-	$quality = null;
+        $quality = null;
+        $xSource = 0;
+        $ySource = 0;        
+        $sourceWidth = $this->info[self::IMAGE_WIDTH];
+        $sourceHeight = $this->info[self::IMAGE_HEIGHT];
+        if ($coords) {
+            $xSource = $coords['x'];
+            $ySource = $coords['y'];
+            $sourceWidth = $coords['x2'] - $coords['x'];
+            $sourceHeight = $coords['y2'] - $coords['y'];
+        }
+        
         switch ($this->info[self::IMAGE_TYPE]) {
             case IMAGETYPE_GIF:
                 $im = imagecreatefromgif($this->imageFile);
@@ -93,7 +110,7 @@ class Image {
                 $im = imagecreatefromjpeg($this->imageFile);
                 $header = "Content-type: image/jpeg";
                 $createFrom = "imagejpeg";
-		$quality = 90;
+                $quality = 90;
                 break;
             case IMAGETYPE_PNG:
                 $im = imagecreatefrompng($this->imageFile);
@@ -103,16 +120,17 @@ class Image {
         }
         switch ($resizeOption) {
             case self::RESIZE_BASED_ON_WIDTH :
-                $iWidth = ($this->info[self::IMAGE_WIDTH] < $width) ? $this->info[self::IMAGE_WIDTH] : $width;
-                $iHeight = ceil($this->info[self::IMAGE_HEIGHT] / ($this->info[self::IMAGE_WIDTH] / $iWidth));
+                $iWidth = ($sourceWidth < $width) ? $sourceWidth : $width;
+                $iHeight = ceil($sourceHeight / ($sourceWidth / $iWidth));
                 break;
             case self::RESIZE_BASED_ON_HEIGHT:
-                $iHeight = ($this->info[self::IMAGE_HEIGHT] < $height) ? $this->info[self::IMAGE_HEIGHT] : $height;
-                $iWidth = ceil($this->info[self::IMAGE_WIDTH] / ($this->info[self::IMAGE_HEIGHT] / $iHeight));
+                $iHeight = ($sourceHeight < $height) ? $sourceHeight : $height;
+                $iWidth = ceil($sourceWidth / ($sourceHeight / $iHeight));
                 break;
         }
         $in = imageCreateTrueColor($iWidth, $iHeight);
-        imagecopyresampled($in, $im, 0, 0, 0, 0, $iWidth, $iHeight, $this->info[self::IMAGE_WIDTH], $this->info[self::IMAGE_HEIGHT]);
+
+        imagecopyresampled($in, $im, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $sourceWidth, $sourceHeight);
         imagedestroy($im);
         if (!$saveTo) {
             header($header);
@@ -158,9 +176,19 @@ class Image {
      * @access public
      * @return bool
      */
-    public function resizeCrob($width, $height, $saveTo = null) {
-        $saveTo = str_replace("/", DIRECTORY_SEPARATOR, $saveTo);        
-	$quality = null;
+    public function resizeCrob($width, $height, $saveTo = null, $coords = array()) {
+        $saveTo = str_replace("/", DIRECTORY_SEPARATOR, $saveTo);
+        $quality = null;
+        $xSource = 0;
+        $ySource = 0;        
+        $sourceWidth = $this->info[self::IMAGE_WIDTH];
+        $sourceHeight = $this->info[self::IMAGE_HEIGHT];
+        if ($coords) {
+            $xSource = $coords['x'];
+            $ySource = $coords['y'];
+            $sourceWidth = $coords['x2'] - $coords['x'];
+            $sourceHeight = $coords['y2'] - $coords['y'];
+        }
         switch ($this->info[self::IMAGE_TYPE]) {
             case IMAGETYPE_GIF:
                 $im = imagecreatefromgif($this->imageFile);
@@ -171,78 +199,75 @@ class Image {
                 $im = imagecreatefromjpeg($this->imageFile);
                 $header = "Content-type: image/jpeg";
                 $createFrom = "imagejpeg";
-		$quality = 90;
+                $quality = 90;
                 break;
             case IMAGETYPE_PNG:
                 $im = imagecreatefrompng($this->imageFile);
                 $header = "Content-type: image/png";
                 $createFrom = "imagepng";
                 break;
-        }               
-        $xSource = 0;
-        $ySource = 0;
-        $wRatio = ($this->info[self::IMAGE_WIDTH] / $width);
-        $hRatio = ($this->info[self::IMAGE_HEIGHT] / $height);        
+        }
+        $wRatio = ($sourceWidth / $width);
+        $hRatio = ($sourceHeight / $height);
         $face = null;
         $ratio = 1;
-        if(function_exists('face_detect')){           
-            $faces = face_detect($this->imageFile, Yii::getPathOfAlias('application.data') . DIRECTORY_SEPARATOR .'haarcascade_frontalface_alt.xml');
-            if(count($faces)){
+        if (function_exists('face_detect')) {
+            $faces = face_detect($this->imageFile, Yii::getPathOfAlias('application.data') . DIRECTORY_SEPARATOR . 'haarcascade_frontalface_alt.xml');
+            if (count($faces)) {
                 $face = $faces[0];
                 //print_r($face);
             }
-            
-        }        
-        if($height <= $this->info[self::IMAGE_HEIGHT] / $wRatio){
+        }
+        if ($height <= $sourceHeight / $wRatio) {
             // scale based on width                 
             $iWidth = $width;
-            $iHeight = ceil($this->info[self::IMAGE_HEIGHT] / $wRatio);            
+            $iHeight = ceil($sourceHeight / $wRatio);
             $ySource = abs(ceil(($height - $iHeight)));
+            if($coords){
+                $ySource += $coords['y'];
+            }
             $ratio = $wRatio;
-        }
-        else{
+        } else {
             // scale based on height                 
-            $iHeight =  $height;            
-            $iWidth = ceil($this->info[self::IMAGE_WIDTH] / $hRatio);            
+            $iHeight = $height;
+            $iWidth = ceil($sourceWidth / $hRatio);
             $xSource = abs(ceil($width - $iWidth));
+            if($coords){
+                $xSource += $coords['x'];
+            }
             $ratio = $hRatio;
         }
-        
-        if($face){
-                $yAfteRatio = ceil($face['y'] / $ratio);            
-                $xAfteRatio = ceil($face['x'] / $ratio);            
-                if(($iHeight - $yAfteRatio >= $height)){
-                    $ySource = $face['y'];
-                }
-                else{
-                    $ySource = $this->info[self::IMAGE_HEIGHT] - ceil($height * $ratio);
-                }
-                if(($iWidth - $xAfteRatio >= $width)){
-                    $xSource = $face['x'];
-                }
-                else{                    
-                    $xSource = $this->info[self::IMAGE_WIDTH] - ceil($width * $ratio);
-                }                
+
+        if ($face) {
+            $yAfteRatio = ceil($face['y'] / $ratio);
+            $xAfteRatio = ceil($face['x'] / $ratio);
+            if (($iHeight - $yAfteRatio >= $height)) {
+                $ySource = $face['y'];
+            } else {
+                $ySource = $sourceHeight - ceil($height * $ratio);
+            }
+            if (($iWidth - $xAfteRatio >= $width)) {
+                $xSource = $face['x'];
+            } else {
+                $xSource = $sourceWidth - ceil($width * $ratio);
+            }
 //                echo "\nH:" .( $yAfteRatio) ."|". ($iHeight - $yAfteRatio < $height) ."\n";
 //                echo "\nW:" .($iWidth - $xAfteRatio < $width)."\n";
-        }
-        else if($this->info[self::IMAGE_HEIGHT] / $this->info[self::IMAGE_WIDTH] > 1.3){
-            $ySource = 0;
+        } else if ($sourceHeight / $sourceWidth > 1.3) {
+            $ySource = ($coords) ? $coords['y'] : 0;
         }
         //echo "from : $xSource , $ySource | Crob: $width, $height, Scale: $iWidth, $iHeight\n";        
-//        imagecopyresampled($in, $im, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $this->info[self::IMAGE_WIDTH], $this->info[self::IMAGE_HEIGHT]);
+//        imagecopyresampled($in, $im, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $sourceWidth, $sourceHeight);
 //        ImageDestroy($im);
-        
+
         $in = imageCreateTrueColor($width, $height);
-        $bg = imagecolorallocate($in, $this->background[0], $this->background[1], $this->background[2]); 
+        $bg = imagecolorallocate($in, $this->background[0], $this->background[1], $this->background[2]);
         imagefilledrectangle($in, 0, 0, $width, $height, $bg);
         // The cropped coordinates from original
-
 //        $crop = imageCreateTrueColor($cropWidth, $cropHeight);
-//        imagecopyresampled($crop, $im, 0, 0, $xSource, $ySource, $cropWidth, $cropHeight, $this->info[self::IMAGE_WIDTH], $this->info[self::IMAGE_HEIGHT]);        
+//        imagecopyresampled($crop, $im, 0, 0, $xSource, $ySource, $cropWidth, $cropHeight, $sourceWidth, $sourceHeight);        
 //        $im = $crop;
-        
-        imagecopyresampled($in, $im, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $this->info[self::IMAGE_WIDTH], $this->info[self::IMAGE_HEIGHT]);
+        imagecopyresampled($in, $im, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $sourceWidth, $sourceHeight);
         ImageDestroy($im);
         if (!$saveTo) {
             header($header);
