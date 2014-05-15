@@ -176,7 +176,7 @@ class Image {
      * @access public
      * @return bool
      */
-    public function resizeCrob($width, $height, $saveTo = null, $coords = array()) {
+    public function resizeCrop($width, $height, $saveTo = null, $coords = array()) {
         $saveTo = str_replace("/", DIRECTORY_SEPARATOR, $saveTo);
         $quality = null;
         $xSource = 0;

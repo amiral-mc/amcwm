@@ -593,7 +593,7 @@ class ManageArticles extends ManageContent {
                         unlink($oldThumbFile);
                     }
                     if ($imageInfo['info']['crob']) {
-                        $image->resizeCrob($imageInfo['info']['width'], $imageInfo['info']['height'], $imageFile, $coords);
+                        $image->resizeCrop($imageInfo['info']['width'], $imageInfo['info']['height'], $imageFile, $coords);
                     } else {
                         $image->resize($imageInfo['info']['width'], $imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $imageFile, $coords);
                     }
