@@ -82,10 +82,10 @@
 
     <fieldset>
         <?php
-        $drawImage = NULL;
-        if ($model->article_id && $model->thumb) {
-            if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['images']['path'] . "/" . $model->article_id . "." . $model->thumb))) {
-                $drawImage = '<div>' . CHtml::image(Yii::app()->baseUrl . "/" . $imagesInfo['images']['path'] . "/" . $model->article_id . "." . $model->thumb . "?" . time(), "", array("class" => "image", "width" => "100")) . '</div>';
+        $imageFile = null;
+        if ($model->article_id && $model->thumb) {            
+            if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['newsList']['path'] . "/" . $model->article_id . "." . $model->thumb))) {
+                $imageFile = Yii::app()->baseUrl . "/" . $imagesInfo['newsList']['path'] . "/" . $model->article_id . "." . $model->thumb . "?" . time();
             }
         }
         ?>
@@ -98,8 +98,8 @@
         <?php
         $this->widget('amcwm.widgets.jcrop.Jcrop', array(
             'url' => ucFirst($model->moduleTable) . "_imageFile",
-            'container' => 'itemImageFile',
             'hiddenField' => 'coords',
+            'thumbnailSrc' => $imageFile,
             'htmlOptions' => array('id' => 'myimg'),
             'sizesInfo' => $imagesInfo,
             // Jcrop options (see Jcrop documentation)
@@ -118,13 +118,9 @@
             <?php echo $form->labelEx($contentModel, 'image_description'); ?>
             <?php echo $form->textField($contentModel, 'image_description', array('size' => 100, 'maxlength' => 100)); ?>
             <?php echo $form->error($contentModel, 'image_description'); ?>
-        </div>
+        </div>       
 
-        <div id="itemImageFile">
-            <?php echo $drawImage ?>
-        </div>
-
-        <?php if ($drawImage): ?>
+        <?php if ($imageFile): ?>
             <div class="row">
                 <input type="checkbox" name="deleteImage" id="deleteImage" style="float: right" onclick="deleteRelatedImage(this);" />
                 <label for="deleteImage" id="lbldltimg" title=""><span><?php echo AmcWm::t("amcBack", 'Delete Image'); ?></span></label>

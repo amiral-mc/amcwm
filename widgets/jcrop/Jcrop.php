@@ -54,9 +54,9 @@ class Jcrop extends CJuiWidget {
     public $ajaxParams = array();
 
     /*
-     * @var string HTML id where image will be wrapped inside
+     * @var string Stores image src path for preview
      */
-    public $container;
+    public $thumbnailSrc;
 
     /*
      * Hidden field storing cropping information in a JSON object
@@ -104,24 +104,10 @@ class Jcrop extends CJuiWidget {
         $cls->registerCssFile($assets . '/css/jquery.Jcrop.min.css');
 
 
-//		$this->options['onChange'] = "js:function(c) {"
-//                        . "jcrop_getCoords(c,'{$id}'); "
-//                        . "jcrop_showThumb(c,'{$id}', '{$this->container}');"
-//                        . "}";
         $this->options['ajaxUrl'] = $this->ajaxUrl;
         $this->options['ajaxParams'] = $this->ajaxParams;
 
-        $options = CJavaScript::encode($this->options);
-        //print_r($this->options); exit;               
-//               echo '<div id="container_' . $this->id .'"></div>';
-//		if (!empty($this->buttons)) {
-//			$js = "jcrop_initWithButtons('{$id}', {$options}, '{$this->container}');";
-//		}
-//		else {
-//			$js = "jQuery('#image_{$id}').Jcrop({$options});";
-//		}
-//                
-//		$cls->registerScript(__CLASS__ . '#' . $id, $js, CClientScript::POS_READY);
+        $options = CJavaScript::encode($this->options);      
     }
 
     public function run() {
@@ -131,6 +117,12 @@ class Jcrop extends CJuiWidget {
         $heightSizes = array();
         $sizes = array();
         $jsCrop = 'function(){$("#' . $this->hiddenField . '").val(JSON.stringify(imageCropper.data.currentCoords)); $("#' . $this->id . '").dialog("close");}';
+        if($this->thumbnailSrc){
+            echo '<div id="thumb_prev_' . $this->id . '"><img src="' . $this->thumbnailSrc .'" /></div>';
+        }
+        else{
+            echo '<div id="thumb_prev_' . $this->id . '"></div>';
+        }
         $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
             'id' => $this->id,
             'options' => array(
