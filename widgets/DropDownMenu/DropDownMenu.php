@@ -74,6 +74,12 @@ class DropDownMenu extends CMenu {
         $cs = Yii::app()->clientScript;
         $cs->registerCoreScript('jquery');
         $cs->registerCssFile($baseUrl . '/css/' . $this->cssFile);
+        /**
+         * Rtl added by ashrafakl@yahoo.com
+         */
+        if(Yii::app()->getLocale()->getOrientation() == 'rtl'){
+            $cs->registerCssFile($baseUrl . '/css/' . $this->cssFile . "-rtl");
+        }
         if ($this->style == 'navbar')
             $cs->registerCssFile($baseUrl . '/css/' . 'superfish-navbar.css');
         if ($this->style == 'vertical')
