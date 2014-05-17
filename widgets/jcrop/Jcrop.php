@@ -116,9 +116,16 @@ class Jcrop extends CJuiWidget {
         $widthSizes = array();
         $heightSizes = array();
         $sizes = array();
-        $jsCrop = 'function(){$("#' . $this->hiddenField . '").val(JSON.stringify(imageCropper.data.currentCoords)); $("#' . $this->id . '").dialog("close");}';
+        $jsCrop = 'function(){'
+                . '$("#' . $this->hiddenField . '").val(JSON.stringify(imageCropper.data.currentCoords)); '
+                . '$("#' . $this->id . '").dialog("close");'
+                . '$("#thumb_prev_' . $this->id . ' img").attr("src", null);'
+                . 'console.log(Math.round(imageCropper.data.currentCoords.x));'
+                . '$("#thumb_prev_' . $this->id . '").css({"background-image" : "url(" + imgSrc + ")", "background-size" : "contain", "background-size" : "100% 100%", "background-position" : Math.round(imageCropper.data.currentCoords.x) + "px " + Math.round(imageCropper.data.currentCoords.y) + "px, center", "width" : imageCropper.data.currentCoords.x2 - imageCropper.data.currentCoords.x, "height" : imageCropper.data.currentCoords.y2 - imageCropper.data.currentCoords.y, "padding" : "20px"});'
+                //. '$("#thumb_prev_' . $this->id . '").css("background-image", "url(" + imgSrc + ") 150px 150px");'
+                . '}';
         if($this->thumbnailSrc){
-            echo '<div id="thumb_prev_' . $this->id . '"><img src="' . $this->thumbnailSrc .'" /></div>';
+            echo '<div id="thumb_prev_' . $this->id . '" style="width:78px; height:59px;"><img src="' . $this->thumbnailSrc .'"/></div>';
         }
         else{
             echo '<div id="thumb_prev_' . $this->id . '"></div>';
@@ -161,6 +168,7 @@ class Jcrop extends CJuiWidget {
 
         $options = CJavaScript::encode($this->options);
         Yii::app()->clientScript->registerScript('cropping', "
+                var imgSrc;
                 var imgWidth;
                 var imgHeight;
                 var imageCropper = {
@@ -185,6 +193,8 @@ class Jcrop extends CJuiWidget {
                         var myImg = new Image();    
                         var maxImageSize = 800 - 25;
                         myImg.src = e.target.result;
+                        imgSrc = e.target.result;
+                        console.log(imgSrc);
                         if(myImg.width > maxImageSize){
                             imageCropper.data.ratio = myImg.width / maxImageSize;
                             myImg.width = maxImageSize;
