@@ -30,7 +30,7 @@ return array(
     'Paid Ads' => '',
     'Technical Support' => '',
     'Website - {year} Copyright © All rights reserved' => "",
-    'Desinged and Developed By' => '',
+    'Designed and Developed By' => '',
     'AMIRAL Management Corporation' => '',
     '_BLOCK_IMAGES_TITLE_' => "Images",
     '_BLOCK_IMAGES_INFO_' => "Browse our media Libarary about the corportae and services.",
