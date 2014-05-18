@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @author Amiral Management Corporation amc.amiral.com
  * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.

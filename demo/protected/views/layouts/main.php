@@ -165,8 +165,8 @@ $locale = Yii::app()->getLocale();
                     <?php endif; ?>                   
                     <div id="footer_line">
                         <div class="credit">                            
-                            <?php echo AmcWm::t("app", "Desinged and Developed By"); ?>                            
-                            <a href="http://amc.amiral.com">A<?php echo AmcWm::t("app", "AMIRAL Management Corporation"); ?></a></div>
+                            <?php echo AmcWm::t("app", "Designed and Developed By"); ?>                            
+                            <a href="http://amc.amiral.com"><?php echo AmcWm::t("app", "AMIRAL Management Corporation"); ?></a></div>
                         <div class="copyright">
                             <?php echo AmcWm::t("app", 'Website {year} Copyright © All rights reserved', array('{year}' => date('Y'))) ?>                            
                         </div>

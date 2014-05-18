@@ -95,7 +95,7 @@ class ManageArticles extends ManageContent {
      * @return void
      */
     public function sort($id, $direction) {
-        $model = $this->controller->loadModel($id);
+        $model = $this->loadModel($id);
         $model->sort($direction);
         Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t("msgsbase.core", 'Article "{article}" has been sorted', array("{article}" => $model->getCurrent()->article_header))));
         $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));

@@ -37,7 +37,7 @@ return array(
     'Follow Us Anywhere' => 'تابع من اي مكان',
     'Newsletter' => 'النشرة البريدية',
     'Website - {year} Copyright © All rights reserved' => "Website {year} © جميع الحقوق محفوظة",
-    'Desinged and Developed By' => 'هذا الموقع تم تطويرة وإدارتة بواسطة',
+    'Designed and Developed By' => 'هذا الموقع تم تطويرة وإدارتة بواسطة',
     'AMIRAL Managment Corporation' => 'شركة أميرال مانجمنت كوربوريشن ',
     'Login To Member Area' => 'الدخول إلي منطقة الإعضاء',
     'Member Regsiteration' => 'تسجيل العضوية',
