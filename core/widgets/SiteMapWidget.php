@@ -59,7 +59,7 @@ class SiteMapWidget extends PageContentWidget {
             } else {
                 $rootItem = $item['label'];
             }
-            $this->contentData.='<h1><img src="' . $imageIcon . '" alt="' . CHtml::encode($item['label']) . '" /><span>' .$rootItem . '</span></h1>';
+            $this->contentData.='<h1><img src="' . $imageIcon . '" alt="" /><span>' .$rootItem . '</span></h1>';
             if (isset($item['items'])) {
                 $this->contentData.= $this->_drawLevelChilds($item['items']);
             }

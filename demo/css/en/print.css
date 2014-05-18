@@ -1,0 +1,119 @@
+@media print {
+    body { background:white; color:black; margin:0; padding:0px; }
+    #nawatSliderContent,
+    #main_menu,
+    .main_slider_wrapper,
+    #content_sec_middle,
+    #reportsTabs,
+    .main_reports_title,
+    #repBtnArea,
+    #footer,
+    #news_ticker,
+    #internal_content_sec_left,
+    #content_sec_right,
+    #pageContentImage,
+    .page_path,
+    .breadcrumbs,
+    .page_content_footer,
+    .page_content_footer,
+    .no-print,
+    .colorbox,
+    #colorbox,
+    form,
+    .doc-print,
+    .doc-more,
+    .grid-more,
+    .pager,
+    #header_top{ display:none; }
+    .page_title{
+        font-family:Arial, Tahoma, Helvetica, sans-serif;
+        font-size: 20px; 
+        font-weight:bold;
+        padding:0px;
+        margin:0px;
+        padding:10px 10px 5px 0px;
+    }
+
+    .page_content{
+        padding:5px 10px; 
+        border-right:none; 
+        border-left:none;
+        min-height:400px;
+        font-size:13.33px;
+        line-height:1.4em;
+    }
+    .page_content img.content_img{
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+
+    .page_title a{
+        color: #284995;
+
+    }
+    .page_content h3.content_img_desc{
+        margin-left: 3px;
+        margin-right: 3px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-top:2px;
+        padding-bottom:2px;
+        text-align: center;
+        font-family: Tahoma , Arial, Verdana, sans-serif;
+        font-size: 11px;
+        color:#494949;
+        background-color: #E0E0E0;
+    }
+    .report_header{
+        color:#000000;
+        text-align:left;
+        padding:4px 5px;
+        font-weight:bold;
+        font-size:13px;
+        /*white-space: nowrap;*/
+    }
+    .Report_data table{
+        border-collapse: collapse;
+    }
+    .Report_data table td,
+    .Report_data table th{
+        border: 1px #c4e1ff solid !important;        
+    }
+    .report_data_row{
+        text-align:left;
+        padding:1px 2px 2px 5px;
+        color:#000000;    
+    }
+    .odd{
+        background-color:#FFFFFF;
+    }
+
+    .even{
+        background-color:#FFFFFF;
+    }
+    .vessels-date{
+        background:#FFFFFF; color:#000000;
+    }
+    .grid-view table.items{
+        border-collapse: collapse !important;    
+    }
+    .grid-view table.items td,
+    .grid-view table.items th{
+        border: 1px #000000 solid !important;  
+        color: #000000 ;
+    }
+    .grid-view table.items th,
+    .grid-view table.items th a{    
+        color: #000000 ;
+        font-weight: bold;
+    }
+    .Report_name{
+        color: #000000 ;
+        font-weight: bold;
+    }
+    .Report_update_date{
+        color: #000000 ;
+        font-weight: bold;
+    }
+
+}

@@ -34,7 +34,7 @@ $baseScript = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias(AmcWm::
                                 <dd><?php echo Yii::app()->getDateFormatter()->format('h:mm a', time()) ?></dd>
                             </dl>
                             <dl>
-                                <dt><?php echo AmcWm::t("amcBack", "last_login_from") ?>:</dt>
+                                <dt><?php echo AmcWm::t("amcBack", "Last Login") ?>:</dt>
                                 <dd><?php echo Yii::app()->user->getLastLogIp() ?></dd>
                             </dl>
                         </div>

@@ -82,10 +82,10 @@
 
     <fieldset>
         <?php
-        $drawImage = NULL;
-        if ($model->article_id && $model->thumb) {
-            if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['images']['path'] . "/" . $model->article_id . "." . $model->thumb))) {
-                $drawImage = '<div>' . CHtml::image(Yii::app()->baseUrl . "/" . $imagesInfo['images']['path'] . "/" . $model->article_id . "." . $model->thumb . "?" . time(), "", array("class" => "image", "width" => "100")) . '</div>';
+        $imageFile = null;
+        if ($model->article_id && $model->thumb) {            
+            if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['newsList']['path'] . "/" . $model->article_id . "." . $model->thumb))) {
+                $imageFile = Yii::app()->baseUrl . "/" . $imagesInfo['newsList']['path'] . "/" . $model->article_id . "." . $model->thumb . "?" . time();
             }
         }
         ?>
@@ -95,18 +95,32 @@
             <?php echo $form->fileField($model, 'imageFile'); ?>
             <?php echo $form->error($model, 'imageFile'); ?>
         </div>
-
+        <?php
+        $this->widget('amcwm.widgets.jcrop.Jcrop', array(
+            'url' => ucFirst($model->moduleTable) . "_imageFile",
+            'hiddenField' => 'coords',
+            'thumbnailSrc' => $imageFile,
+            'htmlOptions' => array('id' => 'myimg'),
+            'sizesInfo' => $imagesInfo,
+            // Jcrop options (see Jcrop documentation)
+            'options' => array(
+//            'onRelease' => "js:function() {jcrop_cancelCrop(this);}",
+            ),
+//            'ajaxUrl' => 'create',
+//            'ajaxParams' => 'js:jQuery("#coords").val()',
+        ));
+        ?>
+        <div id="uploadedimg"></div>
+        <form id="cropForm" name="cropForm" method="post">
+            <input id="coords" name="coords" type="hidden">
+        </form>
         <div class="row">
             <?php echo $form->labelEx($contentModel, 'image_description'); ?>
             <?php echo $form->textField($contentModel, 'image_description', array('size' => 100, 'maxlength' => 100)); ?>
             <?php echo $form->error($contentModel, 'image_description'); ?>
-        </div>
+        </div>       
 
-        <div id="itemImageFile">
-            <?php echo $drawImage ?>
-        </div>
-
-        <?php if ($drawImage): ?>
+        <?php if ($imageFile): ?>
             <div class="row">
                 <input type="checkbox" name="deleteImage" id="deleteImage" style="float: right" onclick="deleteRelatedImage(this);" />
                 <label for="deleteImage" id="lbldltimg" title=""><span><?php echo AmcWm::t("amcBack", 'Delete Image'); ?></span></label>
@@ -310,7 +324,7 @@
             'options' => array(
                 "dropdownCssClass" => "bigdrop",
                 "placeholder" => AmcWm::t('amcTools', 'Enter Search Keywords'),
-                'minimumInputLength'=>'3',
+                'minimumInputLength' => '3',
                 'ajax' => array(
                     'dataType' => "json",
                     "quietMillis" => 100,
@@ -334,7 +348,7 @@
             'htmlOptions' => array(
                 'style' => 'min-width:500px;',
             ),
-        ));  
+        ));
         ?>
         <div>
             <?php echo CHtml::checkBox("remove_parent") . " " . AmcWm::t($msgsBase, "Remove Parent Article"); ?>

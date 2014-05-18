@@ -421,7 +421,7 @@ class AmcDirectoryController extends BackendController {
                         unlink(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $directory->company_id . "." . $oldThumb);
                     }
                     if ($imageInfo['info']['crob']) {
-                        $image->resizeCrob($imageInfo['info']['width'], $imageInfo['info']['height'], $imageFile);
+                        $image->resizeCrop($imageInfo['info']['width'], $imageInfo['info']['height'], $imageFile);
                     } else {
                         $image->resize($imageInfo['info']['width'], $imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $imageFile);
                     }

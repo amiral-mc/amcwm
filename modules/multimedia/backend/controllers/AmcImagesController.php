@@ -65,7 +65,7 @@ class AmcImagesController extends AmcGalleriesController {
             $image->resize($this->imageInfo['info']['width'], $this->imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $path . $model->image_id . "." . $model->ext);
         }
         $image = new Image($path . $model->image_id . "." . $model->ext);
-        $image->resizeCrob($this->imageInfo['info']['thumbSize']['width'], $this->imageInfo['info']['thumbSize']['height'], $path . DIRECTORY_SEPARATOR . $model->image_id . "-th." . $model->ext);
+        $image->resizeCrop($this->imageInfo['info']['thumbSize']['width'], $this->imageInfo['info']['thumbSize']['height'], $path . DIRECTORY_SEPARATOR . $model->image_id . "-th." . $model->ext);
         if ($oldExt) {
             if ($oldExt && $oldExt != $model->ext) {
                 if (is_file($path . DIRECTORY_SEPARATOR . $model->image_id . "." . $oldExt)) {

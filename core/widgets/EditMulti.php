@@ -38,8 +38,14 @@ class EditMulti extends CWidget {
      * Renders the header part.
      */
     public function run() {
+        if(Yii::app()->getLocale()->getOrientation() == 'rtl'){
+            $align = "right";
+        }
+        else{
+            $align = "left";
+        }
         $output = CHtml::openTag("div", $this->htmlOptions);
-        $output.='<div style="text-align: right;padding5px;">';
+        $output.='<div style="text-align: ' . $align . ';padding5px;">';
         $output.= Chtml::link(CHtml::image(Yii::app()->baseUrl . "/images/add.png", "", array("border" => 0, "align" => 'absmiddle')) . "&nbsp;" . $this->title, "javascript:void(0);", array("id" => "{$this->htmlOptions['id']}_addNew", "class" => "btn_label"));
         $output.='</div>';
         $output .= CHtml::closeTag("div");

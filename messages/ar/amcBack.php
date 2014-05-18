@@ -15,7 +15,7 @@ return array(
     'profile' => 'حسابي',
     'messages' => 'رسائل',
     'time' => 'الوقت الأن',
-    'last_login_from' => 'اخر دخول من',
+    'Last Login' => 'اخر دخول من',
     'Publish to the social media sites' => 'نشر على مواقع التواصل الاجتماعى',
     'statistics' => 'احصائيات',
     'manage_content' => 'إدارة المحتوي',
