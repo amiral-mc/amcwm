@@ -92,7 +92,7 @@
         <legend><?php echo AmcWm::t("msgsbase.core", "Image Options"); ?>:</legend>       
         <div class="row">
             <?php echo $form->labelEx($model, 'imageFile'); ?>
-            <?php echo $form->fileField($model, 'imageFile', array('onchange' => 'uploaded_file()')); ?>
+            <?php echo $form->fileField($model, 'imageFile'); ?>
             <?php echo $form->error($model, 'imageFile'); ?>
         </div>
         <?php
