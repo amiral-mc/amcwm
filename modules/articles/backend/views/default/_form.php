@@ -58,7 +58,7 @@
         <?php //echo $form->checkBox($model, 'in_spot'); ?>
         <?php //echo $form->labelEx($model, 'in_spot', array("style" => 'display:inline;')); ?>
         <?php if ($options['default']['check']['addToSlider']): ?>
-            <div style="padding-top:5px;padding-bottom: 5px;">            
+            <div style="padding-top:5px;padding-bottom: 5px;">
                 <?php echo $form->checkBox($model, 'in_slider', array('value' => ($model->in_slider) ? $model->in_slider : null)); ?>       
                 <?php echo $form->labelEx($model, 'in_slider', array("style" => 'display:inline;')); ?>            
             </div>        
@@ -83,7 +83,7 @@
     <fieldset>
         <?php
         $imageFile = null;
-        if ($model->article_id && $model->thumb) {            
+        if ($model->article_id && $model->thumb) {
             if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['newsList']['path'] . "/" . $model->article_id . "." . $model->thumb))) {
                 $imageFile = Yii::app()->baseUrl . "/" . $imagesInfo['newsList']['path'] . "/" . $model->article_id . "." . $model->thumb . "?" . time();
             }
@@ -92,7 +92,7 @@
         <legend><?php echo AmcWm::t("msgsbase.core", "Image Options"); ?>:</legend>       
         <div class="row">
             <?php echo $form->labelEx($model, 'imageFile'); ?>
-            <?php echo $form->fileField($model, 'imageFile', array('onchange' => 'uploaded_file()')); ?>
+            <?php echo $form->fileField($model, 'imageFile'); ?>
             <?php echo $form->error($model, 'imageFile'); ?>
         </div>
         <?php
@@ -112,9 +112,9 @@
         ));
         ?>
         <div id="uploadedimg"></div>
-        <form id="cropForm" name="cropForm" method="post">
-            <input id="coords" name="coords" type="hidden">
-        </form>
+
+        <input id="coords" name="coords" type="hidden">
+
         <div class="row">
             <?php echo $form->labelEx($contentModel, 'image_description'); ?>
             <?php echo $form->textField($contentModel, 'image_description', array('size' => 100, 'maxlength' => 100)); ?>
