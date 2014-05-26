@@ -91,30 +91,19 @@
         ?>
         <legend><?php echo AmcWm::t("msgsbase.core", "Image Options"); ?>:</legend>       
         <div class="row">
-            <?php echo $form->labelEx($model, 'imageFile'); ?>
-            <?php echo $form->fileField($model, 'imageFile'); ?>
-            <?php echo $form->error($model, 'imageFile'); ?>
-        </div>
-        <?php
-        $this->widget('amcwm.widgets.jcrop.Jcrop', array(
-            'url' => ucFirst($model->moduleTable) . "_imageFile",
-            'hiddenField' => 'coords',
+        <?php echo $form->labelEx($model, 'imageFile'); ?>
+        <?php        
+        $this->widget('amcwm.widgets.imageUploader.ImageUploader', array(
+            //'url' => ucFirst($model->moduleTable) . "_imageFile",
+            'model' => $model,
+            'attribute' => 'imageFile',
             'thumbnailSrc' => $imageFile,
             'thumbnailInfo' => $imagesInfo['newsList']['info'],
-            'htmlOptions' => array('id' => 'myimg'),
             'sizesInfo' => $imagesInfo,
-            // Jcrop options (see Jcrop documentation)
-            'options' => array(
-//            'onRelease' => "js:function() {jcrop_cancelCrop(this);}",
-            ),
-//            'ajaxUrl' => 'create',
-//            'ajaxParams' => 'js:jQuery("#coords").val()',
         ));
         ?>
-        <div id="uploadedimg"></div>
-
-        <input id="coords" name="coords" type="hidden">
-
+        <?php echo $form->error($model, 'imageFile'); ?>
+        </div>    
         <div class="row">
             <?php echo $form->labelEx($contentModel, 'image_description'); ?>
             <?php echo $form->textField($contentModel, 'image_description', array('size' => 100, 'maxlength' => 100)); ?>
