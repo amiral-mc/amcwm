@@ -67,7 +67,9 @@ class Tenders extends ParentTranslatedActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('department_id, tender_type, tender_status, rfp_start_date, rfp_end_date, submission_start_date, submission_end_date, technical_date, financial_date, rfp_price1, primary_insurance', 'required'),
+            array('department_id, tender_type, tender_status, rfp_start_date, rfp_end_date, submission_start_date, submission_end_date', 'required'),
+            array('technical_date, financial_date, rfp_price1, rfp_price2, primary_insurance', 'default', 'setOnEmpty' => true, 'value' => NULL),
+
             array('department_id, tender_type, tender_status, published', 'numerical', 'integerOnly' => true),
             array('rfp_price1, rfp_price2, primary_insurance, hits', 'length', 'max' => 10),
             array('file_ext', 'length', 'max' => 4),
