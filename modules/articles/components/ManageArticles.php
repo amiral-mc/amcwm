@@ -581,17 +581,17 @@ class ManageArticles extends ManageContent {
                 $ok = false;
                 if ($imageInfo['autoSave']) {
                     if ($imageInfo['info']['crob']) {
-                        $ok = ($imageInfo['info']['width'] <= ($coords['x2'] - $coords['x']) && $imageInfo['info']['height'] <= ($coords['y2'] - $coords['y'])) ? true : false;
+                        $ok = ($imageInfo['info']['width'] <= ($coords['x2'] - $coords['x']) || $imageInfo['info']['height'] <= ($coords['y2'] - $coords['y'])) ? true : false;
                     } else {
                         $ok = ($imageInfo['info']['width'] <= ($coords['x2'] - $coords['x'])) ? true : false;
                     }
                 }
+                $imageFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $article->article_id . "." . $article->thumb;
+                $oldThumbFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $article->article_id . "." . $oldThumb;
+                if ($oldThumb && is_file($oldThumbFile)) {
+                    unlink($oldThumbFile);
+                }
                 if ($ok) {
-                    $imageFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $article->article_id . "." . $article->thumb;
-                    $oldThumbFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $article->article_id . "." . $oldThumb;
-                    if ($oldThumb != $article->thumb && $oldThumb && is_file($oldThumbFile)) {
-                        unlink($oldThumbFile);
-                    }
                     if ($imageInfo['info']['crob']) {
                         $image->resizeCrop($imageInfo['info']['width'], $imageInfo['info']['height'], $imageFile, $coords);
                     } else {

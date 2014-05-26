@@ -84,24 +84,24 @@ class Jcrop extends CJuiWidget {
 
     public function run() {
         $yesIcon = AmcWm::app()->baseUrl . '/images/yes.png';
-        $noIcon = AmcWm::app()->baseUrl . '/images/no.png';
-        $widthSizes = array();
+        $noIcon  = AmcWm::app()->baseUrl . '/images/no.png';
+        $widthSizes  = array();
         $heightSizes = array();
-        $sizes = array();        
+        $sizes       = array();        
         $jsCrop = 'function(){'
                     . '$("#' . $this->hiddenField . '").val(JSON.stringify(imageCropper.data.currentCoords)); '
                     . 'var cropWidth = parseInt(imageCropper.data.currentCoords.x2 - imageCropper.data.currentCoords.x);'
                     . 'var cropHeight= parseInt(imageCropper.data.currentCoords.y2 - imageCropper.data.currentCoords.y);'
-                    . 'var thumbWidth= imgWidth * imageCropper.data.ratio;'
-                    . 'var thumbHeight= imgHeight * imageCropper.data.ratio;'
+                    . 'var thumbWidth= imgWidth * imageCropper.data.ratio;' // Get original image width
+                    . 'var thumbHeight= imgHeight * imageCropper.data.ratio;' // Get original image height
                     . 'var ratio = 1;'
                     . 'if(cropWidth > ' . $this->thumbnailInfo['width'] . '){'
                         . 'ratio = parseInt(cropWidth / ' . $this->thumbnailInfo['width'] . ');'
-                        . 'cropWidth = ' . $this->thumbnailInfo['width'] . ';'
-                        . 'cropHeight = parseInt(cropHeight / ratio);'
-                        . 'thumbWidth = parseInt(thumbWidth / ratio);'
-                        . 'thumbHeight = parseInt(thumbHeight / ratio);'
-                    . '}'                
+                        . 'cropWidth   = ' . $this->thumbnailInfo['width'] . ';'
+                        . 'cropHeight  = parseInt(cropHeight  / ratio);'
+                        . 'thumbWidth  = parseInt(thumbWidth  / ratio);' // Resize original image width
+                        . 'thumbHeight = parseInt(thumbHeight / ratio);' // Resize original image height
+                    . '}'
                     . '$("#' . $this->id . '").dialog("close");'
                     . '$("#thumb_prev_' . $this->id . '").html("");'
                     . '$("#thumb_prev_' . $this->id . '").width(cropWidth);'
@@ -109,7 +109,7 @@ class Jcrop extends CJuiWidget {
                     . '$("#thumb_prev_' . $this->id . '").css({'
                         . '"background" : "url(" + imgSrc + ") no-repeat", '
                         . '"background-size" : thumbWidth + "px " + thumbHeight + "px", '
-                        . '"background-position" : "-" + parseInt(imageCropper.data.currentCoords.x / ratio) + "px -" + parseInt(imageCropper.data.currentCoords.y / ratio) + "px", '
+                        . '"background-position" : "-" + parseInt(imageCropper.data.currentCoords.x / ratio) + "px -" + parseInt(imageCropper.data.currentCoords.y / ratio) + "px", ' // Get cropped area coords from original image size and divide by ratio.
                     . '});'
                 . '}';
         if($this->thumbnailSrc){

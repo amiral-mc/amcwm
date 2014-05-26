@@ -84,8 +84,8 @@
         <?php
         $imageFile = null;
         if ($model->article_id && $model->thumb) {
-            if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['newsList']['path'] . "/" . $model->article_id . "." . $model->thumb))) {
-                $imageFile = Yii::app()->baseUrl . "/" . $imagesInfo['newsList']['path'] . "/" . $model->article_id . "." . $model->thumb . "?" . time();
+            if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['list']['path'] . "/" . $model->article_id . "." . $model->thumb))) {
+                $imageFile = Yii::app()->baseUrl . "/" . $imagesInfo['list']['path'] . "/" . $model->article_id . "." . $model->thumb . "?" . time();
             }
         }
         ?>
