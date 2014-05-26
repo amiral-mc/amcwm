@@ -236,6 +236,22 @@ abstract class ListData extends CComponent {
     }
 
     /**
+     * get param from parameters array
+     * @param mixed $param key
+     * @param mixed $default the default parameter value if the parameter does not exist.
+     * @access public
+     * @return void
+     */
+    public function getParam($param, $default = null) {
+        if(isset($this->_parameters[$param])){
+            return $this->_parameters[$param];
+        }
+        else {
+            return $default;
+        }
+    }
+    
+     /**
      * add param to parameters aray
      * @param mixed $param
      * @param mixed $value
