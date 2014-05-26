@@ -236,7 +236,7 @@ abstract class ListData extends CComponent {
     }
 
     /**
-     * get param from parameters array
+     * get parameter from parameters array
      * @param mixed $param key
      * @param mixed $default the default parameter value if the parameter does not exist.
      * @access public
