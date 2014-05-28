@@ -181,6 +181,14 @@
                                     echo "<br />";
                                 }
                                 break;
+                            case 'select':
+                                foreach ($options as $optionKey => $optionValue) {
+                                    echo CHtml::label(AmcWm::t("msgsbase.core", "category_settings_{$optionType}_{$optionKey}_") . ":", "settingsOptions_{$optionType}_{$optionKey}");
+                                    echo CHtml::dropDownList("{$model->getClassName()}[settingsOptions][{$optionType}][{$optionKey}]", $optionValue['value'], $optionValue['list'] , array('id' => "settingsOptions_{$optionType}_{$optionKey}", 'class' => 'settingsOptions'));
+                                    echo "<br />";
+                                }
+                                break;
+                                
                         }
                     }
                 }

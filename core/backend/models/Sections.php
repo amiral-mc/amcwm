@@ -258,7 +258,6 @@ class Sections extends ParentTranslatedActiveRecord {
         // preparing the section settings
         $settingsOptions = $defaultOptions = AmcWm::app()->appModule->options['default'];
         $notChanged = true;
-//        die(print_r($this->settingsOptions));
         foreach ($defaultOptions as $optionType => $options) {
             switch ($optionType) {
                 case 'radio':
@@ -271,6 +270,14 @@ class Sections extends ParentTranslatedActiveRecord {
                         $notChanged &= ($settingsOptions[$optionType][$optionKey] == $defaultOptions[$optionType][$optionKey]);
                     }
                     break;
+                case 'select':
+                    foreach ($options as $optionKey => $optionValue) {
+                        $notChanged = false;
+                        if (isset($this->settingsOptions[$optionType][$optionKey])) {
+                            $settingsOptions[$optionType][$optionKey]['value'] = $this->settingsOptions[$optionType][$optionKey];                                                     
+                        }
+                    }
+                    break;
             }
         }
         if ($notChanged) {
@@ -279,7 +286,6 @@ class Sections extends ParentTranslatedActiveRecord {
             $this->settingsOptions = $settingsOptions;
         }
         $this->settings = CJSON::encode($this->settingsOptions);
-
         return parent::beforeSave();
     }
 

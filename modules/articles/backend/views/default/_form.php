@@ -94,7 +94,6 @@
         <?php echo $form->labelEx($model, 'imageFile'); ?>
         <?php        
         $this->widget('amcwm.widgets.imageUploader.ImageUploader', array(
-            //'url' => ucFirst($model->moduleTable) . "_imageFile",
             'model' => $model,
             'attribute' => 'imageFile',
             'thumbnailSrc' => $imageFile,

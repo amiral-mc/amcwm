@@ -571,7 +571,8 @@ class ManageArticles extends ManageContent {
      * @access protected
      */
     protected function saveThumb(ActiveRecord $article, $oldThumb) {
-        $coords = CJavaScript::jsonDecode(Yii::app()->request->getParam('coords'));
+        $articlesParams = Yii::app()->request->getParam('Articles');        
+        $coords = isset($articlesParams['imageFile_coords']) ? CJSON::decode($articlesParams['imageFile_coords']) : array();
         $deleteImage = Yii::app()->request->getParam('deleteImage');
         $imageSizesInfo = $this->controller->getModule()->appModule->mediaPaths;
         if ($article->imageFile instanceof CUploadedFile) {
