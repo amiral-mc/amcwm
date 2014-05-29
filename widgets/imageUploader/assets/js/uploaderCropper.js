@@ -6,11 +6,29 @@
         factory(jQuery);
     }
 })(function($) {
+    'use strict';
     var defaults = {'sizes': {}};
     $.fn.uploaderCropper = function(options) {
         options = $.extend(true, {}, defaults, options);
         var $this = this;
-        var id = $this.attr('id');
+        var id = $this.attr('id');        
+        $("#remove_image_" + id).click(function() {
+            if (parseInt($("#" + id + "_deleteImage").val())) {
+                $('#thumb_prev_' + id).slideDown();
+                $("#remove_image_label_" + id).html(options.removeLabel);
+                $("#" + id + "_deleteImage").val('');
+                $("#remove_image_icon_" + id).attr('src', options.removeIcon);                
+            }
+            else {
+                $($this).val(null);
+                $('#thumb_prev_' + id).slideUp();
+                $("#remove_image_label_" + id).html(options.undoLabel);
+                $("#" + id + "_deleteImage").val(1);
+                $("#remove_image_icon_" + id).attr('src', options.undoIcon);
+            }
+        });
+        var imgWidth = 0;
+        var imgHeight = 0;
         var imgSrc = '';
         var imageCropper = {
             data: {
@@ -39,9 +57,12 @@
                 if (value !== null && typeof value === 'object') {
                     $.each(value, checkSize);
                 }
-            }            
+            }
             $.each(imageCropper.sizes, checkSize);
-        }
+        }        
+        $($this).click(function(e) {
+            $($this).val(null);
+        });
         $($this).change(function(e) {
             var files = this.files;
             if (this.files[0].type.match(/image/)) {
@@ -65,13 +86,12 @@
                         $(myImg).Jcrop(options.cropOptions);
                     };
                     reader.readAsDataURL(file);
-                })(this.files[0])                
+                })(this.files[0])
             }
             return false;
 
         });
         $this.crop = function() {
-            
             $("#" + id + "_coords").val(JSON.stringify(imageCropper.data.currentCoords));
             var cropWidth = parseInt(imageCropper.data.currentCoords.x2 - imageCropper.data.currentCoords.x);
             var cropHeight = parseInt(imageCropper.data.currentCoords.y2 - imageCropper.data.currentCoords.y);
@@ -85,7 +105,6 @@
                 thumbWidth = parseInt(thumbWidth / ratio); // Resize original image width
                 thumbHeight = parseInt(thumbHeight / ratio); // Resize original image height
             }
-            $("#dialog_" + id).dialog("close");
             $("#thumb_prev_" + id).html("");
             $("#thumb_prev_" + id).width(cropWidth);
             $("#thumb_prev_" + id).height(cropHeight);
@@ -94,6 +113,14 @@
                 "background-size": thumbWidth + "px " + thumbHeight + "px",
                 "background-position": "-" + parseInt(imageCropper.data.currentCoords.x / ratio) + "px -" + parseInt(imageCropper.data.currentCoords.y / ratio) + "px"  // Get cropped area coords from original image size and divide by ratio.
             });
+            if (parseInt($("#" + id + "_deleteImage").val())) {
+                $('#thumb_prev_' + id).slideDown();
+                $("#remove_image_label_" + id).html(options.removeLabel);
+                $("#" + id + "_deleteImage").val('');
+                $("#remove_image_icon_" + id).attr('src', options.removeIcon);
+            }
+
+            $("#dialog_" + id).dialog("close");
         }
         return $this;
     }

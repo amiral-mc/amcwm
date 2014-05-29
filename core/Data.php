@@ -181,6 +181,7 @@ class Data {
                 "select 
                     s.section_id,
                     s.parent_section,
+                    s.settings,
                     t.section_name                                
                 from sections s force index (idx_section_sort)
                 inner join sections_translation t on s.section_id = t.section_id
@@ -227,6 +228,7 @@ class Data {
      */
     public function sectionsTopArticles($table = "articles", $module = "articles", $sectionsLimit = 10, $articlesLimit = 4, $parentSectionId = null) {
         $data = new ArticlesListData(array($table));
+        $data->addColumn('tags');
         $articlesTables = ArticlesListData::getArticlesTables();
         if ($table == "articles") {
             //$data->addJoin("inner join {$this->_table} on t.article_id = {$this->_table}.article_id");

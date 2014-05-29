@@ -97,7 +97,7 @@
             'model' => $model,
             'attribute' => 'imageFile',
             'thumbnailSrc' => $imageFile,
-            'thumbnailInfo' => $imagesInfo['newsList']['info'],
+            'thumbnailInfo' => $imagesInfo['list']['info'],
             'sizesInfo' => $imagesInfo,
         ));
         ?>
@@ -108,59 +108,6 @@
             <?php echo $form->textField($contentModel, 'image_description', array('size' => 100, 'maxlength' => 100)); ?>
             <?php echo $form->error($contentModel, 'image_description'); ?>
         </div>       
-
-        <?php if ($imageFile): ?>
-            <div class="row">
-                <input type="checkbox" name="deleteImage" id="deleteImage" style="float: right" onclick="deleteRelatedImage(this);" />
-                <label for="deleteImage" id="lbldltimg" title=""><span><?php echo AmcWm::t("amcBack", 'Delete Image'); ?></span></label>
-                <label for="deleteImage" title="" style='float: right;margin-top: 4px;cursor: pointer'><span id='chklbl'><?php echo AmcWm::t("amcBack", 'Delete Image'); ?></span></label>
-            </div>
-            <?php
-            Yii::app()->clientScript->registerScript('displayDeleteImage', "
-                var imgDesc = null;
-                deleteRelatedImage = function(chk){
-                    if(chk.checked){
-                        if(confirm('" . CHtml::encode(AmcWm::t("amcBack", 'Are you sure you want to delete this image?')) . "')){
-                            jQuery('#chklbl').text('" . CHtml::encode(AmcWm::t("amcBack", 'undo delete image')) . "');
-                            imgDesc = jQuery('#imageDescription').val();
-                            jQuery('#itemImageFile').slideUp();
-                            jQuery('#imageDescription').val('');
-                            jQuery('#lbldltimg').toggleClass('isChecked');
-                        }else{
-                            chk.checked = false;
-                        }
-                    }else{
-                        jQuery('#chklbl').text('" . CHtml::encode(AmcWm::t("amcBack", 'Delete Image')) . "');
-                        jQuery('#imageDescription').val(imgDesc);
-                        jQuery('#itemImageFile').slideDown();
-                        jQuery('#lbldltimg').toggleClass('isChecked');
-                    }
-                }    
-            ", CClientScript::POS_HEAD);
-
-            Yii::app()->clientScript->registerCss('displayImageCss', "
-                label#lbldltimg span {
-                    display: none;
-                }
-                #deleteImage{
-                    display: none;
-                }
-                label#lbldltimg {
-                    background:  url(" . $baseScript . "/images/remove.png) no-repeat;
-                    width: 18px;
-                    height: 18px;
-                    display: block;
-                    cursor: pointer;
-                    float:right;
-                    margin: 3px;
-                }
-                label#lbldltimg.isChecked {
-                    background:  url(" . $baseScript . "/images/undo.png) no-repeat;
-                }
-            ");
-        endif;
-        ?>
-
     </fieldset>
 
     <fieldset>
