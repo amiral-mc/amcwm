@@ -97,8 +97,9 @@
             'model' => $model,
             'attribute' => 'imageFile',
             'thumbnailSrc' => $imageFile,
-            'thumbnailInfo' => $imagesInfo['newsList']['info'],
+            'thumbnailInfo' => $imagesInfo['list']['info'],
             'sizesInfo' => $imagesInfo,
+            'deleteIcon'=>true,
         ));
         ?>
         <?php echo $form->error($model, 'imageFile'); ?>

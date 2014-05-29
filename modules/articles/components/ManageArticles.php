@@ -571,7 +571,7 @@ class ManageArticles extends ManageContent {
      * @access protected
      */
     protected function saveThumb(ActiveRecord $article, $oldThumb) {
-        $articlesParams = Yii::app()->request->getParam('Articles');        
+        $articlesParams = Yii::app()->request->getParam('Articles');
         $coords = isset($articlesParams['imageFile_coords']) ? CJSON::decode($articlesParams['imageFile_coords']) : array();
         $deleteImage = Yii::app()->request->getParam('deleteImage');
         $imageSizesInfo = $this->controller->getModule()->appModule->mediaPaths;
@@ -581,10 +581,14 @@ class ManageArticles extends ManageContent {
                 //print_r($imageSizesInfo); exit;
                 $ok = false;
                 if ($imageInfo['autoSave']) {
-                    if ($imageInfo['info']['crob']) {
-                        $ok = ($imageInfo['info']['width'] <= ($coords['x2'] - $coords['x']) || $imageInfo['info']['height'] <= ($coords['y2'] - $coords['y'])) ? true : false;
+                    if ($coords) {
+                        if ($imageInfo['info']['crob']) {
+                            $ok = ($imageInfo['info']['width'] <= ($coords['x2'] - $coords['x']) || $imageInfo['info']['height'] <= ($coords['y2'] - $coords['y'])) ? true : false;
+                        } else {
+                            $ok = ($imageInfo['info']['width'] <= ($coords['x2'] - $coords['x'])) ? true : false;
+                        }
                     } else {
-                        $ok = ($imageInfo['info']['width'] <= ($coords['x2'] - $coords['x'])) ? true : false;
+                        $ok = true;
                     }
                 }
                 $imageFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $article->article_id . "." . $article->thumb;

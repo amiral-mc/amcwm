@@ -6,11 +6,14 @@
         factory(jQuery);
     }
 })(function($) {
-    var defaults = {'sizes': {}};
+    'use strict';
+    var defaults = {'sizes': {}};    
     $.fn.uploaderCropper = function(options) {
         options = $.extend(true, {}, defaults, options);
         var $this = this;
         var id = $this.attr('id');
+        var imgWidth = 0;
+        var imgHeight = 0;
         var imgSrc = '';
         var imageCropper = {
             data: {
@@ -85,7 +88,6 @@
                 thumbWidth = parseInt(thumbWidth / ratio); // Resize original image width
                 thumbHeight = parseInt(thumbHeight / ratio); // Resize original image height
             }
-            $("#dialog_" + id).dialog("close");
             $("#thumb_prev_" + id).html("");
             $("#thumb_prev_" + id).width(cropWidth);
             $("#thumb_prev_" + id).height(cropHeight);
@@ -94,6 +96,7 @@
                 "background-size": thumbWidth + "px " + thumbHeight + "px",
                 "background-position": "-" + parseInt(imageCropper.data.currentCoords.x / ratio) + "px -" + parseInt(imageCropper.data.currentCoords.y / ratio) + "px"  // Get cropped area coords from original image size and divide by ratio.
             });
+            $("#dialog_" + id).dialog("close");
         }
         return $this;
     }

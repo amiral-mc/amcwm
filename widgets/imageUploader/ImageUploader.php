@@ -30,6 +30,11 @@ class ImageUploader extends CJuiInputWidget {
     public $thumbnailInfo = array();
 
     /**
+     *
+     * @var boolean add delete icon 
+     */
+    public $deleteIcon = false;
+    /**
      * Executes the widget.
      * This method is called by {@link CBaseController::endWidget}.
      */
@@ -77,8 +82,8 @@ class ImageUploader extends CJuiInputWidget {
             }
         }
 
-        $this->options['setSelect'] = array(100, 100, 50, 50);
-        $this->options['aspectRatio'] = 16 / 9;
+        $this->options['setSelect'] = array(0, 0, 50, 50);
+//        $this->options['aspectRatio'] = 16 / 9;
         $this->options['minSize'] = array(min($widthSizes), min($heightSizes));
         $this->options['maxSize'] = array(max($widthSizes), max($heightSizes));        
         $allOptions['cropOptions'] = $this->options;
