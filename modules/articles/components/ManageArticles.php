@@ -155,10 +155,7 @@ class ManageArticles extends ManageContent {
             $contentModel->attributes = $_POST['ArticlesTranslation'];
             $extraModel = null;
 
-            /**
-             * Article main image file
-             */
-            $deleteImage = Yii::app()->request->getParam('deleteImage');
+            $deleteImage = isset($_POST['Articles']['imageFile_deleteImage']) && $_POST['Articles']['imageFile_deleteImage'];
             $model->imageFile = CUploadedFile::getInstance($model, 'imageFile');
             if ($model->imageFile instanceof CUploadedFile) {
                 $model->setAttribute('thumb', $model->imageFile->getExtensionName());
@@ -573,7 +570,7 @@ class ManageArticles extends ManageContent {
     protected function saveThumb(ActiveRecord $article, $oldThumb) {
         $articlesParams = Yii::app()->request->getParam('Articles');
         $coords = isset($articlesParams['imageFile_coords']) ? CJSON::decode($articlesParams['imageFile_coords']) : array();
-        $deleteImage = Yii::app()->request->getParam('deleteImage');
+        $deleteImage = isset($articlesParams['imageFile_deleteImage']) && $articlesParams['imageFile_deleteImage'];
         $imageSizesInfo = $this->controller->getModule()->appModule->mediaPaths;
         if ($article->imageFile instanceof CUploadedFile) {
             $image = new Image($article->imageFile->getTempName());

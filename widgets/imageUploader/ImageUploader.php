@@ -31,9 +31,23 @@ class ImageUploader extends CJuiInputWidget {
 
     /**
      *
-     * @var boolean add delete icon 
+     * @var boolean add delete icon if thumbnailSrc is not empty
      */
-    public $deleteIcon = false;
+    protected $deleteIcon = false;
+
+    /**
+     * Initializes the widget.
+     * This method will publish JUI assets if necessary.
+     * It will also register jquery and JUI JavaScript files and the theme CSS file.
+     * If you override this method, make sure you call the parent implementation first.
+     */
+    public function init() {
+        if($this->thumbnailSrc){
+            $this->deleteIcon = true;
+        }
+        parent::init();
+    }
+
     /**
      * Executes the widget.
      * This method is called by {@link CBaseController::endWidget}.
@@ -62,12 +76,17 @@ class ImageUploader extends CJuiInputWidget {
         if ($this->hasModel()) {
             echo CHtml::activeFileField($this->model, $this->attribute, $this->htmlOptions);
             echo '<input id="' . $uploaderId . '_coords" name="' . $this->model->getClassName() . '[' . $this->attribute . '_coords]" type="hidden" />';
+            echo '<input id="' . $uploaderId . '_deleteImage" name="' . $this->model->getClassName() . '[' . $this->attribute . '_deleteImage]" type="hidden" />';
+            //<input type="checkbox" name="deleteImage" id="deleteImage" style="float: right" onclick="deleteRelatedImage(this);" />
         } else {
             echo CHtml::fileField($name, $this->value, $this->htmlOptions);
             echo '<input id="' . $uploaderId . '_coords" name="' . $name . '_coords]" type="hidden" />';
+            echo '<input id="' . $uploaderId . '_deleteImage" name="' . $name . '_deleteImage]" type="hidden" />';
         }
         $yesIcon = $assets . '/images/yes.png';
         $noIcon = $assets . '/images/no.png';
+        $removeIcon = $assets . '/images/remove.png';
+        $undoIcon = $assets . '/images/undo.png';
         $widthSizes = array();
         $heightSizes = array();
         $sizes = array();
@@ -82,22 +101,31 @@ class ImageUploader extends CJuiInputWidget {
             }
         }
 
-        $this->options['setSelect'] = array(0, 0, 50, 50);
+        $this->options['setSelect'] = array(0, 0, max($widthSizes), max($heightSizes));
 //        $this->options['aspectRatio'] = 16 / 9;
         $this->options['minSize'] = array(min($widthSizes), min($heightSizes));
-        $this->options['maxSize'] = array(max($widthSizes), max($heightSizes));        
+        $this->options['maxSize'] = array(max($widthSizes), max($heightSizes));
         $allOptions['cropOptions'] = $this->options;
-        
+
         $allOptions['sizes'] = $sizes;
+        $allOptions['removeIcon'] = $removeIcon;
+        $allOptions['undoIcon'] = $undoIcon;
         $allOptions['yesIcon'] = $yesIcon;
         $allOptions['noIcon'] = $noIcon;
+        $allOptions['undoLabel'] = AmcWm::t("amcBack", 'undo delete image');
+        $allOptions['removeLabel'] = AmcWm::t("amcBack", 'Delete Image');
+
+        
         $allOptions['thumbnailInfo'] = $this->thumbnailInfo;
-        $options = CJavaScript::encode($allOptions);   
+        $options = CJavaScript::encode($allOptions);
         Yii::app()->clientScript->registerScript('cropping', "var cropper{$uploaderId} = $('#{$uploaderId}').uploaderCropper({$options});", CClientScript::POS_READY);
         if ($this->thumbnailSrc) {
             echo '<div id="thumb_prev_' . $uploaderId . '"><img src="' . $this->thumbnailSrc . '"/></div>';
         } else {
             echo '<div id="thumb_prev_' . $uploaderId . '"></div>';
+        }
+        if($this->deleteIcon){
+            echo '<label style="cursor: pointer;" id="remove_image_' . $uploaderId . '"><img id="remove_image_icon_' . $uploaderId . '" src="' .$removeIcon  .'" style="vertical-align: middle;" /><span id="remove_image_label_' . $uploaderId . '">' . $allOptions['removeLabel'] . '</span></label>';
         }
         $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
             'id' => "dialog_{$uploaderId}",
@@ -121,8 +149,8 @@ class ImageUploader extends CJuiInputWidget {
         echo '<div id="container_' . $uploaderId . '"></div>';
         echo '<div id="container_sizes' . $uploaderId . '" dir="ltr">';
         echo $iconsBar;
-        echo '</div>';        
-        $this->endWidget('zii.widgets.jui.CJuiDialog');        
+        echo '</div>';
+        $this->endWidget('zii.widgets.jui.CJuiDialog');
     }
 
 }
