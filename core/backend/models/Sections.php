@@ -177,11 +177,8 @@ class Sections extends ParentTranslatedActiveRecord {
      * @return array
      */
     public function getSettingsList() {
-        $settingsOptions = CJSON::decode($this->settings);
-        $defaultOptions = AmcWm::app()->appModule->options['default'];
-        if (!$settingsOptions) {
-            $settingsOptions = $defaultOptions;
-        }
+        $settingsOptions = CJSON::decode($this->settings);        
+        $settingsOptions = array_merge(AmcWm::app()->appModule->options['default'], $settingsOptions);
         return $settingsOptions;
     }
 
@@ -275,6 +272,14 @@ class Sections extends ParentTranslatedActiveRecord {
                         $notChanged = false;
                         if (isset($this->settingsOptions[$optionType][$optionKey])) {
                             $settingsOptions[$optionType][$optionKey]['value'] = $this->settingsOptions[$optionType][$optionKey];                                                     
+                        }
+                    }
+                    break;
+                    case 'color':
+                    foreach ($options as $optionKey => $optionValue) {
+                        $notChanged = false;
+                        if (isset($this->settingsOptions[$optionType][$optionKey])) {
+                            $settingsOptions[$optionType][$optionKey] = $this->settingsOptions[$optionType][$optionKey];                                                     
                         }
                     }
                     break;

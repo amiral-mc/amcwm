@@ -12,7 +12,7 @@
             'validateOnSubmit' => true,
         ),
         'htmlOptions' => array('enctype' => 'multipart/form-data')
-            ));
+    ));
     ?>
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage()); ?>
     <?php echo CHtml::hiddenField('module', Data::getForwardModParam()); ?>
@@ -184,11 +184,17 @@
                             case 'select':
                                 foreach ($options as $optionKey => $optionValue) {
                                     echo CHtml::label(AmcWm::t("msgsbase.core", "category_settings_{$optionType}_{$optionKey}_") . ":", "settingsOptions_{$optionType}_{$optionKey}");
-                                    echo CHtml::dropDownList("{$model->getClassName()}[settingsOptions][{$optionType}][{$optionKey}]", $optionValue['value'], $optionValue['list'] , array('id' => "settingsOptions_{$optionType}_{$optionKey}", 'class' => 'settingsOptions'));
+                                    echo CHtml::dropDownList("{$model->getClassName()}[settingsOptions][{$optionType}][{$optionKey}]", $optionValue['value'], $optionValue['list'], array('id' => "settingsOptions_{$optionType}_{$optionKey}", 'class' => 'settingsOptions'));
                                     echo "<br />";
                                 }
                                 break;
-                                
+                            case 'color':
+                                foreach ($options as $optionKey => $optionValue) {
+                                    echo CHtml::label(AmcWm::t("msgsbase.core", "category_settings_{$optionType}_{$optionKey}_") . ":", "settingsOptions_{$optionType}_{$optionKey}");
+                                    echo CHtml::textField("{$model->getClassName()}[settingsOptions][{$optionType}][{$optionKey}]", $optionValue, array('id' => "settingsOptions_{$optionType}_{$optionKey}", 'class' => 'settingsOptions'));
+                                    echo "<br />";
+                                }
+                                break;
                         }
                     }
                 }
@@ -198,7 +204,7 @@
         </div>
         <script type="text/javascript">
             jQuery(function($) {
-                $('.settingsOptions').click(function(){
+                $('.settingsOptions').click(function() {
                     var chkd = this.checked;
                     $(".settingsOptions").prop("checked", false);
                     this.checked = chkd;
