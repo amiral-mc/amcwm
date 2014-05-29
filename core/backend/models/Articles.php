@@ -178,9 +178,8 @@ class Articles extends ParentTranslatedActiveRecord {
     public function validateInSlider($attribute, $params) {
         if ($this->in_slider) {
             if (!$this->sliderFile instanceof CUploadedFile) {
-                $sliderError = !(is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . Yii::app()->params["multimedia"]['slider']['path'] . "/" . $this->article_id . "." . $this->in_slider)));
-                //$inSlider = Yii::app()->db->createCommand('select in_slider from ' . $this->tableName() . ' where article_id = ' . (int) $this->article_id)->queryScalar();  
-                if ($sliderError) {
+                $sliderFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $this->getModuleSettings()->mediaPaths['slider']['path'] . "/" . $this->article_id . "." . $this->in_slider);
+                if (!is_file($sliderFile)) {
                     $this->addError($attribute, Yii::t('yii', "{attribute} cannot be blank.", array("{attribute}" => $this->getAttributeLabel($attribute))));
                 }
             }
