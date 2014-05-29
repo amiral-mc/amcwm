@@ -94,6 +94,7 @@ class SectionsListData {
             if (count($articles)) {
                 $items[$section['data']["section_id"]]['childs'] = $articles;
                 $items[$section['data']["section_id"]]['data']['title'] = $section['data']['section_name'];
+                $items[$section['data']["section_id"]]['data']['settings'] = $section['data']['settings'];
                 //$urlParams = array('list'=>$this->_dataObject->getModuleName(), 'id' => $section['data']['section_id']);
                 $urlParams = array('id' => $section['data']['section_id']);
                 foreach ($forwardModules as $moduleId => $forwardModule) {
