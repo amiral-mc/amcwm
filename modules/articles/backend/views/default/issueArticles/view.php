@@ -32,8 +32,8 @@ if ($model->article_id && $model->in_slider) {
 
 $drawImage = NULL;
 if ($model->article_id && $model->thumb) {
-    if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['images']['path'] . "/" . $model->article_id . "." . $model->thumb))) {
-        $drawImage = '<div>' . CHtml::image(Yii::app()->baseUrl . "/" . $imagesInfo['images']['path'] . "/" . $model->article_id . "." . $model->thumb . "?" . time(), "", array("class" => "image", "width" => "100")) . '</div>';
+    if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['list']['path'] . "/" . $model->article_id . "." . $model->thumb))) {
+        $drawImage = '<div>' . CHtml::image(Yii::app()->baseUrl . "/" . $imagesInfo['list']['path'] . "/" . $model->article_id . "." . $model->thumb . "?" . time(), "", array("class" => "image",)) . '</div>';
     }
 }
 $titles = null;

@@ -11,15 +11,16 @@
     $.fn.uploaderCropper = function(options) {
         options = $.extend(true, {}, defaults, options);
         var $this = this;
-        var id = $this.attr('id');
+        var id = $this.attr('id');        
         $("#remove_image_" + id).click(function() {
             if (parseInt($("#" + id + "_deleteImage").val())) {
                 $('#thumb_prev_' + id).slideDown();
                 $("#remove_image_label_" + id).html(options.removeLabel);
                 $("#" + id + "_deleteImage").val('');
-                $("#remove_image_icon_" + id).attr('src', options.removeIcon);
+                $("#remove_image_icon_" + id).attr('src', options.removeIcon);                
             }
             else {
+                $($this).val(null);
                 $('#thumb_prev_' + id).slideUp();
                 $("#remove_image_label_" + id).html(options.undoLabel);
                 $("#" + id + "_deleteImage").val(1);
@@ -58,7 +59,10 @@
                 }
             }
             $.each(imageCropper.sizes, checkSize);
-        }
+        }        
+        $($this).click(function(e) {
+            $($this).val(null);
+        });
         $($this).change(function(e) {
             var files = this.files;
             if (this.files[0].type.match(/image/)) {
