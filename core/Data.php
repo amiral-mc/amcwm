@@ -226,9 +226,13 @@ class Data {
      * @param integer $parentSectionId to get sub sections contents from, if equal null or 0  then we gets contents from top parent sections
      * @return array
      */
-    public function sectionsTopArticles($table = "articles", $module = "articles", $sectionsLimit = 10, $articlesLimit = 4, $parentSectionId = null) {
+    public function sectionsTopArticles($table = "articles", $module = "articles", $sectionsLimit = 10, $articlesLimit = 4, $parentSectionId = null, $mediapath = null) {
         $data = new ArticlesListData(array($table));
         $data->addColumn('tags');
+        if(isset($mediapath)){
+            $path = Yii::app()->baseUrl . "/" . ArticlesListData::getSettings()->mediaPaths[$mediapath]['path'] . "/";
+            $data->setMediaPath($path);
+        }
         $articlesTables = ArticlesListData::getArticlesTables();
         if ($table == "articles") {
             //$data->addJoin("inner join {$this->_table} on t.article_id = {$this->_table}.article_id");
