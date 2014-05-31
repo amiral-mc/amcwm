@@ -177,7 +177,7 @@ class Sections extends ParentTranslatedActiveRecord {
      * @return array
      */
     public function getSettingsList() {
-        $settingsOptions = CJSON::decode($this->settings);        
+        $settingsOptions = CJSON::decode($this->settings) ? CJSON::decode($this->settings) : array();
         $settingsOptions = array_merge(AmcWm::app()->appModule->options['default'], $settingsOptions);
         return $settingsOptions;
     }
