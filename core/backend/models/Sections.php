@@ -167,8 +167,8 @@ class Sections extends ParentTranslatedActiveRecord {
         $criteria->compare('published', $this->published);
         $criteria->compare('section_sort', $this->section_sort);
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
-                ));
+            'criteria' => $criteria,
+        ));
     }
 
     /**
@@ -177,8 +177,14 @@ class Sections extends ParentTranslatedActiveRecord {
      * @return array
      */
     public function getSettingsList() {
-        $settingsOptions = CJSON::decode($this->settings) ? CJSON::decode($this->settings) : array();
-        $settingsOptions = array_merge(AmcWm::app()->appModule->options['default'], $settingsOptions);
+        $defaultSettings = AmcWm::app()->appModule->options['default'];
+        $settingsOptions = CJSON::decode($this->settings) ? CJSON::decode($this->settings) : $defaultSettings;
+        $settingsOptions = CMap::mergeArray( $defaultSettings, $settingsOptions);
+        if (isset($settingsOptions['select'])) {
+            foreach ($settingsOptions['select'] as $settingkey => $settingOptions) {
+                $settingsOptions['select'][$settingkey]['list'] = $defaultSettings['select'][$settingkey]['list'];
+            }
+        }
         return $settingsOptions;
     }
 
@@ -271,15 +277,15 @@ class Sections extends ParentTranslatedActiveRecord {
                     foreach ($options as $optionKey => $optionValue) {
                         $notChanged = false;
                         if (isset($this->settingsOptions[$optionType][$optionKey])) {
-                            $settingsOptions[$optionType][$optionKey]['value'] = $this->settingsOptions[$optionType][$optionKey];                                                     
+                            $settingsOptions[$optionType][$optionKey]['value'] = $this->settingsOptions[$optionType][$optionKey];
                         }
                     }
                     break;
-                    case 'color':
+                case 'color':
                     foreach ($options as $optionKey => $optionValue) {
                         $notChanged = false;
                         if (isset($this->settingsOptions[$optionType][$optionKey])) {
-                            $settingsOptions[$optionType][$optionKey] = $this->settingsOptions[$optionType][$optionKey];                                                     
+                            $settingsOptions[$optionType][$optionKey] = $this->settingsOptions[$optionType][$optionKey];
                         }
                     }
                     break;
