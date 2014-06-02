@@ -12,7 +12,7 @@ Yii::import('bootstrap.widgets.TbCarousel');
 
 /**
  * Bootstrap carousel widget.
- * @see http://twitter.github.com/bootstrap/javascript.html#carousel
+    * @see http://twitter.github.com/bootstrap/javascript.html#carousel
  */
 class MyCarousel extends TbCarousel {
 
