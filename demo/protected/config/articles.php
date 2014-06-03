@@ -75,7 +75,7 @@ return array(
     'options' => array(
         'default' => array(
             'check' => array(
-                'addToSlider' => false,
+                'addToSlider' => true,
                 'addToInfocus' => false,
             ),
         ),

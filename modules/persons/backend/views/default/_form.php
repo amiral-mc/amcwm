@@ -36,12 +36,8 @@
             <?php echo $form->error($contentModel, 'name'); ?>
         </div>
         <div class="row">
-            <?php $sexLabels = AmcWm::t("msgsbase.core", 'sexLabels'); ?>
             <?php echo $form->labelEx($model, 'sex'); ?>                        
-            <?php echo $sexLabels['m']; ?>
-            <?php echo $form->radioButton($model, 'sex', array("uncheckValue" => null, 'value' => 'm')); ?>            
-            <?php echo $sexLabels['f']; ?>
-            <?php echo $form->radioButton($model, 'sex', array("uncheckValue" => null, 'value' => 'f')); ?>
+            <?php echo $form->radioButtonList($model,'sex',AmcWm::t("msgsbase.core", 'sexLabels'),array('separator'=>' ', 'labelOptions' => array('class' => 'checkbox_label')));?>            
             <?php echo $form->error($model, 'sex'); ?>
         </div>        
 

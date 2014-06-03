@@ -21,12 +21,7 @@ return array(
         ),
         array(
             'id' => 2,
-            'name' => 'news',
-            'translation' => array(
-                'id' => 7,
-                'key' => 'article_id',
-                'name' => 'news_translation',
-            ),
+            'name' => 'news',            
             'key' => 'article_id',
             'sorting' => array('sortField' => "create_date", 'order' => 'desc'),
         ),
@@ -71,6 +66,7 @@ return array(
                 'default' => 'AmcArticlesController',
                 'articleComments' => 'AmcCommentsController',
                 'replies' => 'AmcRepliesController',
+                'sources' => 'AmcSourcesController',                
             ),
         ),
         'virtual' => array(

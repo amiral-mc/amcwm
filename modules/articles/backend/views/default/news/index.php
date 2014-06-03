@@ -14,6 +14,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
         array('label' => AmcWm::t("amcTools", 'Publish'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'publish_articles', 'image_id' => 'publish'),
         array('label' => AmcWm::t("amcTools", 'Unpublish'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'unpublish_articles', 'image_id' => 'unpublish'),
         array('label' => AmcWm::t("msgsbase.core", 'Comments'), 'js' => array('formId' => Yii::app()->params["adminForm"], 'action' => 'comments', 'refId' => 'item'), 'id' => 'manage_article_comments', 'image_id' => 'comments'),
+        array('label' => AmcWm::t("msgsbase.sources", 'Sources'), 'url' => array('/backend/articles/default/sources'), 'id' => 'sources_list', 'image_id' => 'listing'),
         array('label' => AmcWm::t("amcTools", 'Translate'), 'js' => array('formId' => Yii::app()->params["adminForm"],), 'id' => 'translate_article', 'image_id' => 'translate'),
         array('label' => AmcWm::t("amcTools", 'Search'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'articles_comments_search', 'image_id' => 'search'),
         array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array('/backend/default/index'), 'id' => 'articles_list', 'image_id' => 'back'),

@@ -462,7 +462,9 @@ class ArticleData extends Dataset {
         if ($this->_id) {
             $moduleName = $this->getModuleName();
             if ($moduleName == 'news') {
-                $this->addJoin("inner join news_translation nt on nt.article_id = tt.article_id and nt.content_lang = tt.content_lang");
+                $this->addJoin("inner join news n on n.article_id = t.article_id");
+                $this->addJoin("left join news_sources_translation ns on ns.source_id = n.source_id and ns.content_lang = tt.content_lang");
+                $this->addColumn("source");
                 $this->addColumn("source");
             } else {
                 $this->addColumn("' '", 'source');
@@ -489,6 +491,7 @@ class ArticleData extends Dataset {
              ", ActiveRecord::PUBLISHED, 
                 $this->_id, 
                 Yii::app()->db->quoteValue($siteLanguage));
+                //die($this->query);
             $this->items['record'] = Yii::app()->db->createCommand($this->query)->queryRow();
 
             if (is_array($this->items['record'])) {

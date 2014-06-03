@@ -39,6 +39,13 @@ $titles = null;
 foreach ($contentModel->titles as $title) {
     $titles .= $title->title . "<br />";
 }
+
+$writers = null;
+if(count($model->news->writers)){
+    foreach ($model->news->writers as $writer){
+        $writers .= "{$writer->writer->person->getCurrent()->name}<br /> ";
+    }    
+}
 $infocusName = $this->getInfocucName($model->infocusId);
 $this->widget('zii.widgets.CDetailView', array(
     'data' => $model,
@@ -59,7 +66,7 @@ $this->widget('zii.widgets.CDetailView', array(
         ),
         array(
             'label' => AmcWm::t("msgsbase.news", "Source"),
-            'value' => $model->news->getCurrent()->source,
+            'value' => ($model->news->source) ? $model->news->source->getCurrent()->source : null,
         ),
         array(
             'label' => AmcWm::t("msgsbase.core", "Article Detail"),
@@ -80,8 +87,9 @@ $this->widget('zii.widgets.CDetailView', array(
             'value' => ($model->country_code) ? $model->countryCode->getCountryName() : NULL,
         ),
         array(
-            'name' => 'writer_id',
-            'value' => ($model->writer_id && $model->writer->person->getTranslated($contentModel->content_lang)) ? $model->writer->person->getTranslated($contentModel->content_lang)->name : "",
+            'label' => AmcWm::t("msgsbase.news", "Writers"),
+            'value' => $writers,
+            'type' => 'html',
         ),
         array(
             'name' => 'published',

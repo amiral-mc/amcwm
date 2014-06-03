@@ -20,6 +20,12 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
     ),
     'htmlOptions' => array('style' => 'padding:5px;')
 ));
+$writers = null;
+if (count($model->news->writers)) {
+    foreach ($model->news->writers as $writer) {
+        $writers .= "<br />{$writer->writer->person->getCurrent()->name}";
+    }
+}
 ?>
 
 <div class="form">
@@ -36,13 +42,13 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
             'validateOnSubmit' => true,
         ),
         'htmlOptions' => array('enctype' => 'multipart/form-data')
-            ));
+    ));
     ?>
 
     <p class="note"><?php echo AmcWm::t("amcBack", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage()); ?>
     <?php echo CHtml::hiddenField('module', Data::getForwardModParam()); ?>
-    <?php echo $form->errorSummary(array_merge(array($model, $translatedModel, $model->news->getTranslated($translatedModel->content_lang)), $translatedModel->titles)); ?>
+    <?php echo $form->errorSummary(array_merge(array($model, $translatedModel), $translatedModel->titles)); ?>
     <fieldset>
         <legend><?php echo AmcWm::t("msgsbase.core", "General Option"); ?>:</legend>
         <div class="row">                       
@@ -99,7 +105,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 ?>
             </span>
             <!--            --->
-            <span class="translated_label"><?php //echo AmcWm::t("msgsbase.core", 'In Spot');          ?></span>
+            <span class="translated_label"><?php //echo AmcWm::t("msgsbase.core", 'In Spot');            ?></span>
             <span class="translated_org_item">
                 <?php
                 if ($model->in_spot) {
@@ -203,11 +209,16 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
             );
             ?>
         </div>
-        <div class="row">
-            <?php echo $form->labelEx($model->news->getTranslated($translatedModel->content_lang), 'source'); ?>
-            <?php echo $form->textField($model->news->getTranslated($translatedModel->content_lang), 'source', array('size' => 100, 'maxlength' => 100)); ?>
-            <?php echo $form->error($model->news->getTranslated($translatedModel->content_lang), 'source'); ?>
-        </div>
+        <span class="translated_label"><?php echo AmcWm::t("msgsbase.news", 'Breaking News'); ?></span>
+        <span class="translated_org_item">
+            <?php
+            if ($model->news->source) {
+                echo $model->news->source->getCurrent()->source;
+            } else {
+                echo Yii::t('zii', 'Not set');
+            }
+            ?>
+        </span>
         <div class="row">
             <?php echo $form->labelEx($translatedModel, 'article_detail'); ?>
             <?php echo $form->error($translatedModel, 'article_detail'); ?>
@@ -244,11 +255,14 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
         </div>     
 
         <div class="row">
-            <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", 'Writer'); ?></span>:
+            <span class="translated_label"><?php echo AmcWm::t("msgsbase.news", 'Writers'); ?></span>:
             <span class="translated_org_item">
                 <?php
-                $writer = ($model->writer_id && $model->writer->person->getTranslated($contentModel->content_lang)) ? $model->writer->person->getTranslated($contentModel->content_lang)->name : Yii::t('zii', 'Not set');
-                echo $writer;
+                if ($writers) {
+                    echo $writers;
+                } else {
+                    echo Yii::t('zii', 'Not set');
+                }
                 ?>
             </span>
         </div>

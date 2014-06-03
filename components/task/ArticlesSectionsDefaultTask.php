@@ -52,9 +52,9 @@ class ArticlesSectionsDefaultTask extends ArticlesControllerTask {
                 $articleList->addColumn("article_detail");
                 $articleList->addColumn("section_name");
                 $articleList->addJoin("left join sections_translation sectionst on sectionst.section_id = t.section_id and tt.content_lang = sectionst.content_lang");
-                if ($this->table == "news") {
+                if ($this->table == "news") {                    
+                    $articleList->addJoin("left join news_sources_translation ns on ns.source_id = news.source_id and ns.content_lang = tt.content_lang");
                     $articleList->addColumn("source");
-                    $articleList->addJoin("inner join news_translation newst on news.article_id = newst.article_id and tt.content_lang = newst.content_lang");
                 }
                 $data['widgetImage'] = null;
                 if (file_exists("images/front/{$this->module}Image.png")) {
@@ -104,7 +104,7 @@ class ArticlesSectionsDefaultTask extends ArticlesControllerTask {
         $sectionDataset->addArticlesJoin("left join sections_translation sectionst on sectionst.section_id = t.section_id and tt.content_lang = sectionst.content_lang");
         if ($this->module == "news") {
             $sectionDataset->addArticlesColumn("source");
-            $sectionDataset->addArticlesJoin("inner join news_translation newst on news.article_id = newst.article_id and tt.content_lang = newst.content_lang");
+            $sectionDataset->addArticlesJoin("left join news_sources_translation ns on ns.source_id = news.source_id and ns.content_lang = tt.content_lang");
         }
 
         $pagingDataset = new SectionArticlesPagingDataset($sectionDataset, $limit, Yii::app()->request->getParam("page"), $this->table, $topArticlesLimit, $this->params["id"]);
@@ -164,7 +164,7 @@ class ArticlesSectionsDefaultTask extends ArticlesControllerTask {
 
         if ($this->module == "news") {
             $sectionDataset->addArticlesColumn("source");
-            $sectionDataset->addArticlesJoin("inner join news_translation newst on news.article_id = newst.article_id and tt.content_lang = newst.content_lang");
+            $sectionDataset->addArticlesJoin("left join news_sources_translation ns on ns.source_id = news.source_id and ns.content_lang = tt.content_lang");
         }
         if (isset($this->options['showPrimaryHeader'])) {
             $sectionDataset->addArticlesColumn('article_pri_header', 'priHeader');

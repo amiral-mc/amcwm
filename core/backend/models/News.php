@@ -15,13 +15,18 @@
  *
  * The followings are the available model relations:
  * @property Articles $article
- * @property NewsTranslation[] $translationChilds
- * 
+ * @property NewsSources $source
+ * @property Writers[] $writers
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class News extends ParentTranslatedActiveRecord {
+class News extends ActiveRecord {
 
+    /**
+     * 
+     * @var array writers ids saved in news_writers
+     */
+    public $writersIds;
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -45,8 +50,9 @@ class News extends ParentTranslatedActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('is_breaking', 'numerical', 'integerOnly' => true),
+            array('is_breaking, source_id', 'numerical', 'integerOnly' => true),
             array('article_id', 'length', 'max' => 10),
+            array('writersIds', 'isArray', 'allowEmpty'=>true),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('article_id, is_breaking', 'safe', 'on' => 'search'),
@@ -61,7 +67,8 @@ class News extends ParentTranslatedActiveRecord {
         // class name for the relations automatically generated below.
         return array(
             'article' => array(self::BELONGS_TO, 'Articles', 'article_id'),
-            'translationChilds' => array(self::HAS_MANY, 'NewsTranslation', 'article_id', "index"=>"content_lang"),
+            'source' => array(self::BELONGS_TO, 'NewsSources', 'source_id'),
+            'writers' => array(self::HAS_MANY, 'NewsWriters', 'article_id', 'index'=>'writer_id'),
         );
     }
 
@@ -72,6 +79,8 @@ class News extends ParentTranslatedActiveRecord {
         return array(
             'article_id' =>AmcWm::t("msgsbase.core", 'Article ID'),
             'is_breaking' => AmcWm::t("msgsbase.news", 'Breaking News'),
+            'source_id' => AmcWm::t("msgsbase.news", 'Source'),
+            'writersIds' => AmcWm::t("msgsbase.news", 'Writers'),
         );
     }
 
@@ -92,5 +101,36 @@ class News extends ParentTranslatedActiveRecord {
                     'criteria' => $criteria,
                 ));
     }
-
+    
+      /**
+     * This method is invoked after each record is instantiated by a find method.
+     * @access public
+     * @return void
+     */
+    protected function afterFind() {
+        $this->writersIds = array_keys($this->writers);
+        parent::afterFind();
+    }
+    
+     /**
+     * This method is invoked after saving a record successfully.
+     * The default implementation raises the {@link onAfterSave} event.
+     * You may override this method to do postprocessing after record saving.
+     * Make sure you call the parent implementation so that the event is raised properly.
+     */
+    protected function afterSave() {        
+        AmcWm::app()->db->createCommand('delete from news_writers where article_id = ' . (int)$this->article_id)->execute();
+        foreach ($this->writersIds as $writerId){
+            AmcWm::app()->db->createCommand(sprintf('insert into news_writers(article_id, writer_id) values (%d, %d)' , $this->article_id, $writerId))->execute();
+        }
+        parent::afterSave();
+    }
+    
+    /**
+     * Check if we can use writers options or not
+     * @return boolean
+     */
+    public function getHasWriters(){
+        return AmcWm::app()->db->createCommand('select count(*) from writers')->queryScalar();
+    }
 }

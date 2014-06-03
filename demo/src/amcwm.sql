@@ -3550,7 +3550,7 @@ INSERT INTO `modules` (`module_id`, `parent_module`, `module`, `virtual`, `enabl
 (3, 1, 'users', 0, 1, 0, 0),
 (4, 1, 'sections', 0, 1, 0, 0),
 (5, 1, 'uploads', 0, 1, 1, 0),
-(6, 1, 'writers', 0, 0, 0, 0),
+(6, 1, 'writers', 0, 1, 0, 0),
 (7, 1, 'persons', 0, 1, 0, 0),
 (8, 1, 'maillist', 0, 0, 0, 0),
 (10, 1, 'votes', 0, 1, 0, 0),
@@ -3761,26 +3761,46 @@ INSERT INTO `moduls_components_params_translation` (`content_lang`, `component_i
 --
 
 CREATE TABLE IF NOT EXISTS `news` (
-  `article_id` int(10) unsigned NOT NULL,
-  `is_breaking` tinyint(4) DEFAULT '0',
-  PRIMARY KEY (`article_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `article_id` INT UNSIGNED NOT NULL,
+  `source_id` SMALLINT UNSIGNED NULL DEFAULT NULL,
+  `is_breaking` TINYINT NULL DEFAULT 0,
+  PRIMARY KEY (`article_id`),
+  INDEX `fk_news_news_source1_idx` (`source_id` ASC),
+  CONSTRAINT `fk_news_articles`
+    FOREIGN KEY (`article_id`)
+    REFERENCES `articles` (`article_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_news_news_source1`
+    FOREIGN KEY (`source_id`)
+    REFERENCES `news_sources` (`source_id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `news_translation`
---
+CREATE TABLE IF NOT EXISTS `news_sources` (
+  `source_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `url` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`source_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `news_translation` (
-  `article_id` int(10) unsigned NOT NULL,
-  `content_lang` char(2) NOT NULL,
-  `source` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`article_id`,`content_lang`),
-  KEY `fk_news_translation_1` (`article_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `news_sources_translation` (
+  `source_id` SMALLINT UNSIGNED NOT NULL,
+  `content_lang` CHAR(2) NOT NULL,
+  `source` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`source_id`, `content_lang`),
+  INDEX `fk_news_source_translation_news_source1_idx` (`source_id` ASC),
+  CONSTRAINT `fk_news_source_translation_news_source1`
+    FOREIGN KEY (`source_id`)
+    REFERENCES `news_sources` (`source_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 --
 -- Table structure for table `persons`
@@ -4940,6 +4960,26 @@ CREATE TABLE IF NOT EXISTS `writers` (
   PRIMARY KEY (`writer_id`),
   UNIQUE KEY `writer_type_UNIQUE` (`writer_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `news_writers` (
+  `article_id` INT UNSIGNED NOT NULL,
+  `writer_id` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`article_id`, `writer_id`),
+  INDEX `fk_news_has_writers_writers1_idx` (`writer_id` ASC),
+  INDEX `fk_news_has_writers_news1_idx` (`article_id` ASC),
+  CONSTRAINT `fk_news_writers_news1`
+    FOREIGN KEY (`article_id`)
+    REFERENCES `news` (`article_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_news_writers_writers1`
+    FOREIGN KEY (`writer_id`)
+    REFERENCES `writers` (`writer_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 --
 -- Constraints for dumped tables

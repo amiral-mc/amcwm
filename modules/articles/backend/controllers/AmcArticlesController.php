@@ -195,5 +195,12 @@ class AmcArticlesController extends BackendController {
             Yii::app()->end();
         }
     }
+    
+    /**
+     * Manage news sources
+     */
+    public function actionSources(){
+        $this->forward('sources/');       
+    }
 
 }

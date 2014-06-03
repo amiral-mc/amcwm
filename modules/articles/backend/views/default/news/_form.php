@@ -22,7 +22,7 @@
     <p class="note"><?php echo AmcWm::t("amcBack", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage()); ?>
     <?php echo CHtml::hiddenField('module', Data::getForwardModParam()); ?>
-    <?php echo $form->errorSummary(array_merge(array($model, $contentModel, $model->news->getCurrent()), $contentModel->titles)); ?>
+    <?php echo $form->errorSummary(array_merge(array($model, $contentModel, $model->news), $contentModel->titles)); ?>
     <fieldset>
         <legend><?php echo AmcWm::t("msgsbase.core", "General Option"); ?>:</legend>
         <div class="row">                       
@@ -150,9 +150,9 @@
             ?>
         </div>
         <div class="row">
-            <?php echo $form->labelEx($model->news->getCurrent(), 'source'); ?>
-            <?php echo $form->textField($model->news->getCurrent(), 'source', array('size' => 100, 'maxlength' => 100)); ?>
-            <?php echo $form->error($model->news->getCurrent(), 'source'); ?>
+            <?php echo $form->labelEx($model->news, 'source_id'); ?>
+            <?php echo $form->dropDownList($model->news, 'source_id', NewsSources::getSourcesList(), array('empty' => Yii::t('zii', 'Not set'))); ?>
+            <?php echo $form->error($model->news, 'source_id'); ?>
         </div>
         <div class="row">
             <?php echo $form->labelEx($contentModel, 'article_detail'); ?>
@@ -186,12 +186,13 @@
             <?php echo $form->error($model, 'country_code'); ?>
         </div>
 
-
+        <?php if(count($model->news->hasWriters)):?>
         <div class="row">
-            <?php echo $form->labelEx($model, 'writer_id'); ?>
-            <?php echo $form->dropDownList($model, 'writer_id', Persons::getWritersList(Yii::t('zii', 'Not set'))); ?>
-            <?php echo $form->error($model, 'writer_id'); ?>
+            <?php echo $form->labelEx($model->news, 'writersIds'); ?>            
+            <?php echo $form->listBox($model->news, 'writersIds', Persons::getWritersList(), array('multiple'=>'multiple')); ?>
+            <?php echo $form->error($model->news, 'writersIds'); ?>
         </div>
+        <?php endif;?>
 
         <?php if ($options['default']['check']['addToInfocus']): ?>
             <div class="row">
@@ -247,7 +248,7 @@
             ));
             ?>            
             <?php echo Chtml::checkBox('no_expiry', ($model->expire_date) ? 0 : 1, array('onclick' => '$("#Articles_expire_date").val("")')) ?>
-            <?php echo Chtml::label(AmcWm::t($msgsBase, "No expiry date"), "remove_expiry", array("style" => 'display:inline;color:#3E4D57;font-weight:normal')) ?>
+            <?php echo Chtml::label(AmcWm::t("msgsbase.core", "No expiry date"), "remove_expiry", array("style" => 'display:inline;color:#3E4D57;font-weight:normal')) ?>
             <?php echo $form->error($model, 'expire_date'); ?>
 
         </div>
