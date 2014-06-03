@@ -226,9 +226,43 @@ class Data {
      * @param integer $parentSectionId to get sub sections contents from, if equal null or 0  then we gets contents from top parent sections
      * @return array
      */
-    public function sectionsTopArticles($table = "articles", $module = "articles", $sectionsLimit = 10, $articlesLimit = 4, $parentSectionId = null) {
+    public function sectionsTopArticles($table = "articles", $module = "articles", $sectionsLimit = 10, $articlesLimit = 4, $parentSectionId = null, $mediapath = null) {
         $data = new ArticlesListData(array($table));
         $data->addColumn('tags');
+        if(isset($mediapath)){
+            $path = Yii::app()->baseUrl . "/" . ArticlesListData::getSettings()->mediaPaths[$mediapath]['path'] . "/";
+            $data->setMediaPath($path);
+        }
+        $articlesTables = ArticlesListData::getArticlesTables();
+        if ($table == "articles") {
+            //$data->addJoin("inner join {$this->_table} on t.article_id = {$this->_table}.article_id");
+            foreach ($articlesTables as $articleTable) {
+                $data->addJoin("left join {$articleTable} on t.article_id = {$articleTable}.article_id");
+                $data->addWhere("{$articleTable}.article_id is null");
+            }
+        }
+        $data->setModuleName($module);
+        $sections = new SectionsListData($data, $sectionsLimit, $articlesLimit);
+        $sections->setParentSectionId($parentSectionId);
+        return $sections->generate();
+    }
+    
+    /**
+     *
+     * Get sections top articles list for each section in the system
+     * @param string $table, table name to get data using it
+     * @param string $module, module name that handle the output
+     * @param integer $sectionsLimit, Number of sections to be displayed
+     * @param integer $articlesLimits, Number of articles to be displayed in each section
+     * @param integer $parentSectionId to get sub sections contents from, if equal null or 0  then we gets contents from top parent sections
+     * @return array
+     */
+    public function homeSectionsList($table = "articles", $module = "articles", $sectionsLimit = 10, $articlesLimit = 4, $parentSectionId = null) {
+        $data = new ArticlesListData(array($table));
+        $data->addColumn('tags');
+        $data->addOrder("create_date desc");
+        $mediaPath = Yii::app()->baseUrl . "/" . ArticlesListData::getSettings()->mediaPaths['sections']['path'] . "/";
+        $data->setMediaPath($mediaPath);
         $articlesTables = ArticlesListData::getArticlesTables();
         if ($table == "articles") {
             //$data->addJoin("inner join {$this->_table} on t.article_id = {$this->_table}.article_id");
