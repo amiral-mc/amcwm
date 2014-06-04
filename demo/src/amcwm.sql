@@ -635,6 +635,7 @@ CREATE TABLE IF NOT EXISTS `articles` (
   `country_code` char(2) DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
   `comments` int(10) unsigned DEFAULT '0',
+  `shared` int(10) unsigned DEFAULT '0',
   `article_sort` int(10) unsigned DEFAULT '0',
   `in_ticker` tinyint(1) DEFAULT '0',
   `in_slider` varchar(3) DEFAULT NULL,

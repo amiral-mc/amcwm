@@ -13,28 +13,26 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class MostReadAndComment extends CWidget {
+class MostReadAndComment extends SideWidget {
 
-    /**
-     * Widget title
-     * @var string title
-     */
-    public $title = null;
     /**
      * Most read articles tab title
      * @var string title
      */
-    public $readTitle = null;
+    public $readTitle = 'Views';
+
+    /**
+     * Most read articles tab title
+     * @var string title
+     */
+    public $sharedTitle = 'Shared';
+
     /**
      * Most comments articles tab title
      * @var string title
      */
-    public $commentTitle = null;
-    /**
-     *  HTML attributes for the menu's root container tag
-     * @var array
-     */
-    public $htmlOptions = array();
+    public $commentTitle = 'Comments';
+
     /**
      * Most comments articles list array, each article is associated  array that contain's following items:
      * <ul>
@@ -45,6 +43,18 @@ class MostReadAndComment extends CWidget {
      * @var array 
      */
     public $commentsArticles;
+
+    /**
+     * shared articles list array, each article is associated  array that contain's following items:
+     * <ul>
+     * <li>title: string, article title</li>
+     * <li>image: string, link for article image</li>
+     * <li>link: string, link for displaying article details</li>
+     * </ul>
+     * @var array 
+     */
+    public $sharedArticles;
+
     /**
      * Most read articles list array, each article is associated  array that contain's following items:
      * <ul>
@@ -57,54 +67,67 @@ class MostReadAndComment extends CWidget {
     public $readArticles;
 
     /**
-     * Initializes the widget.
-     * If this method is overridden, make sure the parent implementation is invoked.
-     * @access public
-     * @return void
+     *
+     * @var array tabs dispaly orders
      */
-    public function init() {
-        $this->htmlOptions['id'] = $this->getId();
-        parent::init();
-    }
+    public $tabsOrders = array('read', 'comments', 'shared');
+    
+    /**
+     *
+     * @var current active tab 
+     */
+    public $activeTab = null;
 
     /**
      * Render the widget and display the result
      * @access public
      * @return void
      */
-    public function run() {
-        $draw = false;
-        $commentContent = "";
-        $readContent = "";
-        $readContent = '	   	
-              <ul class="wd_news_list">';
+    public function setContentData() {
+        
+        foreach ($this->tabsOrders as $i=>$tabOrder){             
+            
+            $widgetTabs[$tabOrder] = array();
+        }
+
         if (count($this->readArticles)) {
-            $draw = true;
+            $widgetTabs['read'] = array('title' => $this->readTitle, 'content' => '');
+            $widgetTabs['read']['content'] = '<ul>';
             foreach ($this->readArticles As $article) {
-                $readContent.= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
+                $widgetTabs['read']['content'].= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
             }
+            $widgetTabs['read']['content'] .='</ul>';
+        } else {
+            unset($widgetTabs['read']);
         }
-
-        $readContent .='</ul>';
-
-        $commentContent = '	   	
-              <ul class="wd_news_list">';
         if (count($this->commentsArticles)) {
-            $draw = true;
+            $widgetTabs['comments'] = array('title' => $this->commentTitle, 'content' => '', 'active');
+            $widgetTabs['comments']['content'] .= '<ul>';
             foreach ($this->commentsArticles As $article) {
-                $commentContent.= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
+                $widgetTabs['comments']['content'].= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
             }
+            $widgetTabs['comments']['content'] .= '</ul>';
+        } else {
+            unset($widgetTabs['comments']);
         }
-
-        $commentContent .='</ul>';
-
-        $widgetTabs = array(
-            'comment' => array('title' => $this->commentTitle, 'content' => $commentContent),
-            'read' => array('title' => $this->readTitle, 'content' => $readContent),
-        );
-        if ($draw) {
-            echo '<div class="wdl_title">' . $this->title . '</div><div style="height:6px;"></div>';
-            $this->widget('TabView', array('tabs' => $widgetTabs, 'cssFile' => Yii::app()->request->baseUrl . '/css/tabs.css',));
+        if (count($this->sharedArticles)) {
+            $widgetTabs['shared'] = array('title' => $this->sharedTitle, 'content' => '');
+            $widgetTabs['shared']['content'] .= '<ul>';
+            foreach ($this->sharedArticles As $article) {
+                $widgetTabs['shared']['content'].= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
+            }
+            $widgetTabs['shared']['content'] .= '</ul>';
+        } else {
+            unset($widgetTabs['shared']);
+        }
+        
+        if ($widgetTabs) {
+            $tabsWidgetsOptions = array('tabs' => $widgetTabs, 'cssFile' => Yii::app()->request->baseUrl . '/css/tabs.css',);
+            if($this->activeTab){
+                $tabsWidgetsOptions['activeTab'] = $this->activeTab;
+            }
+            $this->contentData .= $this->widget('TabView', $tabsWidgetsOptions, true);
         }
     }
+
 }
