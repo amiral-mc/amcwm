@@ -41,7 +41,17 @@ return array(
                 'path' => 'multimedia/infocus',
                 'info' => array('crob' => false, 'width' => 396, 'height' => 232, 'exact' => false, 'allowedUploadRatio' => 8),
             ),
-            'banners' => array(
+            'slider' => array(
+                'autoSave' => true,
+                'path' => 'multimedia/infocus',
+                'info' => array('crob' => true, 'width' => 260, 'height' => 155, 'exact' => true, 'allowedUploadRatio' => 8),
+            ),
+            'list' => array(
+                'autoSave' => true,
+                'path' => 'multimedia/infocus',
+                'info' => array('width' => 78, 'height' => 59, 'exact' => false, 'allowedUploadRatio' => 8, 'crob' => true,),
+            ), 
+           'banners' => array(
                 'autoSave' => true,
                 'maxImageSize' => 900 * 1024 * 1024,
                 'path' => 'multimedia/infocus/banners',
