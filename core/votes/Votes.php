@@ -13,6 +13,11 @@
 class Votes {
 
     /**
+     *
+     * @var string inner widget used for results and form 
+     */
+    protected $innerWidget = '';
+    /**
      * The dataset of current active vote 
      * @var Array
      * @static
@@ -58,7 +63,8 @@ class Votes {
      * @access protected
      * @throws Error Error if you call the constructor directly or PDO could not connect to MySQL server
      */
-    protected function __construct(Controller $controller, $id = "votes") {
+    protected function __construct(Controller $controller, $innerWidget = 'amcwm.core.votes.VotesWidget', $id = "votes") {
+        $this->innerWidget = $innerWidget;
         $date = date("Y-m-d H:i:s");
         $this->id = $id;
         $this->voteForm = new VoteForm();
@@ -149,12 +155,13 @@ class Votes {
      * Factory Votes method.
      * @static
      * @param Controller $controller the controller object that called this class
+     * @param string $innerWidget inner widget used for results and form
      * @access public
      * @return Votes the Singleton instance of the Votes
      */
-    public static function &getInstance(Controller $controller) {
+    public static function &getInstance(Controller $controller, $innerWidget = 'amcwm.core.votes.VotesWidget') {
         if (self::$_instance == NULL) {
-            self::$_instance = new self($controller);
+            self::$_instance = new self($controller, $innerWidget);
         }
         return self::$_instance;
     }
@@ -190,10 +197,10 @@ class Votes {
                 'items' => $this->data,
             );
             if($return){
-               $output =  $this->controller->widget('amcwm.core.votes.VotesWidget', $voteOptions, true);
+               $output =  $this->controller->widget($this->innerWidget, $voteOptions, true);
             }
             else{
-                $this->controller->widget('amcwm.core.votes.VotesWidget', $voteOptions);
+                $this->controller->widget($this->innerWidget, $voteOptions);
             }            
         }
         return $output;
