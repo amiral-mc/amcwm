@@ -115,6 +115,7 @@ class MostReadAndCommentData extends CComponent {
         if (!$this->commentsArticles) {
             $comments = new ArticlesListData($this->tables, $this->period, $this->limit, $this->sectionId);
             $comments->addOrder('comments desc');
+            $comments->addColumn('comments', 'info');
             $comments->setTitleLength($this->titleLength);
             $comments->generate();
             $this->commentsArticles = $comments->getItems();
@@ -136,6 +137,7 @@ class MostReadAndCommentData extends CComponent {
         if (!$this->readArticles) {
             $read = new ArticlesListData($this->tables, $this->period, $this->limit, $this->sectionId);
             $read->addOrder('hits desc');
+            $read->addColumn('hits', 'info');
             $read->setTitleLength($this->titleLength);
             $read->generate();
             $this->readArticles = $read->getItems();
@@ -157,6 +159,7 @@ class MostReadAndCommentData extends CComponent {
         if (!$this->sharedArticles) {
             $shared = new ArticlesListData($this->tables, $this->period, $this->limit, $this->sectionId);
             $shared->addOrder('shared desc');
+            $shared->addColumn('shared', 'info');
             $shared->setTitleLength($this->titleLength);
             $shared->generate();
             $this->sharedArticles = $shared->getItems();
