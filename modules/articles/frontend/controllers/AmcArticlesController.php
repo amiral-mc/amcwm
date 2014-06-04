@@ -86,13 +86,13 @@ class AmcArticlesController extends FrontendController {
      */
     public function actionView($id) {
         $article = new ArticleData($id);
-        $module = null;
+        $moduleId = null;
         if ($article->getModuleName() != "articles") {
             $forwardModules = amcwm::app()->acl->getForwardModules();            
             foreach ($forwardModules as $forwardId => $forward) {
                 if (isset($forward[$article->getModuleName()])) {
-                    $module = $forwardId;
-                    $_GET['module'] = $module;
+                    $moduleId = $forwardId;
+                    $_GET['module'] = $moduleId;
                     break;
                 }
             }
@@ -129,7 +129,7 @@ class AmcArticlesController extends FrontendController {
             'articleRecord' => $articleRecord,
             'articlesRelated' => $articlesRelated,
             'articleModule' => $articleModule,
-            'articleModuleId' => $module,
+            'articleModuleId' => $moduleId,
             'commentsModel' => $commentsModel,
             'repliesModel' => $repliesModel,
             'viewComments' => Yii::app()->user->checkRouteAccess($virtualCommentsRoute),

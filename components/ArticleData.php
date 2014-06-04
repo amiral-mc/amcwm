@@ -204,8 +204,7 @@ class ArticleData extends Dataset {
             where c.published = %d
             and (c.hide = 0 OR c.force_display=1)
             and ac.article_id = %d
-            order by c.comment_date DESC", 
-                Yii::app()->db->quoteValue($siteLanguage)
+            order by c.comment_date DESC", Yii::app()->db->quoteValue($siteLanguage)
                 , ActiveRecord::PUBLISHED
                 , $this->_id
         );
@@ -254,10 +253,9 @@ class ArticleData extends Dataset {
             and (c.hide = 0 OR c.force_display=1)
             and c.comment_review = %d
             order by c.comment_date DESC
-        ", 
-            Yii::app()->db->quoteValue($siteLanguage)
-            , ActiveRecord::PUBLISHED
-            , $commentId);
+        ", Yii::app()->db->quoteValue($siteLanguage)
+                , ActiveRecord::PUBLISHED
+                , $commentId);
         $replies = Yii::app()->db->createCommand($query)->queryAll();
         $this->items['comments']['records'][$index]["replies"] = array();
         foreach ($replies AS $replay) {
@@ -304,9 +302,7 @@ class ArticleData extends Dataset {
             inner join articles_comments ac on ac.article_comment_id = c.comment_id
             where c.published = %d 
             and (c.hide = 0 OR c.force_display=1) 
-            and ac.article_id = %d", 
-                    ActiveRecord::PUBLISHED, 
-                    $this->_id);
+            and ac.article_id = %d", ActiveRecord::PUBLISHED, $this->_id);
             $dependencyComments = Yii::app()->db->createCommand($dependencyQuery)->queryScalar();
             $this->items = $this->_cache->get('article_' . $this->_id);
             if ($this->items == null) {
@@ -465,7 +461,6 @@ class ArticleData extends Dataset {
                 $this->addJoin("inner join news n on n.article_id = t.article_id");
                 $this->addJoin("left join news_sources_translation ns on ns.source_id = n.source_id and ns.content_lang = tt.content_lang");
                 $this->addColumn("source");
-                $this->addColumn("source");
             } else {
                 $this->addColumn("' '", 'source');
             }
@@ -488,13 +483,29 @@ class ArticleData extends Dataset {
                 and (t.expire_date >'{$currentDate}' or t.expire_date is null)
                 and tt.content_lang = %s
                 $wheres
-             ", ActiveRecord::PUBLISHED, 
-                $this->_id, 
-                Yii::app()->db->quoteValue($siteLanguage));
-                //die($this->query);
+             ", ActiveRecord::PUBLISHED, $this->_id, Yii::app()->db->quoteValue($siteLanguage));
+            //die($this->query);
             $this->items['record'] = Yii::app()->db->createCommand($this->query)->queryRow();
 
             if (is_array($this->items['record'])) {
+                if ($moduleName == 'news') {
+                    $query = 'select writer_id, name , content_lang from news_writers n '
+                            . ' inner join persons_translation p on p.person_id = n.writer_id'
+                            . ' where n.article_id = ' . (int) $this->_id;
+                    $writers = Yii::app()->db->createCommand($query)->queryAll();
+                    $this->items['record']['writers'] = array();
+
+                    foreach ($writers as $writer) {
+                        if (!isset($this->items['record']['writers'][$writer['writer_id']]) || $writer['content_lang'] == $siteLanguage) {
+                            $this->items['record']['writers'][$writer['writer_id']] = $writer['name'];
+                        }
+                    }
+                    if ($this->items['record']['source']) {
+                        $this->items['record']['writers']['orgSource'] = $this->items['record']['source'];
+                        $this->items['record']['source'] = implode(' - ', $this->items['record']['writers']);
+                    }
+                }
+
                 if (isset($this->items['record']["create_date"])) {
                     $this->items['record']["create_date"] = Yii::app()->dateFormatter->format("dd/MM/y hh:mm a", $this->items['record']["create_date"]);
                 }
@@ -508,25 +519,21 @@ class ArticleData extends Dataset {
                 } else {
                     $this->items['record']['page_img'] = null;
                 }
-                
+
                 if (isset($this->items['record']["parent_img"])) {
                     $this->items['record']['parent_img'] = Yii::app()->baseUrl . "/" . Data::getSettings('articles')->mediaPaths['pageImage']['path'] . "/" . $this->items['record']['parent_article'] . "." . $this->items['record']['parent_img'];
                 } else {
                     $this->items['record']['parent_img'] = null;
                 }
-                
+
                 /**
                  * get all sub articles
                  */
                 $subsWhere = sprintf(' and t.published = %d
                                 and t.publish_date <= %s
                                 and (t.expire_date > %s or t.expire_date is null)
-                                and tt.content_lang = %s', 
-                            ActiveRecord::PUBLISHED, 
-                            Yii::app()->db->quoteValue($currentDate),
-                            Yii::app()->db->quoteValue($currentDate),
-                            Yii::app()->db->quoteValue($siteLanguage)
-                        );
+                                and tt.content_lang = %s', ActiveRecord::PUBLISHED, Yii::app()->db->quoteValue($currentDate), Yii::app()->db->quoteValue($currentDate), Yii::app()->db->quoteValue($siteLanguage)
+                );
 
                 $qSubs = 'select t.article_id, tt.article_header from articles t
                     inner join articles_translation tt on t.article_id = tt.article_id
