@@ -70,8 +70,8 @@ class MostReadAndComment extends SideWidget {
      *
      * @var array tabs dispaly orders
      */
-    public $tabsOrders = array('read', 'comments', 'shared');
-    
+    public $tabsOrders = array('read', "comments", "shared");
+
     /**
      *
      * @var current active tab 
@@ -84,50 +84,58 @@ class MostReadAndComment extends SideWidget {
      * @return void
      */
     public function setContentData() {
-        
-        foreach ($this->tabsOrders as $i=>$tabOrder){             
-            
-            $widgetTabs[$tabOrder] = array();
+
+        foreach ($this->tabsOrders as $i => $tabOrder) {
+
+            $widgetTabs["{$this->getId()}-{$tabOrder}"] = array();
         }
 
         if (count($this->readArticles)) {
-            $widgetTabs['read'] = array('title' => $this->readTitle, 'content' => '');
-            $widgetTabs['read']['content'] = '<ul>';
+            $widgetTabs["{$this->getId()}-read"] = array('title' => $this->readTitle, 'content' => '');
+            $widgetTabs["{$this->getId()}-read"]['content'] = '<ul>';
             foreach ($this->readArticles As $article) {
-                $widgetTabs['read']['content'].= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
+                $widgetTabs["{$this->getId()}-read"]['content'].= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
             }
-            $widgetTabs['read']['content'] .='</ul>';
+            $widgetTabs["{$this->getId()}-read"]['content'] .='</ul>';
         } else {
-            unset($widgetTabs['read']);
+            unset($widgetTabs["{$this->getId()}-read"]);
         }
         if (count($this->commentsArticles)) {
-            $widgetTabs['comments'] = array('title' => $this->commentTitle, 'content' => '', 'active');
-            $widgetTabs['comments']['content'] .= '<ul>';
+            $widgetTabs["{$this->getId()}-comments"] = array('title' => $this->commentTitle, 'content' => '', 'active');
+            $widgetTabs["{$this->getId()}-comments"]['content'] .= '<ul>';
             foreach ($this->commentsArticles As $article) {
-                $widgetTabs['comments']['content'].= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
+                $widgetTabs["{$this->getId()}-comments"]['content'].= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
             }
-            $widgetTabs['comments']['content'] .= '</ul>';
+            $widgetTabs["{$this->getId()}-comments"]['content'] .= '</ul>';
         } else {
-            unset($widgetTabs['comments']);
+            unset($widgetTabs["{$this->getId()}-comments"]);
         }
         if (count($this->sharedArticles)) {
-            $widgetTabs['shared'] = array('title' => $this->sharedTitle, 'content' => '');
-            $widgetTabs['shared']['content'] .= '<ul>';
+            $widgetTabs["{$this->getId()}-shared"] = array('title' => $this->sharedTitle, 'content' => '');
+            $widgetTabs["{$this->getId()}-shared"]['content'] .= '<ul>';
             foreach ($this->sharedArticles As $article) {
-                $widgetTabs['shared']['content'].= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
+                $widgetTabs["{$this->getId()}-shared"]['content'].= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
             }
-            $widgetTabs['shared']['content'] .= '</ul>';
+            $widgetTabs["{$this->getId()}-shared"]['content'] .= '</ul>';
         } else {
-            unset($widgetTabs['shared']);
+            unset($widgetTabs["{$this->getId()}-shared"]);
         }
-        
+
         if ($widgetTabs) {
-            $tabsWidgetsOptions = array('tabs' => $widgetTabs, 'cssFile' => Yii::app()->request->baseUrl . '/css/tabs.css',);
-            if($this->activeTab){
-                $tabsWidgetsOptions['activeTab'] = $this->activeTab;
-            }
-            $this->contentData .= $this->widget('TabView', $tabsWidgetsOptions, true);
+            $this->drawTabs($widgetTabs);
         }
+    }
+
+    /**
+     * Draw tabs 
+     * @param array $widgetTabs
+     */
+    protected function drawTabs($widgetTabs) {
+        $tabsWidgetsOptions = array('tabs' => $widgetTabs, 'cssFile' => Yii::app()->request->baseUrl . '/css/tabs.css',);
+        if ($this->activeTab) {
+            $tabsWidgetsOptions['activeTab'] = "{$this->getId()}-{$this->activeTab}";
+        }
+        $this->contentData .= $this->widget('TabView', $tabsWidgetsOptions, true);
     }
 
 }
