@@ -31,7 +31,8 @@ class InFocusListData extends SiteData {
         $this->limit = (int) $limit;
         $this->sectionId = (int) $sectionId;
         $wheresForTables = array();
-        $this->mediaPath = Yii::app()->baseUrl . "/" . Yii::app()->params["multimedia"]['infocus']['list']['path'] . "/";
+        $inFocusSettings = new Settings('infocus', 'frontend');
+        $this->mediaPath = Yii::app()->baseUrl . "/" . $inFocusSettings->settings['media']['paths']['images']['path'] . "/";
     }
 
     /**
