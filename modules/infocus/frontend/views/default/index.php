@@ -1,6 +1,6 @@
 <?php
 
-$this->widget('widgets.InfocusList', array(
+$this->widget('widgets.InfocusListing', array(
     'id' => 'infocusItems',
     'items' => $infocusData,
     ));

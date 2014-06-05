@@ -1,4 +1,5 @@
 <?php
+
 AmcWm::import("widgets.search.AmcSearchWidget");
 
 /**
@@ -14,7 +15,13 @@ AmcWm::import("widgets.search.AmcSearchWidget");
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class SearchWidget extends AmcSearchWidget {    
+class SearchWidget extends AmcSearchWidget {
+
+    /**
+     *
+     * @var string search route 
+     */
+    public $searchRoute = array('/site/search/');
 
     /**
      * Render the widget and display the result
@@ -22,86 +29,90 @@ class SearchWidget extends AmcSearchWidget {
      * @return void
      */
     public function setContentData() {        
-        $output = "";
+        $this->contentData = '<div id="news_search">';
+        $this->contentData .= '<div class="news_search_brief">';
+        if ($this->items['pager']['count']) {
+            $this->contentData .= AmcWm::t("{$this->basePath}.core", 'Found {items} results', array('{items}' => "<span>{$this->items['pager']['count']}</span>"));
+        } else {
+            $this->contentData .= AmcWm::t("{$this->basePath}.core", 'Your search {keywords} did not match any results', array('{keywords}' => " (<u>{$this->keywords}</u>) "));
+        }
+        $this->contentData .= '</div>';
+
+        $this->contentData .= '<form class="well form-search" id="internal_s    earch_form" method="get" action="' . $this->createUrl($this->searchRoute, array('ct' => "news")) . '">';
+        $this->contentData .= '<div class="input-append">';
+        $this->contentData .= '<input name="q" style="width: 150px;" id="form_search_q" type="text" placeholder="' . AmcWm::t('app', "Enter Search Keywords") . '" value="' . $this->keywords . '" />';
+        $this->contentData .= '<span class="add-on">';
+        $this->contentData .= '<button type="submit" class="append-button">';
+        $this->contentData .= '<i class="icon-search"></i>';
+        $this->contentData .= '</button>';
+        $this->contentData .= '</span>';
+        $this->contentData .= '</div>';
+        $this->contentData .= '</form>';
+        $this->contentData .= '</div>';
+        $this->contentData .= '<div id="news_list">';
+
         $searchTabs = array();
         $activeTab = $this->contentType . "SearchTab";
-        
-        if ($this->advancedParams['contentType']['news']) {
-            $searchTabs["newsSearchTab"] = array('title' => AmcWm::t("{$this->basePath}.core", 'News'));
-            $searchTabs["newsSearchTab"]['url'] = Html::createUrl('/site/search', array("q" => ($this->keywords), 'ct' => 'news', 'page' => 1));
+        $this->searchRoute['q'] = $this->keywords;
+        if ($this->advancedParams['contentType']['news']) {            
+            $this->searchRoute['ct'] = 'news';
+            $searchTabs["newsSearchTab"] = array('label' => AmcWm::t("{$this->basePath}.core", 'News'));
+            $searchTabs["newsSearchTab"]['url'] = $this->createUrl();
         }
-        
+
         if ($this->advancedParams['contentType']['articles']) {
-            $searchTabs["articlesSearchTab"] = array('title' => AmcWm::t("{$this->basePath}.core", 'Articles'));
-            $searchTabs["articlesSearchTab"]['url'] = Html::createUrl('/site/search', array("q" => ($this->keywords), 'ct' => 'articles', 'page' => 1));
+            $this->searchRoute['ct'] = 'articles';
+            $searchTabs["articlesSearchTab"] = array('label' => AmcWm::t("{$this->basePath}.core", 'Articles'));
+            $searchTabs["articlesSearchTab"]['url'] = $this->createUrl();
         }
-        
+
         if ($this->advancedParams['contentType']['multimedia']) {
-            $searchTabs["multimediaSearchTab"] = array('title' => AmcWm::t("{$this->basePath}.core", 'Multimedia'));
-            $searchTabs["multimediaSearchTab"]['url'] = Html::createUrl('/site/search', array("q" => ($this->keywords), 'ct' => 'multimedia', 'page' => 1));
+            $this->searchRoute['ct'] = 'multimedia';
+            $searchTabs["multimediaSearchTab"] = array('label' => AmcWm::t("{$this->basePath}.core", 'Multimedia'));
+            $searchTabs["multimediaSearchTab"]['url'] = $this->createUrl();
         }
 
         if ($this->items['pager']['count']) {
-            $articlesOutput = '<table border="0" cellspacing="1" cellpadding="2" width="100%">';
-            $articlesOutput .= '<tr>';
-            $articlesOutput .= '<td class="search_result_items">';
-            $articlesOutput .= AmcWm::t("{$this->basePath}.core", 'Searched for {keywords}', array('{keywords}' => " (<span>" . ($this->keywords) . "</span>) "));
-            $articlesOutput .= '</tr>';
-            $articlesOutput .= '<tr>';
-            $articlesOutput .= '</td>';
-            $articlesOutput .= '<td class="search_result_items">';
-            $articlesOutput .= AmcWm::t("{$this->basePath}.core", 'Found {items} results', array('{items}' => "<span>{$this->items['pager']['count']}</span>"));
-            $articlesOutput .= '</td>';
-            $articlesOutput .= '</tr>';
-            $articlesOutput .= '</table>';
-            $articlesOutput .= CHtml::openTag('table', array("class" => "wdr_table")) . "\n";
-            $class = false;
+            $tabOutput = '<div><ul>';
             foreach ($this->items['records'] as $row) {
-                $bg = ($class) ? "sec_content_even" : "sec_content_odd";
-                $class = !$class;
+                $tabOutput .='<li style="clear:both;">';
                 if ($this->contentType == 'multimedia') {
-                    $link = array($this->routers[$row['module']]['view'] , 'id' => $row['id'], 'gid' => $row['gallery_id']);
+                    $link = array($this->routers[$row['module']]['view'], 'id' => $row['id'], 'gid' => $row['gallery_id']);
                 } else {
-                    $link = array($this->routers[$row['module']]['view'] , 'id' => $row['id']);
+                    $link = array($this->routers[$row['module']]['view'], 'id' => $row['id']);
                 }
-                $articlesOutput .= CHtml::openTag('tr') . "\n";
-                $articlesOutput .= CHtml::openTag('td', array("class" => "wdr_table_right_col {$bg}", "colspan" => 2)) . "\n";
-                $articlesOutput .= CHtml::openTag('div', array("class" => "wd_content_disc")) . "\n";
-                $articlesOutput .= CHtml::openTag('div', array("class" => "wd_content_title searchResult")) . "\n";
-                $articlesOutput .= Html::link("{$row['title']}", $link) . "\n";
-                $articlesOutput .= CHtml::closeTag('div') . "\n";
-                $articlesOutput .= CHtml::openTag('div', array("class" => "sec_content_date_time")) . "\n";
-                $articlesOutput .= $row['publish_date'] . "\n";
-                $articlesOutput .= CHtml::closeTag('div') . "\n";
-                $articlesOutput .= CHtml::openTag('div', array("class" => "sec_content_disc")) . "\n";
-                $articlesOutput .= Html::utfSubstring($row['detail'], 0, 150, true);
-                $articlesOutput .= Html::link(AmcWm::t("{$this->basePath}.core", 'More'), $link, array('class' => 'search_more')) . "\n";
-                $articlesOutput .= CHtml::closeTag('div') . "\n";
-                $articlesOutput .= CHtml::closeTag('div') . "\n";
-                $articlesOutput .= CHtml::closeTag('td') . "\n";
-                $articlesOutput .= CHtml::closeTag('tr') . "\n";
-            }
+                $tabOutput .= '<div class="date">';
+                $tabOutput .= Yii::app()->dateFormatter->format("dd/MM/y hh:mm a", $row['publish_date']) . "\n";
+                $tabOutput .= '</div>';
+                $tabOutput .= '<h1 class="title">';
+                $tabOutput .= Html::link("{$row['title']}", $link) . "\n";
+                $tabOutput .= '</h1>';
+                $tabOutput .= '<div class="disc">';
+                $tabOutput .= Html::utfSubstring($row['detail'], 0, 150, true);
+                $tabOutput .= '<div>';
 
-            $articlesOutput .= CHtml::closeTag('table') . "\n";
+                $tabOutput .='<div class="show_more">';
+                $tabOutput .= Html::link(AmcWm::t("amcwm.modules.articles.frontend.messages.core", "show more") . '<span class="icon"></span>', $link) . "\n";
+                $tabOutput .= '</div>';
+                $tabOutput .='</li>';
+            }
+            $tabOutput .='</ul></div>';
+            $searchTabs[$activeTab]['content'] = $tabOutput;
             $pages = new CPagination($this->items['pager']['count']);
             $pages->setPageSize($this->items['pager']['pageSize']);
-            $articlesOutput .= '<div class="pager_container">';
-            $articlesOutput .= $this->widget('CLinkPager', array('pages' => $pages), true);
-            $articlesOutput .= '</div>';
-            $searchTabs[$activeTab]['content'] = $articlesOutput;
+            $pagesOutput = '<div class="pager_container">';
+            $pagesOutput .= $this->widget('CLinkPager', array('pages' => $pages), true);
+            $pagesOutput .= '</div>';
         } else {
-            $articlesOutput = '<table border="0" cellspacing="1" cellpadding="2" width="100%">';
-            $articlesOutput .= '<tr>';
-            $articlesOutput .= '<td>';
-            $articlesOutput .= AmcWm::t("{$this->basePath}.core", 'Your search {keywords} did not match any results', array('{keywords}' => " (<u>{$this->keywords}</u>) "));
-            $articlesOutput .= '</tr>';
-            $articlesOutput .= '</table>';
-            $searchTabs[$activeTab]['content'] = $articlesOutput;
+            $searchTabs[$activeTab]['content'] = '&nbsp;';
+            $pagesOutput = '';
         }
-//        die(print_r($searchTabs));
-//        $this->contentData =  CHtml::openTag('div', $this->htmlOptions) . "\n";
-        $this->contentData .= $this->widget('TabView', array('activeTab' => $activeTab, 'tabs' => $searchTabs), true);
-//        $this->contentData .= CHtml::closeTag('div') . "\n";
+        $searchTabs[$activeTab]['active'] = true;
+        $this->contentData .= $this->widget('bootstrap.widgets.TbTabs', array(
+            'tabs' => $searchTabs,
+                ), true);
+        $this->contentData .= '</div>';
+        $this->contentData .= $pagesOutput;
     }
 
 }

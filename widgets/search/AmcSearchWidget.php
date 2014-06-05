@@ -39,6 +39,12 @@ class AmcSearchWidget extends PageContentWidget {
      * @var array
      */
     public $routers = array();
+    
+    /**
+     *
+     * @var array search route 
+     */
+    public $searchRoute = array();
    
     /**
      * Advanced parameters array , used in adavanced search
@@ -57,4 +63,16 @@ class AmcSearchWidget extends PageContentWidget {
         $this->keywords = CHtml::encode($this->keywords);
         parent::init();
     }       
+    
+    /**
+     * Create search url
+     * @param integer $page
+     */
+    public function createUrl($page = 1){
+        
+        $params = $this->searchRoute;
+        $route = array_shift($params);
+        return Html::createUrl($route, $params);
+         
+    }
 }

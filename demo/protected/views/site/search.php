@@ -1,6 +1,6 @@
 <?php
 $breadcrumbs[] = AmcWm::t("amcFront", "Site Search");
-$this->widget('ext.MySearchWidget', array(
+$this->widget('widgets.search.SearchWidget', array(
     'items' => $searchData,
     'contentType' => $contentType,
     'advancedParams' => $advancedParams,

@@ -1,4 +1,5 @@
 <?php
+
 AmcWm::import("widgets.AmcArticlesListing");
 
 /**
@@ -17,23 +18,24 @@ AmcWm::import("widgets.AmcArticlesListing");
 class ArticlesLiListing extends AmcArticlesListing {
 
     public $listingId = "articles_list";
+
     /**
      * Draw header 
      * @access protected
      * @param array $row
      * @return string
      */
-    protected function drawHeader($row) {                
+    protected function drawHeader($row) {
         $output = '<h1 class="title">';
-        $output .= Html::link("{$row['title']}", $row['link']) . "\n";        
+        $output .= Html::link("{$row['title']}", $row['link']) . "\n";
         $output .= '</h1>';
         if ($this->viewOptions['showPrimaryHeader']) {
             $output .= '<h2 class="title">';
-            $output .= Html::link("{$row['priHeader']}", $row['link']) . "\n";        
+            $output .= Html::link("{$row['priHeader']}", $row['link']) . "\n";
             $output .= '</h2>';
         }
-        
-        
+
+
         return $output;
     }
 
@@ -46,7 +48,7 @@ class ArticlesLiListing extends AmcArticlesListing {
     protected function drawInfoBar($row) {
         $output = '<div class="date">';
         if ($this->viewOptions['showDate']) {
-            $output .= Yii::app()->dateFormatter->format("dd/MM/y hh:mm a",$row['publish_date']) . "\n";
+            $output .= Yii::app()->dateFormatter->format("dd/MM/y hh:mm a", $row['publish_date']) . "\n";
         }
         if (isset($row['source']) && $row['source'] && $this->viewOptions['showSource']) {
             $output .= '<span class="wd_news_sp"> | </span>';
@@ -62,9 +64,9 @@ class ArticlesLiListing extends AmcArticlesListing {
         return $output;
     }
 
-    protected function drawDetails($row) {        
+    protected function drawDetails($row) {
         $output = '<div class="disc">';
-        $output .= Html::utfSubstring($row['article_detail'], 0, 150, true);
+        $output .= Html::utfSubstring($row[$this->descriptionKey], 0, 150, true);
         $output .= '<div>';
         return $output;
     }
@@ -75,7 +77,7 @@ class ArticlesLiListing extends AmcArticlesListing {
      * @param array $row
      * @return string
      */
-    protected function drawImage($row) {        
+    protected function drawImage($row) {
         $output = '<div class="wd_content_img"><div class="wd_content_img_inner">';
         if ($row['image']) {
             $output .= Html::link(CHtml::tag('img', array("src" => $row['image'])), $row['link']) . "\n";
@@ -99,51 +101,27 @@ class ArticlesLiListing extends AmcArticlesListing {
         $mediaFirstPath = Yii::app()->basePath . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $settings['media']['paths']['sections']['path']) . DIRECTORY_SEPARATOR;
         $mediaFirst = Yii::app()->baseUrl . "/" . $settings['media']['paths']['sections']['path'] . "/";
         $output = null;
-        if (count($this->items['top'])) {
-            $output .= CHtml::openTag('div', array("class" => "sec_main_item")) . "\n";
-            $output .= CHtml::openTag('table') . "\n";
-            $output .= CHtml::openTag('tr') . "\n";
-            $output .= CHtml::openTag('td', array("colspan" => 2)) . "\n";
-            $output .= CHtml::openTag('h1', array("class" => "sec_main_item_title")) . "\n";
-            $output .= Html::link($this->items['top'][0]['title'], $this->items['top'][0]['link']) . "\n";
-            $output .= CHtml::closeTag('div') . "\n";
-            $output .= CHtml::closeTag('td') . "\n";
-            $output .= CHtml::closeTag('tr') . "\n";
-            $output .= CHtml::openTag('tr') . "\n";
 
-            $output .= CHtml::openTag('td', array("style" => "vertical-align:top")) . "\n";
-            $output .= CHtml::openTag('div') . "\n";
+        if (count($this->items['top'])) {
+            $output .= '<div class="top-items">';
+            $output .= '<h1>';
+            $output .= Html::link($this->items['top'][0]['title'], $this->items['top'][0]['link']) . "\n";
+            $output .= '</h1>';
             if ($this->items['top'][0]['thumb'] && file_exists($mediaFirstPath . $this->items['top'][0]['id'] . "." . $this->items['top'][0]["thumb"])) {
                 $output .= CHtml::tag('img', array("src" => $mediaFirst . $this->items['top'][0]['id'] . "." . $this->items['top'][0]["thumb"])) . "\n";
             }
-            $output .= CHtml::closeTag('div') . "\n";
-            $output .= CHtml::closeTag('td') . "\n";
-            $output .= CHtml::openTag('td', array("style" => "vertical-align:top")) . "\n";
-            $output .= CHtml::openTag('div', array("class" => "sec_main_item_brief")) . "\n";
-            $output .= Html::utfSubstring($this->items['top'][0]['article_detail'], 0, 300, true);
-            $output .= CHtml::closeTag('div') . "\n";
-            $output .= CHtml::openTag('div', array("class" => "dotted_line")) . "\n";
-            $output .= CHtml::closeTag('div') . "\n";
-            $output .= CHtml::openTag('div', array("class" => "sec_main_item_readmore")) . "\n";
+            $output .= '<div>';
             $output .= AmcWm::t("amcwm.modules.articles.frontend.messages.core", "Read also");
-            $output .= CHtml::closeTag('div') . "\n";
-            $output .= CHtml::openTag('div') . "\n";
-            $output .= CHtml::openTag('ul', array("class" => "sec_main_item_list"));
+            $output .= '</div>';
+            $output .= '<ul>';
             $articlesTopCount = count($this->items['top']);
             for ($articleIndex = 1; $articleIndex < $articlesTopCount; $articleIndex++) {
-                $output .= CHtml::openTag('li', array("class" => "sec_main_item_list"));
+                $output .= '<li>';
                 $output .= Html::link($this->items['top'][$articleIndex]['title'], $this->items['top'][$articleIndex]['link']);
-                $output .= CHtml::closeTag('li') . "\n";
+                $output .= '</li>';
             }
-            $output .= CHtml::closeTag('ul') . "\n";
-            $output .= CHtml::closeTag('div') . "\n";
-
-            $output .= CHtml::closeTag('td') . "\n";
-            $output .= CHtml::closeTag('tr') . "\n";
-
-            $output .= CHtml::closeTag('table') . "\n";
-            $output .= CHtml::closeTag('div') . "\n";
-            /////////////////////          
+            $output .= '</ul>';
+            $output .= '</div>';
         }
         return $output;
     }
@@ -154,7 +132,7 @@ class ArticlesLiListing extends AmcArticlesListing {
      * @return string
      */
     protected function drawListingTitle() {
-        $output = null;       
+        $output = null;
         if ($this->viewOptions['showListingTitle']) {
             $output .= '<div class="articles_section_title">';
             $output .= AmcWm::t("amcwm.modules.articles.frontend.messages.core", "More About:") . " " . $this->items['sectionTitle'];
@@ -176,13 +154,13 @@ class ArticlesLiListing extends AmcArticlesListing {
             $this->contentData .=$this->drawListingTitle();
             foreach ($this->items['records'] As $sectionArticle) {
                 $this->contentData .='<li style="clear:both;">';
-                foreach($this->viewOptions['listingRowOrders'] as $rowPart){
+                foreach ($this->viewOptions['listingRowOrders'] as $rowPart) {
                     $methodPart = "draw{$rowPart}";
                     $this->contentData .= $this->$methodPart($sectionArticle);
-                }                                        
+                }
                 $this->contentData .='<div class="show_more">';
-                $this->contentData .= Html::link(AmcWm::t("amcwm.modules.articles.frontend.messages.core", "show more") . '<span class="icon"></span>', $sectionArticle['link']) . "\n";        
-		$this->contentData .= '</div>';
+                $this->contentData .= Html::link(AmcWm::t("amcwm.modules.articles.frontend.messages.core", "show more") . '<span class="icon"></span>', $sectionArticle['link']) . "\n";
+                $this->contentData .= '</div>';
                 $this->contentData .='</li>';
             }
             $this->contentData .='</ul>';

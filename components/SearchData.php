@@ -14,17 +14,17 @@
  * @version 1.0
  */
 class SearchData extends SearchContentData {
+
     /**
      * Minimum word length accepted for searching about it.
      */
-
     const MIN_WORD_LENGHT = 3;
 
     /**
      *  the words and phrases to search about in articles and videos
      * @var array 
      */
-    private $_keywords;
+    protected $keywords;
 
     /**
      * Counstructor, the content type
@@ -34,7 +34,7 @@ class SearchData extends SearchContentData {
      * @access public
      * 
      */
-    public function __construct($userInput, $contentType = "news", $limit = 15, $topTextLimit = 1) {
+    public function __construct($userInput, $contentType = "news", $limit = 15) {
         parent::__construct($contentType, $limit);
         $this->_setKeywords($userInput);
     }
@@ -66,8 +66,8 @@ class SearchData extends SearchContentData {
                     $listData->addWhere(sprintf("date(create_date) {$this->advancedParams['date']['opt']} %s", Yii::app()->db->quoteValue($this->advancedParams['date']['value'])));
                 }
                 $listData->addJoin('inner join news n on n.article_id=t.article_id');
-                
-                foreach ($this->_keywords as $keyword) {
+
+                foreach ($this->keywords as $keyword) {
                     $keyword = str_replace("%", "\%", trim($keyword));
                     $keywordLike = Yii::app()->db->quoteValue("%%{$keyword}%%");
                     $keywordLocate = Yii::app()->db->quoteValue($keyword);
@@ -89,8 +89,8 @@ class SearchData extends SearchContentData {
                 }
                 $listData->addWhere('n.article_id is null');
                 $listData->addJoin('left join news n on n.article_id=t.article_id');
-                
-                foreach ($this->_keywords as $keyword) {
+
+                foreach ($this->keywords as $keyword) {
                     $keyword = str_replace("%", "\%", trim($keyword));
                     $keywordLike = Yii::app()->db->quoteValue("%%{$keyword}%%");
                     $keywordLocate = Yii::app()->db->quoteValue($keyword);
@@ -110,7 +110,7 @@ class SearchData extends SearchContentData {
                 if (count($this->advancedParams['date'])) {
                     $listData->addWhere(sprintf("date(creation_date) {$this->advancedParams['date']['opt']} %s", Yii::app()->db->quoteValue($this->advancedParams['date']['value'])));
                 }
-                foreach ($this->_keywords as $keyword) {
+                foreach ($this->keywords as $keyword) {
                     $keyword = str_replace("%", "\%", trim($keyword));
                     $keywordLike = Yii::app()->db->quoteValue("%%{$keyword}%%");
                     $keywordLocate = Yii::app()->db->quoteValue($keyword);
@@ -128,7 +128,7 @@ class SearchData extends SearchContentData {
             $listData->addWhere("(" . implode(" or ", $wheres) . ")");
             $listData->addColumn(implode("+", $weights), "weight");
             $listData->addOrder(" weight desc ");
-            
+
             if ($listData instanceof SiteData) {
                 $pager = new PagingDataset($listData, $this->limit, $page);
                 $this->results = $pager->getData();
@@ -157,14 +157,14 @@ class SearchData extends SearchContentData {
      */
     private function _setKeywords($userInput) {
         $userInput = stripslashes($userInput);
-        $this->_keywords = array();
+        $this->keywords = array();
         if ($this->checkExtactMatch($userInput)) {
-            $this->_keywords[0] = preg_replace('/[\^""\$]/', "", $userInput);
+            $this->keywords[0] = preg_replace('/[\^""\$]/', "", $userInput);
         } else {
             $tmpKeywords = preg_split("/[\s,+]+/", trim($userInput));
             foreach ($tmpKeywords as $keyword) {
                 if (Html::utfStringLength($keyword) >= self::MIN_WORD_LENGHT) {
-                    $this->_keywords[] = str_replace('"', '', $keyword);
+                    $this->keywords[] = str_replace('"', '', $keyword);
                 }
             }
         }

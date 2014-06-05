@@ -39,18 +39,21 @@ class AmcInfocusController extends FrontendController {
      * Display sections Articles
      */
     public function actionView($id) {
-        $contentType = Yii::app()->request->getParam('ct', 'text');
-        $page = Yii::app()->request->getParam('page', 1);        
-        $infocus = new InFocusItemsData($id, $contentType, 15, 1, 3);
-        $infocus->genereateTopResults(true);        
+        $contentType = Yii::app()->request->getParam('ct', 'news');
+        $keywords = Yii::app()->request->getParam('q');
+        $infocus = new InFocusItemsData($id, $keywords, $contentType, 10);
+        $infocus->genereateTopResults(true, 1, 3);        
         $infocus->generate();
         $this->render('view', array(
             'id' => $id,
-            'page' => $page,
-            'contentType'=>$contentType,
+            'page' => Yii::app()->request->getParam('page', 1),
+            'contentType' => $infocus->getContentType(),
             'infocusData' => $infocus->getInfocusData(),
-            'infocusItems' => $infocus->getResults(),
-            'infocusLatestData'=>$infocus->getLatestResults(),
+            'infocusResults' => $infocus->getResults(),
+            'advancedParams' => $infocus->getAdvancedParam(),
+            'keywords' => $keywords,
+            'infocusLatest'=>$infocus->getLatestResults(),
+            'routers' => Yii::app()->params['routers'],
         ));
     }
 }

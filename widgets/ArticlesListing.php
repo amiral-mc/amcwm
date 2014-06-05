@@ -16,7 +16,6 @@ AmcWm::import('widgets.AmcArticlesListing');
  * @version 1.0
  */
 class ArticlesListing extends AmcArticlesListing {
-   
 
     /**
      * Draw header 
@@ -69,7 +68,7 @@ class ArticlesListing extends AmcArticlesListing {
 
     protected function drawDetails($row) {
         $output = '<div class="wd_content_disc">';
-        $output .= Html::utfSubstring($row['article_detail'], 0, 150, true);
+        $output .= Html::utfSubstring($row[$this->descriptionKey], 0, 150, true);
         $output .= '<div>';
         return $output;
     }
@@ -105,50 +104,25 @@ class ArticlesListing extends AmcArticlesListing {
         $mediaFirst = Yii::app()->baseUrl . "/" . $settings['media']['paths']['sections']['path'] . "/";
         $output = null;
         if (count($this->items['top'])) {
-            $output .= CHtml::openTag('div', array("class" => "sec_main_item")) . "\n";
-            $output .= CHtml::openTag('table') . "\n";
-            $output .= CHtml::openTag('tr') . "\n";
-            $output .= CHtml::openTag('td', array("colspan" => 2)) . "\n";
-            $output .= CHtml::openTag('h1', array("class" => "sec_main_item_title")) . "\n";
+            $output .= '<div class="top-items">';
+            $output .= '<h1>';
             $output .= Html::link($this->items['top'][0]['title'], $this->items['top'][0]['link']) . "\n";
-            $output .= CHtml::closeTag('div') . "\n";
-            $output .= CHtml::closeTag('td') . "\n";
-            $output .= CHtml::closeTag('tr') . "\n";
-            $output .= CHtml::openTag('tr') . "\n";
-
-            $output .= CHtml::openTag('td', array("style" => "vertical-align:top")) . "\n";
-            $output .= CHtml::openTag('div') . "\n";
+            $output .= '</h1>';
             if ($this->items['top'][0]['thumb'] && file_exists($mediaFirstPath . $this->items['top'][0]['id'] . "." . $this->items['top'][0]["thumb"])) {
                 $output .= CHtml::tag('img', array("src" => $mediaFirst . $this->items['top'][0]['id'] . "." . $this->items['top'][0]["thumb"])) . "\n";
-            }
-            $output .= CHtml::closeTag('div') . "\n";
-            $output .= CHtml::closeTag('td') . "\n";
-            $output .= CHtml::openTag('td', array("style" => "vertical-align:top")) . "\n";
-            $output .= CHtml::openTag('div', array("class" => "sec_main_item_brief")) . "\n";
-            $output .= Html::utfSubstring($this->items['top'][0]['article_detail'], 0, 300, true);
-            $output .= CHtml::closeTag('div') . "\n";
-            $output .= CHtml::openTag('div', array("class" => "dotted_line")) . "\n";
-            $output .= CHtml::closeTag('div') . "\n";
-            $output .= CHtml::openTag('div', array("class" => "sec_main_item_readmore")) . "\n";
+            }            
+            $output .= '<div>';
             $output .= AmcWm::t("amcwm.modules.articles.frontend.messages.core", "Read also");
-            $output .= CHtml::closeTag('div') . "\n";
-            $output .= CHtml::openTag('div') . "\n";
-            $output .= CHtml::openTag('ul', array("class" => "sec_main_item_list"));
+            $output .= '</div>';
+            $output .= '<ul>';
             $articlesTopCount = count($this->items['top']);
             for ($articleIndex = 1; $articleIndex < $articlesTopCount; $articleIndex++) {
-                $output .= CHtml::openTag('li', array("class" => "sec_main_item_list"));
+                $output .= '<li>';
                 $output .= Html::link($this->items['top'][$articleIndex]['title'], $this->items['top'][$articleIndex]['link']);
-                $output .= CHtml::closeTag('li') . "\n";
+                $output .= '</li>';
             }
-            $output .= CHtml::closeTag('ul') . "\n";
-            $output .= CHtml::closeTag('div') . "\n";
-
-            $output .= CHtml::closeTag('td') . "\n";
-            $output .= CHtml::closeTag('tr') . "\n";
-
-            $output .= CHtml::closeTag('table') . "\n";
-            $output .= CHtml::closeTag('div') . "\n";
-            /////////////////////          
+            $output .= '</ul>';
+            $output .= '</div>';
         }
         return $output;
     }
@@ -181,7 +155,7 @@ class ArticlesListing extends AmcArticlesListing {
         $this->contentData = $this->drawTop();
         if (count($this->items['records'])) {
             $this->contentData .= CHtml::openTag('table', array("class" => "wdr_table", "cellpadding" => "0")) . "\n";
-             $this->contentData .=$this->drawListingTitle();
+            $this->contentData .=$this->drawListingTitle();
             $class = false;
             foreach ($this->items['records'] As $sectionArticle) {
                 $bg = ($class) ? "sec_content_even" : "sec_content_odd";
@@ -190,10 +164,10 @@ class ArticlesListing extends AmcArticlesListing {
                 $this->contentData .= CHtml::openTag('td', array("class" => "wdr_table_right_col {$bg}", "colspan" => 2)) . "\n";
                 $this->contentData .= '<div style="clear:both;">';
                 // primary header container        
-                foreach($this->viewOptions['listingRowOrders'] as $rowPart){
+                foreach ($this->viewOptions['listingRowOrders'] as $rowPart) {
                     $methodPart = "draw{$rowPart}";
                     $this->contentData .= $this->$methodPart($sectionArticle);
-                }                              
+                }
                 $this->contentData .= '<div>';
                 $this->contentData .= CHtml::closeTag('td') . "\n";
                 $this->contentData .= CHtml::closeTag('tr') . "\n";
