@@ -16,6 +16,13 @@
 class InFocusListData extends SiteData {
 
     /**
+     * Setting instance generated from settings.php inside an application module folder
+     * @var Settings
+     * @var array
+     */
+    private static $_settings = null;
+
+    /**
      * Counstructor
      * Make sure you call the parent counstructor so that the method is raised properly.
      * @todo fix bug if $limit = 0
@@ -30,10 +37,21 @@ class InFocusListData extends SiteData {
         $this->period = $period;
         $this->limit = (int) $limit;
         $this->sectionId = (int) $sectionId;
-        $wheresForTables = array();
-        $this->mediaPath = Yii::app()->baseUrl . "/" . Yii::app()->params["multimedia"]['infocus']['list']['path'] . "/";
+        $this->mediaPath = Yii::app()->baseUrl . "/" . self::getSettings()->mediaPaths['list']['path'] . "/";        
     }
 
+    /**
+     * Get articles setting used in the system
+     * @return Settings
+     * @access public 
+     */
+    static public function getSettings() {
+        if (self::$_settings == null) {
+            self::$_settings = new Settings("infocus", false);
+        }
+        return self::$_settings;
+    }
+    
     /**
      *
      * Generate infocus list
@@ -118,6 +136,7 @@ class InFocusListData extends SiteData {
             $this->items[$index]['title'] = $item["header"];
             $this->items[$index]['link'] = Html::createUrl($this->getRoute(), array('id' => $item['infocus_id'], 'title' => $item["header"]));
             $this->items[$index]['image'] = $this->mediaPath . $item["infocus_id"] . "." . $item["thumb"];
+            
             foreach ($this->cols as $colIndex => $col) {
                 $this->items[$index][$colIndex] = $item[$colIndex];
             }
