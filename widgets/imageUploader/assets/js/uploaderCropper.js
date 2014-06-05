@@ -47,8 +47,9 @@
             imageCropper.data.currentCoords.y *= imageCropper.data.ratio;
             imageCropper.data.currentCoords.y2 *= imageCropper.data.ratio;
             var cropWidth = imageCropper.data.currentCoords.x2 - imageCropper.data.currentCoords.x;
+            var cropHeight = imageCropper.data.currentCoords.y2 - imageCropper.data.currentCoords.y;
             var checkSize = function(key, value) {
-                if (value.width < cropWidth) {
+                if (value.width <= cropWidth && value.height <= cropHeight) {
                     $('#icon_size_' + key).attr('src', options.yesIcon);
                 }
                 else {
