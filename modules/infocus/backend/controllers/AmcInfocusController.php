@@ -10,7 +10,6 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-
 class AmcInfocusController extends BackendController {
 
     /**
@@ -92,23 +91,20 @@ class AmcInfocusController extends BackendController {
             foreach ($ids as $id) {
                 $contentModel = $this->loadChildModel($id);
                 $model = $contentModel->getParentContent();
-                $deleted = $model->delete();
+                $hasChilds = $model->integrityCheck();
+                if ($hasChilds) {
+                    $deleted = false;
+                } else {
+                    $deleted = $model->delete();
+                }                
                 if ($deleted) {
-                    $image = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . Yii::app()->params['multimedia']['infocus']['list']['path']) . "/" . $model->infocus_id . "." . $model->thumb;
-                    if (is_file($image)) {
-                        unlink($image);
-                    }
-                    $banner = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaSettings['paths']['banners']['path']) . "/" . $model->infocus_id . "." . $model->banner;
-                    if (is_file($banner)) {
-                        unlink($banner);
-                    }
-                    $background = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaSettings['paths']['backgrounds']['path']) . "/" . $model->infocus_id . "." . $model->background;
-                    if (is_file($background)) {
-                        unlink($background);
-                    }
+                    $this->deleteImages($model);
+                    //die();
+                    $messages['success'][] = AmcWm::t("msgsbase.core", 'Infocus "{infocus}" has been deleted', array("{infocus}" => $contentModel->displayTitle));
                 }
-                //------------------------------------------------------
-                $messages['success'][] = AmcWm::t("msgsbase.core", 'Infocus "{article}" has been deleted', array("{article}" => $model->displayTitle));
+                else{
+                    $messages['error'][] = AmcWm::t("msgsbase.core", 'Can not delete infocus "{infocus}"', array("{infocus}" => $contentModel->displayTitle));                    
+                }                
             }
             if (count($messages['error'])) {
                 Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => implode("<br />", $messages['error'])));
@@ -119,9 +115,43 @@ class AmcInfocusController extends BackendController {
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax']))
                 $this->redirect(array('index'));
-        }
-        else
+        } else
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+    }
+    
+    /**
+     * delete infocus images
+     * @param ActiveRecord $article
+     * @return boolean
+     * @access protected
+     */
+    protected function deleteImages(ActiveRecord $record) {
+        $imageSizesInfo = $this->getModule()->appModule->mediaPaths;
+        if ($record->background) {
+            $imageInfo = $imageSizesInfo['backgrounds'];
+            $background = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $record->infocus_id . "." . $record->background;
+            if (is_file($background)) {
+                unlink($background);
+            }          
+        }
+        if ($record->banner) {
+            $imageInfo = $imageSizesInfo['banners'];
+            $banner = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $record->infocus_id . "." . $record->banner;
+            if (is_file($banner)) {
+                unlink($banner);
+            }          
+        }
+        if ($record->thumb) {
+            foreach ($imageSizesInfo as $imageInfo) {
+                if ($imageInfo['autoSave']) {
+                    $imageFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $record->infocus_id . "." . $record->thumb;
+                    if (is_file($imageFile)) {
+                        unlink($imageFile);
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -172,13 +202,18 @@ class AmcInfocusController extends BackendController {
                 $tags = array_filter($_POST["InfocusTranslation"]["tags"]);
                 $contentModel->setAttribute("tags", implode(PHP_EOL, $tags));
             }
-
+            $oldThumb = $model->thumb;
             $oldImages = array(
-                "thumb" => $model->thumb,
                 "banner" => $model->banner,
                 "background" => $model->background,
             );
             $this->prepareFiles($model);
+            $deleteImage = isset($_POST['Infocus']['imageFile_deleteImage']) && $_POST['Infocus']['imageFile_deleteImage'];
+            if ($model->imageFile instanceof CUploadedFile) {
+                $model->setAttribute('thumb', $model->imageFile->getExtensionName());
+            } else if ($deleteImage) {
+                $model->setAttribute('thumb', null);
+            }
 
             $validate = $this->validateFile($model);
             $validate &= $contentModel->validate();
@@ -187,6 +222,7 @@ class AmcInfocusController extends BackendController {
                     if ($model->save()) {
                         if ($contentModel->save()) {
                             $transaction->commit();
+                            $this->saveThumb($model, $oldThumb);
                             $this->saveFiles($model, $oldImages);
                             Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t("msgsbase.core", 'Article has been saved')));
                             $this->redirect(array('view', 'id' => $model->infocus_id));
@@ -224,25 +260,9 @@ class AmcInfocusController extends BackendController {
      * @param array $oldImages
      */
     protected function saveFiles(Infocus $model, $oldImages = array()) {
-        $deleteImage = Yii::app()->request->getParam('deleteImageFile');
         $deleteBanner = Yii::app()->request->getParam('deleteBnrFile');
         $deleteBg = Yii::app()->request->getParam('deleteBgFile');
         $mediaSettings = AmcWm::app()->appModule->mediaSettings;
-
-        if ($model->imageFile instanceof CUploadedFile) {
-            $imageFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaSettings['paths']['images']['path']) . "/" . $model->infocus_id . "." . $model->thumb;
-            if ($oldImages['thumb'] != $model->thumb && $oldImages['thumb']) {
-                @unlink(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaSettings['paths']['images']['path']) . "/" . $model->infocus_id . "." . $oldImages['thumb']);
-            }
-            $image = new Image($model->imageFile->getTempName());
-            $image->resize($mediaSettings['paths']['images']['info']['width'], $mediaSettings['paths']['images']['info']['height'], Image::RESIZE_BASED_ON_HEIGHT, $imageFile);
-        } else if ($deleteImage) {
-            if ($model->thumb) {
-                @unlink(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaSettings['paths']['images']['path']) . "/" . $model->infocus_id . "." . $model->thumb);
-                $model->setAttribute('thumb', '');
-            }
-        }
-
         if ($model->bannerFile instanceof CUploadedFile) {
             $bannerFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaSettings['paths']['banners']['path']) . "/" . $model->infocus_id . "." . $model->banner;
             if ($oldImages['banner'] != $model->banner && $oldImages['banner']) {
@@ -271,7 +291,64 @@ class AmcInfocusController extends BackendController {
     }
 
     /**
-     * validate article
+     * Save thumb images
+     * @param ActiveRecord $record
+     * @param string $oldThumb
+     * @return void
+     * @access protected
+     */
+    protected function saveThumb(ActiveRecord $record, $oldThumb) {        
+        $recordParams = Yii::app()->request->getParam('Infocus');
+        $coords = isset($recordParams['imageFile_coords']) ? CJSON::decode($recordParams['imageFile_coords']) : array();
+        $deleteImage = isset($recordParams['imageFile_deleteImage']) && $recordParams['imageFile_deleteImage'];
+        $imageSizesInfo = $this->getModule()->appModule->mediaPaths;
+        if ($record->imageFile instanceof CUploadedFile) {
+            $image = new Image($record->imageFile->getTempName());
+            foreach ($imageSizesInfo as $imageInfo) {
+                $path = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']);
+                if(!is_dir($path)){                    
+                    mkdir($path, 0755, true);
+                }                
+                $ok = false;
+                if ($imageInfo['autoSave']) {
+                    if ($coords) {
+                        if ($imageInfo['info']['crob']) {
+                            $ok = ($imageInfo['info']['width'] <= ($coords['x2'] - $coords['x']) || $imageInfo['info']['height'] <= ($coords['y2'] - $coords['y'])) ? true : false;
+                        } else {
+                            $ok = ($imageInfo['info']['width'] <= ($coords['x2'] - $coords['x'])) ? true : false;
+                        }
+                    } else {
+                        $ok = true;
+                    }
+                }
+                $imageFile = $path . DIRECTORY_SEPARATOR . $record->infocus_id . "." . $record->thumb;
+                $oldThumbFile = $path . DIRECTORY_SEPARATOR . $record->infocus_id . "." . $oldThumb;
+                if ($oldThumb && is_file($oldThumbFile)) {
+                    unlink($oldThumbFile);
+                }
+                if ($ok) {
+                    if ($imageInfo['info']['crob']) {
+                        $image->resizeCrop($imageInfo['info']['width'], $imageInfo['info']['height'], $imageFile, $coords);
+                    } else {
+                        $image->resize($imageInfo['info']['width'], $imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $imageFile, $coords);
+                    }
+                }
+            }
+        } else if ($deleteImage && $oldThumb) {
+            foreach ($imageSizesInfo as $imageInfo) {
+                $path = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']);
+                if ($imageInfo['autoSave']) {
+                    $oldThumbFile = $path . "/" . DIRECTORY_SEPARATOR . "." . $oldThumb;
+                    if (is_file($oldThumbFile)) {
+                        unlink($oldThumbFile);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * validate infocus
      * @param ActiveRecord $file
      * @return boolean
      * @access protected

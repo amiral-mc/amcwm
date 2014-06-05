@@ -118,5 +118,15 @@ class InfocusTranslation extends ChildTranslatedActiveRecord {
                     'sort' => $sort,
                 ));
     }
+    
+     /**
+     * This method is invoked after each record is instantiated by a find method.
+     * @access public
+     * @return void
+     */
+    protected function afterFind() {
+        $this->displayTitle = $this->header;
+        parent::afterFind();
+    }
 
 }

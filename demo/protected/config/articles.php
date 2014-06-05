@@ -76,7 +76,7 @@ return array(
         'default' => array(
             'check' => array(
                 'addToSlider' => true,
-                'addToInfocus' => false,
+                'addToInfocus' => true,
             ),
         ),
         'news' => array(

@@ -25,7 +25,8 @@ return array(
     'options' => array(
         'system' => array(
             'check' => array(
-                'enableInfocus' => true,
+                'useBanner' => true,
+                'useBackground' => true,
             ),
         ),
     ),
@@ -43,22 +44,22 @@ return array(
             ),
             'slider' => array(
                 'autoSave' => true,
-                'path' => 'multimedia/infocus',
+                'path' => 'multimedia/infocus/slider',
                 'info' => array('crob' => true, 'width' => 260, 'height' => 155, 'exact' => true, 'allowedUploadRatio' => 8),
             ),
             'list' => array(
                 'autoSave' => true,
-                'path' => 'multimedia/infocus',
+                'path' => 'multimedia/infocus/list',
                 'info' => array('width' => 78, 'height' => 59, 'exact' => false, 'allowedUploadRatio' => 8, 'crob' => true,),
             ), 
            'banners' => array(
-                'autoSave' => true,
+                'autoSave' => false,
                 'maxImageSize' => 900 * 1024 * 1024,
                 'path' => 'multimedia/infocus/banners',
                 'info' => array('crob' => false, 'width' => 990, 'height' => 90, 'exact' => true, 'allowedUploadRatio' => 1),
             ),
             'backgrounds' => array(
-                'autoSave' => true,
+                'autoSave' => false,
                 'maxImageSize' => 1024 * 1024 * 1024,
                 'path' => 'multimedia/infocus/backgrounds',
                 'info' => array('crob' => false, 'width' => 1500, 'height' => 800, 'exact' => false, 'allowedUploadRatio' => 2),

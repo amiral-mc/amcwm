@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'Infocus' => 'تغطيات خاصة',
     'Add' => 'اضافة',
     'ID' => 'رقم الملف',
     'Header' => 'عنوان الملف',
@@ -39,10 +40,9 @@ return array(
     'In Ticker' => 'إضافة إلى شريط الاخبار',
     'In Slider' => 'إضافة إلى أهم الأخبار',
     //'In Spot' => 'إضافة إلى أهم الأخبار',
-    'Slider File' => 'ملف الصورة',
     'View' => 'معاينة',
-    'Can not delete article "{article}"' => 'لم نتمكن من الغاء الملف "{article}"',
-    'Article "{article}" has been deleted' => 'تم الغاء الملف "{article}"',
+    'Infocus "{infocus}" has been deleted' => 'تم الغاء الملف "{infocus}"',
+    'Can not delete article "{infocus}"' => 'لم نتمكن من الغاء الملف "{infocus}"',
     'Article has been saved' => 'تم حفظ الملف',
     'Comments Counts' => 'عدد التعليقات',
     'Creation Date' => 'تاريخ الاضافة',

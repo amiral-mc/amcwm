@@ -575,7 +575,10 @@ class ManageArticles extends ManageContent {
         if ($article->imageFile instanceof CUploadedFile) {
             $image = new Image($article->imageFile->getTempName());
             foreach ($imageSizesInfo as $imageInfo) {
-                //print_r($imageSizesInfo); exit;
+                $path = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']);
+                if(!is_dir($path)){                    
+                    mkdir($path, 0755, true);
+                }                
                 $ok = false;
                 if ($imageInfo['autoSave']) {
                     if ($coords) {
@@ -588,8 +591,8 @@ class ManageArticles extends ManageContent {
                         $ok = true;
                     }
                 }
-                $imageFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $article->article_id . "." . $article->thumb;
-                $oldThumbFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $article->article_id . "." . $oldThumb;
+                $imageFile = $path . DIRECTORY_SEPARATOR . $article->article_id . "." . $article->thumb;
+                $oldThumbFile = $path . DIRECTORY_SEPARATOR . $article->article_id . "." . $oldThumb;
                 if ($oldThumb && is_file($oldThumbFile)) {
                     unlink($oldThumbFile);
                 }
@@ -603,8 +606,9 @@ class ManageArticles extends ManageContent {
             }
         } else if ($deleteImage && $oldThumb) {
             foreach ($imageSizesInfo as $imageInfo) {
+                $path = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']);
                 if ($imageInfo['autoSave']) {
-                    $oldThumbFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $article->article_id . "." . $oldThumb;
+                    $oldThumbFile = $path . "/" . $article->article_id . DIRECTORY_SEPARATOR . $oldThumb;
                     if (is_file($oldThumbFile)) {
                         unlink($oldThumbFile);
                     }
@@ -820,7 +824,7 @@ class ManageArticles extends ManageContent {
     }
 
     /**
-     * delete article
+     * delete article images
      * @param ActiveRecord $article
      * @return boolean
      * @access protected

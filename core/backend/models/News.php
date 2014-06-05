@@ -120,8 +120,10 @@ class News extends ActiveRecord {
      */
     protected function afterSave() {        
         AmcWm::app()->db->createCommand('delete from news_writers where article_id = ' . (int)$this->article_id)->execute();
+        if(is_array($this->writersIds)){
         foreach ($this->writersIds as $writerId){
             AmcWm::app()->db->createCommand(sprintf('insert into news_writers(article_id, writer_id) values (%d, %d)' , $this->article_id, $writerId))->execute();
+        }
         }
         parent::afterSave();
     }

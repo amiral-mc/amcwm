@@ -149,7 +149,7 @@ if ($id && $infocusData['banner']) {
     </table>
 </div>
 <?php
-$this->widget('ext.InfocusWidget', array(
+$this->widget('widgets.InfocusWidget', array(
     'data' => $infocusItems,
     'contentType' => $contentType,
     'page' => $page,

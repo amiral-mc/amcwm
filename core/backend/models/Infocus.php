@@ -29,7 +29,7 @@
  * @property Sections $section
  * @property Articles[] $articles
  * @property Images[] $images
- * @property Videos[] $videoses
+ * @property Videos[] $videos
  * @property InfocusTranslation[] $infocusTranslations
  * 
  * @author Amiral Management Corporation
@@ -138,7 +138,7 @@ class Infocus extends ParentTranslatedActiveRecord {
             'section' => array(self::BELONGS_TO, 'Sections', 'section_id'),
             'articles' => array(self::MANY_MANY, 'Articles', 'infocus_has_articles(infocus_id, article_id)'),
             'images' => array(self::MANY_MANY, 'Images', 'infocus_has_images(infocus_id, image_id)'),
-            'videoses' => array(self::MANY_MANY, 'Videos', 'infocus_has_videos(infocus_id, video_id)'),
+            'videos' => array(self::MANY_MANY, 'Videos', 'infocus_has_videos(infocus_id, video_id)'),
             'translationChilds' => array(self::HAS_MANY, 'InfocusTranslation', 'infocus_id', "index" => "content_lang"),
         );
     }
@@ -194,6 +194,14 @@ class Infocus extends ParentTranslatedActiveRecord {
         return new CActiveDataProvider($this, array(
                     'criteria' => $criteria,
                 ));
+    }
+    
+    /**
+     * Check table integrity in delete process
+     * @return boolean
+     */
+    public function integrityCheck() {
+        return count($this->articles) || count($this->videos) || count($this->images);
     }
 
 }
