@@ -77,7 +77,18 @@ class MostReadAndComment extends SideWidget {
      * @var current active tab 
      */
     public $activeTab = null;
+    
+    /**
+     *
+     * @var string css class in ul listing 
+     */
+    public $listingClass= 'most-listing';
 
+    /**
+     *
+     * @var booleans draw articles images  yes or no
+     */
+    public $drawImages = true;
     /**
      * Render the widget and display the result
      * @access public
@@ -92,9 +103,10 @@ class MostReadAndComment extends SideWidget {
 
         if (count($this->readArticles)) {
             $widgetTabs["{$this->getId()}-read"] = array('title' => $this->readTitle, 'content' => '');
-            $widgetTabs["{$this->getId()}-read"]['content'] = '<ul>';
+            $widgetTabs["{$this->getId()}-read"]['content'] = '<ul class="'. $this->listingClass.'">';
+            
             foreach ($this->readArticles As $article) {
-                $widgetTabs["{$this->getId()}-read"]['content'].= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
+                $widgetTabs["{$this->getId()}-read"]['content'].= $this->drawItem($article, 'read');
             }
             $widgetTabs["{$this->getId()}-read"]['content'] .='</ul>';
         } else {
@@ -102,9 +114,9 @@ class MostReadAndComment extends SideWidget {
         }
         if (count($this->commentsArticles)) {
             $widgetTabs["{$this->getId()}-comments"] = array('title' => $this->commentTitle, 'content' => '', 'active');
-            $widgetTabs["{$this->getId()}-comments"]['content'] .= '<ul>';
+            $widgetTabs["{$this->getId()}-comments"]['content'] .= '<ul class="'. $this->listingClass.'">';
             foreach ($this->commentsArticles As $article) {
-                $widgetTabs["{$this->getId()}-comments"]['content'].= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
+                $widgetTabs["{$this->getId()}-comments"]['content'].= $this->drawItem($article, 'comments');
             }
             $widgetTabs["{$this->getId()}-comments"]['content'] .= '</ul>';
         } else {
@@ -112,9 +124,9 @@ class MostReadAndComment extends SideWidget {
         }
         if (count($this->sharedArticles)) {
             $widgetTabs["{$this->getId()}-shared"] = array('title' => $this->sharedTitle, 'content' => '');
-            $widgetTabs["{$this->getId()}-shared"]['content'] .= '<ul>';
+            $widgetTabs["{$this->getId()}-shared"]['content'] .= '<ul class="'. $this->listingClass.'">';
             foreach ($this->sharedArticles As $article) {
-                $widgetTabs["{$this->getId()}-shared"]['content'].= "<li><a href={$article['link']}>" . $article['title'] . '</a></li>';
+                $widgetTabs["{$this->getId()}-shared"]['content'].= $this->drawItem($article, 'hits');
             }
             $widgetTabs["{$this->getId()}-shared"]['content'] .= '</ul>';
         } else {
@@ -136,6 +148,22 @@ class MostReadAndComment extends SideWidget {
             $tabsWidgetsOptions['activeTab'] = "{$this->getId()}-{$this->activeTab}";
         }
         $this->contentData .= $this->widget('TabView', $tabsWidgetsOptions, true);
+    }
+    
+    /**
+     * Draw article item
+     * @param array $article
+     * @param string $type
+     * @return string
+     */
+    protected function drawItem($article, $type){
+        $item ='<li>';
+        if($this->drawImages && $article['image']){
+            $item .= '<a href="' . $article['link'] . ' "><img src="' . $article['image'] . '" /></a>';
+        }            
+        $item .= '<a href="' . $article['link'] . ' ">' . $article['title'] . '</a>';
+        $item .='</li>';
+        return $item;        
     }
 
 }

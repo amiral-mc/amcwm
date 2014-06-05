@@ -79,7 +79,7 @@ class VotesWidget extends CWidget {
         }
     }
 
-    private function runResults() {
+    protected function runResults() {
         echo CHtml::openTag("div", $this->htmlOptions);
         echo '<h1>' . $this->items['ques'] . '</h1>';
         if (count($this->items['results']['votes'])) {
@@ -104,7 +104,7 @@ class VotesWidget extends CWidget {
      * @access private 
      * @return string
      */
-    private function runForm() {
+    protected function runForm() {
         echo CHtml::openTag("div", $this->htmlOptions);
         $form = $this->beginWidget('CActiveForm', array('action' => $this->formAction, 'id' => $this->getId() . "_form"));
         echo CHtml::hiddenField('lang', Controller::getCurrentLanguage(), array('id' => 'vote_lang'));

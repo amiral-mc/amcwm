@@ -54,10 +54,10 @@ update news, news_translation set source_id = (select source_id from news_source
 where news.article_id = news_translation.article_id;
 
 
-select n.article_id, n.source_id, nt.source , nt.content_lang,  st.source, st.content_lang from news n 
-inner join news_translation nt on n.article_id = nt.article_id
-inner join news_sources s on n.source_id = s.source_id 
-inner join news_sources_translation st on s.source_id = st.source_id and st.content_lang = nt.content_lang;
+-- select n.article_id, n.source_id, nt.source , nt.content_lang,  st.source, st.content_lang from news n 
+-- inner join news_translation nt on n.article_id = nt.article_id
+-- inner join news_sources s on n.source_id = s.source_id 
+-- inner join news_sources_translation st on s.source_id = st.source_id and st.content_lang = nt.content_lang;
 
 drop table `news_translation`;
 

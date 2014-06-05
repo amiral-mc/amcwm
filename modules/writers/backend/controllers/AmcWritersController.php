@@ -53,6 +53,7 @@ class AmcWritersController extends BackendController {
             $transaction = Yii::app()->db->beginTransaction();
             $model = $contentModel->getParentContent();
             $model->attributes = $_POST['Persons'];
+            $model->toMailList = 0;
             $contentModel->attributes = $_POST['PersonsTranslation'];
             $model->personImage = CUploadedFile::getInstance($model, 'personImage');
             $oldThumb = $model->thumb;
