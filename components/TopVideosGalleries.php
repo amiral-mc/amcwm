@@ -30,7 +30,7 @@ class TopVideosGalleries extends TopGalleriesData {
      */
     protected function setChilds($galleryId) {        
         $mediaPaths = VideosListData::getSettings()->mediaPaths;
-        $this->videoRoute = '/multimedia/videos/index';
+        $this->videoRoute = '/multimedia/videos/view';
         $this->videoParamId = 'id';
         $count = 0;
         $childs = array();
