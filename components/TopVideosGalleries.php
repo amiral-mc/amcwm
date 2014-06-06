@@ -12,26 +12,35 @@
  */
 class TopVideosGalleries extends TopGalleriesData {
 
-    private $videoRoute = '';
-    private $videoParamId = '';
+    
+    private $route = '';
     private $firstVideo = '';
-
+    
     public function __construct($pageNo = 1, $pageSize = 7, $moreLimit = 3) {
         $this->mediaType = "videos";
         parent::__construct($pageNo, $pageSize, $moreLimit);
     }
 
+     /**
+     * Get route router for viewing content details
+     * @access public 
+     * @return string
+     */
+    public function getRoute() {
+        return $this->route;
+    }
+    
     public function getFirstVideo() {
         return $this->firstVideo;
     }
 
+    
     /**
      * @todo explain the query
      */
     protected function setChilds($galleryId) {        
         $mediaPaths = VideosListData::getSettings()->mediaPaths;
-        $this->videoRoute = '/multimedia/videos/view';
-        $this->videoParamId = 'id';
+        $this->route = '/multimedia/videos/view';
         $count = 0;
         $childs = array();
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
@@ -62,7 +71,7 @@ class TopVideosGalleries extends TopGalleriesData {
             foreach ($galleryItems as $v) {
                 $moreVideos = array();
                 $moreVideos['id'] = $v['video_id'];
-                $moreVideos['route'] = array($this->videoRoute, "gid" => $v['gallery_id'], "id" => $v['video_id'], "page" => $this->pageNo);
+                $moreVideos['params'] = array("gid" => $v['gallery_id'], "id" => $v['video_id'], "page" => $this->pageNo);
                 $moreVideos['title'] = $v['video_header'];
                 $moreVideos['hits'] = $v['hits'];
                 $moreVideos['created'] = Yii::app()->dateFormatter->format("dd/MM/y", $v['creation_date']);

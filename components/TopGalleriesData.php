@@ -9,6 +9,7 @@
 /**
  * Description of TopGalleriesData
  * @author Amiral Management Corporation amc.amiral.com
+ * @todo correct this class to extend SiteData
  */
 abstract class TopGalleriesData {
 
