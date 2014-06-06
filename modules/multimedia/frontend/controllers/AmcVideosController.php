@@ -20,7 +20,6 @@ class AmcVideosController extends FrontendController {
     public function actionIndex() {
         $multiMedia = new MediaListData(Yii::app()->request->getParam('gid'), SiteData::VIDEO_TYPE);
         $mediaPaging = new PagingDataset($multiMedia, 10, Yii::app()->request->getParam('page'));
-        $multiMedia->generate();
         $galleries = $multiMedia->getGalleries();
         $galleryId = $multiMedia->getGalleryId();
         $activeGallery = null;
