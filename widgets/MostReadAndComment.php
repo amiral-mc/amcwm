@@ -126,7 +126,7 @@ class MostReadAndComment extends SideWidget {
             $widgetTabs["{$this->getId()}-shared"] = array('title' => $this->sharedTitle, 'content' => '');
             $widgetTabs["{$this->getId()}-shared"]['content'] .= '<ul class="'. $this->listingClass.'">';
             foreach ($this->sharedArticles As $article) {
-                $widgetTabs["{$this->getId()}-shared"]['content'].= $this->drawItem($article, 'hits');
+                $widgetTabs["{$this->getId()}-shared"]['content'].= $this->drawItem($article, 'shared');
             }
             $widgetTabs["{$this->getId()}-shared"]['content'] .= '</ul>';
         } else {
