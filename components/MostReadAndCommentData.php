@@ -73,6 +73,12 @@ class MostReadAndCommentData extends CComponent {
      * @var int 
      */
     protected $period = 0;
+    
+    /**
+     *      
+     * @var array add custom where 
+     */
+    protected $wheres = array();
 
     /**
      * Title length , if greater than 0 then we get the first titleLength characters from content tite
@@ -100,6 +106,13 @@ class MostReadAndCommentData extends CComponent {
 
         //$this->sharedArticles = $shared->getItems();
     }
+    
+    /**
+     * Add where to wheres array
+     */
+    public function setWheres($where){
+        $this->wheres[md5($where)] = $where; 
+    }
 
     /**
      * Gets the most comments articles list array, each article is associated  array that contain's following items:
@@ -119,6 +132,9 @@ class MostReadAndCommentData extends CComponent {
             $comments->addOrder('comments desc');
             $comments->addColumn('comments', 'info');
             $comments->setTitleLength($this->titleLength);
+            foreach($this->wheres as $where){
+                $comments->addWhere($where);
+            }
             $comments->generate();
             $this->commentsArticles = $comments->getItems();
         }
@@ -143,6 +159,9 @@ class MostReadAndCommentData extends CComponent {
             $read->addOrder('hits desc');
             $read->addColumn('hits', 'info');
             $read->setTitleLength($this->titleLength);
+            foreach($this->wheres as $where){
+                $read->addWhere($where);
+            }
             $read->generate();
             $this->readArticles = $read->getItems();
         }
@@ -167,6 +186,9 @@ class MostReadAndCommentData extends CComponent {
             $shared->addOrder('shared desc');
             $shared->addColumn('shared', 'info');
             $shared->setTitleLength($this->titleLength);
+            foreach($this->wheres as $where){
+                $shared->addWhere($where);
+            }
             $shared->generate();
             $this->sharedArticles = $shared->getItems();
         }
