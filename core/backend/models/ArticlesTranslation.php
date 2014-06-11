@@ -190,7 +190,12 @@ class ArticlesTranslation extends ChildTranslatedActiveRecord {
             $sort->defaultOrder = "workflow_tasks.step_id desc, p.section_id, {$order}";    
         }
         else{
-            $sort->defaultOrder = "p.section_id , {$order}";    
+            if($table == "news"){
+                $sort->defaultOrder = "{$order}";                            
+            }
+            else{
+                $sort->defaultOrder = "p.section_id , {$order}";                            
+            }
         }
 
         
