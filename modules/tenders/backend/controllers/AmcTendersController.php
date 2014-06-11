@@ -58,6 +58,7 @@ class AmcTendersController extends BackendController {
                         }
                     }
                 } catch (CDbException $e) {
+//                    echo $e->getMessage();
                     $transaction->rollback();
                     Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => AmcWm::t("amcTools", "Can't save record")));
                     //$this->refresh();

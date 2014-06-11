@@ -27,9 +27,7 @@ class AmcTendersController extends FrontendController {
         $pdataset->useRecordIdAsKey(false);
         $pdataset->addWhere('t.tender_status >= 3');
         $ppaging = new PagingDataset($pdataset, 10, (int) Yii::app()->request->getParam('page', 1));
-        $pastTenders = new PagingDatasetProvider($ppaging, array());
-
-//        die(print_r($dataProvider));
+        $pastTenders = new PagingDatasetProvider($ppaging, array());        
         $this->render('tenders', array(
             'currentTenders' => $currentTenders,
             'pastTenders' => $pastTenders,
@@ -71,12 +69,13 @@ class AmcTendersController extends FrontendController {
             $from = $this->module->appModule->options['default']['text']['email'];
             if ($this->saveComment($model)) {
                 $ok = Yii::app()->db->createCommand(sprintf("insert into tenders_comments (comment_id, tender_id) values (%d, %d)", $model->comment_id, $id))->execute();
+                $commentId = Yii::app()->db->lastInsertID;
                 if ($ok) {
                     $queryArticle = sprintf("update tenders set comments = comments + 1 where tender_id = %d", $id);
                     Yii::app()->db->createCommand($queryArticle)->execute();
                 }
                 // Send comment notification by email
-                $this->sendResult($model->commentsOwners->name, $model->commentsOwners->email, $id, $from);
+                $this->sendResult($model->commentsOwners->name, $model->commentsOwners->email, $id, $model->comment_id , $from);
                 Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t("comments", 'Comment has been added')));
             } else {
                 Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => AmcWm::t("comments", 'Comment cannot be added, please check the required values')));
@@ -136,7 +135,7 @@ class AmcTendersController extends FrontendController {
     /**
      * Send tender comment notification by email
      */
-    private function sendResult($name, $email, $id, $from) {
+    private function sendResult($name, $email, $id, $commentId, $from) {
         Yii::app()->mail->sender->Subject = AmcWm::t("app", "_TENDER_SUBJECT_");
         Yii::app()->mail->sender->AddAddress($from);
         Yii::app()->mail->sender->SetFrom($from);
@@ -144,7 +143,7 @@ class AmcTendersController extends FrontendController {
         Yii::app()->mail->sender->IsHTML();
         Yii::app()->mail->sendView("application.views.email.tenders." . Controller::getCurrentLanguage() . ".tenders", array(
             'name' => $name,
-            'link' => AmcWm::app()->request->getHostInfo() . Html::createUrl('/tenders/default/view', array('id' => $id))));
+            'link' => AmcWm::app()->request->getHostInfo() . Html::createUrl('/backend/tenders/questions/view', array('item' => $id, 'id' => $commentId))));
 //        Yii::app()->mail->sender->Send();
 //        Yii::app()->mail->sender->ClearAddresses();
 

@@ -58,15 +58,15 @@ $this->widget('zii.widgets.CDetailView', array(
         ),
         array(
             'name' => AmcWm::t("msgsbase.core", "Rfp Price1"),
-            'value' => $model->rfp_price1,
+            'value' => ($model->rfp_price1) ? $model->rfp_price1 . " " . AmcWm::app()->getLocale()->getCurrencySymbol($model->rfp_price1_currency) : null,
         ),
         array(
             'name' => AmcWm::t("msgsbase.core", "Rfp Price2"),
-            'value' => $model->rfp_price2,
+            'value' => ($model->rfp_price2) ? $model->rfp_price2 . " " . AmcWm::app()->getLocale()->getCurrencySymbol($model->rfp_price2_currency) : null,
         ),
         array(
             'name' => AmcWm::t("msgsbase.core", "Primary Insurance"),
-            'value' => $model->primary_insurance,
+            'value' => ($model->primary_insurance) ? $model->primary_insurance . " " . AmcWm::app()->getLocale()->getCurrencySymbol($model->primary_insurance_currency) : null,
         ),
         array(
             'name' => AmcWm::t("msgsbase.core", "Description"),

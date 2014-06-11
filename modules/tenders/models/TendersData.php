@@ -142,10 +142,7 @@ class TendersData extends Dataset {
             where c.published = %d
             and (c.hide = 0 OR c.force_display=1)
             and ac.tender_id = %d
-            order by c.comment_date DESC", 
-                Yii::app()->db->quoteValue($siteLanguage),
-                ActiveRecord::PUBLISHED, 
-                $this->_id
+            order by c.comment_date DESC", Yii::app()->db->quoteValue($siteLanguage), ActiveRecord::PUBLISHED, $this->_id
         );
         $comments = Yii::app()->db->createCommand($query)->queryAll();
         $count = count($comments);
@@ -227,7 +224,7 @@ class TendersData extends Dataset {
     public function generate($start = 0) {
         $dependencyComments = null;
         $cacheMe = false;
-        
+
         $commentsCount = 0;
         $this->_initItem();
 //        if ($this->_cache !== null) {
@@ -321,7 +318,7 @@ class TendersData extends Dataset {
                 $wheres
              ", ActiveRecord::PUBLISHED, $this->_id, Yii::app()->db->quoteValue($siteLanguage));
             $this->items['record'] = Yii::app()->db->createCommand($this->query)->queryRow();
-            
+
             if (is_array($this->items['record'])) {
                 $this->items['record']["create_date"] = Yii::app()->dateFormatter->format("dd/MM/y (hh:mm a)", $this->items['record']["create_date"]);
                 $this->items['record']["rfp_start_date"] = Yii::app()->dateFormatter->format("dd-MM-y (hh:mm a)", $this->items['record']["rfp_start_date"]);
@@ -330,7 +327,10 @@ class TendersData extends Dataset {
                 $this->items['record']["submission_end_date"] = Yii::app()->dateFormatter->format("dd-MM-y (hh:mm a)", $this->items['record']["submission_end_date"]);
                 $this->items['record']["technical_date"] = Yii::app()->dateFormatter->format("dd-MM-y (hh:mm a)", $this->items['record']["technical_date"]);
                 $this->items['record']["financial_date"] = Yii::app()->dateFormatter->format("dd-MM-y (hh:mm a)", $this->items['record']["financial_date"]);
-                
+                $this->items['record']['rfp_price1'] = ($this->items['record']['rfp_price1']) ? $this->items['record']['rfp_price1'] . " " . AmcWm::app()->getLocale()->getCurrencySymbol($this->items['record']['rfp_price1_currency']) : null;
+                $this->items['record']['rfp_price2'] = ($this->items['record']['rfp_price2']) ? $this->items['record']['rfp_price2'] . " " . AmcWm::app()->getLocale()->getCurrencySymbol($this->items['record']['rfp_price2_currency']) : null;
+                $this->items['record']['primary_insurance'] = ($this->items['record']['primary_insurance']) ? $this->items['record']['primary_insurance'] . " " . AmcWm::app()->getLocale()->getCurrencySymbol($this->items['record']['primary_insurance_currency']) : null;
+
                 $this->items['record']["tender_type"] = Tenders::model()->getTenderTypes($this->items['record']["tender_type"]);
                 $this->items['record']["tender_status"] = Tenders::model()->getTenderStatus($this->items['record']["tender_status"]);
                 $this->items['record']["activities"] = TendersActivities::model()->getTenderActivity($this->items['record']["tender_id"]);

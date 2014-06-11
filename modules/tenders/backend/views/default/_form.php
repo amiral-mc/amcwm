@@ -257,18 +257,21 @@
         <div class="row">
             <?php echo $form->labelEx($model, 'rfp_price1'); ?>
             <?php echo $form->textField($model, 'rfp_price1', array('size' => 10, 'maxlength' => 10)); ?>
+            <?php echo $form->dropDownList($model, 'rfp_price1_currency', Tenders::model()->getCurrencyList()); ?>
             <?php echo $form->error($model, 'rfp_price1'); ?>
         </div>
 
         <div class="row">
             <?php echo $form->labelEx($model, 'rfp_price2'); ?>
             <?php echo $form->textField($model, 'rfp_price2', array('size' => 10, 'maxlength' => 10)); ?>
+            <?php echo $form->dropDownList($model, 'rfp_price2_currency', Tenders::model()->getCurrencyList()); ?>
             <?php echo $form->error($model, 'rfp_price2'); ?>
         </div>
 
         <div class="row">
             <?php echo $form->labelEx($model, 'primary_insurance'); ?>
             <?php echo $form->textField($model, 'primary_insurance', array('size' => 10, 'maxlength' => 10)); ?>
+            <?php echo $form->dropDownList($model, 'primary_insurance_currency', Tenders::model()->getCurrencyList()); ?>
             <?php echo $form->error($model, 'primary_insurance'); ?>
         </div>
 

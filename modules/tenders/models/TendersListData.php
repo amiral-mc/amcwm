@@ -146,9 +146,9 @@ class TendersListData extends Dataset {
                     
             $this->items[$index]['rfp_start_date'] = Yii::app()->dateFormatter->format("dd-MM-y (hh:mm)", $tender['rfp_start_date']);
             $this->items[$index]['submission_start_date'] = Yii::app()->dateFormatter->format("dd-MM-y (hh:mm)", $tender['submission_start_date']);
-            $this->items[$index]['rfp_price1'] = $tender['rfp_price1'];
-            $this->items[$index]['rfp_price2'] = $tender['rfp_price2'];
-            $this->items[$index]['primary_insurance'] = $tender['primary_insurance'];
+            $this->items[$index]['rfp_price1'] = ($tender['rfp_price1']) ? $tender['rfp_price1'] . " " . AmcWm::app()->getLocale()->getCurrencySymbol($tender['rfp_price1_currency']) : null;
+            $this->items[$index]['rfp_price2'] = ($tender['rfp_price2']) ? $tender['rfp_price2'] . " " . AmcWm::app()->getLocale()->getCurrencySymbol($tender['rfp_price2_currency']) : null;
+            $this->items[$index]['primary_insurance'] = ($tender['primary_insurance']) ? $tender['primary_insurance'] . " " . AmcWm::app()->getLocale()->getCurrencySymbol($tender['primary_insurance_currency']) : null;
 
             if ($this->checkIsActive) {
                 $this->items[$index]['isActive'] = Data::getInstance()->isCurrentRoute($this->route, array("id" => $tender['tender_id']));

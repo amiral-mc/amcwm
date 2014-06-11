@@ -41,6 +41,11 @@ return array(
             'text' => array(
                 'homeRoute' => '/tenders/default/index',
             ),
+            'currency'=>array(
+                'EGP'=>'EGP',
+                'EUR'=>'EUR',
+                'USD'=>'USD',
+            )
         ),
     ),
     'media' => array(

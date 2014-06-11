@@ -23,6 +23,9 @@
  * @property string $rfp_price1
  * @property string $rfp_price2
  * @property string $primary_insurance
+ * @property string $rfp_price1_currency
+ * @property string $rfp_price2_currency
+ * @property string $primary_insurance_currency
  * @property integer $published
  * @property string $hits
  * @property string $file_ext
@@ -69,18 +72,15 @@ class Tenders extends ParentTranslatedActiveRecord {
         return array(
             array('department_id, tender_type, tender_status, rfp_start_date, rfp_end_date, submission_start_date, submission_end_date', 'required'),
             array('technical_date, financial_date, rfp_price1, rfp_price2, primary_insurance', 'default', 'setOnEmpty' => true, 'value' => NULL),
-
             array('department_id, tender_type, tender_status, published', 'numerical', 'integerOnly' => true),
             array('rfp_price1, rfp_price2, primary_insurance, hits', 'length', 'max' => 10),
             array('file_ext', 'length', 'max' => 4),
+            array('rfp_price1_currency, rfp_price2_currency, primary_insurance_currency', 'length', 'max' => 3),
             array('activities, rfp_start_date, rfp_end_date, submission_start_date, submission_end_date, technical_date, financial_date', 'safe'),
-            
             array('rfp_end_date', 'compare', 'compareAttribute' => 'rfp_start_date', 'operator' => '>'),
             array('submission_end_date', 'compare', 'compareAttribute' => 'submission_start_date', 'operator' => '>'),
-            
             array('rfp_start_date', 'compare', 'compareValue' => $date, 'operator' => '>=', 'on' => 'insert'),
             array('submission_start_date', 'compare', 'compareValue' => $date, 'operator' => '>=', 'on' => 'insert'),
-            
             array('docFile', 'file', 'types' => $mediaSettings['info']['extensions'], 'allowEmpty' => true, 'maxSize' => $mediaSettings['info']['maxFileSize']),
             array('create_date', 'default',
                 'value' => $date,
@@ -161,8 +161,8 @@ class Tenders extends ParentTranslatedActiveRecord {
         $criteria->compare('create_date', $this->create_date, true);
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
-                ));
+            'criteria' => $criteria,
+        ));
     }
 
     public function afterFind() {
@@ -221,6 +221,35 @@ class Tenders extends ParentTranslatedActiveRecord {
             return $status[$s];
         else
             return $status;
+    }
+
+    /**
+     * This method is invoked before each record has been saved
+     * @access public
+     * @return boolean
+     */
+    protected function beforeSave() {
+        if (!$this->rfp_price1) {
+            $this->rfp_price1_currency = null;
+        }
+        if (!$this->rfp_price2) {
+            $this->rfp_price2_currency = null;
+        }
+        if (!$this->primary_insurance) {
+            $this->primary_insurance_currency = null;
+        }
+        return parent::beforeSave();
+    }
+
+    public static function getCurrencyList() {
+        $settings = new Settings('tenders', true);
+        $options = $settings->getOptions();
+        $currencies = array();
+        foreach ($options['default']['currency'] as $currency) {
+            $currencies[$currency] = AmcWm::app()->getLocale()->getCurrencySymbol($currency);
+        }
+        
+        return $currencies;
     }
 
 }

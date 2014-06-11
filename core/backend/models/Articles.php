@@ -321,7 +321,7 @@ class Articles extends ParentTranslatedActiveRecord {
     }
 
     /**
-     * This method is invoked after each record has been saved
+     * This method is invoked before each record has been saved
      * @access public
      * @return boolean
      */

@@ -108,8 +108,18 @@ class TendersTranslation extends ChildTranslatedActiveRecord {
         $criteria->compare('financial_results', $this->financial_results, true);
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
-                ));
+            'criteria' => $criteria,
+        ));
+    }
+
+    /**
+     * This method is invoked after each record is instantiated by a find method.
+     * @access public
+     * @return void
+     */
+    protected function afterFind() {
+        $this->displayTitle = $this->title;
+        parent::afterFind();
     }
 
 }

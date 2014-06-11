@@ -5,6 +5,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
     'id' => 'tools-grid',
     'items' => array(
         array('label' => AmcWm::t("amcTools", 'Edit'), 'js' => array('formId' => Yii::app()->params["adminForm"], 'params' => $this->getParams()), 'id' => 'edit_comment', 'image_id' => 'edit'),
+        array('label' => AmcWm::t("amcTools", 'Preview'), 'js' => array('formId' => Yii::app()->params["adminForm"], 'params' => $this->getParams()), 'id' => 'edit_comment', 'image_id' => 'view'),
         array('label' => AmcWm::t("amcwm.core.backend.messages.comments", 'Replies'), 'js' => array('formId' => Yii::app()->params["adminForm"], 'action' => 'replies', 'params' => $this->getParams(), 'refId' => 'cid'), 'id' => 'manage_comment_replies', 'image_id' => 'replies'),
         array('label' => AmcWm::t("amcTools", 'Delete'), 'js' => array('formId' => Yii::app()->params["adminForm"], 'params' => $this->getParams()), 'id' => 'delete_comments', 'image_id' => 'delete'),
         array('label' => AmcWm::t("amcTools", 'Publish'), 'js' => array('formId' => Yii::app()->params["adminForm"], 'params' => $this->getParams()), 'id' => 'publish_comments', 'image_id' => 'publish'),
