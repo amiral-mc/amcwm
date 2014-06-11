@@ -51,33 +51,10 @@
         ?>
         <?php echo $form->checkBox($model, 'archive'); ?>
         <?php echo $form->labelEx($model, 'archive', array("style" => 'display:inline;')); ?>
-        <?php echo $form->checkBox($model, 'in_ticker'); ?>
-        <?php echo $form->labelEx($model, 'in_ticker', array("style" => 'display:inline;')); ?>
         <?php echo $form->checkBox($model, 'in_list'); ?>
         <?php echo $form->labelEx($model, 'in_list', array("style" => 'display:inline;')); ?>
         <?php //echo $form->checkBox($model, 'in_spot'); ?>
-        <?php //echo $form->labelEx($model, 'in_spot', array("style" => 'display:inline;')); ?>
-        <?php if ($options['default']['check']['addToSlider']): ?>
-            <div style="padding-top:5px;padding-bottom: 5px;">
-                <?php echo $form->checkBox($model, 'in_slider', array('value' => ($model->in_slider) ? $model->in_slider : null)); ?>       
-                <?php echo $form->labelEx($model, 'in_slider', array("style" => 'display:inline;')); ?>            
-            </div>        
-            <?php
-            $sliderUploadDisplay = ($model->in_slider) ? "block" : "none";
-            $drawSliderImage = NULL;
-            if ($model->article_id && $model->in_slider) {
-                if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['slider']['path'] . "/" . $model->article_id . "." . $model->in_slider))) {
-                    $drawSliderImage = '<div>' . CHtml::image(Yii::app()->baseUrl . "/" . $imagesInfo['slider']['path'] . "/" . $model->article_id . "." . $model->in_slider . "?" . time(), "", array("class" => "image", "width" => "200")) . '</div>';
-                }
-            }
-            ?>
-            <div id="sliderImage" style="display:<?php echo $sliderUploadDisplay ?>;">            
-                <?php echo $form->labelEx($model, 'sliderFile', array("style" => 'display:inline;')); ?>
-                <?php echo $form->fileField($model, 'sliderFile', array("style" => 'display:inline;')); ?>
-                <?php echo $form->error($model, 'sliderFile'); ?>
-                <?php echo $drawSliderImage ?>
-            </div>
-        <?php endif; ?>
+        <?php //echo $form->labelEx($model, 'in_spot', array("style" => 'display:inline;')); ?>        
     </fieldset>
 
     <fieldset>
@@ -161,31 +138,7 @@
             <?php echo $form->labelEx($model, 'section_id'); ?>
             <?php echo $form->dropDownList($model, 'section_id', Sections::getSectionsList(), array('empty' => Yii::t('zii', 'Not set'))); ?>
             <?php echo $form->error($model, 'section_id'); ?>
-        </div>      
-        <div class="row">
-            <?php
-            if ($model->isNewRecord) {
-                $model->country_code = 'EG';
-            }
-            ?>
-            <?php echo $form->labelEx($model, 'country_code'); ?>
-            <?php echo $form->dropDownList($model, 'country_code', $this->getCountries(true)); ?>
-            <?php echo $form->error($model, 'country_code'); ?>
-        </div>
-
-
-        <div class="row">
-            <?php echo $form->labelEx($model, 'writer_id'); ?>
-            <?php echo $form->dropDownList($model, 'writer_id', Persons::getWritersList(Yii::t('zii', 'Not set'))); ?>
-            <?php echo $form->error($model, 'writer_id'); ?>
-        </div>
-        <?php if ($options['default']['check']['addToInfocus']): ?>
-            <div class="row">
-                <?php echo $form->labelEx($model, 'infocusId'); ?>
-                <?php echo $form->dropDownList($model, 'infocusId', $this->getInfocus()); ?>
-                <?php echo $form->error($model, 'infocusId'); ?>
-            </div>
-        <?php endif; ?>
+        </div>                 
         <div class="row">
             <?php echo $form->labelEx($model, 'publish_date'); ?>
             <?php
@@ -211,32 +164,6 @@
             <?php echo $form->error($model, 'publish_date'); ?>
         </div>
 
-        <div class="row">            
-            <?php echo $form->labelEx($model, 'expire_date'); ?>                        
-            <?php
-            $this->widget('amcwm.core.widgets.timepicker.EJuiDateTimePicker', array(
-                'model' => $model,
-                'attribute' => 'expire_date',
-                'options' => array(
-                    'showAnim' => 'fold',
-                    'dateFormat' => 'yy-mm-dd',
-                    'timeFormat' => 'hh:mm',
-                    'changeMonth' => true,
-                    'changeYear' => false,
-                ),
-                'htmlOptions' => array(
-                    'class' => 'datebox',
-                    'style' => 'direction:ltr',
-                    'readonly' => 'readonly',
-                    'value' => ($model->expire_date) ? date("Y-m-d H:i", strtotime($model->expire_date)) : NULL,
-                )
-            ));
-            ?>            
-            <?php echo Chtml::checkBox('no_expiry', ($model->expire_date) ? 0 : 1, array('onclick' => '$("#Articles_expire_date").val("")')) ?>
-            <?php echo Chtml::label(AmcWm::t($msgsBase, "No expiry date"), "remove_expiry", array("style" => 'display:inline;color:#3E4D57;font-weight:normal')) ?>
-            <?php echo $form->error($model, 'expire_date'); ?>
-
-        </div>
     </fieldset>
     <fieldset>
         <legend><?php echo AmcWm::t($msgsBase, "Parent Article"); ?>:</legend>

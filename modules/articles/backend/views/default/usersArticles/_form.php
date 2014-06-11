@@ -168,14 +168,7 @@
             <?php echo $form->labelEx($model, 'country_code'); ?>
             <?php echo $form->dropDownList($model, 'country_code', $this->getCountries(true)); ?>
             <?php echo $form->error($model, 'country_code'); ?>
-        </div>
-
-
-        <div class="row">
-            <?php echo $form->labelEx($model, 'writer_id'); ?>
-            <?php echo $form->dropDownList($model, 'writer_id', Persons::getWritersList(Yii::t('zii', 'Not set'))); ?>
-            <?php echo $form->error($model, 'writer_id'); ?>
-        </div>
+        </div>       
         <?php if ($options['default']['check']['addToInfocus']): ?>
             <div class="row">
                 <?php echo $form->labelEx($model, 'infocusId'); ?>

@@ -63,6 +63,12 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
             </span>
         </div>        
         <div class="row">
+            <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", "Writer Type"); ?></span>:
+            <span class="translated_org_item">
+                <?php echo $model->writers->getWriterTypeLabel(); ?>
+            </span>
+        </div>        
+        <div class="row">
             <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", 'Email'); ?></span>:
             <span class="translated_org_item">
                 <?php echo $model->email ?>

@@ -43,13 +43,17 @@ $this->widget('zii.widgets.CDetailView', array(
             'name' => 'sex',
             'value' => $model->getSexLabel(),
         ),
+         array(
+            'label' => AmcWm::t("msgsbase.core", "Writer Type"),
+            'value' => $model->writers->getWriterTypeLabel(),
+        ),
         'email',
         array(
             'name' => 'country_code',
             'value' => $model->country->getCountryName(),
         ),
         array(
-            'name' => 'content_lang',
+            'label' => AmcWm::t("msgsbase.core", "Content Lang"),
             'value' => ($contentModel->content_lang) ? Yii::app()->params["languages"][$contentModel->content_lang] : "",
         ),
     ),

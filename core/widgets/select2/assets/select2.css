@@ -552,7 +552,7 @@ disabled look for disabled choices in the results dropdown
     width: 12px;
     height: 13px;
     position: absolute;
-    right: 3px;
+    /*right: 3px;*/
     top: 4px;
 
     font-size: 1px;

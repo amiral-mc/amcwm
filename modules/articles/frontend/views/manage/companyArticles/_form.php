@@ -87,16 +87,7 @@
             );
             ?>            
         </div>       
-        <div class="row">
-            <?php
-            if ($model->isNewRecord) {
-                $model->country_code = 'EG';
-            }
-            ?>
-            <?php echo $form->labelEx($model, 'country_code'); ?>
-            <?php echo $form->dropDownList($model, 'country_code', $this->getCountries(true)); ?>
-            <?php echo $form->error($model, 'country_code'); ?>
-        </div>
+       
 
         <div class="row">
             <?php echo $form->labelEx($model, 'publish_date'); ?>

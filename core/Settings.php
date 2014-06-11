@@ -250,7 +250,14 @@ class Settings extends CComponent {
      * @access public    
      */
     public function getExtendsTables() {
-        return (isset($this->_settings['tables'][0]['extendsTables'])) ? $this->_settings['tables'][0]['extendsTables'] : array();
+        $tables = array();
+        if(isset($this->_settings['tables']) && is_array($this->_settings['tables'])){
+            reset($this->_settings['tables']);
+            $first = current($this->_settings['tables']);
+            $tables = (isset($first['extendsTables'])) ? $first['extendsTables'] : array();
+        }
+        return $tables;
+        
     }
 
     /**
@@ -293,6 +300,11 @@ class Settings extends CComponent {
         $forward = AmcWm::app()->getController()->getForwardModule();
         $virtuals = $this->getVirtuals();
         $table = null;
+        $first = null;
+        if(isset($this->_settings['tables'])){
+            reset($this->_settings['tables']);
+            $first = current($this->_settings['tables']);
+        }
         if (!$table && count($virtuals)) {
             if (isset($forward[0])) {
                 foreach ($virtuals as $virtual) {
@@ -302,8 +314,8 @@ class Settings extends CComponent {
                     }
                 }
             }
-            if (!$table && isset($this->_settings['tables'][0]['name'])) {
-                $table = $this->_settings['tables'][0]['name'];
+            if (!$table && isset($first['name'])) {
+                $table = $first['name'];
             }
         }
         return $table;

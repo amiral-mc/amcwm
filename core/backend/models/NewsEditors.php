@@ -1,20 +1,20 @@
 <?php
 
 /**
- * This is the model class for table "news_writers".
+ * This is the model class for table "news_editors".
  *
- * The followings are the available columns in table 'news_writers':
+ * The followings are the available columns in table 'news_editors':
  * @property string $article_id
- * @property string $writer_id
- * @property Writers[] $writer
+ * @property string $editor_id
+ * @property Writers[] $editor
  */
-class NewsWriters extends ActiveRecord {
+class NewsEditors extends ActiveRecord {
 
     /**
      * @return string the associated database table name
      */
     public function tableName() {
-        return 'news_writers';
+        return 'news_editors';
     }
 
     /**
@@ -24,11 +24,11 @@ class NewsWriters extends ActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('article_id, writer_id', 'required'),
-            array('article_id, writer_id', 'length', 'max' => 10),
+            array('article_id, editor_id', 'required'),
+            array('article_id, editor_id', 'length', 'max' => 10),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('article_id, writer_id', 'safe', 'on' => 'search'),
+            array('article_id, editor_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -39,7 +39,7 @@ class NewsWriters extends ActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'writer' => array(self::BELONGS_TO, 'Writers', 'writer_id',),
+            'editor' => array(self::BELONGS_TO, 'Writers', 'editor_id',),
         );
     }
 
@@ -49,7 +49,7 @@ class NewsWriters extends ActiveRecord {
     public function attributeLabels() {
         return array(
             'article_id' => 'Article',
-            'writer_id' => 'Writer',
+            'editor_id' => 'Writer',
         );
     }
 
@@ -71,7 +71,7 @@ class NewsWriters extends ActiveRecord {
         $criteria = new CDbCriteria;
 
         $criteria->compare('article_id', $this->article_id, true);
-        $criteria->compare('writer_id', $this->writer_id, true);
+        $criteria->compare('editor_id', $this->editor_id, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

@@ -59,6 +59,10 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 'htmlOptions' => array('width' => '230'),
             ),
             array(
+                'value' => '$data->getParentContent()->writers->getWriterTypeLabel()',
+                'header' => AmcWm::t("msgsbase.core", "Writer Type"),
+            ),
+            array(
                 'value' => '$data->getParentContent()->getSexLabel()',
                 'header' => AmcWm::t("msgsbase.core", 'Sex'),
             ),

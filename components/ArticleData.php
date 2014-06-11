@@ -489,20 +489,20 @@ class ArticleData extends Dataset {
 
             if (is_array($this->items['record'])) {
                 if ($moduleName == 'news') {
-                    $query = 'select writer_id, name , content_lang from news_writers n '
-                            . ' inner join persons_translation p on p.person_id = n.writer_id'
+                    $query = 'select editor_id, name , content_lang from news_editors n '
+                            . ' inner join persons_translation p on p.person_id = n.editor_id'
                             . ' where n.article_id = ' . (int) $this->_id;
-                    $writers = Yii::app()->db->createCommand($query)->queryAll();
-                    $this->items['record']['writers'] = array();
+                    $editors = Yii::app()->db->createCommand($query)->queryAll();
+                    $this->items['record']['editors'] = array();
 
-                    foreach ($writers as $writer) {
-                        if (!isset($this->items['record']['writers'][$writer['writer_id']]) || $writer['content_lang'] == $siteLanguage) {
-                            $this->items['record']['writers'][$writer['writer_id']] = $writer['name'];
+                    foreach ($editors as $editor) {
+                        if (!isset($this->items['record']['writers'][$editor['editor_id']]) || $editor['content_lang'] == $siteLanguage) {
+                            $this->items['record']['editors'][$editor['editor_id']] = $editor['name'];
                         }
                     }
                     if ($this->items['record']['source']) {
-                        $this->items['record']['writers']['orgSource'] = $this->items['record']['source'];
-                        $this->items['record']['source'] = implode(' - ', $this->items['record']['writers']);
+                        $this->items['record']['editors']['orgSource'] = $this->items['record']['source'];
+                        $this->items['record']['source'] = implode(' - ', $this->items['record']['editors']);
                     }
                 }
 

@@ -145,29 +145,7 @@
             );
             ?>            
         </div>       
-        <div class="row">                       
-            <?php echo $form->labelEx($model, 'section_id'); ?>
-            <?php echo $form->dropDownList($model, 'section_id', Sections::getSectionsList(), array('empty' => Yii::t('zii', 'Not set'))); ?>
-            <?php echo $form->error($model, 'section_id'); ?>
-        </div>      
-
-        <div class="row">
-            <?php
-            if ($model->isNewRecord) {
-                $model->country_code = 'EG';
-            }
-            ?>
-            <?php echo $form->labelEx($model, 'country_code'); ?>
-            <?php echo $form->dropDownList($model, 'country_code', $this->getCountries(true)); ?>
-            <?php echo $form->error($model, 'country_code'); ?>
-        </div>
-
-
-        <div class="row">
-            <?php echo $form->labelEx($model, 'writer_id'); ?>
-            <?php echo $form->dropDownList($model, 'writer_id', Persons::getWritersList(Yii::t('zii', 'Not set'))); ?>
-            <?php echo $form->error($model, 'writer_id'); ?>
-        </div>
+       
         <?php if ($options['default']['check']['addToInfocus']): ?>
             <div class="row">
                 <?php echo $form->labelEx($model, 'infocusId'); ?>

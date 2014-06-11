@@ -39,6 +39,12 @@ class ArticlesListData extends SiteData {
      * @var integer 
      */
     protected $language = null;
+    
+    /**
+     *
+     * @var boolean , execlude articles  with empty details
+     */
+    protected $detailsIsNotEmpty = true;
 
     /**
      * Counstructor
@@ -80,8 +86,8 @@ class ArticlesListData extends SiteData {
             }
             $this->addWhere("(" . implode(" or ", $wheresForTables) . ")");
         }
-        $this->addWhere("(t.in_list = 1)");
         
+        $this->addWhere("(t.in_list = 1)");        
         if ($this->parentArticle) {
             $this->addWhere("t.parent_article = " . (int) $this->parentArticle);
         } else {
@@ -126,6 +132,9 @@ class ArticlesListData extends SiteData {
      * @return void
      */
     public function generate() {
+        if($this->detailsIsNotEmpty){
+            $this->addWhere("tt.article_detail is not null");
+        }
         if ($this->period) {
             $this->toDate = date('Y-m-d 23:59:59');
             $this->fromDate = date('Y-m-d 00:00:01', time() - $this->period);
@@ -157,7 +166,17 @@ class ArticlesListData extends SiteData {
     }
 
     /**
+     * If the given $ok equal true then execlude articles  with empty details
+     * @param boolean $ok
+     * @return void
+     */
+    public function setDetailsIsNotEmpty($ok) {
+        $this->detailsIsNotEmpty = $ok;
+    }
+
+     /**
      * Set the articles parent id
+     * @param integer $articleId
      * @access public
      * @return void
      */
@@ -165,8 +184,11 @@ class ArticlesListData extends SiteData {
         $this->parentArticle = $articleId;
     }
 
+    
+    
     /**
      * If the given $ok equal true then append sub titles to the results
+     * @param boolean $ok
      * @access public
      * @return void
      */

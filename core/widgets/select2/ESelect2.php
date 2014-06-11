@@ -13,7 +13,7 @@ class ESelect2 extends CInputWidget {
      * @var array select2 options
      */
     public $options = array();
-    
+
     /**
      * Init list selection
      * @var array 
@@ -94,17 +94,29 @@ class ESelect2 extends CInputWidget {
                     echo CHtml::hiddenField($this->name, $this->value, $this->htmlOptions);
                 }
             }
-            if (!isset($this->initSelection['id'])) {
-                $this->initSelection['id'] = $this->value;
-            }
-            if (!isset($this->initSelection['text'])) {
-                $this->initSelection['text'] = $this->value;
-            }
-            if (!$this->useSelect) {
-                $this->defaultOptions["initSelection"] = "js:function (element, callback) {
-                    var data = {id:'{$this->initSelection['id']}', text:'{$this->initSelection['text']}'};
-                    callback(data);
-                }";
+            if (isset($this->options['multiple']) && $this->options['multiple']) {
+                $this->options['data'] = array();
+                if (!$this->useSelect) {
+                    $data = CJSON::encode($this->initSelection);
+//                    die($data);
+                    $this->defaultOptions["initSelection"] = "js:function (element, callback) {
+                        var data = {$data};
+                        callback(data);
+                    }";
+                }
+            } else {
+                if (!isset($this->initSelection['id'])) {
+                    $this->initSelection['id'] = $this->value;
+                }
+                if (!isset($this->initSelection['text'])) {
+                    $this->initSelection['text'] = $this->value;
+                }
+                if (!$this->useSelect) {
+                    $this->defaultOptions["initSelection"] = "js:function (element, callback) {
+                        var data = {id:'{$this->initSelection['id']}', text:'{$this->initSelection['text']}'};
+                        callback(data);
+                    }";
+                }
             }
         }
 
@@ -124,7 +136,7 @@ class ESelect2 extends CInputWidget {
         if (isset($this->options['ajax'])) {
             unset($options['data']);
         }
-    
+
         ob_start();
         echo "jQuery('{$this->selector}').select2(" . CJavaScript::encode($options) . ");";
         foreach ($this->events as $event => $handler)

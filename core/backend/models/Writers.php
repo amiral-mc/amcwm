@@ -15,6 +15,7 @@
  *
  * The followings are the available model relations:
  * @property Articles[] $articles
+ * @property NewsEditors[] $news
  * @property Persons $person
  * 
  * @author Amiral Management Corporation
@@ -22,6 +23,10 @@
  */
 class Writers extends ActiveRecord {
 
+    const REF_PAGE_SIZE = 30;
+    const BOTH_TYPE = 1;
+    const WRITER_TYPE = 2;
+    const EDITOR_TYPE = 3;
     /**
      * Returns the static model of the specified AR class.
      * @return Writers the static model class
@@ -44,7 +49,7 @@ class Writers extends ActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('writer_id', 'required'),
+            array('writer_type', 'required'),
             array('writer_type', 'numerical', 'integerOnly' => true),
             array('writer_id', 'length', 'max' => 10),
             // The following rule is used by search().
@@ -61,6 +66,7 @@ class Writers extends ActiveRecord {
         // class name for the relations automatically generated below.
         return array(
             'articles' => array(self::HAS_MANY, 'Articles', 'writer_id'),
+            'news' => array(self::HAS_MANY, 'NewsEditors', 'editor_id'),
             'person' => array(self::BELONGS_TO, 'Persons', 'writer_id'),
         );
     }
@@ -71,7 +77,7 @@ class Writers extends ActiveRecord {
     public function attributeLabels() {
         return array(
             'writer_id' => 'Writer',
-            'writer_type' => 'Writer Type',
+            'writer_type' => AmcWm::t("msgsbase.core", 'Writer Type'),
         );
     }
 
@@ -92,4 +98,102 @@ class Writers extends ActiveRecord {
             'criteria' => $criteria,
         ));
     }   
+    
+    /**
+     * Get writer type label
+     * @access public
+     * @return string
+     */
+    public function getWriterTypeLabel() {
+        $types = AmcWm::t("msgsbase.core", 'writersLabels');
+        return $types[$this->writer_type];
+    }
+     
+    /**
+     * Get vessels list 
+     * @return array
+     * @access public 
+     */
+    static public function getEditorsList($keywords = null, $pageNumber = 1, $prompt = null) {
+        return self::getWritersEditorsList(self::EDITOR_TYPE, $keywords, $pageNumber, $prompt);
+    }
+    
+    /**
+     * Get vessels list 
+     * @return array
+     * @access public 
+     */
+    static public function getWritersList($keywords = null, $pageNumber = 1, $prompt = null) {
+        return self::getWritersEditorsList(self::WRITER_TYPE, $keywords, $pageNumber, $prompt);
+    }
+    
+    /**
+     * Get vessels list 
+     * @return array
+     * @access public 
+     */
+    static protected function getWritersEditorsList($type = Writers::BOTH_TYPE, $keywords = null, $pageNumber = 1, $prompt = null) {
+        if (!$pageNumber) {
+            $pageNumber = 1;
+        }
+        $queryWhere = null;
+        $pageNumber = (int) $pageNumber;
+        $keywords = trim($keywords);
+        $queryCount = "SELECT count(*) FROM writers t
+        inner join persons p on t.writer_id = p.person_id
+        inner join persons_translation pt on p.person_id = pt.person_id
+        ";
+        $command = AmcWm::app()->db->createCommand();
+        $command->select("t.writer_id, p.email, pt.name");
+        $command->from = "writers t";
+        $command->join("persons p", 't.writer_id = p.person_id');
+        $command->join("persons_translation pt", 'p.person_id = pt.person_id');
+        $where ="writer_type in (". $type . ", ". self::BOTH_TYPE .")"; 
+        $where .= sprintf(" and pt.content_lang = %s", AmcWm::app()->db->quoteValue(Controller::getContentLanguage()));        
+        if ($keywords) {
+            $keywords = "%{$keywords}%";
+            $where .= sprintf("
+                    and (name like %s 
+                    or email like %s) 
+                    "
+                    , AmcWm::app()->db->quoteValue($keywords)
+                    , AmcWm::app()->db->quoteValue($keywords)
+            );
+        }
+        $command->where($where);
+        $queryCount.=" where {$where}";
+        $command->limit(self::REF_PAGE_SIZE, self::REF_PAGE_SIZE * ($pageNumber - 1));
+        $data = $command->queryAll();
+        $list = array('records' => array(), 'total' => 0);
+        if ($prompt) {
+            $list['records'][] = array("id" => null, "text" => $prompt);
+        }
+        foreach ($data as $row) {
+            $label = "[{$row['name']}]";
+            if ($row['email']) {
+                $label .= " [{$row['email']}]";
+            }
+            $list['records'][] = array("id" => $row['writer_id'], "text" => $label);
+        }
+        $list['total'] = AmcWm::app()->db->createCommand($queryCount)->queryScalar();
+        return $list;
+    }
+
+    /**
+     * Get writers
+     * @access public 
+     * @return array     
+     */
+    static public function x() {
+        $language = Controller::getContentLanguage();
+        $query = sprintf("
+            select t.writer_id, tt.name
+            from writers t
+            inner join persons_translation tt on t.writer_id = tt.person_id
+            where writer_type in (". Writers::WRITER_TYPE . ", ". Writers::BOTH_TYPE .") and content_lang = %s", Yii::app()->db->quoteValue($language));
+        $writers = CHtml::listData(Yii::app()->db->createCommand($query)->queryAll(), 'writer_id', 'name');       
+        return $writers;
+    }
+
+
 }

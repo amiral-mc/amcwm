@@ -20,10 +20,10 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
     ),
     'htmlOptions' => array('style' => 'padding:5px;')
 ));
-$writers = null;
-if (count($model->news->writers)) {
-    foreach ($model->news->writers as $writer) {
-        $writers .= "<br />{$writer->writer->person->getCurrent()->name}";
+$editors = null;
+if (count($model->news->editors)) {
+    foreach ($model->news->editors as $editor) {
+        $editors .= "<br />{$editor->editor->person->getCurrent()->name}";
     }
 }
 ?>
@@ -255,11 +255,11 @@ if (count($model->news->writers)) {
         </div>     
 
         <div class="row">
-            <span class="translated_label"><?php echo AmcWm::t("msgsbase.news", 'Writers'); ?></span>:
+            <span class="translated_label"><?php echo AmcWm::t("msgsbase.news", 'Editors'); ?></span>:
             <span class="translated_org_item">
                 <?php
-                if ($writers) {
-                    echo $writers;
+                if ($editors) {
+                    echo $editors;
                 } else {
                     echo Yii::t('zii', 'Not set');
                 }

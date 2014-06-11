@@ -231,16 +231,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 <?php echo $model->countryCode->getCountryName() ?>
             </span>
         </div>     
-
-        <div class="row">
-            <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", 'Writer'); ?></span>:
-            <span class="translated_org_item">
-                <?php
-                $writer = ($model->writer_id && $model->writer->person->getTranslated($contentModel->content_lang)) ? $model->writer->person->getTranslated($contentModel->content_lang)->name : Yii::t('zii', 'Not set');
-                echo $writer;
-                ?>
-            </span>
-        </div>
+      
         <?php if ($options['default']['check']['addToInfocus']): ?>
             <div class="row">
                 <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", 'In Focus File'); ?></span>:

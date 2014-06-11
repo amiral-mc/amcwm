@@ -2,11 +2,15 @@
 
 return array(
     '_NEWS_MODULE_' => 'الاخبار',
-    '_ARTICLES_MODULE_' => 'المقالات',
+    '_BREAKING_MODULE_'=>'أخبار عاجلة',
+    '_ARTICLES_MODULE_' => 'محتوي الموقع',    
+    '_ESSAYS_MODULE_' => 'المقالات',
+    '_USERSARTICLES_MODULE_'=>'مقالات القراء',
+    '_ISSUEARTICLES_MODULE_'=>'مقالات الاعداد',    
     '_EVENTS_MODULE_' => 'الاجندة',
     '_VOTES_MODULE_' => 'استطلاع الرأي',
     '_MAILLIST_MODULE_' => 'القائمة البريدية',
-    '_WRITERS_MODULE_' => 'الكتاب والمحررين',
+    '_WRITERS_MODULE_' => 'كتاب ومحررون',
     '_SECTIONS_MODULE_' => 'اقسام الموقع',
     '_USERS_MODULE_' => 'المستخدمين',
     '_MULTIMEDIA_MODULE_' => 'مكتبة الصور والفيديوهات',
@@ -123,6 +127,13 @@ return array(
     '_USERSCVS_ACTION_'=>'السير الذاتية',
     '_USERSCVS_CONTROLLER_'=>'السير الذاتية',
     '_REQUESTS_ACTION_'=>'طلبات عضوية',
+    '_COMMENTS_CONTROLLER_'=>'التعليقات',
+    '_BREAKING_DEFAULT_CONTROLLER_'=>'أخبار عاجلة',     
+    '_ESSAYS_DEFAULT_CONTROLLER_'=> 'المقالات',
+    '_USERSARTICLES_DEFAULT_CONTROLLER_'=> 'مقالات القرأء',
+    '_FRONT_USERSARTICLES_DEFAULT_CONTROLLER_'=> 'مقالات القرأء',
+    '_FRONT_ESSAYS_DEFAULT_CONTROLLER_'=> 'المقالات',
+    '_RESET_ACTION_'=> 'تغيير',
     
     
 );

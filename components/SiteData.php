@@ -112,6 +112,16 @@ abstract class SiteData extends Dataset {
     }
 
      /**
+     * set date compare field path      
+     * @param string $field 
+     * @access public 
+     * @return void
+     */
+    public function setDateCompareField($field) {
+        $this->dateCompareField = $field;
+    }
+    
+     /**
      * set media path      
      * @param string $path 
      * @access public 
@@ -120,6 +130,7 @@ abstract class SiteData extends Dataset {
     public function setMediaPath($path) {
         $this->mediaPath = $path;
     }
+    
     /**
      * set the section id to get data from
      * @param integer sectionId 

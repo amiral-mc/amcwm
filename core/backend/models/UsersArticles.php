@@ -44,7 +44,6 @@ class UsersArticles extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('article_id', 'required'),
             array('article_id, user_id', 'length', 'max' => 10),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.

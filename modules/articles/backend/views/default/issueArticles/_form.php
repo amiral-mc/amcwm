@@ -164,7 +164,6 @@
             <?php echo $form->error($model, 'country_code'); ?>
         </div>
 
-
         <div class="row">
             <?php echo $form->labelEx($model, 'writer_id'); ?>
             <?php echo $form->dropDownList($model, 'writer_id', Persons::getWritersList(Yii::t('zii', 'Not set'))); ?>

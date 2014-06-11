@@ -38,15 +38,6 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
 ));
 ?>
 <?php
-
-$imagesInfo = $this->getModule()->appModule->mediaPaths;
-$drawSliderImage = NULL;
-if ($model->article_id && $model->in_slider) {
-    if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['slider']['path'] . "/" . $model->article_id . "." . $model->in_slider))) {
-        $drawSliderImage = '<div>' . CHtml::image(Yii::app()->baseUrl . "/" . $imagesInfo['slider']['path'] . "/" . $model->article_id . "." . $model->in_slider . "?" . time(), "", array("class" => "image")) . '</div>';
-    }
-}
-
 $drawImage = NULL;
 if ($model->article_id && $model->thumb) {
     if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['list']['path'] . "/" . $model->article_id . "." . $model->thumb))) {
@@ -57,7 +48,6 @@ $titles = null;
 foreach ($contentModel->titles as $title) {
     $titles .= $title->title . "<br />";
 }
-$infocusName = $this->getInfocucName($model->infocusId);
 
 $this->widget('zii.widgets.CDetailView', array(
     'data' => $model,
@@ -95,14 +85,6 @@ $this->widget('zii.widgets.CDetailView', array(
             'value' => Sections::drawSectionPath($model->section_id),
         ),
         array(
-            'name' => 'country_code',
-            'value' => ($model->country_code) ? $model->countryCode->getCountryName() : NULL,
-        ),
-        array(
-            'name' => 'writer_id',
-            'value' => ($model->writer_id && $model->writer->person->getTranslated($contentModel->content_lang)) ? $model->writer->person->getTranslated($contentModel->content_lang)->name : "",
-        ),
-        array(
             'name' => 'published',
             'value' => ($model->published) ? AmcWm::t("amcBack", "Yes") : AmcWm::t("amcBack", "No"),
         ),
@@ -114,25 +96,7 @@ $this->widget('zii.widgets.CDetailView', array(
             'label' => AmcWm::t("msgsbase.core", "Content Lang"),
             'value' => ($contentModel->content_lang) ? Yii::app()->params["languages"][$contentModel->content_lang] : "",
         ),
-        array(
-            'label' => AmcWm::t("msgsbase.core", 'In Focus File'),
-            'value' => ($infocusName) ? $infocusName : Yii::t('zii', 'Not set'),
-            'visible' => $options['default']['check']['addToInfocus'],
-        ),
-        array(
-            'label' => AmcWm::t("msgsbase.core", 'In Ticker'),
-            'value' => ($model->in_ticker) ? AmcWm::t("amcBack", "Yes") : AmcWm::t("amcBack", "No"),
-        ),
-//        array(
-//            'label' => AmcWm::t("msgsbase.core", 'In Spot'),
-//            'value' => ($model->in_spot) ? AmcWm::t("amcBack", "Yes") : AmcWm::t("amcBack", "No"),
-//        ),
-        array(
-            'label' => AmcWm::t("msgsbase.core", 'In Slider'),
-            'type' => 'html',
-            'value' => ($model->in_slider) ? AmcWm::t("amcBack", "Yes") . $drawSliderImage : AmcWm::t("amcBack", "No"),
-            'visible' => $options['default']['check']['addToSlider'],
-        ),
+     
         array(
             'label' => AmcWm::t("msgsbase.core", 'In List'),
             'type' => 'html',

@@ -48,9 +48,10 @@ class TickerData {
      * @param integer $sectionId, The section id to get contents from, if equal null then we gets contents from all sections
      * @access public
      */
-    public function __construct($tables = array(), $limit = 10, $breakingOnly = false, $lang = null, $cols = array(), $sectionId = null) {
+    public function __construct($tables = array('news'), $limit = 10, $breakingOnly = false, $lang = null, $cols = array(), $sectionId = null) {
 
         $this->articles = new ArticlesListData($tables, 0, $limit, $sectionId);
+        $this->articles->setDetailsIsNotEmpty(false);
         foreach ($cols as $col) {
             $this->articles->addColumn($col);
         }
@@ -63,6 +64,7 @@ class TickerData {
             $this->articles->setModuleName("news");
             $this->articles->addOrder("t.create_date desc");
             $this->articles->addWhere("news.is_breaking = 1");
+            $this->articles->setDateCompareField('publish_date');
             $this->articles->setFromDate(date("Y-m-d H:i:s", time() - $settings['integer']['breakingExpiredAfter']));
             $this->articles->generate();
             $items = $this->articles->getItems();

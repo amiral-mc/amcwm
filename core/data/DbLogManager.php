@@ -43,15 +43,15 @@ class DbLogManager extends LogManager {
         }
         $mySettings = $moduleSettings->getSettings($key);
         if (isset($mySettings['log'])) {
-            $settings['log'] = $mySettings['log'];
-        }
+            $settings['log'] = $mySettings['log'];            
+        }        
         $modelClass = $model->getClassName();
         $className = "Log{$modelClass}";
         $alias = $moduleSettings->getMainAlias() . ".{$key}.components.$className";
         $className = AmcWm::import($alias);
         $settings['module'] = $moduleSettings->getCurrentVirtual();
         $settings['log']['template'] = $moduleSettings->getMainAlias() . ".backend.views.logs.{$settings['module']}";
-        if ($settings['log']['use'] && class_exists($className)) {
+        if (isset($settings['log']['use']) && $settings['log']['use'] && class_exists($className)) {
             $settings['virtuals'] = $moduleSettings->getVirtuals();
             $settings['module'] = $moduleSettings->getCurrentVirtual();
             $settings['tables'] = $moduleSettings->getTables();

@@ -576,9 +576,9 @@ class ManageArticles extends ManageContent {
             $image = new Image($article->imageFile->getTempName());
             foreach ($imageSizesInfo as $imageInfo) {
                 $path = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']);
-                if(!is_dir($path)){                    
+                if (!is_dir($path)) {
                     mkdir($path, 0755, true);
-                }                
+                }
                 $ok = false;
                 if ($imageInfo['autoSave']) {
                     if ($coords) {
@@ -907,6 +907,27 @@ class ManageArticles extends ManageContent {
             }
             return $articles;
         }
+    }
+
+    /**
+     * required for ajax requests
+     * @param boolean $printResult
+     */
+    public function findWriters() {
+        $writers = Writers::getWritersList(Yii::app()->request->getParam('q'), Yii::app()->request->getParam('page'), AmcWm::app()->request->getParam('prompt'));
+        header('Content-type: application/json');
+        echo CJSON::encode($writers);
+    }
+    
+    
+    /**
+     * required for ajax requests
+     * @param boolean $printResult
+     */
+    public function findEditors() {
+        $editors = Writers::getEditorsList(Yii::app()->request->getParam('q'), Yii::app()->request->getParam('page'), AmcWm::app()->request->getParam('prompt'));
+        header('Content-type: application/json');
+        echo CJSON::encode($editors);
     }
 
     /**

@@ -45,6 +45,11 @@
             <?php echo $form->error($model, 'email'); ?>
         </div>
         <div class="row">
+            <?php echo $form->labelEx($model->writers,'writer_type'); ?>
+            <?php echo $form->radioButtonList($model->writers,'writer_type',AmcWm::t("msgsbase.core", 'writersLabels'),array('separator'=>' ', 'labelOptions' => array('class' => 'checkbox_label')));?>            
+            <?php echo $form->error($model->writers, 'writer_type'); ?>
+        </div>
+        <div class="row">
             <?php
             if ($model->isNewRecord) {
                 $model->country_code = 'EG';

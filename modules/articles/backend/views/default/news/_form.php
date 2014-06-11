@@ -49,20 +49,18 @@
                 <?php echo $form->checkBox($model, 'in_slider', array('value' => ($model->in_slider) ? $model->in_slider : null)); ?>       
                 <?php echo $form->labelEx($model, 'in_slider', array("style" => 'display:inline;')); ?>            
             <?php endif; ?>
-            <?php if ($options[$module]['default']['check']['addToBreaking']): ?>                
-                <?php
-                if (!$model->isNewRecord && $options[$module]['default']['integer']['breakingExpiredAfter'] <= time() - strtotime($model->publish_date)) {
-                    echo $form->labelEx($model->news, 'is_breaking', array("style" => 'display:inline;')) . ": ";
+            <?php if ($options[$module]['default']['check']['addToBreaking']): ?>
+                <span>-</span>
+                <span class="translated_label"><?php echo AmcWm::t("msgsbase.news", 'Breaking News'); ?></span>:
+                <span class="translated_org_item">
+                    <?php
                     if ($model->news->is_breaking) {
                         echo AmcWm::t("amcFront", "Yes");
                     } else {
                         echo AmcWm::t("amcFront", "No");
                     }
-                } else {
-                    echo $form->checkBox($model->news, 'is_breaking');
-                    echo $form->labelEx($model->news, 'is_breaking', array("style" => 'display:inline;'));
-                }
-                ?>
+                    ?>
+                </span>
             <?php endif; ?>
 
         </div>
@@ -186,13 +184,53 @@
             <?php echo $form->error($model, 'country_code'); ?>
         </div>
 
-        <?php if(count($model->news->hasWriters)):?>
-        <div class="row">
-            <?php echo $form->labelEx($model->news, 'writersIds'); ?>            
-            <?php echo $form->listBox($model->news, 'writersIds', Persons::getWritersList(), array('multiple'=>'multiple')); ?>
-            <?php echo $form->error($model->news, 'writersIds'); ?>
-        </div>
-        <?php endif;?>
+        <?php if (count($model->news->hasEditors)): ?>
+            <div class="row">
+
+
+                <?php echo $form->labelEx($model->news, 'editorsIds'); ?>            
+                <?php
+                $editorSelected = array();
+                foreach ($model->news->editors as $newsEditor) {
+                    $editor = "[{$newsEditor->editor->person->getCurrent()->name}]";
+                    if ($newsEditor->editor->person->email) {
+                        $editor .= " [{$newsEditor->editor->person->email}]";
+                    }
+                    $editorSelected[] = array('id'=>$newsEditor->editor_id, 'text'=>$editor);
+                }
+                $this->widget('amcwm.core.widgets.select2.ESelect2', array(
+                    'model' => $model->news,
+                    'attribute' => "editorsIds",
+                    'initSelection' => $editorSelected,
+                    'options' => array(
+                        'multiple' => true,
+                        "dropdownCssClass" => "bigdrop",
+                        "placeholder" => AmcWm::t('amcTools', 'Enter Search Keywords'),
+                        'ajax' => array(
+                            'dataType' => "json",
+                            "quietMillis" => 100,
+                            'url' => Html::createUrl('/backend/articles/default/ajax', array('do' => 'findEditors')),
+                            'data' => 'js:function (term, page) { // page is the one-based page number tracked by Select2
+                        return {
+                               q: term, //search term
+                               page: page, // page number                     
+                           };
+                       }',
+                            'results' => 'js:function (data, page) {
+                            var more = (page * ' . Writers::REF_PAGE_SIZE . ') < data.total; // whether or not there are more results available 
+                            // notice we return the value of more so Select2 knows if more results can be loaded
+                            return {results: data.records, more: more};
+                          }',
+                        ),
+                    ),
+                    'htmlOptions' => array(
+                        'style' => 'min-width:400px;',
+                    ),
+                ));
+                ?>
+                <?php echo $form->error($model->news, 'editorsIds'); ?>
+            </div>
+        <?php endif; ?>
 
         <?php if ($options['default']['check']['addToInfocus']): ?>
             <div class="row">
@@ -278,7 +316,7 @@
     <div class="row">
         <fieldset>
             <legend><?php echo AmcWm::t("amcBack", "Publish to the social media sites"); ?>:</legend>
-            <?php //echo $form->labelEx($model, 'socialIds');       ?>
+            <?php //echo $form->labelEx($model, 'socialIds');         ?>
             <span>
                 <?php echo $form->checkBoxList($model, 'socialIds', $this->getSocials(), array("separator" => "<br />", 'labelOptions' => array('class' => 'checkbox_label'))); ?>
             </span>

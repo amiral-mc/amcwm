@@ -56,17 +56,23 @@ class ArticlesTranslation extends ChildTranslatedActiveRecord {
     public function rules() {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
-        return array(
-            array('article_header, article_detail', 'required'),
-            array('article_id', 'length', 'max' => 10),
-            array('content_lang', 'length', 'max' => 2),
-            array('article_header, article_pri_header', 'length', 'max' => 500),
-            array('tags', 'length', 'max' => 1024),
-            array('image_description', 'length', 'max' => 100),
-            // The following rule is used by search().
-            // Please remove those attributes that should not be searched.
-            array('article_id, content_lang, article_header, article_pri_header, article_detail, tags, image_description', 'safe', 'on' => 'search'),
-        );
+        $rules = array();
+        $table = $this->parentContent->getModuleTable();
+        $rules[] = array('article_header, article_detail', 'required');
+        if (AmcWm::app()->appModule) {
+            $module = AmcWm::app()->appModule->currentVirtual;            
+            if($module == 'breaking'){
+                $rules[0] = array('article_header', 'required');
+            }
+        }
+        
+        $rules[] = array('article_id', 'length', 'max' => 10);
+        $rules[] = array('content_lang', 'length', 'max' => 2);
+        $rules[] = array('article_header, article_pri_header', 'length', 'max' => 500);
+        $rules[] = array('tags', 'length', 'max' => 1024);
+        $rules[] = array('image_description', 'length', 'max' => 100);
+        $rules[] = array('article_id, content_lang, article_header, article_pri_header, article_detail, tags, image_description', 'safe', 'on' => 'search');
+        return $rules;
     }
 
     /**

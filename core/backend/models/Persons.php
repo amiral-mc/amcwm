@@ -205,30 +205,7 @@ class Persons extends ParentTranslatedActiveRecord {
         }
         return $supervisors;
     }
-
-    /**
-     * Get writers
-     * @param string $emptyLabel if not equal null then add empty item with the given $emptyLabel
-     * @param string $language if not equal null then get writers according to the given $language, 
-     * @access public 
-     * @return array     
-     */
-    static public function getWritersList($emptyLabel = null, $language = null) {
-        if (!$language) {
-            $language = Controller::getContentLanguage();
-        }
-        $query = sprintf("
-            select t.writer_id, tt.name
-            from writers t
-            inner join persons_translation tt on t.writer_id = tt.person_id
-            where content_lang = %s", Yii::app()->db->quoteValue($language));
-        $writers = CHtml::listData(Yii::app()->db->createCommand($query)->queryAll(), 'writer_id', 'name');
-        if ($emptyLabel) {
-            $writers[""] = $emptyLabel;
-        }
-        return $writers;
-    }
-
+    
     public function deleteImage($thumb = null) {
         $imageSizesInfo = Persons::getSettings()->mediaPaths;
         if (!$thumb) {

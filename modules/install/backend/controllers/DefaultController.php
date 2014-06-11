@@ -22,10 +22,9 @@ class DefaultController extends BackendController {
      * @return string
      */
     private function _processInstallModule($name, $config, $remove) {
-        if($remove){
+        if ($remove) {
             $msg = AmcWm::t("msgsbase.core", 'Module "{name}" has been removed successfully', array("{name}" => $name));
-        }
-        else{
+        } else {
             $msg = AmcWm::t("msgsbase.core", 'Module "{name}" has been installed successfully', array("{name}" => $name));
         }
         $transaction = AmcWm::app()->db->beginTransaction();
@@ -45,6 +44,7 @@ class DefaultController extends BackendController {
             $msg = AmcWm::t("msgsbase.core", 'Cannot install module "{name}"', array("{name}" => $name));
             $msg .= "<br />" . $e->getMessage();
         }
+
         return $msg;
     }
 
@@ -59,9 +59,15 @@ class DefaultController extends BackendController {
         if (isset($config['virtual'])) {
             $query = "delete from forward_modules where forward_to = {$forwardTo}";
             AmcWm::app()->db->createCommand($query)->execute();
+
             foreach ($config['virtual'] as $virtaul) {
-                $forwardFrom = $this->_installModule($virtaul['module'], $config, $isBackend, $remove);
-                $query = "insert into forward_modules(forward_from, forward_to) values ($forwardFrom, $forwardTo);";
+
+                $forwardFrom = $this->_installModule($virtaul['module'], $config, $isBackend, $remove, true);
+//                echo  "{$isBackend}:{$virtaul['module']}<hr>";
+                if (!$remove) {
+                    $query = "insert into forward_modules(forward_from, forward_to) values ($forwardFrom, $forwardTo);";
+//                    echo "{$virtaul['module']}:$query<hr />";                   
+                }
                 AmcWm::app()->db->createCommand($query)->execute();
             }
         }
@@ -74,7 +80,7 @@ class DefaultController extends BackendController {
      * @param boolean $isBackend
      * @return integer
      */
-    private function _installModule($name, $allConfig, $isBackend, $remove) {
+    private function _installModule($name, $allConfig, $isBackend, $remove, $virtaul = false) {
         $config = $allConfig['install'];
         if ($isBackend) {
             $query = sprintf(" select module_id from modules where module = %s ", AmcWm::app()->db->quoteValue(AmcWm::app()->backendName));
@@ -114,20 +120,31 @@ class DefaultController extends BackendController {
             $moduleData = null;
             $moduleId = 0;
             try {
+
                 $query = sprintf("delete from modules where module = %s {$where} ", AmcWm::app()->db->quoteValue($name));
+//                die();
                 AmcWm::app()->db->createCommand($query)->execute();
             } catch (Exception $e) {
-//                echo $e->getMessage();
+                echo $e->getMessage();
             }
         } else {
             if (!$moduleId) {
+                if ($virtaul) {
+                    $enabled = isset($allConfig['virtual'][$name]['enabled']) ? $allConfig['virtual'][$name]['enabled'] : 1;
+                    $system = isset($allConfig['virtual'][$name]['system']) ? $allConfig['virtual'][$name]['system'] : 0;
+                }
+                else{
+                    $enabled = 1;
+                    $system = isset($config['options']['system']) ? $config['options']['system'] : 0;
+                }
                 $query = sprintf(
                         "insert into modules(parent_module, module, virtual, enabled, system, workflow_enabled) 
-                    values (%s, %s , 0, 1, %d, %d);"
+                    values (%s, %s , 0, %d, %d, %d);"
                         , $backendId
                         , AmcWm::app()->db->quoteValue($name)
-                        , $config['options']['system']
-                        , $config['options']['workflow']
+                        , $enabled
+                        , $system
+                        , isset($config['options']['workflow']) ? $config['options']['workflow'] : 0
                 );
                 AmcWm::app()->db->createCommand($query)->execute();
                 $moduleId = AmcWm::app()->db->lastInsertID;
@@ -149,7 +166,7 @@ class DefaultController extends BackendController {
                                 values (%d, %s, %d);"
                             , $moduleId
                             , AmcWm::app()->db->quoteValue($controllerName)
-                            , $controller['options']['hidden']
+                            , isset($controller['options']['hidden']) && $controller['options']['hidden'] ? $controller['options']['hidden'] : 0
                     );
                     AmcWm::app()->db->createCommand($query)->execute();
                     $controllerId = AmcWm::app()->db->lastInsertID;

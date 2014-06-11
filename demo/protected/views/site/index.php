@@ -1,5 +1,4 @@
 <?php
-$currentAppLang = Yii::app()->getLanguage();
-//print_r($weather);
-//die();
+//$ticker = new TickerData();
+//print_r($ticker->getArticles()->getItems());
 ?>

@@ -2,7 +2,7 @@
 
 return array(
     'tables' => array(
-        array(
+        't1' => array(
             'id' => 1,
             'name' => 'articles',
             'translation' => array(
@@ -14,24 +14,25 @@ return array(
             'sorting' => array('sortField' => "article_sort", 'order' => 'asc'),
             'extendsTables' => array(
                 'news' => 'news',
+                'essays' => 'essays',
                 'users_articles' => 'users_articles',
                 'dir_companies_articles' => 'dir_companies_articles',
                 'issues_articles' => 'issues_articles',
             ),
         ),
-        array(
+        't2' => array(
             'id' => 2,
-            'name' => 'news',            
+            'name' => 'news',
             'key' => 'article_id',
             'sorting' => array('sortField' => "create_date", 'order' => 'desc'),
         ),
-        array(
+        't3' => array(
             'id' => 3,
             'name' => 'users_articles',
             'key' => 'article_id',
             'sorting' => array('sortField' => "create_date", 'order' => 'desc'),
         ),
-        array(
+        't4' => array(
             'id' => 4,
             'name' => 'dir_companies_articles',
             'key' => 'article_id',
@@ -40,13 +41,13 @@ return array(
                 'companyId' => array('sql' => 'company_id = %d', 'type' => 'integer', 'ref' => 'companyId', 'operator' => 'and', 'inBackendOnly' => true),
             ),
         ),
-        array(
+        't5' => array(
             'id' => 5,
             'key' => 'article_id',
             'name' => 'articles_titles',
             'hasMany' => true,
         ),
-        array(
+        't6' => array(
             'id' => 6,
             'name' => 'issues_articles',
             'key' => 'article_id',
@@ -54,6 +55,12 @@ return array(
             'wheres' => array(
                 'issueId' => array('sql' => 'issue_id = %d', 'type' => 'integer', 'ref' => 'issueId', 'operator' => 'and', 'inBackendOnly' => true),
             ),
+        ),
+        't7' => array(
+            'id' => 7,
+            'name' => 'essays',
+            'key' => 'article_id',
+            'sorting' => array('sortField' => "create_date", 'order' => 'desc'),
         ),
     ),
     'backend' => array(
@@ -66,7 +73,283 @@ return array(
                 'default' => 'AmcArticlesController',
                 'articleComments' => 'AmcCommentsController',
                 'replies' => 'AmcRepliesController',
-                'sources' => 'AmcSourcesController',                
+                'sources' => 'AmcSourcesController',
+            ),
+        ),
+        'install' => array(
+            'controllers' => array(
+                'default' => array(
+                    "actions" => array(
+                        "index" => array(
+                            "perm" => 1,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "view" => array(
+                            "perm" => 1,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "create" => array(
+                            "perm" => 2,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "update" => array(
+                            "perm" => 4,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "delete" => array(
+                            "perm" => 8,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "publish" => array(
+                            "perm" => 16,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "sort" => array(
+                            "perm" => 32,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        'comments' => array(
+                            "perm" => 64,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                            'forwardTo' => array(
+                                'controller' => 'comments',
+                                'action' => 'index',
+                            ),
+                        ),
+                    ),
+                ),
+                'comments' => array(
+                    "actions" => array(
+                        "index" => array(
+                            "perm" => 1,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "view" => array(
+                            "perm" => 1,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "update" => array(
+                            "perm" => 4,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "delete" => array(
+                            "perm" => 8,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "publish" => array(
+                            "perm" => 16,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "hide" => array(
+                            "perm" => 32,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        'replies' => array(
+                            "perm" => 64,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                            'forwardTo' => array(
+                                'controller' => 'replies',
+                                'action' => 'index',
+                            ),
+                        ),
+                    ),
+                ),
+                'replies' => array(
+                    "actions" => array(
+                        "index" => array(
+                            "perm" => 1,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "view" => array(
+                            "perm" => 1,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "update" => array(
+                            "perm" => 4,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "delete" => array(
+                            "perm" => 8,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "publish" => array(
+                            "perm" => 16,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "hide" => array(
+                            "perm" => 32,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                    ),
+                ),
             ),
         ),
         'virtual' => array(
@@ -79,6 +362,36 @@ return array(
                     'index' => "index",
                     'view' => "view",
                     '_form' => "_form",
+                    'translate' => "translate",
+                ),
+            ),
+            'breaking' => array(
+                'route' => 'backend/breaking',
+                'table' => 'news',
+                'tableModel' => 'news',
+                'module' => 'breaking',
+                'views' => array(
+                    'index' => "index",
+                    'view' => "view",
+                    '_form' => "_form",
+                    'update' => "update",
+                    'translate' => "translate",
+                ),
+                'customCriteria' => array(
+                    'useRelaedModel' => true,
+                    'conditionGeneration' => array('class' => 'amcwm.modules.articles.components.ManageBreakingCondition'),
+                ),
+            ),
+            'essays' => array(
+                'route' => 'backend/essays',
+                'table' => 'essays',
+                'tableModel' => 'essays',
+                'module' => 'essays',
+                'views' => array(
+                    'index' => "index",
+                    'view' => "view",
+                    '_form' => "_form",
+                    '_search' => "_search",
                     'translate' => "translate",
                 ),
             ),
@@ -102,6 +415,8 @@ return array(
                 'module' => 'companyArticles',
                 'redirectParams' => array('companyId'),
                 'saveMethod' => 'saveRelatedVirtual',
+                'system'=>0,
+                'enabled'=> 0 ,
                 'views' => array(
                     'index' => "index",
                     'wajax' => 'wajax',
@@ -119,6 +434,8 @@ return array(
                 'module' => 'issueArticles',
                 'redirectParams' => array('issueId'),
                 'saveMethod' => 'saveRelatedVirtual',
+                'system'=>0,
+                'enabled'=> 0 ,
                 'views' => array(
                     'index' => "index",
                     'wajax' => 'wajax',
@@ -140,16 +457,296 @@ return array(
                 'manage' => 'AmcManageArticlesController',
             ),
         ),
+        'install' => array(
+            'controllers' => array(
+                'default' => array(
+                    "actions" => array(
+                        "index" => array(
+                            "perm" => 1,
+                            'roles' => array('guest'),
+                            'roles4Virtual' => array(
+                                'news' => array('guest'),
+                                'breaking' => array('guest'),
+                                'essays' => array('guest'),
+                                'companyArticles' => array('guest'),
+                                'usersArticles' => array('guest'),
+                                'issueArticles' => array('guest'),
+                            ),
+                        ),
+                        "sections" => array(
+                            "perm" => 1,
+                            'roles' => array('guest'),
+                            'roles4Virtual' => array(
+                                'news' => array('guest'),
+                                'breaking' => array('guest'),
+                                'essays' => array('guest'),
+                                'companyArticles' => array('guest'),
+                                'usersArticles' => array('guest'),
+                                'issueArticles' => array('guest'),
+                            ),
+                        ),
+                        "view" => array(
+                            "perm" => 1,
+                            'roles' => array('guest'),
+                            'roles4Virtual' => array(
+                                'news' => array('guest'),
+                                'breaking' => array('guest'),
+                                'essays' => array('guest'),
+                                'companyArticles' => array('guest'),
+                                'usersArticles' => array('guest'),
+                                'issueArticles' => array('guest'),
+                            ),
+                        ),
+                        'comments' => array(
+                            "perm" => 32,
+                            'roles' => array('guest'),
+                            'forwardTo' => array(
+                                'controller' => 'comments',
+                                'action' => 'index',
+                                'roles4Virtual' => array(
+                                    'news' => array('guest'),
+                                    'breaking' => array('guest'),
+                                    'essays' => array('guest'),
+                                    'companyArticles' => array('guest'),
+                                    'usersArticles' => array('guest'),
+                                    'issueArticles' => array('guest'),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                'manage' => array(
+                    "actions" => array(
+                        "index" => array(
+                            "perm" => 1,
+                            'roles' => array('registered'),
+                            'roles4Virtual' => array(
+                                'news' => array('registered'),
+                                'breaking' => array('registered'),
+                                'essays' => array('registered'),
+                                'companyArticles' => array('registered'),
+                                'usersArticles' => array('registered'),
+                                'issueArticles' => array('registered'),
+                            ),
+                        ),
+                        "view" => array(
+                            "perm" => 1,
+                            'roles' => array('registered'),
+                            'roles4Virtual' => array(
+                                'news' => array('registered'),
+                                'breaking' => array('registered'),
+                                'essays' => array('registered'),
+                                'companyArticles' => array('registered'),
+                                'usersArticles' => array('registered'),
+                                'issueArticles' => array('registered'),
+                            ),
+                        ),
+                        "create" => array(
+                            "perm" => 2,
+                            'roles' => array('registered'),
+                            'roles4Virtual' => array(
+                                'news' => array('registered'),
+                                'breaking' => array('registered'),
+                                'essays' => array('registered'),
+                                'companyArticles' => array('registered'),
+                                'usersArticles' => array('registered'),
+                                'issueArticles' => array('registered'),
+                            ),
+                        ),
+                        "update" => array(
+                            "perm" => 4,
+                            'roles' => array('registered'),
+                            'roles4Virtual' => array(
+                                'news' => array('registered'),
+                                'breaking' => array('registered'),
+                                'essays' => array('registered'),
+                                'companyArticles' => array('registered'),
+                                'usersArticles' => array('registered'),
+                                'issueArticles' => array('registered'),
+                            ),
+                        ),
+                        "delete" => array(
+                            "perm" => 8,
+                            'roles' => array('registered'),
+                            'roles4Virtual' => array(
+                                'news' => array('registered'),
+                                'breaking' => array('registered'),
+                                'essays' => array('registered'),
+                                'companyArticles' => array('registered'),
+                                'usersArticles' => array('registered'),
+                                'issueArticles' => array('registered'),
+                            ),
+                        ),
+                        "publish" => array(
+                            "perm" => 16,
+                            'roles' => array('registered'),
+                            'roles4Virtual' => array(
+                                'news' => array('registered'),
+                                'breaking' => array('registered'),
+                                'essays' => array('registered'),
+                                'companyArticles' => array('registered'),
+                                'usersArticles' => array('registered'),
+                                'issueArticles' => array('registered'),
+                            ),
+                        ),
+                        "sort" => array(
+                            "perm" => 32,
+                            'roles' => array('registered'),
+                            'roles4Virtual' => array(
+                                'news' => array('registered'),
+                                'breaking' => array('registered'),
+                                'essays' => array('registered'),
+                                'companyArticles' => array('registered'),
+                                'usersArticles' => array('registered'),
+                                'issueArticles' => array('registered'),
+                            ),
+                        ),
+                    ),
+                ),
+                'comments' => array(
+                    "actions" => array(
+                        "index" => array(
+                            "perm" => 1,
+                            'roles' => array('guest'),
+                            'roles4Virtual' => array(
+                                'news' => array('registered'),
+                                'breaking' => array('registered'),
+                                'essays' => array('registered'),
+                                'companyArticles' => array('registered'),
+                                'usersArticles' => array('registered'),
+                                'issueArticles' => array('registered'),
+                            ),
+                        ),
+                        "view" => array(
+                            "perm" => 1,
+                            'roles' => array('guest'),
+                            'roles4Virtual' => array(
+                                'news' => array('registered'),
+                                'breaking' => array('registered'),
+                                'essays' => array('registered'),
+                                'companyArticles' => array('registered'),
+                                'usersArticles' => array('registered'),
+                                'issueArticles' => array('registered'),
+                            ),
+                        ),
+                        "create" => array(
+                            "perm" => 2,
+                            'roles' => array('guest'),
+                            'roles4Virtual' => array(
+                                'news' => array('registered'),
+                                'breaking' => array('registered'),
+                                'essays' => array('registered'),
+                                'companyArticles' => array('guest'),
+                                'usersArticles' => array('guest'),
+                                'issueArticles' => array('guest'),
+                            ),
+                        ),
+                        'replies' => array(
+                            "perm" => 64,
+                            'roles' => array('guest'),
+                            'roles4Virtual' => array(
+                                'news' => array('guest'),
+                                'breaking' => array('guest'),
+                                'essays' => array('guest'),
+                                'companyArticles' => array('guest'),
+                                'usersArticles' => array('guest'),
+                                'issueArticles' => array('guest'),
+                            ),
+                            'forwardTo' => array(
+                                'controller' => 'replies',
+                                'action' => 'index',
+                            ),
+                        ),
+                    ),
+                ),
+                'replies' => array(
+                    "actions" => array(
+                        "index" => array(
+                            "perm" => 1,
+                            'roles' => array('guest'),
+                            'roles4Virtual' => array(
+                                'news' => array('registered'),
+                                'breaking' => array('registered'),
+                                'essays' => array('registered'),
+                                'companyArticles' => array('registered'),
+                                'usersArticles' => array('registered'),
+                                'issueArticles' => array('registered'),
+                            ),
+                        ),
+                        "view" => array(
+                            "perm" => 1,
+                            'roles' => array('guest'),
+                            'roles4Virtual' => array(
+                                'news' => array('registered'),
+                                'breaking' => array('registered'),
+                                'essays' => array('registered'),
+                                'companyArticles' => array('registered'),
+                                'usersArticles' => array('registered'),
+                                'issueArticles' => array('registered'),
+                            ),
+                        ),
+                        "create" => array(
+                            "perm" => 2,
+                            'roles' => array('guest'),
+                            'roles4Virtual' => array(
+                                'news' => array('registered'),
+                                'breaking' => array('registered'),
+                                'essays' => array('registered'),
+                                'companyArticles' => array('registered'),
+                                'usersArticles' => array('registered'),
+                                'issueArticles' => array('registered'),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
         'virtual' => array(
             'news' => array(
                 'route' => 'news',
                 'table' => 'news',
                 'tableModel' => 'news',
-                'module' => 'news',
+                'module' => 'news',                
                 'customCriteria' => array(
-                    'join' => 'inner join users_articles on p.article_id = users_articles.article_id',
+                   'join' => 'inner join users_articles on p.article_id = users_articles.article_id',
+                    'useRelaedModel' => true,
+                    'conditionGeneration' => array(),
+                ),
+                'views' => array(
+                    'index' => "index",
+                    'view' => "view",
+                    '_form' => "_form",
+                    'create' => "create",
+                    'update' => "update",
+                    'translate' => "translate",
+                ),
+            ),
+            'usersArticles' => array(
+                'route' => 'usersArticles',
+                'table' => 'users_articles',
+                'tableModel' => 'usersArticles',
+                'module' => 'usersArticles',                
+                'customCriteria' => array(
                     'useRelaedModel' => true,
                     'conditionGeneration' => array('class' => 'amcwm.modules.articles.components.ManageUsersArticlesCondition'),
+                ),
+                'views' => array(
+                    'index' => "index",
+                    'view' => "view",
+                    '_form' => "_form",
+                    'create' => "create",
+                    'update' => "update",
+                    'translate' => "translate",
+                ),
+            ),
+            'essays' => array(
+                'route' => 'essays',
+                'table' => 'essays',
+                'tableModel' => 'essays',
+                'module' => 'essays',
+                'customCriteria' => array(                    
+                    'useRelaedModel' => true,
+                    'conditionGeneration' => array(),
                 ),
                 'views' => array(
                     'index' => "index",
@@ -165,9 +762,31 @@ return array(
                 'table' => 'dir_companies_articles',
                 'tableModel' => 'dirCompaniesArticles',
                 'module' => 'companyArticles',
+                'system'=>0,
+                'enabled'=> 0 ,
                 'customCriteria' => array(
                     'useRelaedModel' => false,
                     'conditionGeneration' => array('class' => 'amcwm.modules.directory.components.ManageCompaniesArticlesCondition'),
+                ),
+                'views' => array(
+                    'index' => "index",
+                    'view' => "view",
+                    'create' => "create",
+                    'update' => "update",
+                    '_form' => "_form",
+                    'translate' => "translate",
+                ),
+            ),
+             'issueArticles' => array(
+                'route' => 'issueArticles',
+                'table' => 'issue_articles',
+                'tableModel' => 'issueArticles',
+                'module' => 'issueArticles',
+                'system'=>0,
+                'enabled'=> 0 ,
+                'customCriteria' => array(
+                    'useRelaedModel' => false,
+                    'conditionGeneration' => array('class' => 'amcwm.modules.directory.components.ManageIssueArticlesCondition'),
                 ),
                 'views' => array(
                     'index' => "index",
@@ -202,7 +821,7 @@ return array(
                 'integer' => array(
                     'mainTopics' => 4,
                     'breakingExpiredAfter' => 12 * 60 * 60,
-                ),                
+                ),
                 'topArticles' => 0,
                 'showListingTitle' => false,
                 'showPrimaryHeader' => true,

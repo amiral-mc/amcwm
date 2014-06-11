@@ -1,8 +1,12 @@
 <?php
 
 return array(
-    '_NEWS_MODULE_' => 'News',
-    '_ARTICLES_MODULE_' => 'Articles',
+    '_NEWS_MODULE_' => 'News',    
+    '_BREAKING_MODULE_'=>'Breaking News',
+    '_ARTICLES_MODULE_' => 'Website Content',
+    '_ESSAYS_MODULE_' => 'Articles',    
+    '_USERSARTICLES_MODULE_'=>'Users Articles',
+    '_ISSUEARTICLES_MODULE_'=>'Issue Articles',    
     '_EVENTS_MODULE_' => 'Events',
     '_VOTES_MODULE_' => 'Votes',
     '_MAILLIST_MODULE_' => 'Maillist',
@@ -123,6 +127,15 @@ return array(
     '_USERSCVS_ACTION_'=>'Cvs',
     '_USERSCVS_CONTROLLER_'=>'Cvs',
     '_REQUESTS_ACTION_'=>'Requests',
+    '_COMMENTS_CONTROLLER_'=>'Comments',
+    '_BREAKING_DEFAULT_CONTROLLER_'=>'Breaking News',
+    '_ESSAYS_DEFAULT_CONTROLLER_'=> 'Articles',
+    '_USERSARTICLES_DEFAULT_CONTROLLER_'=> 'Users Articles',
+    '_FRONT_USERSARTICLES_DEFAULT_CONTROLLER_'=> 'Users Articles', 
+    '_FRONT_ESSAYS_DEFAULT_CONTROLLER_'=> 'Articles',
+    '_RESET_ACTION'=> 'Reset',
+
+    
     
     
 );

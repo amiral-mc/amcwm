@@ -45,6 +45,7 @@
  * @property Issues[] $issues
  * @property MaillistArticlesLog[] $maillistArticlesLogs
  * @property News $news
+ * @property Essays $essays
  * @property UsersArticles $usersArticles 
  * 
  * @author Amiral Management Corporation
@@ -205,7 +206,8 @@ class Articles extends ParentTranslatedActiveRecord {
             'usersArticles' => array(self::HAS_ONE, 'UsersArticles', 'article_id'),
             'dirCompaniesArticles' => array(self::HAS_ONE, 'DirCompaniesArticles', 'article_id'),
             'issuesArticles' => array(self::HAS_ONE, 'IssuesArticles', 'article_id'),
-            'parentArticle' => array(self::BELONGS_TO, 'Articles', 'parent_article'),
+            'essays' => array(self::HAS_ONE, 'Essays', 'article_id'),
+            'parentArticle' => array(self::BELONGS_TO, 'Articles', 'parent_article'),            
         );
     }
 

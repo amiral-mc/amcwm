@@ -70,18 +70,6 @@ $this->widget('zii.widgets.CDetailView', array(
             'type' => 'html',
         ),
         array(
-            'label' => AmcWm::t("msgsbase.core", "Section"),
-            'value' => Sections::drawSectionPath($model->section_id),
-        ),
-        array(
-            'name' => 'country_code',
-            'value' => ($model->country_code) ? $model->countryCode->getCountryName() : NULL,
-        ),
-        array(
-            'name' => 'writer_id',
-            'value' => ($model->writer_id && $model->writer->person->getTranslated($contentModel->content_lang)) ? $model->writer->person->getTranslated($contentModel->content_lang)->name : "",
-        ),
-        array(
             'name' => 'published',
             'value' => ($model->published) ? AmcWm::t("amcBack", "Yes") : AmcWm::t("amcBack", "No"),
         ),

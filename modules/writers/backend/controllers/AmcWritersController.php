@@ -71,7 +71,9 @@ class AmcWritersController extends BackendController {
                 try {
                     if ($model->save()) {
                         if ($contentModel->save()) {
-                            $model->writers->attributes = array('writer_id' => $model->person_id);
+                            $writerAttributes = $_POST['Writers'];
+                            $writerAttributes['writer_id'] = $model->person_id;
+                            $model->writers->attributes = $writerAttributes;
                             if ($model->writers->save()) {
                                 $transaction->commit();
                                 $success = true;
@@ -153,7 +155,7 @@ class AmcWritersController extends BackendController {
             foreach ($ids as $id) {
                 $contentModel = $this->loadChildModel($id);
                 $model = $contentModel->getParentContent();
-                $checkRelated = (count($model->sections) || $model->users || count($model->writers->articles));
+                $checkRelated = (count($model->sections) || $model->users || count($model->writers->articles) || count($model->writers->news));
                 if ($checkRelated) {
                     $messages['error'][] = AmcWm::t("msgsbase.core", 'Can not delete writer "{writer}"', array("{writer}" => $contentModel->name));
                 } else {

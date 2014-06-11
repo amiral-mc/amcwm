@@ -27,6 +27,8 @@ class NewsSideList extends SideWidget {
      * @return void
      */
     public function setContentData() {        
+        $settings = new Settings("articles", false);
+        $virtualId = $settings->getVirtualId('news');
         if (count($this->items)) {
             $this->contentData = '<ul class="News_list">';
             foreach ($this->items as $article) {
@@ -37,7 +39,7 @@ class NewsSideList extends SideWidget {
                             </li>';
             }
             $this->contentData .='</ul>';
-            $this->contentData .='<div class="readmore">'.CHtml::link(AmcWm::t("amcFront", 'Read more'), array('/articles/default/sections/', 'module'=>22)).'</div>';
+            $this->contentData .='<div class="readmore">'.CHtml::link(AmcWm::t("amcFront", 'Read more'), array('/articles/default/sections/', 'module'=>$virtualId)).'</div>';
         }else{
              $this->contentData .= AmcWm::t("amcFront", 'Sorry, no news found');
         }

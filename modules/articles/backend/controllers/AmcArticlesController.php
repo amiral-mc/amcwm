@@ -184,6 +184,22 @@ class AmcArticlesController extends BackendController {
     public function ajaxFindArticle() {
         $this->manager->findArticle(true);
     }
+    
+    /**
+     * required for ajax requests
+     */
+    public function ajaxFindWriters() {
+        $this->manager->findWriters();
+    }    
+    
+    /**
+     * required for ajax requests
+     */
+    public function ajaxFindEditors() {
+        $this->manager->findEditors();
+    }    
+    
+    
 
     /**
      * Performs the AJAX validation.
@@ -201,6 +217,19 @@ class AmcArticlesController extends BackendController {
      */
     public function actionSources(){
         $this->forward('sources/');       
+    }
+    
+    /**
+     * Manage news sources
+     */
+    public function actionMore(){
+        $settings = new Settings("articles", true);
+        $virtualId = $settings->getVirtualId('news');
+//        $_GET['module'] = $virtualId;                
+        $action = AmcWm::app()->request->getParam('action', 'update');
+        $id = AmcWm::app()->request->getParam('id');        
+        //$this->forward("/backend/articles/default/{$action}");
+        $this->redirect(array("/backend/articles/default/{$action}", 'id'=>$id, 'module'=>$virtualId));
     }
 
 }

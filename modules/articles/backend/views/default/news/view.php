@@ -40,10 +40,10 @@ foreach ($contentModel->titles as $title) {
     $titles .= $title->title . "<br />";
 }
 
-$writers = null;
-if(count($model->news->writers)){
-    foreach ($model->news->writers as $writer){
-        $writers .= "{$writer->writer->person->getCurrent()->name}<br /> ";
+$editors = null;
+if(count($model->news->editors)){
+    foreach ($model->news->editors as $editor){
+        $editors .= "{$editor->editor->person->getCurrent()->name}<br /> ";
     }    
 }
 $infocusName = $this->getInfocucName($model->infocusId);
@@ -87,8 +87,8 @@ $this->widget('zii.widgets.CDetailView', array(
             'value' => ($model->country_code) ? $model->countryCode->getCountryName() : NULL,
         ),
         array(
-            'label' => AmcWm::t("msgsbase.news", "Writers"),
-            'value' => $writers,
+            'label' => AmcWm::t("msgsbase.news", "Editors"),
+            'value' => $editors,
             'type' => 'html',
         ),
         array(
