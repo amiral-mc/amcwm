@@ -134,6 +134,8 @@ return array(
     '_FRONT_USERSARTICLES_DEFAULT_CONTROLLER_'=> 'مقالات القرأء',
     '_FRONT_ESSAYS_DEFAULT_CONTROLLER_'=> 'المقالات',
     '_RESET_ACTION_'=> 'تغيير',
+    '_SOURCES_CONTROLLER_'=>"المصادر",
+    '_SOURCES_ACTION_'=>"المصادر",           
     
     
 );

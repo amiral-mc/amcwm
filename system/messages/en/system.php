@@ -133,9 +133,7 @@ return array(
     '_USERSARTICLES_DEFAULT_CONTROLLER_'=> 'Users Articles',
     '_FRONT_USERSARTICLES_DEFAULT_CONTROLLER_'=> 'Users Articles', 
     '_FRONT_ESSAYS_DEFAULT_CONTROLLER_'=> 'Articles',
-    '_RESET_ACTION'=> 'Reset',
-
-    
-    
-    
+    '_RESET_ACTION_'=> 'Reset',
+    '_SOURCES_CONTROLLER_'=>"Sources",
+    '_SOURCES_ACTION_'=>"Sources",           
 );

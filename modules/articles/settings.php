@@ -180,6 +180,70 @@ return array(
                                 'action' => 'index',
                             ),
                         ),
+                        'sources' => array(
+                            "perm" => 128,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                            ),
+                            'forwardTo' => array(
+                                'controller' => 'sources',
+                                'action' => 'index',
+                            ),
+                        ),
+                    ),
+                ),
+                'sources' => array(
+                    "actions" => array(
+                        "index" => array(
+                            "perm" => 1,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "view" => array(
+                            "perm" => 1,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "update" => array(
+                            "perm" => 4,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
+                        "delete" => array(
+                            "perm" => 8,
+                            'roles' => array('admin'),
+                            'roles4Virtual' => array(
+                                'news' => array('admin'),
+                                'breaking' => array('admin'),
+                                'essays' => array('admin'),
+                                'companyArticles' => array('admin'),
+                                'usersArticles' => array('admin'),
+                                'issueArticles' => array('admin'),
+                            ),
+                        ),
                     ),
                 ),
                 'comments' => array(
@@ -415,8 +479,8 @@ return array(
                 'module' => 'companyArticles',
                 'redirectParams' => array('companyId'),
                 'saveMethod' => 'saveRelatedVirtual',
-                'system'=>0,
-                'enabled'=> 0 ,
+                'system' => 0,
+                'enabled' => 0,
                 'views' => array(
                     'index' => "index",
                     'wajax' => 'wajax',
@@ -434,8 +498,8 @@ return array(
                 'module' => 'issueArticles',
                 'redirectParams' => array('issueId'),
                 'saveMethod' => 'saveRelatedVirtual',
-                'system'=>0,
-                'enabled'=> 0 ,
+                'system' => 0,
+                'enabled' => 0,
                 'views' => array(
                     'index' => "index",
                     'wajax' => 'wajax',
@@ -706,9 +770,9 @@ return array(
                 'route' => 'news',
                 'table' => 'news',
                 'tableModel' => 'news',
-                'module' => 'news',                
+                'module' => 'news',
                 'customCriteria' => array(
-                   'join' => 'inner join users_articles on p.article_id = users_articles.article_id',
+                    'join' => 'inner join users_articles on p.article_id = users_articles.article_id',
                     'useRelaedModel' => true,
                     'conditionGeneration' => array(),
                 ),
@@ -725,7 +789,7 @@ return array(
                 'route' => 'usersArticles',
                 'table' => 'users_articles',
                 'tableModel' => 'usersArticles',
-                'module' => 'usersArticles',                
+                'module' => 'usersArticles',
                 'customCriteria' => array(
                     'useRelaedModel' => true,
                     'conditionGeneration' => array('class' => 'amcwm.modules.articles.components.ManageUsersArticlesCondition'),
@@ -744,7 +808,7 @@ return array(
                 'table' => 'essays',
                 'tableModel' => 'essays',
                 'module' => 'essays',
-                'customCriteria' => array(                    
+                'customCriteria' => array(
                     'useRelaedModel' => true,
                     'conditionGeneration' => array(),
                 ),
@@ -762,8 +826,8 @@ return array(
                 'table' => 'dir_companies_articles',
                 'tableModel' => 'dirCompaniesArticles',
                 'module' => 'companyArticles',
-                'system'=>0,
-                'enabled'=> 0 ,
+                'system' => 0,
+                'enabled' => 0,
                 'customCriteria' => array(
                     'useRelaedModel' => false,
                     'conditionGeneration' => array('class' => 'amcwm.modules.directory.components.ManageCompaniesArticlesCondition'),
@@ -777,13 +841,13 @@ return array(
                     'translate' => "translate",
                 ),
             ),
-             'issueArticles' => array(
+            'issueArticles' => array(
                 'route' => 'issueArticles',
                 'table' => 'issue_articles',
                 'tableModel' => 'issueArticles',
                 'module' => 'issueArticles',
-                'system'=>0,
-                'enabled'=> 0 ,
+                'system' => 0,
+                'enabled' => 0,
                 'customCriteria' => array(
                     'useRelaedModel' => false,
                     'conditionGeneration' => array('class' => 'amcwm.modules.directory.components.ManageIssueArticlesCondition'),
