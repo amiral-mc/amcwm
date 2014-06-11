@@ -73,12 +73,18 @@ class MostReadAndCommentData extends CComponent {
      * @var int 
      */
     protected $period = 0;
+    
+    /**
+     *      
+     * @var array add custom where 
+     */
+    protected $wheres = array();
 
     /**
      * Title length , if greater than 0 then we get the first titleLength characters from content tite
      * @var integer 
      */
-    protected $titleLength = 70;
+    protected $titleLength = 70;       
 
     /**
      * Counstructor
@@ -100,6 +106,13 @@ class MostReadAndCommentData extends CComponent {
 
         //$this->sharedArticles = $shared->getItems();
     }
+    
+    /**
+     * Add where to wheres array
+     */
+    public function setWheres($where){
+        $this->wheres[md5($where)] = $where; 
+    }
 
     /**
      * Gets the most comments articles list array, each article is associated  array that contain's following items:
@@ -108,15 +121,20 @@ class MostReadAndCommentData extends CComponent {
      * <li>image: string, link for article image</li>
      * <li>link: string, link for displaying article details</li>
      * </ul>
+     * @param string $$mediaPathIndex media path index to get images path from it
      * @access public
      * @return array
      */
-    public function getCommentsArticles() {
+    public function getCommentsArticles($mediaPathIndex = 'list') {
         if (!$this->commentsArticles) {
             $comments = new ArticlesListData($this->tables, $this->period, $this->limit, $this->sectionId);
+            $comments->setMediaPath ( Yii::app()->baseUrl . "/" . ArticlesListData::getSettings()->mediaPaths[$mediaPathIndex]['path'] . "/");
             $comments->addOrder('comments desc');
             $comments->addColumn('comments', 'info');
             $comments->setTitleLength($this->titleLength);
+            foreach($this->wheres as $where){
+                $comments->addWhere($where);
+            }
             $comments->generate();
             $this->commentsArticles = $comments->getItems();
         }
@@ -130,15 +148,20 @@ class MostReadAndCommentData extends CComponent {
      * <li>image: string, link for article image</li>
      * <li>link: string, link for displaying article details</li>
      * </ul>
+     * @param string $$mediaPathIndex media path index to get images path from it
      * @access public
      * @return array
      */
-    public function getReadArticles() {
+    public function getReadArticles($mediaPathIndex = 'list') {
         if (!$this->readArticles) {
             $read = new ArticlesListData($this->tables, $this->period, $this->limit, $this->sectionId);
+            $read->setMediaPath ( Yii::app()->baseUrl . "/" . ArticlesListData::getSettings()->mediaPaths[$mediaPathIndex]['path'] . "/");
             $read->addOrder('hits desc');
             $read->addColumn('hits', 'info');
             $read->setTitleLength($this->titleLength);
+            foreach($this->wheres as $where){
+                $read->addWhere($where);
+            }
             $read->generate();
             $this->readArticles = $read->getItems();
         }
@@ -152,15 +175,20 @@ class MostReadAndCommentData extends CComponent {
      * <li>image: string, link for article image</li>
      * <li>link: string, link for displaying article details</li>
      * </ul>
+     * @param string $$mediaPathIndex media path index to get images path from it
      * @access public
      * @return array
      */
-    public function getSharedArticles() {
+    public function getSharedArticles($mediaPathIndex = 'list') {
         if (!$this->sharedArticles) {
             $shared = new ArticlesListData($this->tables, $this->period, $this->limit, $this->sectionId);
+            $shared->setMediaPath ( Yii::app()->baseUrl . "/" . ArticlesListData::getSettings()->mediaPaths[$mediaPathIndex]['path'] . "/");
             $shared->addOrder('shared desc');
             $shared->addColumn('shared', 'info');
             $shared->setTitleLength($this->titleLength);
+            foreach($this->wheres as $where){
+                $shared->addWhere($where);
+            }
             $shared->generate();
             $this->sharedArticles = $shared->getItems();
         }

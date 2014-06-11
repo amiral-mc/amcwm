@@ -96,13 +96,25 @@ class Data {
     /**
      * 
      * Get sub-sections ids as array list for the given section $id
-     * @todo need to implement this method
+     * @todo need to enhance this method
      * @access public
      * @param string $id
      * @return array
      */
-    public function getSectionSubIds($id) {
-        return array();
+    public function getSectionSubIds($id, $sections = array() , &$subs = array()) {
+        $siteLanguage = Yii::app()->user->getCurrentLanguage();
+        if(!$sections && isset($this->_sections[$siteLanguage][$id]['childs']) && $this->_sections[$siteLanguage][$id]['childs']){
+            $sections = $this->_sections[$siteLanguage][$id]['childs'];
+        }
+        if($sections){
+            foreach ($sections as $section){
+                $subs[] = $section['data']['section_id'];
+                if($section['childs']){
+                    $this->getSectionSubIds($section['data']['section_id'], $section['childs'], $subs);
+                }
+            }
+        }
+        return $subs;
     }
 
     /**

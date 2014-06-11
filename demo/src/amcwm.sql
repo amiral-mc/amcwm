@@ -2834,6 +2834,7 @@ CREATE TABLE IF NOT EXISTS `galleries` (
   `section_id` smallint(5) unsigned DEFAULT NULL,
   `show_gallery` tinyint(1) DEFAULT '1',
   `country_code` char(2) DEFAULT NULL,
+  `is_system` tinyint(1) NOT NULL DEFAULT '0', 
   PRIMARY KEY (`gallery_id`),
   KEY `fk_galleries_sections` (`section_id`),
   KEY `fk_galleries_countries1` (`country_code`)

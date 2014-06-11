@@ -10,7 +10,6 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-
 class AmcGalleriesController extends MultimediaController {
 
     /**
@@ -140,20 +139,29 @@ class AmcGalleriesController extends MultimediaController {
         if (Yii::app()->request->isPostRequest) {
             // we only allow deletion via POST request
             $ids = Yii::app()->request->getParam('ids');
+            $messages = array();
+            $messages['error'] = array();
+            $messages['success'] = array();
             foreach ($ids as $id) {
                 $contentModel = $this->loadGallery($id);
                 $model = $contentModel->getParentContent();
-                $this->deleteGallery($model);
-                $messages['success'][] = AmcWm::t("msgsbase.core", 'Gallery "{galleryname}" has been deleted', array("{galleryname}" => $contentModel->gallery_header));
+                $delete = $this->deleteGallery($model);
+                if ($delete) {
+                    $messages['success'][] = AmcWm::t("msgsbase.core", 'Gallery "{galleryname}" has been deleted', array("{galleryname}" => $contentModel->gallery_header));
+                } else {
+                    $messages['error'][] = AmcWm::t("msgsbase.core", 'Can not delete gallery "{galleryname}"', array("{galleryname}" => $contentModel->gallery_header));
+                }
             }
             if (count($messages['success'])) {
                 Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => implode("<br />", $messages['success'])));
             }
+            if (count($messages['error'])) {
+                Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => implode("<br />", $messages['error'])));
+            }
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax']))
                 $this->redirect(array('index'));
-        }
-        else
+        } else
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
@@ -161,52 +169,56 @@ class AmcGalleriesController extends MultimediaController {
         $galleryFolder = $galleryModel->gallery_id;
         $mediaPaths = $this->getModule()->appModule->mediaPaths;
         $images = $galleryModel->images;
-        $path = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaPaths['galleries']['path']) . DIRECTORY_SEPARATOR;
-        $imgPath = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaPaths['images']['path']) . DIRECTORY_SEPARATOR;
-        $imgPath = str_replace("{gallery_id}", $galleryFolder, $imgPath);
-        $bgPath = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaPaths['backgrounds']['path']) . DIRECTORY_SEPARATOR;
-        $bgPath = str_replace("{gallery_id}", $galleryFolder, $bgPath);
-        $videoPath = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaPaths['videos']['path']) . DIRECTORY_SEPARATOR;
-        $videoPath = str_replace("{gallery_id}", $galleryFolder, $videoPath);
-        $videoThumbPath = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaPaths['videos']['thumb']['path']) . DIRECTORY_SEPARATOR;
-        $videoThumbPath = str_replace("{gallery_id}", $galleryFolder, $videoThumbPath);
-        $galleryPath = $path . $galleryFolder;
-        /**
-         * @todo check the directory when trying to delete the gallery that contains another images, and folder inside the main gallery folder
-         * @todo getting the error [Directory not empty] when deleting gallery not empty.
-         */
-        if (is_dir($path)) {
-            foreach ($images As $image) {
-                if ($image['is_background']) {
-                    $deleteFile = $bgPath . $image->image_id;
-                } else {
-                    $deleteFile = $imgPath . $image->image_id;
+        $videos = $galleryModel->videos;
+        $delete = $galleryModel->delete();
+        if ($delete) {
+            $path = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaPaths['galleries']['path']) . DIRECTORY_SEPARATOR;
+            $imgPath = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaPaths['images']['path']) . DIRECTORY_SEPARATOR;
+            $imgPath = str_replace("{gallery_id}", $galleryFolder, $imgPath);
+            $bgPath = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaPaths['backgrounds']['path']) . DIRECTORY_SEPARATOR;
+            $bgPath = str_replace("{gallery_id}", $galleryFolder, $bgPath);
+            $videoPath = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaPaths['videos']['path']) . DIRECTORY_SEPARATOR;
+            $videoPath = str_replace("{gallery_id}", $galleryFolder, $videoPath);
+            $videoThumbPath = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaPaths['videos']['thumb']['path']) . DIRECTORY_SEPARATOR;
+            $videoThumbPath = str_replace("{gallery_id}", $galleryFolder, $videoThumbPath);
+            $galleryPath = $path . $galleryFolder;
+            /**
+             * @todo check the directory when trying to delete the gallery that contains another images, and folder inside the main gallery folder
+             * @todo getting the error [Directory not empty] when deleting gallery not empty.
+             */
+            if (is_dir($path)) {
+                foreach ($images As $image) {
+                    if ($image['is_background']) {
+                        $deleteFile = $bgPath . $image->image_id;
+                    } else {
+                        $deleteFile = $imgPath . $image->image_id;
+                    }
+                    if (is_file($deleteFile)) {
+                        unlink($deleteFile);
+                    }
+                    $image->delete();
                 }
-                if (is_file($deleteFile)) {
-                    unlink($deleteFile);
+                if (is_dir($imgPath)) {
+                    rmdir($imgPath);
                 }
-                $image->delete();
-            }
-            if (is_dir($imgPath)) {
-                rmdir($imgPath);
-            }
-            if (is_dir($bgPath)) {
-                rmdir($bgPath);
-            }            
-            if (is_dir($videoThumbPath)) {
-                rmdir($videoThumbPath);
-            }
-            if (is_dir($videoPath)) {
-                rmdir($videoPath);
-            }
-            if (is_dir($galleryPath)) {
-                rmdir($galleryPath);
-            }
-            foreach ($galleryModel->videos as $video) {
-                $video->delete();
+                if (is_dir($bgPath)) {
+                    rmdir($bgPath);
+                }
+                if (is_dir($videoThumbPath)) {
+                    rmdir($videoThumbPath);
+                }
+                if (is_dir($videoPath)) {
+                    rmdir($videoPath);
+                }
+                if (is_dir($galleryPath)) {
+                    rmdir($galleryPath);
+                }
+                foreach ($videos as $video) {
+                    $video->delete();
+                }
             }
         }
-        $galleryModel->delete();
+        return $delete;
     }
 
     /**
