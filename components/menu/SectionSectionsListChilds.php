@@ -17,6 +17,10 @@
 class SectionSectionsListChilds extends MenuModuleChilds {
 
     /**
+     * @var string module name
+     */
+    protected $moduleName;
+    /**
      * Initilize the class data
      * @access protected
      * @return void
@@ -33,6 +37,13 @@ class SectionSectionsListChilds extends MenuModuleChilds {
         }
     }
 
+    public function appendParamsToParent() {
+        $settings = new Settings('articles', false);
+        if (isset($settings->options[$this->moduleName]['default']['check']['menu']['section']['linkOnTop']) && $settings->options[$this->moduleName]['default']['check']['menu']['section']['linkOnTop']) {
+            return array('id'=>  $this->id);
+        }
+    }
+
     /**
      *
      * Generate child list
@@ -40,18 +51,22 @@ class SectionSectionsListChilds extends MenuModuleChilds {
      * @return void
      */
     public function generate() {
+        
         $this->addJoin("inner join articles a on a.section_id = t.section_id");
         $forwardModules = amcwm::app()->acl->getForwardModules();
         $articlesTables = ArticlesListData::getArticlesTables();
-        if (isset($forwardModules[$this->moduleId])) {           
-            $module = key($forwardModules[$this->moduleId]);
-            if($module != "articles"){
+        if (isset($forwardModules[$this->moduleId])) {
+            $this->moduleName = key($forwardModules[$this->moduleId]);
+            if ($this->moduleName != "articles") {
                 $this->params["module"] = $this->moduleId;
             }
-            switch ($module) {
+            switch ($this->moduleName) {
+
                 case "news":
-                    
                     $this->addJoin("inner join news n on n.article_id = a.article_id");
+                    break;
+                case "essays":
+                    $this->addJoin("inner join essays on essays.article_id = a.article_id");
                     break;
             }
         } else {
@@ -61,7 +76,6 @@ class SectionSectionsListChilds extends MenuModuleChilds {
             }
         }
         $this->setItems();
-        
     }
 
     /**

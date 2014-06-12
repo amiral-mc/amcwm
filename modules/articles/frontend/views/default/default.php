@@ -5,7 +5,7 @@ $virtualModule = $data['task']->getSettings()->currentVirtual;
 $msgsBase = ($virtualModule == "articles") ? "msgsbase.core" : "msgsbase.{$virtualModule}";
 $extension = "ContentList";
 $removeLastItem = (bool) AmcWm::app()->request->getParam('menu');
-if ($virtualModule == "news") {
+if ($virtualModule == "news" || $virtualModule == "essays") {
     $extension = "ArticlesListing";
     $params = $data['task']->getActionParams();
     $removeLastItem = !isset($params['id']);

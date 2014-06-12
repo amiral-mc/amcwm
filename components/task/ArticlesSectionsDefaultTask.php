@@ -96,7 +96,7 @@ class ArticlesSectionsDefaultTask extends ArticlesControllerTask {
     private function _runDefault($limit) {
         $render = false;
         $topArticlesLimit = 0;
-        if ($this->options['topArticles'] && $this->displayResult) {
+        if (isset($this->options['topArticles']) && $this->options['topArticles'] && $this->displayResult) {
             $topArticlesLimit = $this->options['topArticles'];
         }
         $sectionDataset = new SectionArticlesData($this->table, $this->params["id"], $limit);

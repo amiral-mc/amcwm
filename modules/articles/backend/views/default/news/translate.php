@@ -209,7 +209,7 @@ if (count($model->news->editors)) {
             );
             ?>
         </div>
-        <span class="translated_label"><?php echo AmcWm::t("msgsbase.news", 'Breaking News'); ?></span>
+        <span class="translated_label"><?php echo AmcWm::t("msgsbase.news", 'Source'); ?></span>
         <span class="translated_org_item">
             <?php
             if ($model->news->source) {

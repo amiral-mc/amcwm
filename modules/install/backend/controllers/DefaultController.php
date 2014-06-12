@@ -23,10 +23,21 @@ class DefaultController extends BackendController {
      */
     private function _processInstallModule($name, $config, $remove) {
         if ($remove) {
+            $query = sprintf("select count(*) "
+                    . "from modules m "
+                    . "inner join modules_components c on m.module_id = c.module_id  "
+                    . "where module = %s ", AmcWm::app()->db->quoteValue($name));
+
+            $cannotRemove = AmcWm::app()->db->createCommand($query)->queryScalar();
+            if($cannotRemove){
+                return AmcWm::t("msgsbase.core", 'Cannot remove module "{name}"', array("{name}" => $name));
+            }            
             $msg = AmcWm::t("msgsbase.core", 'Module "{name}" has been removed successfully', array("{name}" => $name));
         } else {
             $msg = AmcWm::t("msgsbase.core", 'Module "{name}" has been installed successfully', array("{name}" => $name));
         }
+
+
         $transaction = AmcWm::app()->db->beginTransaction();
         try {
             if (isset($config['backend']['install'])) {
@@ -96,15 +107,16 @@ class DefaultController extends BackendController {
             where m.module = %s {$where} ", AmcWm::app()->db->quoteValue($name));
         $moduleData = AmcWm::app()->db->createCommand($query)->queryRow();
         $moduleId = 0;
+        //echo $name . "<hr>";
         if ($moduleData) {
             $moduleId = $moduleData['module_id'];
             $query = "select * from controllers where module_id = " . $moduleId;
             $controllersData = AmcWm::app()->db->createCommand($query)->queryAll();
             $installedControllers = array();
-            foreach ($controllersData as $controller) {
-                $installedControllers[$controller['controller']]['id'] = $controller['controller_id'];
-                $installedControllers[$controller['controller']]['actions'] = array();
-            }
+//            foreach ($controllersData as $controller) {
+//                $installedControllers[$controller['controller']]['id'] = $controller['controller_id'];
+//                $installedControllers[$controller['controller']]['actions'] = array();
+//            }
             if (!isset($allConfig['virtual'])) {
                 $query = "select forward_from from forward_modules where forward_to = " . $moduleId;
                 $forwardModules = AmcWm::app()->db->createCommand($query)->queryAll();
@@ -114,15 +126,12 @@ class DefaultController extends BackendController {
                 }
             }
         }
-
         if ($remove) {
             $installedControllers = array();
             $moduleData = null;
             $moduleId = 0;
             try {
-
                 $query = sprintf("delete from modules where module = %s {$where} ", AmcWm::app()->db->quoteValue($name));
-//                die();
                 AmcWm::app()->db->createCommand($query)->execute();
             } catch (Exception $e) {
                 echo $e->getMessage();
@@ -132,8 +141,7 @@ class DefaultController extends BackendController {
                 if ($virtaul) {
                     $enabled = isset($allConfig['virtual'][$name]['enabled']) ? $allConfig['virtual'][$name]['enabled'] : 1;
                     $system = isset($allConfig['virtual'][$name]['system']) ? $allConfig['virtual'][$name]['system'] : 0;
-                }
-                else{
+                } else {
                     $enabled = 1;
                     $system = isset($config['options']['system']) ? $config['options']['system'] : 0;
                 }
@@ -148,6 +156,14 @@ class DefaultController extends BackendController {
                 );
                 AmcWm::app()->db->createCommand($query)->execute();
                 $moduleId = AmcWm::app()->db->lastInsertID;
+            }
+            else{
+                $ok = AmcWm::app()->db->createCommand("delete from controllers where module_id = $moduleId")->execute();
+                //print_r($installedControllers);
+                //echo $ok;
+                //echo "delete from controllers where module_id = $moduleId\n";
+                //die();
+//                return ;
             }
             $forwardTo = array();
             foreach ($config['controllers'] as $controllerName => $controller) {

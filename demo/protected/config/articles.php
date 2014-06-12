@@ -77,8 +77,8 @@ return array(
             'check' => array(
                 'addToSlider' => true,
                 'addToInfocus' => true,
-            ),
-        ),
+            ),            
+        ),        
         'news' => array(
             'postitions' => array(
                 'sisterPostition' => 4,
@@ -89,6 +89,11 @@ return array(
             'default' => array(
                 'check' => array(
                     'addToBreaking' => true,
+                ),
+                'menu'=>array(
+                    'section' => array(
+                        'linkOnTop'=> true,
+                    ),
                 ),
                 'listingRowOrders' => array('infoBar' => 'infoBar','header' => 'header', 'details' => 'details'),
                 'topArticles' => 0,

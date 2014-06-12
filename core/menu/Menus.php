@@ -763,7 +763,7 @@ class Menus extends Dataset {
      * @param array $menuItem the current menu item
      * @param array $param module menu item parameters
      * @access private
-     * return string|array
+     * return array
      */
     private function _setModuleChilds(&$menuItem, $param) {
         if ($param['route'] && $param['param']) {
@@ -774,6 +774,8 @@ class Menus extends Dataset {
                 $moduleParam['menu'] = "{$this->_id}-{$param['item_id']}";
                 $module = new $classChilds($param['module_id'], $moduleParam);
                 $menuItem['items'] = $module->getItems();
+                $urlAppendParam = $module->appendParamsToParent();
+                return $urlAppendParam;
             }
         }
     }
@@ -806,7 +808,11 @@ class Menus extends Dataset {
                             $url[$param['param']] = $param['value'];
                             break;
                         case "MENU_CLASS":
-                            $this->_setModuleChilds($menuItem, $param);
+                            //$url[] = $param['value'];
+                            $urlAppendParam = $this->_setModuleChilds($menuItem, $param);
+                            if(is_array($urlAppendParam)){
+                                $url = array_merge($urlAppendParam, $url);
+                            }
                             break;
                         case "CODE":
                             $routeCode[$param['param'] . $param['value']] = $param;
