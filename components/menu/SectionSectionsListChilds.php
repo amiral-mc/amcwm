@@ -32,6 +32,13 @@ class SectionSectionsListChilds extends MenuModuleChilds {
         } else {
             $this->addWhere("t.parent_section is null");
         }
+        $forwardModules = amcwm::app()->acl->getForwardModules();
+        if (isset($forwardModules[$this->moduleId])) {            
+            $this->moduleName = key($forwardModules[$this->moduleId]);
+            if ($this->moduleName != "articles") {
+                $this->params["module"] = $this->moduleId;
+            }
+        }        
         if (!count($this->orders)) {
             $this->addOrder(SectionsData::getDefaultSortOrder());
         }
@@ -39,7 +46,7 @@ class SectionSectionsListChilds extends MenuModuleChilds {
 
     public function appendParamsToParent() {
         $settings = new Settings('articles', false);
-        if (isset($settings->options[$this->moduleName]['default']['check']['menu']['section']['linkOnTop']) && $settings->options[$this->moduleName]['default']['check']['menu']['section']['linkOnTop']) {
+        if (isset($settings->options[$this->moduleName]['default']['menu']['section']['linkOnTop']) && $settings->options[$this->moduleName]['default']['menu']['section']['linkOnTop']) {
             return array('id'=>  $this->id);
         }
     }
@@ -53,13 +60,8 @@ class SectionSectionsListChilds extends MenuModuleChilds {
     public function generate() {
         
         $this->addJoin("inner join articles a on a.section_id = t.section_id");
-        $forwardModules = amcwm::app()->acl->getForwardModules();
         $articlesTables = ArticlesListData::getArticlesTables();
-        if (isset($forwardModules[$this->moduleId])) {
-            $this->moduleName = key($forwardModules[$this->moduleId]);
-            if ($this->moduleName != "articles") {
-                $this->params["module"] = $this->moduleId;
-            }
+        if ($this->moduleName) {            
             switch ($this->moduleName) {
 
                 case "news":
