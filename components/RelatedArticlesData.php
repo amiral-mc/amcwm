@@ -46,12 +46,13 @@ class RelatedArticlesData extends ArticlesListData {
      * @return void
      */
     public function setTags($tags) {
+        $keywords = null;
         if (is_string($tags)) {
             $keywords = explode(PHP_EOL, $tags);
         } else if (is_array($tags)) {
             $keywords = $tags;
         }        
-        if(is_array($tags)) {
+        if(is_array($keywords)) {
             foreach ($keywords as $tag) {
                 $this->addTag($tag);
             }
