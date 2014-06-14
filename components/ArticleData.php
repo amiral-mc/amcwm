@@ -511,7 +511,7 @@ class ArticleData extends Dataset {
                 }
                 $this->items['record']['titles'] = Yii::app()->db->createCommand(sprintf("SELECT title FROM `articles_titles` where `article_id`= %d and content_lang=%s", $this->_id, Yii::app()->db->quoteValue($siteLanguage)))->queryAll();
                 if ($moduleName == "news") {
-                    $this->items['record']["article_detail"] = strip_tags($this->items['record']["article_detail"], "<br /><br><p><b><img><a><li><ul><ol>");
+                    $this->items['record']["article_detail"] = strip_tags($this->items['record']["article_detail"], "<br /><br><p><b><img><a><li><ul><ol><iframe>");
                 }
 
                 if (isset($this->items['record']["page_img"])) {

@@ -652,7 +652,7 @@ class MTinyMce extends CInputWidget {
     protected function makeFullEditor($url = '') {
         $options = array();
 
-        $this->plugins = array('safari', 'pagebreak', 'style', 'layer', 'table', 'save', 'advhr', 'advimage', 'advlink', 'emotions', 'spellchecker', 'inlinepopups', 'insertdatetime', 'preview', 'media', 'searchreplace', 'print', 'contextmenu', 'paste', 'directionality', 'fullscreen', 'noneditable', 'visualchars', 'nonbreaking', 'xhtmlxtras', 'template');
+        $this->plugins = array('safari', 'pagebreak', 'style', 'layer', 'table', 'save', 'advhr', 'advimage', 'advlink', 'emotions', 'spellchecker', 'inlinepopups', 'insertdatetime', 'preview', 'media', 'searchreplace', 'print', 'contextmenu', 'paste', 'directionality', 'fullscreen', 'noneditable', 'visualchars', 'nonbreaking', 'xhtmlxtras', 'template', 'youtubeIframe');
 
         if ($this->contentCSS !== '') {
             $sc = "styleselect,";
@@ -678,7 +678,7 @@ class MTinyMce extends CInputWidget {
         $options['theme_advanced_buttons1'] = "save,newdocument,print,|,cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo,|,removeformat,cleanup,|,spellchecker,|,visualaid,visualchars,|,ltr,rtl,|,code,preview,fullscreen,|,help";
         $options['theme_advanced_buttons2'] = "{$sc}formatselect,fontselect,fontsizeselect,|,forecolor,backcolor,|,bold,italic,underline,strikethrough,|,sub,sup{$c1}";
         $options['theme_advanced_buttons3'] = "justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,outdent,indent,|,hr,advhr,nonbreaking,pagebreak,blockquote,|,charmap,emotions,media,image,|,link,unlink,anchor,|,insertdate,inserttime";
-        $options['theme_advanced_buttons4'] = "{$c2}tablecontrols,|,insertlayer,moveforward,movebackward,absolute,|,styleprops,del,ins,attribs,|,template";
+        $options['theme_advanced_buttons4'] = "{$c2}tablecontrols,|,insertlayer,moveforward,movebackward,absolute,|,styleprops,del,ins,attribs,|,template,|,youtubeIframe";
         $options['theme_advanced_toolbar_location'] = "'top'";
         $options['theme_advanced_toolbar_align'] = "'left'";
         $options['theme_advanced_statusbar_location'] = "bottom";
@@ -688,6 +688,7 @@ class MTinyMce extends CInputWidget {
         $options['theme_advanced_resize_horizontal'] = true;
         $options['theme_advanced_resizing'] = true;
         $options['spellchecker_languages'] = '+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv';
+        $options['valid_elements'] = 'iframe[src|title|width|height|allowfullscreen|frameborder|class|id],object[classid|width|height|codebase|*],param[name|value|_value|*],embed[type|width|height|src|*]';
 
         if ($url !== '') {
             $options['spellchecker_rpc_url'] = $url . '/tiny_mce/plugins/spellchecker/rpc.php';
