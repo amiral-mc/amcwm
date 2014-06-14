@@ -30,12 +30,12 @@ class AmcSectionsController extends BackendController {
      * @access protected
      */
     protected function save(SectionsTranslation $contentModel) {
-        if ($this->getParentId()) {
-            $model->parent_section = $this->getParentId();
-        }
         if (isset($_POST['Sections']) && isset($_POST["SectionsTranslation"])) {
             $transaction = Yii::app()->db->beginTransaction();
             $model = $contentModel->getParentContent();
+            if ($this->getParentId()) {
+                $model->parent_section = $this->getParentId();
+            }
             $oldThumb = $model->image_ext;
             $model->attributes = $_POST['Sections'];
 
@@ -200,8 +200,7 @@ class AmcSectionsController extends BackendController {
             if (!isset($_GET['ajax'])) {
                 $this->redirect(array('index', 'sid' => $this->getParentId()));
             }
-        }
-        else
+        } else
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
