@@ -1,1 +1,2 @@
 ALTER TABLE  `galleries` ADD  `is_system` BOOLEAN NOT NULL DEFAULT FALSE;
+

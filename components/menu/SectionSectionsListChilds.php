@@ -31,25 +31,11 @@ class SectionSectionsListChilds extends MenuModuleChilds {
             $this->addWhere("t.parent_section = " . (int) $this->id);
         } else {
             $this->addWhere("t.parent_section is null");
-        }
-        $forwardModules = amcwm::app()->acl->getForwardModules();
-        if (isset($forwardModules[$this->moduleId])) {            
-            $this->moduleName = key($forwardModules[$this->moduleId]);
-            if ($this->moduleName != "articles") {
-                $this->params["module"] = $this->moduleId;
-            }
         }        
         if (!count($this->orders)) {
             $this->addOrder(SectionsData::getDefaultSortOrder());
         }
-    }
-
-    public function appendParamsToParent() {
-        $settings = new Settings('articles', false);
-        if (isset($settings->options[$this->moduleName]['default']['menu']['section']['linkOnTop']) && $settings->options[$this->moduleName]['default']['menu']['section']['linkOnTop']) {
-            return array('id'=>  $this->id);
-        }
-    }
+    }   
 
     /**
      *

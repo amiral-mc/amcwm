@@ -42,9 +42,9 @@ abstract class MenuModuleChilds extends Dataset {
      * @access public
      */
     public function __construct($moduleId, $params = array()) {
-        $this->moduleId = $moduleId;        
+        $this->moduleId = $moduleId;
         if (isset($params['count'])) {
-            $this->limit = (int) $params['count'];            
+            $this->limit = (int) $params['count'];
             unset($params['count']);
         } else {
             $this->limit = 25;
@@ -53,9 +53,27 @@ abstract class MenuModuleChilds extends Dataset {
             $this->id = (int) $params['id'];
             unset($params['id']);
         }
-        $this->params = $params;      
+        $this->params = $params;
+        $forwardModules = amcwm::app()->acl->getForwardModules();
+        if (isset($forwardModules[$this->moduleId])) {            
+            $this->moduleName = key($forwardModules[$this->moduleId]);
+            if ($this->moduleName != "articles") {
+                $this->params["module"] = $this->moduleId;
+            }
+        }        
         $this->init();
         $this->generate();
+    }
+
+    /**
+     * append parameters to url   
+     * @return array
+     */
+    public function appendParamsToParent() {
+        $settings = new Settings('articles', false);
+        if (isset($settings->options[$this->moduleName]['default']['menu']['section']['linkOnTop']) && $settings->options[$this->moduleName]['default']['menu']['section']['linkOnTop']) {
+            return array('id' => $this->id);
+        }
     }
 
     /**
@@ -85,7 +103,7 @@ abstract class MenuModuleChilds extends Dataset {
     protected function generateUrl($urlParams = array()) {
         $url = array();
         if ($this->route) {
-            $url[0] = "/" .$this->route;            
+            $url[0] = "/" . $this->route;
             $urlParams = array_merge($this->params, $urlParams);
             $url = array_merge($url, $urlParams);
         }
