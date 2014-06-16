@@ -596,7 +596,7 @@ class ManageArticles extends ManageContent {
                 if ($oldThumb && is_file($oldThumbFile)) {
                     unlink($oldThumbFile);
                 }
-                if ($ok) {
+                if ($ok && $article->thumb) {
                     if ($imageInfo['info']['crob']) {
                         $image->resizeCrop($imageInfo['info']['width'], $imageInfo['info']['height'], $imageFile, $coords);
                     } else {
@@ -628,7 +628,7 @@ class ManageArticles extends ManageContent {
         $deleteImage = Yii::app()->request->getParam('deletePageImage');
         $mediaSettings = AmcWm::app()->appModule->mediaSettings;
         $dir = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaSettings['paths']['pageImage']['path']);
-        if ($model->pageImg instanceof CUploadedFile) {
+        if ($model->pageImg instanceof CUploadedFile && $model->page_img) {
             $pageImage = $dir . DIRECTORY_SEPARATOR . $model->article_id . "." . $model->page_img;
             if (!is_dir($dir)) {
                 mkdir($dir, 0777, true);
