@@ -246,7 +246,7 @@ class Menus extends Dataset {
                 $finalList['items'][$itemId] = $item;
                 if (isset($item['url'][0])) {
                     $url = $item['url'];
-                    if(is_array($url)){
+                    if (is_array($url)) {
                         $finalList['items'][$itemId]['isActive'] = Data::getInstance()->isCurrentRoute(array_shift($url), $url);
                     }
                 }
@@ -282,10 +282,9 @@ class Menus extends Dataset {
                 $finalList[$itemId] = $item;
                 if (isset($item['url'][0])) {
                     $url = $item['url'];
-                    if(is_array($url)){
-                        $finalList[$itemId]['isActive'] = Data::getInstance()->isCurrentRoute(array_shift($url), $url);    
+                    if (is_array($url)) {
+                        $finalList[$itemId]['isActive'] = Data::getInstance()->isCurrentRoute(array_shift($url), $url);
                     }
-                    
                 }
             }
         }
@@ -796,6 +795,7 @@ class Menus extends Dataset {
         if (!$itemUrl) {
             if (count($params)) {
                 $routeParam = array();
+                $urlAppendParam = array();
                 foreach ($params as $param) {
                     switch ($param['param_type']) {
                         case "ROUTE":
@@ -810,9 +810,6 @@ class Menus extends Dataset {
                         case "MENU_CLASS":
                             //$url[] = $param['value'];
                             $urlAppendParam = $this->_setModuleChilds($menuItem, $param);
-                            if(is_array($urlAppendParam)){
-                                $url = array_merge($urlAppendParam, $url);
-                            }
                             break;
                         case "CODE":
                             $routeCode[$param['param'] . $param['value']] = $param;
@@ -820,6 +817,9 @@ class Menus extends Dataset {
                     }
                 }
 
+                if (is_array($urlAppendParam) && $urlAppendParam) {
+                    $url = array_merge($url, $urlAppendParam);
+                }
                 $this->items['routes'][$param['route']]['url'][$codeRouteId] = $routeParam;
                 $this->items['routes'][$param['route']]['code'][$codeRouteId] = $routeCode;
                 $this->items['routes'][$param['route']]['itemIds'][$codeRouteId] = $itemId;
