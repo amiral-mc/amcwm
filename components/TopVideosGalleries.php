@@ -44,6 +44,7 @@ class TopVideosGalleries extends TopGalleriesData {
         $count = 0;
         $childs = array();
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
+        $dateNow = date('Y-m-d H:i:s');
         $videosQuery = sprintf("select sql_calc_found_rows 
                 v.video_id, v.hits , v.gallery_id, v.creation_date, v.comments, vt.video_header, 
                 iv.video_ext, iv.img_ext, ev.video, comments
@@ -53,13 +54,15 @@ class TopVideosGalleries extends TopGalleriesData {
             left join external_videos ev on ev.video_id = v.video_id
             where v.gallery_id IN (%s) 
             and v.published = %d
-            and v.publish_date <= NOW() 
+            and v.publish_date <= %s
             and vt.content_lang = %s
-            and (v.expire_date >= NOW() or v.expire_date is null)
+            and (v.expire_date >= %s or v.expire_date is null)
             order by v.publish_date desc limit %d , %d", 
                 $galleryId, 
                 ActiveRecord::PUBLISHED, 
+                Yii::app()->db->quoteValue($dateNow),
                 Yii::app()->db->quoteValue($siteLanguage), 
+                Yii::app()->db->quoteValue($dateNow),
                 ($this->pageNo - 1 ) * $this->pageSize, 
                 $this->pageSize
         );
@@ -74,7 +77,7 @@ class TopVideosGalleries extends TopGalleriesData {
                 $moreVideos['params'] = array("gid" => $v['gallery_id'], "id" => $v['video_id'], "page" => $this->pageNo);
                 $moreVideos['title'] = $v['video_header'];
                 $moreVideos['hits'] = $v['hits'];
-                $moreVideos['created'] = Yii::app()->dateFormatter->format("dd/MM/y", $v['creation_date']);
+                $moreVideos['created'] = $v['creation_date'];
                 $moreVideos['comments'] = $v['comments'];
                 if (isset($v['video_ext'])) {
                     $moreVideos['url'] = Yii::app()->request->baseUrl . "/" . $mediaPaths['videos']['path'] . "/{$v['video_id']}.{$v['video_ext']}";
