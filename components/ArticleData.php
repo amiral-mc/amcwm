@@ -510,9 +510,9 @@ class ArticleData extends Dataset {
                     $this->items['record']["create_date"] = Yii::app()->dateFormatter->format("dd/MM/y hh:mm a", $this->items['record']["create_date"]);
                 }
                 $this->items['record']['titles'] = Yii::app()->db->createCommand(sprintf("SELECT title FROM `articles_titles` where `article_id`= %d and content_lang=%s", $this->_id, Yii::app()->db->quoteValue($siteLanguage)))->queryAll();
-                if ($moduleName == "news") {
-                    $this->items['record']["article_detail"] = strip_tags($this->items['record']["article_detail"], "<br /><br><p><b><img><a><li><ul><ol><iframe>");
-                }
+//                if ($moduleName == "news") {
+//                    $this->items['record']["article_detail"] = strip_tags($this->items['record']["article_detail"], "<br /><br><p><b><img><a><li><ul><ol><iframe>");
+//                }
 
                 if (isset($this->items['record']["page_img"])) {
                     $this->items['record']['page_img'] = Yii::app()->baseUrl . "/" . Data::getSettings('articles')->mediaPaths['pageImage']['path'] . "/" . $this->items['record']['article_id'] . "." . $this->items['record']['page_img'];
