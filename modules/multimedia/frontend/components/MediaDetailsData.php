@@ -204,6 +204,7 @@ class MediaDetailsData extends Dataset {
         $this->items['updated'] = $row["updated"];
         $this->items['comments'] = $row["comments"];
         $this->items['hits'] = $row["hits"];
+        $this->items['tags'] = $row["tags"];
         $this->items['description'] = $row["description"];
         $this->items['type'] = $this->type;
         switch ($this->type) {
@@ -231,7 +232,7 @@ class MediaDetailsData extends Dataset {
 
         foreach ($this->cols as $colIndex => $col) {
             $this->items[$colIndex] = $row[$colIndex];
-        }
+        }       
     }
 
 }
