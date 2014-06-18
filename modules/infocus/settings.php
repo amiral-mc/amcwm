@@ -46,24 +46,24 @@ return array(
                 ),
             ),
         ),
-        'frontend' => array(
-            'structure' => array(
-                'controllers' => array(
-                    'default' => 'AmcInfocusController',
-                ),
+    ),
+    'frontend' => array(
+        'structure' => array(
+            'controllers' => array(
+                'default' => 'AmcInfocusController',
             ),
-            'install' => array(
-                'controllers' => array(
-                    'default' => array(
-                        "actions" => array(
-                            "index" => array(
-                                "perm" => 1,
-                                'roles' => array('guest'),
-                            ),
-                            "view" => array(
-                                "perm" => 1,
-                                'roles' => array('guest'),
-                            ),
+        ),
+        'install' => array(
+            'controllers' => array(
+                'default' => array(
+                    "actions" => array(
+                        "index" => array(
+                            "perm" => 1,
+                            'roles' => array('guest'),
+                        ),
+                        "view" => array(
+                            "perm" => 1,
+                            'roles' => array('guest'),
                         ),
                     ),
                 ),

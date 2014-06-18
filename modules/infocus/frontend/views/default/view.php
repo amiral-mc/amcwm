@@ -3,7 +3,7 @@
  * @toda implment breadcrumbs same as articles
  */
 
-$this->widget('widgets.InfocusWidget', array(
+$this->widget('widgets.infocus.InfocusWidget', array(
     'items' => $infocusResults,
     'infocusData'=>$infocusData,
     'contentType' => $contentType,

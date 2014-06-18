@@ -40,7 +40,7 @@ class SearchWidget extends AmcSearchWidget {
 
         $this->contentData .= '<form class="well form-search" id="internal_s    earch_form" method="get" action="' . $this->createUrl($this->searchRoute, array('ct' => "news")) . '">';
         $this->contentData .= '<div class="input-append">';
-        $this->contentData .= '<input name="q" style="width: 150px;" id="form_search_q" type="text" placeholder="' . AmcWm::t('app', "Enter Search Keywords") . '" value="' . $this->keywords . '" />';
+        $this->contentData .= '<input name="q" style="width: 150px;" id="form_search_q" type="text" placeholder="' . AmcWm::t("{$this->basePath}.core", "Enter Search Keywords") . '" value="' . $this->keywords . '" />';
         $this->contentData .= '<span class="add-on">';
         $this->contentData .= '<button type="submit" class="append-button">';
         $this->contentData .= '<i class="icon-search"></i>';
