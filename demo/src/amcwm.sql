@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 18, 2014 at 10:06 AM
--- Server version: 5.5.37-0ubuntu0.12.04.1
--- PHP Version: 5.3.10-1ubuntu3.11
+-- Generation Time: Jun 18, 2014 at 05:43 PM
+-- Server version: 5.5.34-0ubuntu0.12.04.1
+-- PHP Version: 5.3.10-1ubuntu3.8
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -43,9 +43,6 @@ INSERT INTO `access_rights` (`role_id`, `controller_id`, `access`) VALUES
 (1, 1, 1),
 (1, 39, 993),
 (1, 41, 97),
-(1, 43, 225),
-(1, 44, 7),
-(1, 45, 7),
 (1, 46, 97),
 (1, 47, 193),
 (1, 48, 7),
@@ -54,19 +51,27 @@ INSERT INTO `access_rights` (`role_id`, `controller_id`, `access`) VALUES
 (1, 51, 7),
 (1, 52, 7),
 (1, 53, 15),
-(1, 54, 1),
 (1, 55, 1),
 (1, 56, 97),
 (1, 57, 1),
 (1, 59, 33),
-(1, 61, 225),
-(1, 62, 7),
-(1, 63, 7),
 (1, 79, 449),
-(1, 80, 225),
-(1, 81, 7),
-(1, 82, 7),
 (1, 86, 3),
+(1, 90, 97),
+(1, 210, 1),
+(1, 1175, 33),
+(1, 1177, 67),
+(1, 1178, 3),
+(1, 1179, 33),
+(1, 1181, 64),
+(1, 1183, 33),
+(1, 1185, 66),
+(1, 1187, 33),
+(1, 1189, 64),
+(1, 1191, 33),
+(1, 1193, 66),
+(1, 1195, 33),
+(1, 1197, 66),
 (2, 1, 33),
 (2, 2, 255),
 (2, 3, 63),
@@ -84,18 +89,6 @@ INSERT INTO `access_rights` (`role_id`, `controller_id`, `access`) VALUES
 (2, 17, 15),
 (2, 18, 31),
 (2, 21, 63),
-(2, 22, 63),
-(2, 23, 127),
-(2, 24, 63),
-(2, 25, 63),
-(2, 26, 127),
-(2, 27, 63),
-(2, 31, 61),
-(2, 32, 127),
-(2, 33, 63),
-(2, 34, 63),
-(2, 35, 127),
-(2, 36, 63),
 (2, 37, 31),
 (2, 60, 7),
 (2, 68, 127),
@@ -106,25 +99,108 @@ INSERT INTO `access_rights` (`role_id`, `controller_id`, `access`) VALUES
 (2, 73, 15),
 (2, 74, 15),
 (2, 75, 107),
-(2, 76, 63),
-(2, 77, 127),
-(2, 78, 63),
 (2, 83, 29),
 (2, 84, 31),
 (2, 85, 29),
 (2, 87, 15),
+(2, 96, 1),
+(2, 97, 31),
+(2, 98, 31),
+(2, 99, 95),
+(2, 100, 31),
+(2, 102, 47),
+(2, 104, 15),
+(2, 105, 15),
+(2, 106, 15),
+(2, 107, 15),
+(2, 161, 47),
+(2, 162, 15),
+(2, 163, 15),
+(2, 164, 31),
+(2, 184, 31),
+(2, 185, 31),
+(2, 186, 31),
+(2, 187, 15),
+(2, 188, 1),
+(2, 189, 15),
+(2, 190, 15),
+(2, 191, 15),
+(2, 193, 109),
+(2, 194, 5),
+(2, 195, 15),
+(2, 196, 15),
+(2, 197, 31),
+(2, 198, 15),
+(2, 199, 15),
+(2, 200, 15),
+(2, 201, 15),
+(2, 202, 15),
+(2, 203, 15),
+(2, 204, 31),
+(2, 205, 31),
+(2, 206, 15),
+(2, 207, 31),
+(2, 208, 15),
+(2, 209, 15),
 (3, 12, 63),
 (3, 16, 15),
 (3, 37, 63),
 (3, 58, 5),
+(3, 188, 13),
+(3, 1147, 255),
+(3, 1148, 13),
+(3, 1149, 125),
+(3, 1150, 61),
+(3, 1151, 255),
+(3, 1152, 13),
+(3, 1153, 125),
+(3, 1154, 61),
+(3, 1155, 255),
+(3, 1156, 13),
+(3, 1157, 125),
+(3, 1158, 61),
+(3, 1159, 255),
+(3, 1160, 13),
+(3, 1161, 125),
+(3, 1162, 61),
+(3, 1163, 255),
+(3, 1164, 13),
+(3, 1165, 125),
+(3, 1166, 61),
+(3, 1167, 255),
+(3, 1168, 13),
+(3, 1169, 125),
+(3, 1170, 61),
+(3, 1171, 255),
+(3, 1172, 13),
+(3, 1173, 125),
+(3, 1174, 61),
+(3, 1199, 1),
 (4, 39, 993),
 (4, 41, 481),
 (4, 59, 33),
 (4, 91, 15),
 (4, 92, 101),
-(4, 93, 31),
-(4, 94, 31),
-(4, 95, 0);
+(4, 103, 1),
+(4, 165, 1),
+(4, 166, 1),
+(4, 192, 1),
+(4, 1176, 63),
+(4, 1180, 63),
+(4, 1181, 3),
+(4, 1182, 3),
+(4, 1184, 63),
+(4, 1185, 1),
+(4, 1186, 3),
+(4, 1188, 63),
+(4, 1189, 3),
+(4, 1190, 3),
+(4, 1192, 63),
+(4, 1193, 1),
+(4, 1194, 3),
+(4, 1196, 63),
+(4, 1197, 1),
+(4, 1198, 3);
 
 -- --------------------------------------------------------
 
@@ -140,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `actions` (
   `is_system` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`action_id`),
   KEY `fk_actions_controllers1` (`controller_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1119 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6631 ;
 
 --
 -- Dumping data for table `actions`
@@ -268,98 +344,6 @@ INSERT INTO `actions` (`action_id`, `controller_id`, `action`, `permissions`, `i
 (124, 21, 'delete', 8, 0),
 (125, 21, 'publish', 16, 0),
 (126, 21, 'pollResults', 32, 0),
-(127, 22, 'index', 1, 0),
-(128, 22, 'sort', 1, 0),
-(129, 22, 'view', 1, 0),
-(130, 22, 'create', 2, 0),
-(131, 22, 'update', 4, 0),
-(132, 22, 'delete', 8, 0),
-(133, 22, 'publish', 16, 0),
-(134, 22, 'comments', 32, 0),
-(135, 23, 'index', 1, 0),
-(136, 23, 'view', 1, 0),
-(137, 23, 'create', 2, 0),
-(138, 23, 'update', 4, 0),
-(139, 23, 'delete', 8, 0),
-(140, 23, 'publish', 16, 0),
-(141, 23, 'hide', 32, 0),
-(142, 23, 'replies', 64, 0),
-(143, 24, 'index', 1, 0),
-(144, 24, 'view', 1, 0),
-(145, 24, 'create', 2, 0),
-(146, 24, 'update', 4, 0),
-(147, 24, 'delete', 8, 0),
-(148, 24, 'publish', 16, 0),
-(149, 24, 'hide', 32, 0),
-(150, 25, 'index', 1, 0),
-(151, 25, 'sort', 1, 0),
-(152, 25, 'view', 1, 0),
-(153, 25, 'create', 2, 0),
-(154, 25, 'update', 4, 0),
-(155, 25, 'delete', 8, 0),
-(156, 25, 'publish', 16, 0),
-(157, 25, 'comments', 32, 0),
-(158, 26, 'index', 1, 0),
-(159, 26, 'view', 1, 0),
-(160, 26, 'create', 2, 0),
-(161, 26, 'update', 4, 0),
-(162, 26, 'delete', 8, 0),
-(163, 26, 'publish', 16, 0),
-(164, 26, 'hide', 32, 0),
-(165, 26, 'replies', 64, 0),
-(166, 27, 'index', 1, 0),
-(167, 27, 'view', 1, 0),
-(168, 27, 'create', 2, 0),
-(169, 27, 'update', 4, 0),
-(170, 27, 'delete', 8, 0),
-(171, 27, 'publish', 16, 0),
-(172, 27, 'hide', 32, 0),
-(196, 31, 'index', 1, 0),
-(197, 31, 'sort', 1, 0),
-(198, 31, 'view', 1, 0),
-(199, 31, 'create', 2, 0),
-(200, 31, 'update', 4, 0),
-(201, 31, 'delete', 8, 0),
-(202, 31, 'publish', 16, 0),
-(203, 31, 'comments', 32, 0),
-(204, 32, 'index', 1, 0),
-(205, 32, 'view', 1, 0),
-(206, 32, 'create', 2, 0),
-(207, 32, 'update', 4, 0),
-(208, 32, 'delete', 8, 0),
-(209, 32, 'publish', 16, 0),
-(210, 32, 'hide', 32, 0),
-(211, 32, 'replies', 64, 0),
-(212, 33, 'index', 1, 0),
-(213, 33, 'view', 1, 0),
-(214, 33, 'create', 2, 0),
-(215, 33, 'update', 4, 0),
-(216, 33, 'delete', 8, 0),
-(217, 33, 'publish', 16, 0),
-(218, 33, 'hide', 32, 0),
-(219, 34, 'index', 1, 0),
-(220, 34, 'sort', 1, 0),
-(221, 34, 'view', 1, 0),
-(222, 34, 'create', 2, 0),
-(223, 34, 'update', 4, 0),
-(224, 34, 'delete', 8, 0),
-(225, 34, 'publish', 16, 0),
-(226, 34, 'comments', 32, 0),
-(227, 35, 'index', 1, 0),
-(228, 35, 'view', 1, 0),
-(229, 35, 'create', 2, 0),
-(230, 35, 'update', 4, 0),
-(231, 35, 'delete', 8, 0),
-(232, 35, 'publish', 16, 0),
-(233, 35, 'hide', 32, 0),
-(234, 35, 'replies', 64, 0),
-(235, 36, 'index', 1, 0),
-(236, 36, 'view', 1, 0),
-(237, 36, 'create', 2, 0),
-(238, 36, 'update', 4, 0),
-(239, 36, 'delete', 8, 0),
-(240, 36, 'publish', 16, 0),
-(241, 36, 'hide', 32, 0),
 (242, 37, 'index', 1, 0),
 (243, 37, 'view', 1, 0),
 (244, 37, 'create', 2, 0),
@@ -373,15 +357,6 @@ INSERT INTO `actions` (`action_id`, `controller_id`, `action`, `permissions`, `i
 (266, 41, 'reset', 64, 0),
 (267, 41, 'profile', 128, 0),
 (269, 41, 'index', 256, 0),
-(270, 43, 'view', 1, 0),
-(271, 43, 'comments', 32, 0),
-(272, 44, 'index', 1, 0),
-(273, 44, 'view', 1, 0),
-(274, 44, 'create', 2, 0),
-(275, 43, 'replies', 64, 0),
-(276, 45, 'index', 1, 0),
-(278, 45, 'view', 1, 0),
-(279, 45, 'create', 2, 0),
 (281, 39, 'vote', 256, 0),
 (284, 13, 'sort', 1, 0),
 (293, 46, 'index', 1, 0),
@@ -415,14 +390,10 @@ INSERT INTO `actions` (`action_id`, `controller_id`, `action`, `permissions`, `i
 (327, 53, 'subscribe', 2, 0),
 (328, 53, 'activate', 4, 0),
 (329, 53, 'unsubscribe', 8, 0),
-(330, 44, 'like', 4, 0),
-(331, 45, 'like', 4, 0),
 (332, 48, 'like', 4, 0),
 (333, 49, 'like', 4, 0),
 (334, 51, 'like', 4, 0),
 (335, 52, 'like', 4, 0),
-(336, 54, 'index', 1, 0),
-(337, 54, 'view', 1, 0),
 (338, 55, 'index', 1, 0),
 (339, 55, 'breaking', 1, 0),
 (344, 56, 'contact', 64, 0),
@@ -447,20 +418,6 @@ INSERT INTO `actions` (`action_id`, `controller_id`, `action`, `permissions`, `i
 (365, 53, 'view', 1, 0),
 (366, 53, 'log', 1, 0),
 (367, 53, 'article', 1, 0),
-(368, 61, 'view', 1, 0),
-(370, 61, 'comments', 32, 0),
-(371, 61, 'replies', 64, 0),
-(372, 62, 'index', 1, 0),
-(373, 62, 'view', 1, 0),
-(374, 62, 'like', 4, 0),
-(375, 62, 'create', 2, 0),
-(376, 63, 'index', 1, 0),
-(377, 63, 'view', 1, 0),
-(378, 63, 'like', 4, 0),
-(379, 63, 'create', 2, 0),
-(380, 43, 'sections', 128, 0),
-(381, 61, 'sections', 128, 0),
-(400, 34, 'ajax', 1, 0),
 (401, 68, 'create', 2, 0),
 (402, 68, 'update', 4, 0),
 (403, 68, 'index', 1, 0),
@@ -506,46 +463,10 @@ INSERT INTO `actions` (`action_id`, `controller_id`, `action`, `permissions`, `i
 (450, 75, 'delete', 8, 0),
 (451, 75, 'sort', 32, 0),
 (452, 75, 'ajax', 64, 0),
-(453, 76, 'index', 1, 0),
-(454, 76, 'sort', 1, 0),
-(455, 76, 'view', 1, 0),
-(456, 76, 'create', 2, 0),
-(457, 76, 'update', 4, 0),
-(458, 76, 'delete', 8, 0),
-(459, 76, 'publish', 16, 0),
-(460, 76, 'comments', 32, 0),
-(461, 76, 'ajax', 1, 0),
-(462, 77, 'index', 1, 0),
-(463, 77, 'view', 1, 0),
-(464, 77, 'create', 2, 0),
-(465, 77, 'update', 4, 0),
-(466, 77, 'delete', 8, 0),
-(467, 77, 'publish', 16, 0),
-(468, 77, 'hide', 32, 0),
-(469, 77, 'replies', 64, 0),
-(470, 78, 'index', 1, 0),
-(471, 78, 'view', 1, 0),
-(472, 78, 'create', 2, 0),
-(473, 78, 'update', 4, 0),
-(474, 78, 'delete', 8, 0),
-(475, 78, 'publish', 16, 0),
-(476, 78, 'hide', 32, 0),
 (477, 79, 'index', 1, 0),
 (478, 79, 'view', 64, 0),
 (479, 79, 'countryList', 128, 0),
 (480, 79, 'viewArticle', 256, 0),
-(481, 80, 'view', 1, 0),
-(482, 80, 'comments', 32, 0),
-(483, 80, 'replies', 64, 0),
-(484, 80, 'sections', 128, 0),
-(485, 81, 'index', 1, 0),
-(486, 81, 'view', 1, 0),
-(487, 81, 'create', 2, 0),
-(488, 81, 'like', 4, 0),
-(489, 82, 'index', 1, 0),
-(490, 82, 'view', 1, 0),
-(491, 82, 'create', 2, 0),
-(492, 82, 'like', 4, 0),
 (493, 83, 'index', 1, 0),
 (494, 83, 'view', 1, 0),
 (495, 83, 'update', 4, 0),
@@ -570,6 +491,9 @@ INSERT INTO `actions` (`action_id`, `controller_id`, `action`, `permissions`, `i
 (514, 87, 'create', 2, 0),
 (515, 87, 'update', 4, 0),
 (516, 87, 'delete', 8, 0),
+(517, 90, 'index', 1, 0),
+(518, 90, 'list', 32, 0),
+(519, 90, 'viewArticle', 64, 0),
 (520, 91, 'index', 1, 0),
 (521, 91, 'view', 1, 0),
 (522, 91, 'create', 2, 0),
@@ -581,35 +505,523 @@ INSERT INTO `actions` (`action_id`, `controller_id`, `action`, `permissions`, `i
 (528, 92, 'update', 4, 0),
 (529, 92, 'articles', 32, 0),
 (530, 92, 'translate', 64, 0),
-(531, 93, 'index', 1, 0),
-(532, 93, 'view', 1, 0),
-(533, 93, 'create', 2, 0),
-(534, 93, 'update', 4, 0),
-(535, 93, 'delete', 8, 0),
-(536, 93, 'publish', 16, 0),
-(537, 93, 'sort', 1, 0),
-(538, 93, 'ajax', 1, 0),
-(539, 94, 'index', 1, 0),
-(540, 94, 'view', 1, 0),
-(541, 94, 'create', 2, 0),
-(542, 94, 'update', 4, 0),
-(543, 94, 'delete', 8, 0),
-(544, 94, 'publish', 16, 0),
-(545, 94, 'sort', 1, 0),
-(546, 94, 'ajax', 1, 0),
-(547, 95, 'index', 1, 0),
-(548, 95, 'view', 1, 0),
-(549, 95, 'create', 2, 0),
-(550, 95, 'update', 4, 0),
-(551, 95, 'delete', 8, 0),
-(552, 95, 'publish', 16, 0),
-(553, 95, 'sort', 1, 0),
-(554, 95, 'ajax', 1, 0),
 (555, 68, 'generateUser', 64, 0),
+(556, 96, 'index', 1, 0),
+(557, 96, 'view', 1, 0),
+(558, 96, 'update', 1, 0),
+(559, 96, 'create', 1, 0),
+(560, 96, 'delete', 1, 0),
+(561, 96, 'publish', 1, 0),
+(562, 96, 'comments', 1, 0),
+(563, 96, 'translate', 1, 0),
+(564, 97, 'index', 1, 0),
+(565, 97, 'view', 1, 0),
+(566, 97, 'update', 4, 0),
+(567, 97, 'create', 2, 0),
+(568, 97, 'delete', 8, 0),
+(569, 97, 'publish', 16, 0),
+(571, 98, 'index', 1, 0),
+(572, 98, 'view', 1, 0),
+(573, 98, 'update', 4, 0),
+(574, 98, 'create', 2, 0),
+(575, 98, 'delete', 8, 0),
+(576, 98, 'publish', 16, 0),
+(578, 99, 'index', 1, 0),
+(579, 99, 'view', 1, 0),
+(580, 99, 'update', 4, 0),
+(581, 99, 'create', 2, 0),
+(582, 99, 'delete', 8, 0),
+(583, 99, 'publish', 16, 0),
+(584, 99, 'replies', 64, 0),
+(585, 100, 'index', 1, 0),
+(586, 100, 'view', 1, 0),
+(587, 100, 'update', 4, 0),
+(588, 100, 'create', 2, 0),
+(589, 100, 'delete', 8, 0),
+(590, 100, 'publish', 16, 0),
 (591, 1, 'login', 1, 0),
 (592, 39, 'login', 1, 0),
 (593, 1, 'logout', 1, 0),
-(594, 39, 'logout', 1, 0);
+(594, 39, 'logout', 1, 0),
+(598, 102, 'index', 1, 0),
+(599, 102, 'view', 1, 0),
+(600, 102, 'create', 2, 0),
+(601, 102, 'update', 4, 0),
+(602, 102, 'delete', 8, 0),
+(603, 102, 'uploade', 32, 0),
+(604, 103, 'index', 1, 0),
+(605, 104, 'index', 1, 0),
+(606, 104, 'view', 1, 0),
+(607, 104, 'create', 2, 0),
+(608, 104, 'update', 4, 0),
+(609, 104, 'delete', 8, 0),
+(610, 105, 'index', 1, 0),
+(611, 105, 'view', 1, 0),
+(612, 105, 'create', 2, 0),
+(613, 105, 'update', 4, 0),
+(614, 105, 'delete', 8, 0),
+(615, 106, 'index', 1, 0),
+(616, 106, 'view', 1, 0),
+(617, 106, 'create', 2, 0),
+(618, 106, 'update', 4, 0),
+(619, 106, 'delete', 8, 0),
+(620, 107, 'index', 1, 0),
+(621, 107, 'view', 1, 0),
+(622, 107, 'create', 2, 0),
+(623, 107, 'update', 4, 0),
+(624, 107, 'delete', 8, 0),
+(866, 161, 'index', 1, 0),
+(867, 161, 'view', 1, 0),
+(868, 161, 'create', 2, 0),
+(869, 161, 'update', 4, 0),
+(870, 161, 'delete', 8, 0),
+(871, 161, 'tracking', 32, 0),
+(872, 162, 'index', 1, 0),
+(873, 162, 'view', 1, 0),
+(874, 162, 'create', 2, 0),
+(875, 162, 'update', 4, 0),
+(876, 162, 'delete', 8, 0),
+(877, 163, 'index', 1, 0),
+(878, 163, 'view', 1, 0),
+(879, 163, 'create', 2, 0),
+(880, 163, 'update', 4, 0),
+(881, 163, 'delete', 8, 0),
+(882, 164, 'index', 1, 0),
+(883, 164, 'view', 1, 0),
+(884, 164, 'create', 2, 0),
+(885, 164, 'update', 4, 0),
+(886, 164, 'delete', 8, 0),
+(887, 164, 'action', 16, 0),
+(888, 165, 'index', 1, 0),
+(889, 165, 'view', 1, 0),
+(890, 166, 'index', 1, 0),
+(891, 166, 'view', 1, 0),
+(985, 184, 'index', 1, 0),
+(986, 184, 'view', 1, 0),
+(987, 184, 'create', 2, 0),
+(988, 184, 'update', 4, 0),
+(989, 184, 'delete', 8, 0),
+(990, 184, 'action', 16, 0),
+(991, 185, 'index', 1, 0),
+(992, 185, 'view', 1, 0),
+(993, 185, 'create', 2, 0),
+(994, 185, 'update', 4, 0),
+(995, 185, 'delete', 8, 0),
+(996, 185, 'publish', 16, 0),
+(997, 186, 'index', 1, 0),
+(998, 186, 'view', 1, 0),
+(999, 186, 'create', 2, 0),
+(1000, 186, 'update', 4, 0),
+(1001, 186, 'delete', 8, 0),
+(1002, 186, 'publish', 16, 0),
+(1003, 187, 'index', 1, 0),
+(1004, 187, 'view', 1, 0),
+(1005, 187, 'create', 2, 0),
+(1006, 187, 'update', 4, 0),
+(1007, 187, 'delete', 8, 0),
+(1008, 188, 'index', 1, 0),
+(1009, 188, 'view', 1, 0),
+(1010, 188, 'update', 4, 0),
+(1011, 188, 'delete', 8, 0),
+(1012, 189, 'index', 1, 0),
+(1013, 189, 'view', 1, 0),
+(1014, 189, 'create', 2, 0),
+(1015, 189, 'update', 4, 0),
+(1016, 189, 'delete', 8, 0),
+(1017, 190, 'index', 1, 0),
+(1018, 190, 'view', 1, 0),
+(1019, 190, 'create', 2, 0),
+(1020, 190, 'update', 4, 0),
+(1021, 190, 'delete', 8, 0),
+(1022, 191, 'index', 1, 0),
+(1023, 191, 'view', 1, 0),
+(1024, 191, 'create', 2, 0),
+(1025, 191, 'update', 4, 0),
+(1026, 191, 'delete', 8, 0),
+(1027, 192, 'index', 1, 0),
+(1028, 192, 'view', 1, 0),
+(1029, 193, 'index', 1, 0),
+(1030, 193, 'view', 1, 0),
+(1031, 193, 'update', 4, 0),
+(1032, 193, 'delete', 8, 0),
+(1033, 193, 'settings', 32, 0),
+(1034, 193, 'natureCargo', 64, 0),
+(1035, 194, 'index', 1, 0),
+(1036, 194, 'update', 4, 0),
+(1037, 195, 'index', 1, 0),
+(1038, 195, 'view', 1, 0),
+(1039, 195, 'create', 2, 0),
+(1040, 195, 'update', 4, 0),
+(1041, 195, 'delete', 8, 0),
+(1042, 196, 'index', 1, 0),
+(1043, 196, 'view', 1, 0),
+(1044, 196, 'create', 2, 0),
+(1045, 196, 'update', 4, 0),
+(1046, 196, 'delete', 8, 0),
+(1047, 197, 'index', 1, 0),
+(1048, 197, 'view', 1, 0),
+(1049, 197, 'create', 2, 0),
+(1050, 197, 'update', 4, 0),
+(1051, 197, 'delete', 8, 0),
+(1052, 197, 'pilotageTonnageRanges', 16, 0),
+(1053, 198, 'index', 1, 0),
+(1054, 198, 'view', 1, 0),
+(1055, 198, 'create', 2, 0),
+(1056, 198, 'update', 4, 0),
+(1057, 198, 'delete', 8, 0),
+(1058, 199, 'index', 1, 0),
+(1059, 199, 'view', 1, 0),
+(1060, 199, 'create', 2, 0),
+(1061, 199, 'update', 4, 0),
+(1062, 199, 'delete', 8, 0),
+(1063, 200, 'index', 1, 0),
+(1064, 200, 'view', 1, 0),
+(1065, 200, 'create', 2, 0),
+(1066, 200, 'update', 4, 0),
+(1067, 200, 'delete', 8, 0),
+(1068, 201, 'index', 1, 0),
+(1069, 201, 'view', 1, 0),
+(1070, 201, 'create', 2, 0),
+(1071, 201, 'update', 4, 0),
+(1072, 201, 'delete', 8, 0),
+(1073, 202, 'index', 1, 0),
+(1074, 202, 'view', 1, 0),
+(1075, 202, 'create', 2, 0),
+(1076, 202, 'update', 4, 0),
+(1077, 202, 'delete', 8, 0),
+(1078, 203, 'index', 1, 0),
+(1079, 203, 'view', 1, 0),
+(1080, 203, 'create', 2, 0),
+(1081, 203, 'update', 4, 0),
+(1082, 203, 'delete', 8, 0),
+(1083, 204, 'index', 1, 0),
+(1084, 204, 'view', 1, 0),
+(1085, 204, 'create', 2, 0),
+(1086, 204, 'update', 4, 0),
+(1087, 204, 'delete', 8, 0),
+(1088, 204, 'portAuthorityRanges', 16, 0),
+(1089, 205, 'index', 1, 0),
+(1090, 205, 'view', 1, 0),
+(1091, 205, 'create', 2, 0),
+(1092, 205, 'update', 4, 0),
+(1093, 205, 'delete', 8, 0),
+(1094, 205, 'loyalPortTaxRanges', 16, 0),
+(1095, 206, 'index', 1, 0),
+(1096, 206, 'view', 1, 0),
+(1097, 206, 'create', 2, 0),
+(1098, 206, 'update', 4, 0),
+(1099, 206, 'delete', 8, 0),
+(1100, 207, 'index', 1, 0),
+(1101, 207, 'view', 1, 0),
+(1102, 207, 'create', 2, 0),
+(1103, 207, 'update', 4, 0),
+(1104, 207, 'delete', 8, 0),
+(1105, 207, 'typesTonnageRanges', 16, 0),
+(1106, 208, 'index', 1, 0),
+(1107, 208, 'view', 1, 0),
+(1108, 208, 'create', 2, 0),
+(1109, 208, 'update', 4, 0),
+(1110, 208, 'delete', 8, 0),
+(1111, 209, 'index', 1, 0),
+(1112, 209, 'view', 1, 0),
+(1113, 209, 'create', 2, 0),
+(1114, 209, 'update', 4, 0),
+(1115, 209, 'delete', 8, 0),
+(1116, 210, 'index', 1, 0),
+(1117, 210, 'view', 1, 0),
+(1118, 210, 'print', 1, 0),
+(6339, 1147, 'index', 1, 0),
+(6340, 1147, 'view', 1, 0),
+(6341, 1147, 'create', 2, 0),
+(6342, 1147, 'update', 4, 0),
+(6343, 1147, 'delete', 8, 0),
+(6344, 1147, 'publish', 16, 0),
+(6345, 1147, 'sort', 32, 0),
+(6346, 1147, 'comments', 64, 0),
+(6347, 1147, 'sources', 128, 0),
+(6348, 1148, 'index', 1, 0),
+(6349, 1148, 'view', 1, 0),
+(6350, 1148, 'update', 4, 0),
+(6351, 1148, 'delete', 8, 0),
+(6352, 1149, 'index', 1, 0),
+(6353, 1149, 'view', 1, 0),
+(6354, 1149, 'update', 4, 0),
+(6355, 1149, 'delete', 8, 0),
+(6356, 1149, 'publish', 16, 0),
+(6357, 1149, 'hide', 32, 0),
+(6358, 1149, 'replies', 64, 0),
+(6359, 1150, 'index', 1, 0),
+(6360, 1150, 'view', 1, 0),
+(6361, 1150, 'update', 4, 0),
+(6362, 1150, 'delete', 8, 0),
+(6363, 1150, 'publish', 16, 0),
+(6364, 1150, 'hide', 32, 0),
+(6365, 1151, 'index', 1, 0),
+(6366, 1151, 'view', 1, 0),
+(6367, 1151, 'create', 2, 0),
+(6368, 1151, 'update', 4, 0),
+(6369, 1151, 'delete', 8, 0),
+(6370, 1151, 'publish', 16, 0),
+(6371, 1151, 'sort', 32, 0),
+(6372, 1151, 'comments', 64, 0),
+(6373, 1151, 'sources', 128, 0),
+(6374, 1152, 'index', 1, 0),
+(6375, 1152, 'view', 1, 0),
+(6376, 1152, 'update', 4, 0),
+(6377, 1152, 'delete', 8, 0),
+(6378, 1153, 'index', 1, 0),
+(6379, 1153, 'view', 1, 0),
+(6380, 1153, 'update', 4, 0),
+(6381, 1153, 'delete', 8, 0),
+(6382, 1153, 'publish', 16, 0),
+(6383, 1153, 'hide', 32, 0),
+(6384, 1153, 'replies', 64, 0),
+(6385, 1154, 'index', 1, 0),
+(6386, 1154, 'view', 1, 0),
+(6387, 1154, 'update', 4, 0),
+(6388, 1154, 'delete', 8, 0),
+(6389, 1154, 'publish', 16, 0),
+(6390, 1154, 'hide', 32, 0),
+(6391, 1155, 'index', 1, 0),
+(6392, 1155, 'view', 1, 0),
+(6393, 1155, 'create', 2, 0),
+(6394, 1155, 'update', 4, 0),
+(6395, 1155, 'delete', 8, 0),
+(6396, 1155, 'publish', 16, 0),
+(6397, 1155, 'sort', 32, 0),
+(6398, 1155, 'comments', 64, 0),
+(6399, 1155, 'sources', 128, 0),
+(6400, 1156, 'index', 1, 0),
+(6401, 1156, 'view', 1, 0),
+(6402, 1156, 'update', 4, 0),
+(6403, 1156, 'delete', 8, 0),
+(6404, 1157, 'index', 1, 0),
+(6405, 1157, 'view', 1, 0),
+(6406, 1157, 'update', 4, 0),
+(6407, 1157, 'delete', 8, 0),
+(6408, 1157, 'publish', 16, 0),
+(6409, 1157, 'hide', 32, 0),
+(6410, 1157, 'replies', 64, 0),
+(6411, 1158, 'index', 1, 0),
+(6412, 1158, 'view', 1, 0),
+(6413, 1158, 'update', 4, 0),
+(6414, 1158, 'delete', 8, 0),
+(6415, 1158, 'publish', 16, 0),
+(6416, 1158, 'hide', 32, 0),
+(6417, 1159, 'index', 1, 0),
+(6418, 1159, 'view', 1, 0),
+(6419, 1159, 'create', 2, 0),
+(6420, 1159, 'update', 4, 0),
+(6421, 1159, 'delete', 8, 0),
+(6422, 1159, 'publish', 16, 0),
+(6423, 1159, 'sort', 32, 0),
+(6424, 1159, 'comments', 64, 0),
+(6425, 1159, 'sources', 128, 0),
+(6426, 1160, 'index', 1, 0),
+(6427, 1160, 'view', 1, 0),
+(6428, 1160, 'update', 4, 0),
+(6429, 1160, 'delete', 8, 0),
+(6430, 1161, 'index', 1, 0),
+(6431, 1161, 'view', 1, 0),
+(6432, 1161, 'update', 4, 0),
+(6433, 1161, 'delete', 8, 0),
+(6434, 1161, 'publish', 16, 0),
+(6435, 1161, 'hide', 32, 0),
+(6436, 1161, 'replies', 64, 0),
+(6437, 1162, 'index', 1, 0),
+(6438, 1162, 'view', 1, 0),
+(6439, 1162, 'update', 4, 0),
+(6440, 1162, 'delete', 8, 0),
+(6441, 1162, 'publish', 16, 0),
+(6442, 1162, 'hide', 32, 0),
+(6443, 1163, 'index', 1, 0),
+(6444, 1163, 'view', 1, 0),
+(6445, 1163, 'create', 2, 0),
+(6446, 1163, 'update', 4, 0),
+(6447, 1163, 'delete', 8, 0),
+(6448, 1163, 'publish', 16, 0),
+(6449, 1163, 'sort', 32, 0),
+(6450, 1163, 'comments', 64, 0),
+(6451, 1163, 'sources', 128, 0),
+(6452, 1164, 'index', 1, 0),
+(6453, 1164, 'view', 1, 0),
+(6454, 1164, 'update', 4, 0),
+(6455, 1164, 'delete', 8, 0),
+(6456, 1165, 'index', 1, 0),
+(6457, 1165, 'view', 1, 0),
+(6458, 1165, 'update', 4, 0),
+(6459, 1165, 'delete', 8, 0),
+(6460, 1165, 'publish', 16, 0),
+(6461, 1165, 'hide', 32, 0),
+(6462, 1165, 'replies', 64, 0),
+(6463, 1166, 'index', 1, 0),
+(6464, 1166, 'view', 1, 0),
+(6465, 1166, 'update', 4, 0),
+(6466, 1166, 'delete', 8, 0),
+(6467, 1166, 'publish', 16, 0),
+(6468, 1166, 'hide', 32, 0),
+(6469, 1167, 'index', 1, 0),
+(6470, 1167, 'view', 1, 0),
+(6471, 1167, 'create', 2, 0),
+(6472, 1167, 'update', 4, 0),
+(6473, 1167, 'delete', 8, 0),
+(6474, 1167, 'publish', 16, 0),
+(6475, 1167, 'sort', 32, 0),
+(6476, 1167, 'comments', 64, 0),
+(6477, 1167, 'sources', 128, 0),
+(6478, 1168, 'index', 1, 0),
+(6479, 1168, 'view', 1, 0),
+(6480, 1168, 'update', 4, 0),
+(6481, 1168, 'delete', 8, 0),
+(6482, 1169, 'index', 1, 0),
+(6483, 1169, 'view', 1, 0),
+(6484, 1169, 'update', 4, 0),
+(6485, 1169, 'delete', 8, 0),
+(6486, 1169, 'publish', 16, 0),
+(6487, 1169, 'hide', 32, 0),
+(6488, 1169, 'replies', 64, 0),
+(6489, 1170, 'index', 1, 0),
+(6490, 1170, 'view', 1, 0),
+(6491, 1170, 'update', 4, 0),
+(6492, 1170, 'delete', 8, 0),
+(6493, 1170, 'publish', 16, 0),
+(6494, 1170, 'hide', 32, 0),
+(6495, 1171, 'index', 1, 0),
+(6496, 1171, 'view', 1, 0),
+(6497, 1171, 'create', 2, 0),
+(6498, 1171, 'update', 4, 0),
+(6499, 1171, 'delete', 8, 0),
+(6500, 1171, 'publish', 16, 0),
+(6501, 1171, 'sort', 32, 0),
+(6502, 1171, 'comments', 64, 0),
+(6503, 1171, 'sources', 128, 0),
+(6504, 1172, 'index', 1, 0),
+(6505, 1172, 'view', 1, 0),
+(6506, 1172, 'update', 4, 0),
+(6507, 1172, 'delete', 8, 0),
+(6508, 1173, 'index', 1, 0),
+(6509, 1173, 'view', 1, 0),
+(6510, 1173, 'update', 4, 0),
+(6511, 1173, 'delete', 8, 0),
+(6512, 1173, 'publish', 16, 0),
+(6513, 1173, 'hide', 32, 0),
+(6514, 1173, 'replies', 64, 0),
+(6515, 1174, 'index', 1, 0),
+(6516, 1174, 'view', 1, 0),
+(6517, 1174, 'update', 4, 0),
+(6518, 1174, 'delete', 8, 0),
+(6519, 1174, 'publish', 16, 0),
+(6520, 1174, 'hide', 32, 0),
+(6521, 1175, 'index', 1, 0),
+(6522, 1175, 'sections', 1, 0),
+(6523, 1175, 'view', 1, 0),
+(6524, 1175, 'comments', 32, 0),
+(6525, 1176, 'index', 1, 0),
+(6526, 1176, 'view', 1, 0),
+(6527, 1176, 'create', 2, 0),
+(6528, 1176, 'update', 4, 0),
+(6529, 1176, 'delete', 8, 0),
+(6530, 1176, 'publish', 16, 0),
+(6531, 1176, 'sort', 32, 0),
+(6532, 1177, 'index', 1, 0),
+(6533, 1177, 'view', 1, 0),
+(6534, 1177, 'create', 2, 0),
+(6535, 1177, 'replies', 64, 0),
+(6536, 1178, 'index', 1, 0),
+(6537, 1178, 'view', 1, 0),
+(6538, 1178, 'create', 2, 0),
+(6539, 1179, 'index', 1, 0),
+(6540, 1179, 'sections', 1, 0),
+(6541, 1179, 'view', 1, 0),
+(6542, 1179, 'comments', 32, 0),
+(6543, 1180, 'index', 1, 0),
+(6544, 1180, 'view', 1, 0),
+(6545, 1180, 'create', 2, 0),
+(6546, 1180, 'update', 4, 0),
+(6547, 1180, 'delete', 8, 0),
+(6548, 1180, 'publish', 16, 0),
+(6549, 1180, 'sort', 32, 0),
+(6550, 1181, 'index', 1, 0),
+(6551, 1181, 'view', 1, 0),
+(6552, 1181, 'create', 2, 0),
+(6553, 1181, 'replies', 64, 0),
+(6554, 1182, 'index', 1, 0),
+(6555, 1182, 'view', 1, 0),
+(6556, 1182, 'create', 2, 0),
+(6557, 1183, 'index', 1, 0),
+(6558, 1183, 'sections', 1, 0),
+(6559, 1183, 'view', 1, 0),
+(6560, 1183, 'comments', 32, 0),
+(6561, 1184, 'index', 1, 0),
+(6562, 1184, 'view', 1, 0),
+(6563, 1184, 'create', 2, 0),
+(6564, 1184, 'update', 4, 0),
+(6565, 1184, 'delete', 8, 0),
+(6566, 1184, 'publish', 16, 0),
+(6567, 1184, 'sort', 32, 0),
+(6568, 1185, 'index', 1, 0),
+(6569, 1185, 'view', 1, 0),
+(6570, 1185, 'create', 2, 0),
+(6571, 1185, 'replies', 64, 0),
+(6572, 1186, 'index', 1, 0),
+(6573, 1186, 'view', 1, 0),
+(6574, 1186, 'create', 2, 0),
+(6575, 1187, 'index', 1, 0),
+(6576, 1187, 'sections', 1, 0),
+(6577, 1187, 'view', 1, 0),
+(6578, 1187, 'comments', 32, 0),
+(6579, 1188, 'index', 1, 0),
+(6580, 1188, 'view', 1, 0),
+(6581, 1188, 'create', 2, 0),
+(6582, 1188, 'update', 4, 0),
+(6583, 1188, 'delete', 8, 0),
+(6584, 1188, 'publish', 16, 0),
+(6585, 1188, 'sort', 32, 0),
+(6586, 1189, 'index', 1, 0),
+(6587, 1189, 'view', 1, 0),
+(6588, 1189, 'create', 2, 0),
+(6589, 1189, 'replies', 64, 0),
+(6590, 1190, 'index', 1, 0),
+(6591, 1190, 'view', 1, 0),
+(6592, 1190, 'create', 2, 0),
+(6593, 1191, 'index', 1, 0),
+(6594, 1191, 'sections', 1, 0),
+(6595, 1191, 'view', 1, 0),
+(6596, 1191, 'comments', 32, 0),
+(6597, 1192, 'index', 1, 0),
+(6598, 1192, 'view', 1, 0),
+(6599, 1192, 'create', 2, 0),
+(6600, 1192, 'update', 4, 0),
+(6601, 1192, 'delete', 8, 0),
+(6602, 1192, 'publish', 16, 0),
+(6603, 1192, 'sort', 32, 0),
+(6604, 1193, 'index', 1, 0),
+(6605, 1193, 'view', 1, 0),
+(6606, 1193, 'create', 2, 0),
+(6607, 1193, 'replies', 64, 0),
+(6608, 1194, 'index', 1, 0),
+(6609, 1194, 'view', 1, 0),
+(6610, 1194, 'create', 2, 0),
+(6611, 1195, 'index', 1, 0),
+(6612, 1195, 'sections', 1, 0),
+(6613, 1195, 'view', 1, 0),
+(6614, 1195, 'comments', 32, 0),
+(6615, 1196, 'index', 1, 0),
+(6616, 1196, 'view', 1, 0),
+(6617, 1196, 'create', 2, 0),
+(6618, 1196, 'update', 4, 0),
+(6619, 1196, 'delete', 8, 0),
+(6620, 1196, 'publish', 16, 0),
+(6621, 1196, 'sort', 32, 0),
+(6622, 1197, 'index', 1, 0),
+(6623, 1197, 'view', 1, 0),
+(6624, 1197, 'create', 2, 0),
+(6625, 1197, 'replies', 64, 0),
+(6626, 1198, 'index', 1, 0),
+(6627, 1198, 'view', 1, 0),
+(6628, 1198, 'create', 2, 0),
+(6629, 1199, 'index', 1, 0),
+(6630, 1199, 'view', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -635,7 +1047,6 @@ CREATE TABLE IF NOT EXISTS `articles` (
   `country_code` char(2) DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
   `comments` int(10) unsigned DEFAULT '0',
-  `shared` int(10) unsigned DEFAULT '0',
   `article_sort` int(10) unsigned DEFAULT '0',
   `in_ticker` tinyint(1) DEFAULT '0',
   `in_slider` varchar(3) DEFAULT NULL,
@@ -643,6 +1054,7 @@ CREATE TABLE IF NOT EXISTS `articles` (
   `in_list` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `parent_article` int(10) unsigned DEFAULT NULL,
   `is_system` tinyint(1) NOT NULL DEFAULT '0',
+  `shared` int(10) unsigned DEFAULT '0',
   PRIMARY KEY (`article_id`),
   KEY `fk_articles_writers1` (`writer_id`),
   KEY `articles_create_date_idx` (`create_date`),
@@ -650,14 +1062,7 @@ CREATE TABLE IF NOT EXISTS `articles` (
   KEY `fk_articles_countries1` (`country_code`),
   KEY `fk_articles_sections1` (`section_id`),
   KEY `fk_articles_articles1` (`parent_article`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `articles`
---
-
-INSERT INTO `articles` (`article_id`, `section_id`, `votes`, `votes_rate`, `hits`, `published`, `archive`, `create_date`, `writer_id`, `publish_date`, `expire_date`, `published_mobile`, `thumb`, `page_img`, `country_code`, `update_date`, `comments`, `article_sort`, `in_ticker`, `in_slider`, `in_spot`, `in_list`, `parent_article`, `is_system`) VALUES
-(2, NULL, 0, 1, 2, 1, 0, '2014-05-16 12:26:06', NULL, '2014-05-16 14:22:00', NULL, 1, NULL, NULL, 'EG', '2014-05-16 14:26:06', 0, 1, 0, NULL, 0, 1, NULL, 0);
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=49 ;
 
 -- --------------------------------------------------------
 
@@ -698,19 +1103,12 @@ CREATE TABLE IF NOT EXISTS `articles_translation` (
   `content_lang` char(2) NOT NULL,
   `article_header` varchar(500) NOT NULL,
   `article_pri_header` varchar(500) DEFAULT NULL,
-  `article_detail` text NOT NULL,
+  `article_detail` text,
   `tags` varchar(1024) DEFAULT NULL,
   `image_description` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`article_id`,`content_lang`),
   KEY `fk_articles_translation_1` (`article_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `articles_translation`
---
-
-INSERT INTO `articles_translation` (`article_id`, `content_lang`, `article_header`, `article_pri_header`, `article_detail`, `tags`, `image_description`) VALUES
-(2, 'en', 'About us', '', '<p>About</p>', NULL, '');
 
 -- --------------------------------------------------------
 
@@ -800,8 +1198,8 @@ CREATE TABLE IF NOT EXISTS `configuration` (
 --
 
 INSERT INTO `configuration` (`content_lang`, `config`) VALUES
-('ar', 'YToxOntzOjY6ImN1c3RvbSI7YToxOntzOjU6ImZyb250IjthOjE6e3M6NDoic2l0ZSI7YTo1OntzOjU6InRpdGxlIjtzOjc6IldlYnNpdGUiO3M6ODoia2V5d29yZHMiO3M6NzoiV2Vic2l0ZSI7czoxMToiZGVzY3JpcHRpb24iO3M6NzoiV2Vic2l0ZSI7czoxMDoibmV3c190aXRsZSI7czo0OiJOZXdzIjtzOjE1OiJuZXdzX3RpdGxlX2luZm8iO3M6NDoiTmV3cyI7fX19fQ=='),
-('en', 'YToxOntzOjY6ImN1c3RvbSI7YToxOntzOjU6ImZyb250IjthOjE6e3M6NDoic2l0ZSI7YTo1OntzOjU6InRpdGxlIjtzOjc6IldlYnNpdGUiO3M6ODoia2V5d29yZHMiO3M6NzoiV2Vic2l0ZSI7czoxMToiZGVzY3JpcHRpb24iO3M6NzoiV2Vic2l0ZSI7czoxMDoibmV3c190aXRsZSI7czoxMjoiTmV3cyBBcmNoaXZlIjtzOjE1OiJuZXdzX3RpdGxlX2luZm8iO3M6NDoiTmV3cyI7fX19fQ==');
+('ar', 'YToxOntzOjY6ImN1c3RvbSI7YToxOntzOjU6ImZyb250IjthOjE6e3M6NDoic2l0ZSI7YTo1OntzOjU6InRpdGxlIjtzOjc6IldlYlNpdGUiO3M6ODoia2V5d29yZHMiO3M6NzoiV2ViU2l0ZSI7czoxMToiZGVzY3JpcHRpb24iO3M6NzoiV2ViU2l0ZSI7czoxMDoibmV3c190aXRsZSI7czo0OiJOZXdzIjtzOjE1OiJuZXdzX3RpdGxlX2luZm8iO3M6NDoiTmV3cyI7fX19fQ=='),
+('en', 'YToxOntzOjY6ImN1c3RvbSI7YToxOntzOjU6ImZyb250IjthOjE6e3M6NDoic2l0ZSI7YTo1OntzOjU6InRpdGxlIjtzOjc6IldlYlNpdGUiO3M6ODoia2V5d29yZHMiO3M6NzoiV2ViU2l0ZSI7czoxMToiZGVzY3JpcHRpb24iO3M6NzoiV2ViU2l0ZSI7czoxMDoibmV3c190aXRsZSI7czo0OiJOZXdzIjtzOjE1OiJuZXdzX3RpdGxlX2luZm8iO3M6NDoiTmV3cyI7fX19fQ==');
 
 -- --------------------------------------------------------
 
@@ -816,7 +1214,7 @@ CREATE TABLE IF NOT EXISTS `controllers` (
   `hidden` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`controller_id`),
   KEY `fk_controllers_modules1` (`module_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=211 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1200 ;
 
 --
 -- Dumping data for table `controllers`
@@ -842,24 +1240,9 @@ INSERT INTO `controllers` (`controller_id`, `module_id`, `controller`, `hidden`)
 (17, 7, 'default', 1),
 (18, 8, 'default', 0),
 (21, 10, 'default', 0),
-(22, 11, 'default', 0),
-(23, 11, 'articleComments', 0),
-(24, 11, 'replies', 0),
-(25, 12, 'default', 0),
-(26, 12, 'articleComments', 0),
-(27, 12, 'replies', 0),
-(31, 14, 'default', 0),
-(32, 14, 'articleComments', 0),
-(33, 14, 'replies', 0),
-(34, 15, 'default', 0),
-(35, 15, 'articleComments', 0),
-(36, 15, 'replies', 0),
 (37, 16, 'default', 0),
 (39, 18, 'site', 1),
 (41, 20, 'default', 0),
-(43, 22, 'default', 0),
-(44, 22, 'comments', 0),
-(45, 22, 'replies', 0),
 (46, 23, 'default', 0),
 (47, 23, 'videos', 0),
 (48, 23, 'videoComments', 0),
@@ -868,16 +1251,12 @@ INSERT INTO `controllers` (`controller_id`, `module_id`, `controller`, `hidden`)
 (51, 23, 'imageComments', 0),
 (52, 23, 'imageReplies', 0),
 (53, 24, 'default', 0),
-(54, 25, 'default', 0),
 (55, 26, 'default', 0),
 (56, 27, 'mobile', 1),
 (57, 28, 'api', 1),
 (58, 29, 'default', 0),
 (59, 30, 'default', 0),
 (60, 31, 'default', 0),
-(61, 32, 'default', 0),
-(62, 32, 'comments', 0),
-(63, 32, 'replies', 0),
 (68, 34, 'default', 0),
 (69, 34, 'branches', 0),
 (70, 34, 'categories', 0),
@@ -886,13 +1265,7 @@ INSERT INTO `controllers` (`controller_id`, `module_id`, `controller`, `hidden`)
 (73, 36, 'default', 0),
 (74, 37, 'default', 0),
 (75, 38, 'attachment', 0),
-(76, 39, 'default', 1),
-(77, 39, 'articleComments', 1),
-(78, 39, 'replies', 1),
 (79, 40, 'default', 0),
-(80, 41, 'default', 0),
-(81, 41, 'articleComments', 0),
-(82, 41, 'replies', 0),
 (83, 34, 'requests', 0),
 (84, 42, 'default', 0),
 (85, 42, 'jobs', 0),
@@ -900,11 +1273,106 @@ INSERT INTO `controllers` (`controller_id`, `module_id`, `controller`, `hidden`)
 (87, 29, 'attributes', 0),
 (88, 42, 'categories', 0),
 (89, 42, 'usersCvs', 0),
+(90, 44, 'default', 0),
 (91, 40, 'branches', 0),
 (92, 40, 'members', 0),
-(93, 41, 'manage', 0),
-(94, 32, 'manage', 0),
-(95, 22, 'manage', 0);
+(96, 45, 'default', 0),
+(97, 45, 'departments', 0),
+(98, 45, 'activities', 0),
+(99, 45, 'questions', 0),
+(100, 45, 'repliesTenders', 0),
+(102, 47, 'default', 0),
+(103, 48, 'default', 0),
+(104, 49, 'default', 0),
+(105, 49, 'ports', 0),
+(106, 49, 'vesselsTypes', 0),
+(107, 49, 'vessels', 0),
+(161, 68, 'default', 0),
+(162, 68, 'carriers', 0),
+(163, 68, 'status', 0),
+(164, 68, 'tracking', 0),
+(165, 69, 'default', 0),
+(166, 69, 'tracking', 0),
+(184, 72, 'default', 0),
+(185, 72, 'crews', 0),
+(186, 72, 'agencies', 0),
+(187, 72, 'hotels', 0),
+(188, 72, 'closed', 0),
+(189, 72, 'status', 0),
+(190, 72, 'tracking', 0),
+(191, 72, 'ranks', 0),
+(192, 73, 'default', 0),
+(193, 74, 'default', 0),
+(194, 74, 'config', 0),
+(195, 74, 'natureCargo', 0),
+(196, 74, 'loyalSuezTax', 0),
+(197, 74, 'pilotageTonnage', 0),
+(198, 74, 'pilotageTonnageRanges', 0),
+(199, 74, 'pilotageOutside', 0),
+(200, 74, 'pilotageInside', 0),
+(201, 74, 'pilotageBerth', 0),
+(202, 74, 'portMooringProjector', 0),
+(203, 74, 'suezMooringProjector', 0),
+(204, 74, 'portAuthority', 0),
+(205, 74, 'loyalPortTax', 0),
+(206, 74, 'loyalPorTaxRanges', 0),
+(207, 74, 'typesTonnage', 0),
+(208, 74, 'typesTonnageRanges', 0),
+(209, 74, 'cleaningDues', 0),
+(210, 75, 'default', 0),
+(1147, 15, 'default', 0),
+(1148, 15, 'sources', 0),
+(1149, 15, 'comments', 0),
+(1150, 15, 'replies', 0),
+(1151, 11, 'default', 0),
+(1152, 11, 'sources', 0),
+(1153, 11, 'comments', 0),
+(1154, 11, 'replies', 0),
+(1155, 76, 'default', 0),
+(1156, 76, 'sources', 0),
+(1157, 76, 'comments', 0),
+(1158, 76, 'replies', 0),
+(1159, 77, 'default', 0),
+(1160, 77, 'sources', 0),
+(1161, 77, 'comments', 0),
+(1162, 77, 'replies', 0),
+(1163, 14, 'default', 0),
+(1164, 14, 'sources', 0),
+(1165, 14, 'comments', 0),
+(1166, 14, 'replies', 0),
+(1167, 39, 'default', 0),
+(1168, 39, 'sources', 0),
+(1169, 39, 'comments', 0),
+(1170, 39, 'replies', 0),
+(1171, 78, 'default', 0),
+(1172, 78, 'sources', 0),
+(1173, 78, 'comments', 0),
+(1174, 78, 'replies', 0),
+(1175, 32, 'default', 0),
+(1176, 32, 'manage', 0),
+(1177, 32, 'comments', 0),
+(1178, 32, 'replies', 0),
+(1179, 22, 'default', 0),
+(1180, 22, 'manage', 0),
+(1181, 22, 'comments', 0),
+(1182, 22, 'replies', 0),
+(1183, 79, 'default', 0),
+(1184, 79, 'manage', 0),
+(1185, 79, 'comments', 0),
+(1186, 79, 'replies', 0),
+(1187, 80, 'default', 0),
+(1188, 80, 'manage', 0),
+(1189, 80, 'comments', 0),
+(1190, 80, 'replies', 0),
+(1191, 41, 'default', 0),
+(1192, 41, 'manage', 0),
+(1193, 41, 'comments', 0),
+(1194, 41, 'replies', 0),
+(1195, 81, 'default', 0),
+(1196, 81, 'manage', 0),
+(1197, 81, 'comments', 0),
+(1198, 81, 'replies', 0),
+(1199, 82, 'default', 0);
 
 -- --------------------------------------------------------
 
@@ -2471,7 +2939,7 @@ CREATE TABLE IF NOT EXISTS `docs` (
   `create_date` datetime NOT NULL,
   PRIMARY KEY (`doc_id`),
   KEY `fk_docs_docs_categories1` (`category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -2610,6 +3078,17 @@ CREATE TABLE IF NOT EXISTS `dope_sheet_translation` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `essays`
+--
+
+CREATE TABLE IF NOT EXISTS `essays` (
+  `article_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`article_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `events`
 --
 
@@ -2677,33 +3156,7 @@ CREATE TABLE IF NOT EXISTS `files` (
   PRIMARY KEY (`file_id`),
   KEY `fk_files_folders1` (`folder_id`),
   KEY `fk_files_users1` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
-
---
--- Dumping data for table `files`
---
-
-INSERT INTO `files` (`file_id`, `ext`, `create_date`, `folder_id`, `file`, `content_type`, `rte`, `manager_exclude`, `user_id`) VALUES
-(1, 'xls', '2013-12-24 13:57:46', NULL, 't', 'LINK', 1, 0, 1),
-(3, 'jpg', '2014-01-08 12:02:30', NULL, 'co-founder', 'IMAGE', 1, 0, 1),
-(4, 'jpg', '2014-01-08 12:02:43', NULL, 'gm', 'IMAGE', 1, 0, 1),
-(5, 'jpg', '2014-01-08 12:02:53', NULL, 'Chairman_ceo', 'IMAGE', 1, 0, 1),
-(7, 'jpg', '2014-01-12 10:37:26', NULL, 'Founder_CEO', 'IMAGE', 1, 0, 1),
-(9, 'jpg', '2014-01-14 10:20:41', NULL, 'pic2', 'IMAGE', 1, 0, 1),
-(10, 'jpg', '2014-01-14 10:39:10', NULL, 'sts', 'IMAGE', 1, 0, 1),
-(11, 'jpg', '2014-01-14 10:43:13', NULL, 'bunker', 'IMAGE', 1, 0, 1),
-(13, 'jpg', '2014-01-14 10:54:09', NULL, 'Towage operation', 'IMAGE', 1, 0, 1),
-(14, 'jpg', '2014-01-14 12:05:51', NULL, 'salvage', 'IMAGE', 1, 0, 1),
-(15, 'jpg', '2014-01-14 12:26:18', NULL, 'Specialized Projects Agency', 'IMAGE', 1, 0, 1),
-(16, 'jpg', '2014-01-14 15:11:24', NULL, 'Logistics Solutions', 'IMAGE', 1, 0, 1),
-(17, 'jpg', '2014-01-14 16:16:32', NULL, 'history_sues', 'IMAGE', 1, 0, 1),
-(18, 'jpg', '2014-01-14 16:47:10', NULL, 'rebat', 'IMAGE', 1, 0, 1),
-(20, 'jpg', '2014-01-14 17:07:04', NULL, '874', 'IMAGE', 1, 0, 1),
-(21, 'jpg', '2014-01-14 17:16:08', NULL, '8744', 'IMAGE', 1, 0, 1),
-(22, 'jpg', '2014-01-19 10:04:34', NULL, 'Sailing Permit', 'IMAGE', 1, 0, 1),
-(23, 'jpg', '2014-01-19 10:23:20', NULL, 's_canal', 'IMAGE', 1, 0, 1),
-(24, 'jpg', '2014-01-26 10:59:55', NULL, 'cruse', 'IMAGE', 1, 0, 1),
-(25, 'jpg', '2014-04-01 13:34:59', NULL, '55', 'IMAGE', 1, 0, 1);
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=38 ;
 
 -- --------------------------------------------------------
 
@@ -2778,24 +3231,48 @@ INSERT INTO `forward_actions` (`forward_to`, `forward_from`) VALUES
 (60, 59),
 (67, 66),
 (86, 85),
-(135, 134),
-(143, 142),
-(158, 157),
-(166, 165),
-(204, 203),
-(212, 211),
-(227, 226),
-(235, 234),
-(272, 270),
-(272, 271),
-(276, 275),
 (299, 298),
 (303, 302),
 (307, 306),
 (310, 309),
 (314, 313),
-(372, 370),
-(376, 371);
+(882, 871),
+(1037, 1034),
+(1053, 1052),
+(1106, 1105),
+(6348, 6347),
+(6352, 6346),
+(6359, 6358),
+(6374, 6373),
+(6378, 6372),
+(6385, 6384),
+(6400, 6399),
+(6404, 6398),
+(6411, 6410),
+(6426, 6425),
+(6430, 6424),
+(6437, 6436),
+(6452, 6451),
+(6456, 6450),
+(6463, 6462),
+(6478, 6477),
+(6482, 6476),
+(6489, 6488),
+(6504, 6503),
+(6508, 6502),
+(6515, 6514),
+(6532, 6524),
+(6536, 6535),
+(6550, 6542),
+(6554, 6553),
+(6568, 6560),
+(6572, 6571),
+(6586, 6578),
+(6590, 6589),
+(6604, 6596),
+(6608, 6607),
+(6622, 6614),
+(6626, 6625);
 
 -- --------------------------------------------------------
 
@@ -2819,8 +3296,14 @@ INSERT INTO `forward_modules` (`forward_from`, `forward_to`) VALUES
 (11, 15),
 (14, 15),
 (39, 15),
+(76, 15),
+(77, 15),
+(78, 15),
 (22, 32),
-(41, 32);
+(41, 32),
+(79, 32),
+(80, 32),
+(81, 32);
 
 -- --------------------------------------------------------
 
@@ -2834,11 +3317,11 @@ CREATE TABLE IF NOT EXISTS `galleries` (
   `section_id` smallint(5) unsigned DEFAULT NULL,
   `show_gallery` tinyint(1) DEFAULT '1',
   `country_code` char(2) DEFAULT NULL,
-  `is_system` tinyint(1) NOT NULL DEFAULT '0', 
+  `is_system` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`gallery_id`),
   KEY `fk_galleries_sections` (`section_id`),
   KEY `fk_galleries_countries1` (`country_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -2938,7 +3421,7 @@ CREATE TABLE IF NOT EXISTS `images` (
   KEY `fk_images_users1` (`user_id`),
   KEY `fk_images_galleries1` (`gallery_id`),
   KEY `image_sort_idx` (`image_sort`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
 
@@ -2992,7 +3475,7 @@ CREATE TABLE IF NOT EXISTS `infocus` (
   PRIMARY KEY (`infocus_id`),
   KEY `fk_infocus_sections1` (`section_id`),
   KEY `fk_infocus_countries1` (`country_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -3050,7 +3533,7 @@ CREATE TABLE IF NOT EXISTS `infocus_translation` (
   `tags` varchar(1024) DEFAULT NULL,
   PRIMARY KEY (`infocus_id`,`content_lang`),
   KEY `fk_infocus_translation_1` (`infocus_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -3215,7 +3698,7 @@ CREATE TABLE IF NOT EXISTS `maillist` (
   `person_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `person_id` (`person_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
 
 -- --------------------------------------------------------
 
@@ -3405,7 +3888,7 @@ CREATE TABLE IF NOT EXISTS `menus` (
   `menu_name` varchar(45) DEFAULT NULL,
   `levels` tinyint(3) unsigned DEFAULT '3',
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `menus`
@@ -3463,18 +3946,15 @@ CREATE TABLE IF NOT EXISTS `menu_items` (
   KEY `fk_menus` (`menu_id`),
   KEY `fk_menus_items` (`parent_item`),
   KEY `sort_item` (`sort_item`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=57 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=58 ;
 
 --
 -- Dumping data for table `menu_items`
 --
 
 INSERT INTO `menu_items` (`item_id`, `parent_item`, `menu_id`, `sort_item`, `link`, `icon`, `page_img`, `published`) VALUES
-(1, NULL, 2, 1, 'jobs/default/index', NULL, NULL, 1),
-(2, NULL, 2, 2, 'site/contact', NULL, NULL, 1),
-(3, NULL, 2, 3, 'site/siteMap', NULL, NULL, 1),
-(55, NULL, 1, 5, '', NULL, NULL, 1),
-(56, NULL, 1, 4, 'site/index', NULL, NULL, 1);
+(56, NULL, 1, 1, 'site/index', NULL, NULL, 1),
+(57, NULL, 2, 2, 'site/contact', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -3491,13 +3971,6 @@ CREATE TABLE IF NOT EXISTS `menu_items_params` (
   KEY `fk_menu_items_has_menus_params_menu_items1` (`item_id`),
   KEY `fk_menu_items_params_modules_components_params1` (`component_id`,`param_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `menu_items_params`
---
-
-INSERT INTO `menu_items_params` (`item_id`, `component_id`, `param_id`, `value`) VALUES
-(55, 2, 1, '2');
 
 -- --------------------------------------------------------
 
@@ -3518,11 +3991,8 @@ CREATE TABLE IF NOT EXISTS `menu_item_translation` (
 --
 
 INSERT INTO `menu_item_translation` (`item_id`, `content_lang`, `label`, `page_title`) VALUES
-(1, 'en', 'Careers', NULL),
-(2, 'en', 'Contact us', NULL),
-(3, 'en', 'Site map', NULL),
-(55, 'en', 'About us', NULL),
-(56, 'en', 'Home', NULL);
+(56, 'en', 'Home', NULL),
+(57, 'en', 'Contact us', NULL);
 
 -- --------------------------------------------------------
 
@@ -3540,7 +4010,7 @@ CREATE TABLE IF NOT EXISTS `modules` (
   `workflow_enabled` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`module_id`),
   KEY `fk_modules_modules1` (`parent_module`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=76 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=83 ;
 
 --
 -- Dumping data for table `modules`
@@ -3557,7 +4027,6 @@ INSERT INTO `modules` (`module_id`, `parent_module`, `module`, `virtual`, `enabl
 (8, 1, 'maillist', 0, 0, 0, 0),
 (10, 1, 'votes', 0, 1, 0, 0),
 (11, 1, 'news', 0, 1, 0, 0),
-(12, 1, 'infocus', 0, 0, 0, 0),
 (14, 1, 'usersArticles', 0, 0, 0, 0),
 (15, 1, 'articles', 0, 1, 0, 0),
 (16, 1, 'events', 0, 1, 0, 0),
@@ -3566,7 +4035,6 @@ INSERT INTO `modules` (`module_id`, `parent_module`, `module`, `virtual`, `enabl
 (22, NULL, 'news', 0, 1, 0, 0),
 (23, NULL, 'multimedia', 0, 1, 0, 0),
 (24, NULL, 'maillist', 0, 1, 1, 0),
-(25, NULL, 'infocus', 0, 0, 0, 0),
 (26, NULL, 'rss', 0, 1, 1, 0),
 (27, NULL, 'mobile', 1, 1, 1, 0),
 (28, NULL, 'api', 1, 1, 1, 0),
@@ -3583,7 +4051,26 @@ INSERT INTO `modules` (`module_id`, `parent_module`, `module`, `virtual`, `enabl
 (40, NULL, 'directory', 0, 0, 0, 0),
 (41, NULL, 'companyArticles', 0, 0, 0, 0),
 (42, 1, 'jobs', 0, 1, 0, 0),
-(43, NULL, 'jobs', 0, 1, 0, 0);
+(43, NULL, 'jobs', 0, 1, 0, 0),
+(44, NULL, 'agencies', 0, 0, 0, 0),
+(45, 1, 'tenders', 0, 0, 0, 0),
+(46, NULL, 'tenders', 0, 0, 0, 0),
+(47, 1, 'transits', 0, 1, 0, 0),
+(48, NULL, 'transits', 0, 1, 0, 0),
+(49, 1, 'maritimeData', 0, 1, 0, 0),
+(68, 1, 'parcels', 0, 1, 0, 0),
+(69, NULL, 'parcels', 0, 1, 0, 0),
+(72, 1, 'crewsMovements', 0, 1, 0, 0),
+(73, NULL, 'crewsMovements', 0, 1, 0, 0),
+(74, 1, 'toll', 0, 1, 0, 0),
+(75, NULL, 'toll', 0, 1, 0, 0),
+(76, 1, 'breaking', 0, 1, 0, 0),
+(77, 1, 'essays', 0, 0, 0, 0),
+(78, 1, 'issueArticles', 0, 0, 0, 0),
+(79, NULL, 'usersArticles', 0, 1, 0, 0),
+(80, NULL, 'essays', 0, 0, 0, 0),
+(81, NULL, 'issueArticles', 0, 0, 0, 0),
+(82, 1, 'infocus', 0, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -3597,7 +4084,7 @@ CREATE TABLE IF NOT EXISTS `modules_components` (
   `route` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`component_id`),
   KEY `fk_modules_components` (`module_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
 --
 -- Dumping data for table `modules_components`
@@ -3615,8 +4102,12 @@ INSERT INTO `modules_components` (`component_id`, `module_id`, `route`) VALUES
 (9, 37, 'documents/default/index'),
 (10, 35, 'glossary/default/index'),
 (11, 34, 'directory/default/index'),
+(12, 44, 'agencies/default/index'),
 (13, 43, 'jobs/default/index'),
-(15, 23, 'multimedia/default/index');
+(14, 46, 'tenders/default/index'),
+(15, 23, 'multimedia/default/index'),
+(16, 80, 'articles/default/view'),
+(17, 80, 'articles/default/sections');
 
 -- --------------------------------------------------------
 
@@ -3645,12 +4136,16 @@ INSERT INTO `modules_components_params` (`component_id`, `param_id`) VALUES
 (9, 1),
 (11, 1),
 (15, 1),
+(16, 1),
+(17, 1),
 (4, 2),
 (5, 2),
+(17, 2),
 (4, 3),
 (4, 4),
 (4, 5),
 (5, 6),
+(17, 6),
 (2, 7),
 (4, 7),
 (2, 8),
@@ -3667,7 +4162,7 @@ CREATE TABLE IF NOT EXISTS `modules_components_translation` (
   `content_lang` char(2) NOT NULL,
   `component_name` varchar(45) NOT NULL,
   PRIMARY KEY (`component_id`,`content_lang`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
 --
 -- Dumping data for table `modules_components_translation`
@@ -3676,12 +4171,12 @@ CREATE TABLE IF NOT EXISTS `modules_components_translation` (
 INSERT INTO `modules_components_translation` (`component_id`, `content_lang`, `component_name`) VALUES
 (1, 'ar', 'الرئيسية'),
 (1, 'en', 'Home page'),
-(2, 'ar', 'عرض مقال'),
-(2, 'en', 'View Article'),
+(2, 'ar', 'عرض صفحة'),
+(2, 'en', 'View Page'),
 (3, 'ar', 'عرض خبر'),
 (3, 'en', 'View News Item'),
-(4, 'ar', 'أقسام المقالات'),
-(4, 'en', 'Article Sections'),
+(4, 'ar', 'أقسام صفحات الموقع'),
+(4, 'en', 'Site pages Sections'),
 (5, 'ar', 'اقسام الاخبار'),
 (5, 'en', 'News Sections'),
 (6, 'ar', 'أنشطة وفعاليات'),
@@ -3696,10 +4191,18 @@ INSERT INTO `modules_components_translation` (`component_id`, `content_lang`, `c
 (10, 'en', 'Glossary'),
 (11, 'ar', 'الدليل'),
 (11, 'en', 'Directory'),
+(12, 'ar', 'تعريفة الخدمات للوكالة الملاحية'),
+(12, 'en', 'Agencies List'),
 (13, 'ar', 'الوظائف'),
 (13, 'en', 'Jobs'),
+(14, 'ar', 'المناقصات والعطاءات'),
+(14, 'en', 'Tenders'),
 (15, 'ar', 'وسائط منعددة'),
-(15, 'en', 'multimedia');
+(15, 'en', 'multimedia'),
+(16, 'ar', 'عرض المقال'),
+(16, 'en', 'View Article'),
+(17, 'ar', 'أقسام المقالات'),
+(17, 'en', 'Articles Sections');
 
 -- --------------------------------------------------------
 
@@ -3722,13 +4225,13 @@ CREATE TABLE IF NOT EXISTS `moduls_components_params_translation` (
 --
 
 INSERT INTO `moduls_components_params_translation` (`content_lang`, `component_id`, `param_id`, `label`, `description`) VALUES
-('ar', 2, 1, 'عنوان المقال', NULL),
+('ar', 2, 1, 'عنوان الصفحة', NULL),
 ('ar', 2, 7, 'عرض /اخفاء العنوان التمهيدي', NULL),
 ('ar', 2, 8, 'عرض/اخفاء التاريخ', NULL),
 ('ar', 3, 1, 'عنوان الخبر', NULL),
 ('ar', 4, 1, 'عنوان القسم', NULL),
 ('ar', 4, 2, 'اضافة الاقسام الفرعيه للقائمة', NULL),
-('ar', 4, 3, 'اضافة مقالات القسم للقائمة', NULL),
+('ar', 4, 3, 'اضافة صفحات القسم للقائمة', NULL),
 ('ar', 4, 4, 'نموذج عرض المحتوي', NULL),
 ('ar', 4, 5, 'طريقة عرض المحتوي', NULL),
 ('ar', 4, 7, 'عرض /اخفاء العنوان التمهيدي', NULL),
@@ -3739,13 +4242,17 @@ INSERT INTO `moduls_components_params_translation` (`content_lang`, `component_i
 ('ar', 6, 1, 'عنوان القسم', NULL),
 ('ar', 9, 1, 'اسم التصنيف', NULL),
 ('ar', 11, 1, 'اسم التصنيف', NULL),
-('en', 2, 1, 'Article title', NULL),
+('ar', 16, 1, 'عنوان المقال', NULL),
+('ar', 17, 1, 'عنوان القسم', NULL),
+('ar', 17, 2, 'اضافة الاقسام الفرعيه للقائمة', NULL),
+('ar', 17, 6, 'module', NULL),
+('en', 2, 1, 'Site page title', NULL),
 ('en', 2, 7, 'Show/Hide Primary Header', NULL),
 ('en', 2, 8, 'Show/Hide date', NULL),
 ('en', 3, 1, 'News title', NULL),
 ('en', 4, 1, 'Section title', NULL),
 ('en', 4, 2, 'Append sub-sections to the menu list', NULL),
-('en', 4, 3, 'Append articles to the menu list', NULL),
+('en', 4, 3, 'Append site pages to the menu list', NULL),
 ('en', 4, 4, 'View Type', NULL),
 ('en', 4, 5, 'Others', NULL),
 ('en', 4, 7, 'Show/Hide Primary Header', NULL),
@@ -3754,7 +4261,11 @@ INSERT INTO `moduls_components_params_translation` (`content_lang`, `component_i
 ('en', 5, 2, 'Append sub-sections to the menu list', NULL),
 ('en', 5, 6, 'module', NULL),
 ('en', 6, 1, 'Section ID', NULL),
-('en', 11, 1, 'Category Name', NULL);
+('en', 11, 1, 'Category Name', NULL),
+('en', 16, 1, 'News title', NULL),
+('en', 17, 1, 'Section title', NULL),
+('en', 17, 2, 'Append sub-sections to the menu list', NULL),
+('en', 17, 6, 'module', NULL);
 
 -- --------------------------------------------------------
 
@@ -3763,46 +4274,70 @@ INSERT INTO `moduls_components_params_translation` (`content_lang`, `component_i
 --
 
 CREATE TABLE IF NOT EXISTS `news` (
-  `article_id` INT UNSIGNED NOT NULL,
-  `source_id` SMALLINT UNSIGNED NULL DEFAULT NULL,
-  `is_breaking` TINYINT NULL DEFAULT 0,
+  `article_id` int(10) unsigned NOT NULL,
+  `is_breaking` tinyint(4) DEFAULT '0',
+  `source_id` smallint(5) unsigned DEFAULT NULL,
   PRIMARY KEY (`article_id`),
-  INDEX `fk_news_news_source1_idx` (`source_id` ASC),
-  CONSTRAINT `fk_news_articles`
-    FOREIGN KEY (`article_id`)
-    REFERENCES `articles` (`article_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_news_news_source1`
-    FOREIGN KEY (`source_id`)
-    REFERENCES `news_sources` (`source_id`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  KEY `fk_news_news_source1_idx` (`source_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
+--
+-- Table structure for table `news_editors`
+--
+
+CREATE TABLE IF NOT EXISTS `news_editors` (
+  `article_id` int(10) unsigned NOT NULL,
+  `editor_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`article_id`,`editor_id`),
+  KEY `fk_news_has_editors_editors1_idx` (`editor_id`),
+  KEY `fk_news_has_editors_news1_idx` (`article_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `news_sources`
+--
+
 CREATE TABLE IF NOT EXISTS `news_sources` (
-  `source_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `url` VARCHAR(255) NULL DEFAULT NULL,
-  PRIMARY KEY (`source_id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  `source_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`source_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `news_sources`
+--
+
+INSERT INTO `news_sources` (`source_id`, `url`) VALUES
+(1, NULL),
+(2, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `news_sources_translation`
+--
 
 CREATE TABLE IF NOT EXISTS `news_sources_translation` (
-  `source_id` SMALLINT UNSIGNED NOT NULL,
-  `content_lang` CHAR(2) NOT NULL,
-  `source` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`source_id`, `content_lang`),
-  INDEX `fk_news_source_translation_news_source1_idx` (`source_id` ASC),
-  CONSTRAINT `fk_news_source_translation_news_source1`
-    FOREIGN KEY (`source_id`)
-    REFERENCES `news_sources` (`source_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  `source_id` smallint(5) unsigned NOT NULL,
+  `content_lang` char(2) NOT NULL,
+  `source` varchar(100) NOT NULL,
+  PRIMARY KEY (`source_id`,`content_lang`),
+  KEY `fk_news_source_translation_news_source1_idx` (`source_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `news_sources_translation`
+--
+
+INSERT INTO `news_sources_translation` (`source_id`, `content_lang`, `source`) VALUES
+(1, 'en', 'Daily News Egypt'),
+(2, 'en', 'Arabian Supply Chain');
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `persons`
@@ -3828,8 +4363,8 @@ CREATE TABLE IF NOT EXISTS `persons` (
 --
 
 INSERT INTO `persons` (`person_id`, `email`, `inserted_date`, `country_code`, `sex`, `thumb`, `phone`, `mobile`, `fax`, `date_of_birth`) VALUES
-(1, 'info@amiral.com', '2011-07-20 21:59:13', 'EG', 'm', NULL, '', '', '', '1966-12-20'),
-(2, 'ashraf.akl@amiral.com', '2013-01-22 01:33:44', 'EG', 'm', NULL, NULL, NULL, NULL, NULL);
+(1, 'info@amiral.com', '2011-07-20 23:59:13', 'EG', 'm', NULL, '', '', '', '1966-12-20'),
+(2, 'ashraf.akl@amiral.com', '2013-01-22 03:33:44', 'EG', 'm', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -4077,7 +4612,7 @@ CREATE TABLE IF NOT EXISTS `sections` (
   PRIMARY KEY (`section_id`),
   KEY `fk_sections_sections` (`parent_section`),
   KEY `idx_section_sort` (`section_sort`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 -- --------------------------------------------------------
 
@@ -4389,6 +4924,9 @@ CREATE TABLE IF NOT EXISTS `tenders` (
   `comments` int(11) NOT NULL,
   `file_ext` varchar(4) DEFAULT NULL,
   `create_date` datetime NOT NULL,
+  `rfp_price1_currency` char(3) NOT NULL DEFAULT 'EGP',
+  `rfp_price2_currency` char(3) NOT NULL DEFAULT 'EGP',
+  `primary_insurance_currency` char(3) NOT NULL DEFAULT 'EGP',
   PRIMARY KEY (`tender_id`),
   KEY `fk_docs_docs_department1` (`department_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -4618,23 +5156,7 @@ CREATE TABLE IF NOT EXISTS `users_log` (
   PRIMARY KEY (`log_id`),
   KEY `fk_users_log_user_actions` (`action_id`),
   KEY `fk_users_log_users1` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=451 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users_principals`
---
-
-CREATE TABLE IF NOT EXISTS `users_principals` (
-  `user_id` int(10) unsigned NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `phone` varchar(15) NOT NULL,
-  `address` text,
-  `email` varchar(65) DEFAULT NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=448 ;
 
 -- --------------------------------------------------------
 
@@ -4678,7 +5200,7 @@ CREATE TABLE IF NOT EXISTS `videos` (
   PRIMARY KEY (`video_id`),
   KEY `fk_videos_users1` (`user_id`),
   KEY `fk_videos_galleries1` (`gallery_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -4958,30 +5480,10 @@ CREATE TABLE IF NOT EXISTS `workflow_users` (
 
 CREATE TABLE IF NOT EXISTS `writers` (
   `writer_id` int(10) unsigned NOT NULL,
-  `writer_type` tinyint(3) unsigned DEFAULT NULL,
+  `writer_type` tinyint(3) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`writer_id`),
-  UNIQUE KEY `writer_type_UNIQUE` (`writer_type`)
+  KEY `fk_writers_persons` (`writer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE IF NOT EXISTS `news_writers` (
-  `article_id` INT UNSIGNED NOT NULL,
-  `writer_id` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`article_id`, `writer_id`),
-  INDEX `fk_news_has_writers_writers1_idx` (`writer_id` ASC),
-  INDEX `fk_news_has_writers_news1_idx` (`article_id` ASC),
-  CONSTRAINT `fk_news_writers_news1`
-    FOREIGN KEY (`article_id`)
-    REFERENCES `news` (`article_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_news_writers_writers1`
-    FOREIGN KEY (`writer_id`)
-    REFERENCES `writers` (`writer_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
 
 --
 -- Constraints for dumped tables
@@ -5204,6 +5706,12 @@ ALTER TABLE `dope_sheet_shots_translation`
 --
 ALTER TABLE `dope_sheet_translation`
   ADD CONSTRAINT `fk_dope_sheet_videos_translation10` FOREIGN KEY (`video_id`) REFERENCES `dope_sheet` (`video_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `essays`
+--
+ALTER TABLE `essays`
+  ADD CONSTRAINT `fk_news_articles0` FOREIGN KEY (`article_id`) REFERENCES `articles` (`article_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `events`
@@ -5496,19 +6004,33 @@ ALTER TABLE `moduls_components_params_translation`
 -- Constraints for table `news`
 --
 ALTER TABLE `news`
-  ADD CONSTRAINT `fk_news_articles` FOREIGN KEY (`article_id`) REFERENCES `articles` (`article_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_news_articles` FOREIGN KEY (`article_id`) REFERENCES `articles` (`article_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_news_news_source1` FOREIGN KEY (`source_id`) REFERENCES `news_sources` (`source_id`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `news_translation`
+-- Constraints for table `news_editors`
 --
-ALTER TABLE `news_translation`
-  ADD CONSTRAINT `fk_news_translation_1` FOREIGN KEY (`article_id`) REFERENCES `news` (`article_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `news_editors`
+  ADD CONSTRAINT `fk_news_editors_editors1` FOREIGN KEY (`editor_id`) REFERENCES `writers` (`writer_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_news_editors_news1` FOREIGN KEY (`article_id`) REFERENCES `news` (`article_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `news_sources_translation`
+--
+ALTER TABLE `news_sources_translation`
+  ADD CONSTRAINT `fk_news_source_translation_news_source1` FOREIGN KEY (`source_id`) REFERENCES `news_sources` (`source_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `persons`
 --
 ALTER TABLE `persons`
   ADD CONSTRAINT `fk_persons_countries1` FOREIGN KEY (`country_code`) REFERENCES `countries` (`code`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `persons_translation`
+--
+ALTER TABLE `persons_translation`
+  ADD CONSTRAINT `fk_persons_translated_1` FOREIGN KEY (`person_id`) REFERENCES `persons` (`person_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `prayer_times`
@@ -5700,13 +6222,7 @@ ALTER TABLE `users_cv_translation`
 --
 ALTER TABLE `users_log`
   ADD CONSTRAINT `fk_users_log_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_users_log_user_actions` FOREIGN KEY (`action_id`) REFERENCES `actions` (`action_id`) ON UPDATE CASCADE;
-
---
--- Constraints for table `users_principals`
---
-ALTER TABLE `users_principals`
-  ADD CONSTRAINT `fk_organization_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_users_log_user_actions` FOREIGN KEY (`action_id`) REFERENCES `actions` (`action_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `users_workflow_log`
