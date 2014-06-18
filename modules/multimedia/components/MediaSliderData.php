@@ -21,7 +21,9 @@ class MediaSliderData extends MediaListData {
      * @return void
      */
     public function generate() {        
-        $this->addWhere("t.in_slider = 1");        
+        $this->addOrder("creation_date desc");
+        $this->addWhere('in_slider = 1');
+        $this->addColumn("in_slider");        
         parent::generate();        
     }
 }
