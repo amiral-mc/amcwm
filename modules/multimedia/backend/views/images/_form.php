@@ -1,5 +1,4 @@
-<div class="form">
-
+<div class="form">    
     <?php
     $model = $contentModel->getParentContent();
     $form = $this->beginWidget('CActiveForm', array(

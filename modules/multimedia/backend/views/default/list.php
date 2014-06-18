@@ -15,42 +15,30 @@
         if (count($list['records'])) {
             foreach ($list['records'] as $row) {
                 $row['url'] = (isset($row['link']) ? $row['link'] : $row['url']);
-                echo '<div class="file-container">';
-                
-                if($row['type'] == SiteData::VIDEO_TYPE){
-                    $row['type'] = (isset($row['imageExt']))?AttachmentList::INTERNAL_VIDEO:AttachmentList::EXTERNAL_VIDEO;
-                }else{
-                    $row['type'] = AttachmentList::IMAGE;
-                }
-                
-                if(!isset($row['image'])){
-                    $row['image'] = $row['video'];
+                echo '<div class="file-container">';                
+                if(!isset($row['thumb'])){                    
                     $image =  $iconsPath . '/link_media.png';
                 }else{
-                    $image = $row['image'];
-                }
-                
-                if(isset($row['video'])){
-                    $url = $row['video'];
-                }else{
-                    $url = $row['image'];
-                }
-                
-                echo '<div class="file-box" data-type="' . $row['type'] . '" data-url="' . $url . '">';
+                    $image = $row['thumb'];
+                }                   
                 switch ($row['type']) {
-                    case AttachmentList::IMAGE:
+                    case SiteData::IAMGE_TYPE:
+                        echo '<div class="file-box" data-type="' . AttachmentList::IMAGE . '" data-url="' . $row['url'] . '">';
                         echo '<div class="file-box-img">
                                 <img src= "' . $image . '" title="' . CHtml::encode($row['title']) . '" />
                               </div>';
+                        echo '</div>';
                         break;
-                    case AttachmentList::INTERNAL_VIDEO:
-                    case AttachmentList::EXTERNAL_VIDEO:
+                    case SiteData::VIDEO_TYPE:
+                        $type = (($row['internal'])) ? AttachmentList::INTERNAL_VIDEO : AttachmentList::EXTERNAL_VIDEO;
+                        echo '<div class="file-box" data-type="' . $type . '" data-url="' . $row['url'] . '">';
                         echo '<div class="file-box-internal">
                                 <img src="' . $image . '" title="' . CHtml::encode($row['title']) . '" width="60"/>
                               </div>';
+                        echo '</div>';
                         break;
                 }
-                echo '</div>';
+                
                 echo '</div>';
             }
         } else {

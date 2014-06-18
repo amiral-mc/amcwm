@@ -41,13 +41,13 @@ abstract class SearchContentData {
      * <ul>
      * @var array 
      */
-    protected $tables = array("news" => array('articles' => 'articles'), "articles" => array('articles' => 'articles'), "multimedia" => array('videos' => "videos"));
+    protected $tables = array("news" => array('news' => 'news'), "articles" => array('articles' => 'articles'), "essays" => array('essays' => 'essays'), "videos" => array('videos' => "videos"), "images" => array('images' => "images"));
 
     /**
      * Advanced parameters
      * @var array
      */
-    protected $advancedParams = array('archive' => 1, 'contentType' => array('news' => 1, 'articles' => 1, 'multimedia' => 1), 'section' => null, 'date' => array());
+    protected $advancedParams = array('archive' => 1, 'contentType' => array('news' => 1, 'essays'=>1 ,'articles' => 1, 'videos' => 1, 'images' => 1), 'section' => null, 'date' => array());
 
     /**
      * Counstructor, the content type
@@ -70,11 +70,21 @@ abstract class SearchContentData {
                     $contentType = 'articles';
                 }
                 break;
-            case 'multimedia':
-                if (!$this->advancedParams['contentType']['multimedia']) {
-                    $contentType = 'news';
+            case 'essays':
+                if (!$this->advancedParams['contentType']['essays']) {
+                    $contentType = 'essays';
                 }
                 break;
+            case 'videos':
+                if (!$this->advancedParams['contentType']['videos']) {
+                    $contentType = 'videos';
+                }
+                break;
+            case 'images':
+                if (!$this->advancedParams['contentType']['images']) {
+                    $contentType = 'images';
+                }
+                break;     
         }
         $this->contentType = $contentType;
     }

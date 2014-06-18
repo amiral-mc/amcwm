@@ -34,6 +34,7 @@ class InfocusWidget extends SearchWidget {
      */
     public function setContentData() {
         $this->searchRoute['id'] = $this->infocusData['infocus_id'];
+        unset($this->routers['articles']);
         parent::setContentData();
     }
 

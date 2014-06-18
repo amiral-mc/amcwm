@@ -116,7 +116,6 @@ class InFocusListData extends SiteData {
             and t.publish_date <= %s            
             and (t.expire_date  >= %s or t.expire_date is null)  
             and t.published = %d
-            and (t.thumb is not null or t.thumb <> 0)
             $wheres
             $orders
             LIMIT {$this->fromRecord} , {$this->limit}

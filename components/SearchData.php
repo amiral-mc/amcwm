@@ -54,57 +54,54 @@ class SearchData extends SearchContentData {
         $wheres = array();
         $weights = array();
 
+        if ($this->contentType == 'essays' || $this->contentType == 'articles' || $this->contentType == 'news') {
+            $listData = new ArticlesListData($this->tables[$this->contentType], 0, $this->limit);
+            $listData->addOrder("create_date desc");
+            $listData->addColumn("article_detail", "detail");
+            $listData->addColumn("'articles'", "module");
+            $listData->addColumn("publish_date");
+            $listData->setArchive($this->advancedParams['archive']);
+            if (count($this->advancedParams['date'])) {
+                $listData->addWhere(sprintf("date(create_date) {$this->advancedParams['date']['opt']} %s", Yii::app()->db->quoteValue($this->advancedParams['date']['value'])));
+            }
+            foreach ($this->keywords as $keyword) {
+                $keyword = str_replace("%", "\%", trim($keyword));
+                $keywordLike = Yii::app()->db->quoteValue("%%{$keyword}%%");
+                $keywordLocate = Yii::app()->db->quoteValue($keyword);
+                $wheres[] = "article_header like {$keywordLike}";
+                $wheres[] = "article_detail like {$keywordLike}";
+                $weights[] = "if(locate($keywordLocate,article_header)>0," . Html::utfStringLength($keyword) . ",0) ";
+                $weights[] = "if(locate($keywordLocate,article_detail)>0," . Html::utfStringLength($keyword) . ",0) ";
+            }
+        }
         switch ($this->contentType) {
-            case 'news':
-                $listData = new ArticlesListData($this->tables[$this->contentType], 0, $this->limit);
-                $listData->addOrder("create_date desc");
-                $listData->addColumn("article_detail", "detail");
+            case 'news':                
                 $listData->addColumn("'news'", "module");
-                $listData->addColumn("publish_date");
-                $listData->setArchive($this->advancedParams['archive']);
-                if (count($this->advancedParams['date'])) {
-                    $listData->addWhere(sprintf("date(create_date) {$this->advancedParams['date']['opt']} %s", Yii::app()->db->quoteValue($this->advancedParams['date']['value'])));
-                }
-                $listData->addJoin('inner join news n on n.article_id=t.article_id');
-
-                foreach ($this->keywords as $keyword) {
-                    $keyword = str_replace("%", "\%", trim($keyword));
-                    $keywordLike = Yii::app()->db->quoteValue("%%{$keyword}%%");
-                    $keywordLocate = Yii::app()->db->quoteValue($keyword);
-                    $wheres[] = "article_header like {$keywordLike}";
-                    $wheres[] = "article_detail like {$keywordLike}";
-                    $weights[] = "if(locate($keywordLocate,article_header)>0," . Html::utfStringLength($keyword) . ",0) ";
-                    $weights[] = "if(locate($keywordLocate,article_detail)>0," . Html::utfStringLength($keyword) . ",0) ";
-                }
+                break;
+            case 'essays':
+                $listData->addColumn("'essays'", "module");
                 break;
             case 'articles':
-                $listData = new ArticlesListData($this->tables[$this->contentType], 0, $this->limit);
-                $listData->addOrder("create_date desc");
-                $listData->addColumn("article_detail", "detail");
                 $listData->addColumn("'articles'", "module");
-                $listData->addColumn("publish_date");
-                $listData->setArchive($this->advancedParams['archive']);
-                if (count($this->advancedParams['date'])) {
-                    $listData->addWhere(sprintf("date(create_date) {$this->advancedParams['date']['opt']} %s", Yii::app()->db->quoteValue($this->advancedParams['date']['value'])));
-                }
-                $listData->addWhere('n.article_id is null');
-                $listData->addJoin('left join news n on n.article_id=t.article_id');
-
-                foreach ($this->keywords as $keyword) {
-                    $keyword = str_replace("%", "\%", trim($keyword));
-                    $keywordLike = Yii::app()->db->quoteValue("%%{$keyword}%%");
-                    $keywordLocate = Yii::app()->db->quoteValue($keyword);
-                    $wheres[] = "article_header like {$keywordLike}";
-                    $wheres[] = "article_detail like {$keywordLike}";
-                    $weights[] = "if(locate($keywordLocate,article_header)>0," . Html::utfStringLength($keyword) . ",0) ";
-                    $weights[] = "if(locate($keywordLocate,article_detail)>0," . Html::utfStringLength($keyword) . ",0) ";
-                }
+                $listData->addWhere('news.article_id is null');
+                $listData->addWhere('essays.article_id is null');
+                $listData->addJoin('left join news on news.article_id=t.article_id');
+                $listData->addJoin('left join essays on essays.article_id=t.article_id');
                 break;
-            case 'multimedia':
-                $listData = new VideosListData();
+            case 'images':
+            case 'videos':
+                Yii::import("amcwm.modules.multimedia.components.*");
+                if ($this->contentType == 'videos') {
+                    $header = 'video_header';
+                    $listData = new MediaListData(null, MediaListData::VIDEO_TYPE, 0, $this->limit);
+                    $listData->addColumn("'videos'", "module");
+                } else if ($this->contentType == 'images') {
+                    $header = 'image_header';
+                    $listData = new MediaListData(null, MediaListData::IAMGE_TYPE, 0, $this->limit);
+                    $listData->addColumn("'images'", "module");
+                }
                 $listData->setLimit($this->limit);
                 $listData->addColumn("description", "detail");
-                $listData->addColumn("'videos'", "module");
                 $listData->addColumn("t.gallery_id", "gallery_id");
                 $listData->addColumn("publish_date");
                 if (count($this->advancedParams['date'])) {
@@ -114,9 +111,9 @@ class SearchData extends SearchContentData {
                     $keyword = str_replace("%", "\%", trim($keyword));
                     $keywordLike = Yii::app()->db->quoteValue("%%{$keyword}%%");
                     $keywordLocate = Yii::app()->db->quoteValue($keyword);
-                    $wheres[] = "video_header like {$keywordLike}";
+                    $wheres[] = "{$header} like {$keywordLike}";
                     $wheres[] = "description like {$keywordLike}";
-                    $weights[] = "if(locate($keywordLocate,video_header)>0," . Html::utfStringLength($keyword) . ",0) ";
+                    $weights[] = "if(locate($keywordLocate,{$header})>0," . Html::utfStringLength($keyword) . ",0) ";
                     $weights[] = "if(locate($keywordLocate,description)>0," . Html::utfStringLength($keyword) . ",0) ";
                 }
                 break;
@@ -128,7 +125,6 @@ class SearchData extends SearchContentData {
             $listData->addWhere("(" . implode(" or ", $wheres) . ")");
             $listData->addColumn(implode("+", $weights), "weight");
             $listData->addOrder(" weight desc ");
-
             if ($listData instanceof SiteData) {
                 $pager = new PagingDataset($listData, $this->limit, $page);
                 $this->results = $pager->getData();

@@ -35,7 +35,7 @@ return array(
     ),
     'limits' => array(
         'elements' => array("min" => 0, "max" => 50),
-        'wordsCount' => array("min" => 2, "max" => 4),
+        'wordsCount' => array("min" => 1, "max" => 4),
         'delimiter' => PHP_EOL,
     ),
 );

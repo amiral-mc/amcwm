@@ -44,6 +44,7 @@ class Videos extends ParentTranslatedActiveRecord {
 
     const EXTERNAL = 'externalVideos';
     const INTERNAL = 'internalVideos';
+
     /**
      * Social ids added to this active record
      * @var array
@@ -94,7 +95,7 @@ class Videos extends ParentTranslatedActiveRecord {
         // will receive user inputs.
         $date = date("Y-m-d H:i:s");
         return array(
-            array('published, in_slider, show_media', 'numerical', 'integerOnly' => true),
+            array('published, infocusId, in_slider, show_media', 'numerical', 'integerOnly' => true),
             array('votes_rate', 'numerical'),
             array('votes, hits, user_id, gallery_id, video_sort, comments', 'length', 'max' => 10),
             array('tags', 'length', 'max' => 1024),
@@ -255,8 +256,8 @@ class Videos extends ParentTranslatedActiveRecord {
         $criteria->compare('comments', $this->comments, true);
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
-                ));
+            'criteria' => $criteria,
+        ));
     }
 
     /**
@@ -274,9 +275,25 @@ class Videos extends ParentTranslatedActiveRecord {
             $this->videoType = Videos::INTERNAL;
         }
         if (count($this->infocuses)) {
-            $this->infocusId = $this->infocuses[0]->infocus_id;
+            foreach ($this->infocuses as $infocus) {
+                if (isset($infocus->infocus_id)) {
+                    $this->infocusId = $infocus->infocus_id;
+                    break;
+                }
+            }
         }
         parent::afterFind();
+    }
+
+    /**
+     * This method is invoked after save record
+     */
+    protected function afterSave() {
+        if ($this->infocusId) {
+            Yii::app()->db->createCommand('delete from infocus_has_videos where video_id = ' . (int) $this->video_id)->execute();
+            Yii::app()->db->createCommand('insert into infocus_has_videos (infocus_id, video_id) values(' . (int) $this->infocusId . ', ' . (int) $this->video_id . ')')->execute();
+        }
+        parent::afterSave();
     }
 
     /**
@@ -339,26 +356,26 @@ class Videos extends ParentTranslatedActiveRecord {
      * @return boolean
      * @access public
      */
-    public function uploadedViaApi(){      
+    public function uploadedViaApi() {
         return ($this->isEexternal() && $this->externalVideos->uploaded_via_api && $this->externalVideos->video);
     }
-    
+
     /**
      * Check if video is internal video or not
      * @return boolean
      * @access public
      */
-    public function isInternal(){
+    public function isInternal() {
         return $this->videoType == Videos::INTERNAL;
     }
-    
+
     /**
      * Check if video is external video or not
      * @return boolean
      * @access public
      */
-    
-    public function isEexternal(){
+    public function isEexternal() {
         return $this->videoType == Videos::EXTERNAL;
     }
+
 }

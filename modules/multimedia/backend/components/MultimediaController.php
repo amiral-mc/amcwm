@@ -129,22 +129,30 @@ class MultimediaController extends BackendController {
         if ($access) {
             $assets = AmcWm::app()->getAssetManager()->publish(Yii::getPathOfAlias('amcwm.modules.uploads.assets'));
             $component = AmcWm::app()->request->getParam("component");
+            Yii::import("amcwm.modules.multimedia.components.*");
+            $list = null;
             switch ($component) {
                 case 'multimediaVideos':
-                    $list = new VideosListData();
+                    $list = new MediaListData(null, MediaListData::VIDEO_TYPE, 0, 5);
                     break;
                 case 'multimediaImages':
-                    $list = new MultimediaImagesList();
+                    $list = new MediaListData(null, MediaListData::IAMGE_TYPE, 0, 5);                    
+                    $list->addWhere('is_background = 0');
                     break;
                 case 'multimediaBackgrounds':
-                    $list = new MultimediaBackgroundList();
+                    $list = new MediaListData(null, MediaListData::IAMGE_TYPE, 0, 5);
+                    $list->addWhere('is_background = 1');
                     break;
             }
             
-            if (count($list)) {
+            if ($list) {                                
+                $list->setLanguage(Controller::getContentLanguage());
                 $page = (int) AmcWm::app()->request->getParam("page");
-                $pagingDataset = new PagingDataset($list, 10, $page);
-                $this->renderPartial("list", array("msg" => '', "iconsPath" => $assets . "/images", 'list' => $pagingDataset->getData()));
+                $pagingDataset = new PagingDataset($list, 10, $page);               
+                $this->renderPartial("list", array(
+                    "msg" => '', 
+                    "iconsPath" => $assets . "/images", 
+                    'list' => $pagingDataset->getData()));
             }
         }
         exit;

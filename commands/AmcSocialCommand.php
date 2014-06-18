@@ -208,7 +208,7 @@ class AmcSocialCommand extends CConsoleCommand {
         $type = NULL;
         $isUrl = false;
         $posted = false;
-        $mediaPaths = VideosListData::getSettings()->mediaPaths;
+        $mediaPaths = MediaListData::getSettings()->mediaPaths;
         foreach ($multimediaDataset as $multimedia) {
             $data = array();
             switch ($multimedia['module']) {

@@ -179,7 +179,7 @@ class HomeFrontendController extends FrontendController {
         $contentType = Yii::app()->request->getParam('ct', 'news');
         $keywords = Yii::app()->request->getParam('q');
         $search = new SearchData($keywords, $contentType, 10);
-        $search->setAdvancedParam('contentType', array('news' => 1, 'articles' => 1, 'multimedia' => 1));
+        $search->setAdvancedParam('contentType', array('news' => 1, 'articles' => 1 , 'essays'=>1 , 'videos' => 1, 'images'=>1));
         $search->generate();
         $this->render('search', array(
             'page' => (int) Yii::app()->request->getParam('page', 1),

@@ -7,6 +7,7 @@
  */
 
 /**
+ * @deprecated use instead MediaListData
  * Description of TopVideosGalleries
  * @author Amiral Management Corporation amc.amiral.com
  */
@@ -39,7 +40,7 @@ class TopVideosGalleries extends TopGalleriesData {
      * @todo explain the query
      */
     protected function setChilds($galleryId) {        
-        $mediaPaths = VideosListData::getSettings()->mediaPaths;
+        $mediaPaths = MediaListData::getSettings()->mediaPaths;
         $this->route = '/multimedia/videos/view';
         $count = 0;
         $childs = array();

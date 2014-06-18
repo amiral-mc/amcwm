@@ -77,6 +77,11 @@ return array(
                 'images' => '/images/front/images.jpg',
                 'presentations' => '/images/front/presentations.jpg'
             ),
+            'check'=>array(
+                'videosGalleryFilterOnStart'=> true,
+                'imagesGalleryFilterOnStart'=>true,
+                'useGalleriesList'=>true,
+            ),
             'integer' => array(
                 'presentationId' => 0,
                 'presentationViewInSite' => false,

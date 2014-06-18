@@ -20,7 +20,7 @@ class MediaListData extends SiteData {
      * @var Settings
      * @var array
      */
-    private static $_settings = null;
+    protected static $settings = null;
 
     /**
      * Content language
@@ -48,18 +48,6 @@ class MediaListData extends SiteData {
 
     /**
      *
-     * @var boolean calculate media count in each gallery 
-     */
-    protected $calcGalleryCount = true;
-
-    /**
-     *
-     * @var galleries used in the system
-     */
-    protected $galleries = array();
-
-    /**
-     *
      * @var string thumb media path 
      */
     protected $thumbMediaPath = null;
@@ -74,7 +62,7 @@ class MediaListData extends SiteData {
      * @param integer $sectionId, The section id to get contents from, if equal null then we gets contents from all sections
      * @access public
      */
-    public function __construct($galleryId, $mediaType, $period = 0, $limit = 10, $sectionId = null) {
+    public function __construct($galleryId = null, $mediaType = SiteData::VIDEO_TYPE, $period = 0, $limit = 10, $sectionId = null) {
         $this->dateCompareField = "creation_date";
         if (!$this->language) {
             $this->language = Yii::app()->getLanguage();
@@ -102,51 +90,7 @@ class MediaListData extends SiteData {
         if (isset(self::getSettings()->mediaPaths[$this->mediaTable]['thumb'])) {
             $this->thumbMediaPath = Yii::app()->baseUrl . "/" . self::getSettings()->mediaPaths[$this->mediaTable]['thumb']['path'] . "/";
         }
-    }
-
-    /**
-     * @todo explain the query
-     * Set galleries array
-     */
-    private function _setGalleries() {
-        $subCount = "";
-        $having = "";
-        $order = "gallery_id desc";
-        if ($this->calcGalleryCount) {
-            $subCount = ", (select count(*) from {$this->mediaTable} t where t.gallery_id = g.gallery_id) as media_count";
-            $having = "having media_count > 0";
-            $order = "media_count desc";
-        }
-        $galleryQuery = sprintf("select 
-                g.gallery_id, gallery_header, tags $subCount
-            from galleries g
-            inner join galleries_translation gt on g.gallery_id = gt.gallery_id
-            where g.published = 1
-            and gt.content_lang = %s            
-            $having
-            order by $order ", Yii::app()->db->quoteValue($this->language));
-        $galleries = Yii::app()->db->createCommand($galleryQuery)->queryAll();
-        if (count($galleries)) {
-            foreach ($galleries as $gallery) {
-                $this->galleries[$gallery['gallery_id']] = array(
-                    "id" => $gallery['gallery_id'],
-                    "title" => $gallery['gallery_header'],
-                    "childs" => array(),
-                );
-            }
-            if (!isset($this->galleries[$this->galleryId])) {
-                $this->galleryId = $galleries[0]['gallery_id'];
-            }
-        }
-    }
-
-    /**
-     * return galleries used in the system
-     * @return array
-     */
-    public function getGalleries() {
-        return $this->galleries;
-    }
+    }   
 
     /**
      * return current gallery id used in the system
@@ -161,11 +105,11 @@ class MediaListData extends SiteData {
      * @return Settings
      * @access public 
      */
-    static public function getSettings() {
-        if (self::$_settings == null) {
-            self::$_settings = new Settings("multimedia", false);
+    static public function getSettings() {       
+        if (self::$settings == null) {
+            self::$settings = new Settings("multimedia", false);
         }
-        return self::$_settings;
+        return self::$settings;
     }
 
     /**
@@ -175,9 +119,10 @@ class MediaListData extends SiteData {
      * @access public
      * @return void
      */
-    public function generate() {
-        $this->_setGalleries();
-        $this->addWhere("t.gallery_id ={$this->galleryId}");
+    public function generate() {       
+        if ($this->galleryId) {
+            $this->addWhere("t.gallery_id ={$this->galleryId}");
+        }
         if ($this->period) {
             $this->toDate = date('Y-m-d 23:59:59');
             $this->fromDate = date('Y-m-d 00:00:01', time() - $this->period);
@@ -196,7 +141,7 @@ class MediaListData extends SiteData {
                 $this->addOrder("creation_date desc");
             }
         }
-//        $this->params['gid'] = $this->galleryId;
+        $this->setSectionWhere();
         $this->setItems();
     }
 
@@ -224,11 +169,7 @@ class MediaListData extends SiteData {
      * @return void
      */
     protected function setVideosItems() {
-        $currentDate = date("Y-m-d H:i:s");
-        $sectionsList = array();
-        if ($this->sectionId) {
-            
-        }
+        $currentDate = date("Y-m-d H:i:s");        
         $orders = $this->generateOrders();
         $cols = "t.video_id item_id
                 ,t.hits
@@ -254,16 +195,41 @@ class MediaListData extends SiteData {
             and t.publish_date <= '{$currentDate}'            
             and (t.expire_date  >= '{$currentDate}' or t.expire_date is null)  
             and t.published = %d                
-            $wheres
-            $orders
-            $limit
+            $wheres            
             ", Yii::app()->db->quoteValue($this->language), ActiveRecord::PUBLISHED);
 
-        $this->query = "select {$cols} $videoQuerySearch";
-
+        $this->query = "select {$cols} $videoQuerySearch $orders $limit";
+        // die($this->query);
         $this->count = Yii::app()->db->createCommand("select count(*) {$videoQuerySearch}")->queryScalar();
         $rows = Yii::app()->db->createCommand($this->query)->queryAll();
         $this->setDataset($rows);
+    }
+
+    /**
+     * add section id and its childs to where
+     */
+    protected function setSectionWhere() {
+        if ($this->sectionId) {
+            $sectionList = array();
+            if ($this->useSubSections) {
+                if (is_array($this->sectionId)) {
+                    $sections = $this->sectionId;
+                    foreach ($sections as $section) {
+                        $sectionList = Data::getInstance()->getSectionSubIds($section);
+                        $sectionList[] = (int) $section;
+                        if (is_array($sectionList) && $sectionList) {
+                            $sectionsList = array_merge($sectionsList, $sectionList);
+                        }
+                    }
+                } else {
+                    $sectionsList = Data::getInstance()->getSectionSubIds($this->sectionId);
+                    $sectionsList[] = (int) $this->sectionId;
+                }
+                $this->addWhere("(t.section_id in (" . implode(',', $sectionsList) . "))");
+            } else {
+                $this->addWhere("t.section_id = {$this->sectionId}");
+            }
+        }
     }
 
     /**
@@ -273,10 +239,6 @@ class MediaListData extends SiteData {
      */
     protected function setImagesItems() {
         $currentDate = date("Y-m-d H:i:s");
-        $sectionsList = array();
-        if ($this->sectionId) {
-            
-        }
         $orders = $this->generateOrders();
         $cols = "t.image_id item_id
                 ,t.hits
@@ -298,14 +260,12 @@ class MediaListData extends SiteData {
             and t.publish_date <= '{$currentDate}'            
             and (t.expire_date  >= '{$currentDate}' or t.expire_date is null)  
             and t.published = %d                
-            $wheres
-            $orders
-            $limit
+            $wheres            
             ", Yii::app()->db->quoteValue($this->language), ActiveRecord::PUBLISHED);
 
-        $this->query = "select {$cols} $videoQuerySearch";
-
+        $this->query = "select {$cols} $videoQuerySearch $orders $limit";
         $this->count = Yii::app()->db->createCommand("select count(*) {$videoQuerySearch}")->queryScalar();
+        // die($this->query);
         $rows = Yii::app()->db->createCommand($this->query)->queryAll();
         $this->setDataset($rows);
     }
@@ -341,22 +301,25 @@ class MediaListData extends SiteData {
             $this->items[$index]['created'] = $row["created"];
             $this->items[$index]['comments'] = $row["comments"];
             $this->items[$index]['hits'] = $row["hits"];
+            $this->items[$index]['internal'] = false;
+            //$this->items[$index]['shared'] = $row["shared"];
             switch ($this->type) {
                 case SiteData::VIDEO_TYPE:
-                    if (isset($row['video_ext'])) {
-                        $this->items[$index]['url'] = $this->mediaPath . "/{$row['item_id']}.{$row['video_ext']}";
+                    if (isset($row['video_ext'])) {                        
+                        $this->items[$index]['url'] = $this->mediaPath . "{$row['item_id']}.{$row['video_ext']}";
                         $this->items[$index]['url'] = str_replace("{gallery_id}", $row['gallery_id'], $this->items[$index]['url']);
-                        $this->items[$index]['thumb'] = $this->thumbMediaPath . "/{$row['item_id']}.{$row['img_ext']}?t=" . time();
+                        $this->items[$index]['thumb'] = $this->thumbMediaPath . "{$row['item_id']}.{$row['img_ext']}?t=" . time();
                         $this->items[$index]['thumb'] = str_replace("{gallery_id}", $row['gallery_id'], $this->items[$index]['thumb']);
                     } else {
+                        $this->items[$index]['internal'] = true;
                         $this->items[$index]['url'] = $row['video'];
                         $this->items[$index]['thumb'] = "http://img.youtube.com/vi/" . self::getVideoCode($row['video']) . "/default.jpg";
                     }
                     break;
                 case SiteData::IAMGE_TYPE:
-                    $this->items[$index]['url'] = $this->mediaPath . "/{$row['item_id']}.{$row['ext']}?t=" . time();
+                    $this->items[$index]['url'] = $this->mediaPath . "{$row['item_id']}.{$row['ext']}?t=" . time();
                     $this->items[$index]['url'] = str_replace("{gallery_id}", $row['gallery_id'], $this->items[$index]['url']);
-                    $this->items[$index]['thumb'] = $this->mediaPath . "/{$row['item_id']}-th.{$row['ext']}?t=" . time();
+                    $this->items[$index]['thumb'] = $this->mediaPath . "{$row['item_id']}-th.{$row['ext']}?t=" . time();
                     $this->items[$index]['thumb'] = str_replace("{gallery_id}", $row['gallery_id'], $this->items[$index]['thumb']);
                     break;
             }

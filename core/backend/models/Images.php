@@ -85,7 +85,7 @@ class Images extends ParentTranslatedActiveRecord {
         $date = date("Y-m-d H:i:s");
         return array(
             array('publish_date', 'required'),
-            array('is_background, published, in_slider, show_media', 'numerical', 'integerOnly' => true),
+            array('infocusId, is_background, published, in_slider, show_media', 'numerical', 'integerOnly' => true),
             array('votes_rate', 'numerical'),
             array('ext', 'length', 'max' => 4),
             array('hits, user_id, gallery_id, image_sort, votes, comments', 'length', 'max' => 10),
@@ -206,8 +206,13 @@ class Images extends ParentTranslatedActiveRecord {
      * @return void
      */
     public function afterFind() {
-        if (count($this->infocuses)) {
-            $this->infocusId = $this->infocuses[0]->infocus_id;
+      if (count($this->infocuses)) {
+            foreach ($this->infocuses as $infocus) {
+                if (isset($infocus->infocus_id)) {
+                    $this->infocusId = $infocus->infocus_id;
+                    break;
+                }
+            }
         }
         parent::afterFind();
     }
@@ -260,6 +265,16 @@ class Images extends ParentTranslatedActiveRecord {
      */
     protected function afterDeleteChild($childAttributes) {
         $this->correctSort();
-    }
+    }    
 
+    /**
+     * This method is invoked after save record
+     */
+    protected function afterSave() {
+        if ($this->infocusId) {
+            Yii::app()->db->createCommand('delete from infocus_has_images where image_id = ' . (int) $this->image_id)->execute();
+            Yii::app()->db->createCommand('insert into infocus_has_images (infocus_id, image_id) values(' . (int) $this->infocusId . ', ' . (int) $this->image_id . ')')->execute();
+        }
+        parent::afterSave();
+    }
 }

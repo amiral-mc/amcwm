@@ -125,14 +125,24 @@ return CMap::mergeArray(
                         'sections' => '/articles/default/sections',
                         'view' => '/articles/default/view',
                     ),
+                    'essays' => array(
+                        'list' => '/articles/default/index',
+                        'sections' => '/articles/default/sections',
+                        'view' => '/articles/default/view',
+                    ),
                     'infocus' => array(
                         'list' => '/infocus/default/index',
                         'view' => '/infocus/default/view',
                     ),
                     'videos' => array(
                         'list' => '/multimedia/videos/default/index',
-                        'view' => '/multimedia/videos/index',
+                        'view' => '/multimedia/videos/view',
                         'sections' => '/multimedia/videos/sections',
+                    ),
+                    'images' => array(
+                        'list' => '/multimedia/images/default/index',
+                        'view' => '/multimedia/images/view',
+                        'sections' => '/multimedia/images/sections',
                     ),
                 ),
             )),

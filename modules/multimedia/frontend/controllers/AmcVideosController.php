@@ -18,19 +18,14 @@
 class AmcVideosController extends FrontendController {
 
     public function actionIndex() {
-        $multiMedia = new MediaListData(Yii::app()->request->getParam('gid'), SiteData::VIDEO_TYPE);
+        $multiMedia = new GalleriesMediaListData(Yii::app()->request->getParam('gid'), SiteData::VIDEO_TYPE);
         $mediaPaging = new PagingDataset($multiMedia, 10, Yii::app()->request->getParam('page'));
-        $galleries = $multiMedia->getGalleries();
-        $galleryId = $multiMedia->getGalleryId();
-        $activeGallery = null;
-        if (count($galleries) && array_key_exists($galleryId, $galleries)) {
-            $activeGallery = $mediaPaging->getData();
-        }
+        $useGalleriesList = !isset(MediaListData::getSettings()->options['default']['check']['useGalleriesList']) ? true : MediaListData::getSettings()->options['default']['check']['useGalleriesList'];        
         $this->render('index', array(
             'route'=> $multiMedia->getRoute(),
-            'galleries' => $galleries,
-            'galleryId' => $galleryId,
-            'activeGallery' => $activeGallery)
+            'galleries' => ($useGalleriesList) ? $multiMedia->getGalleries() : array(),
+            'galleryId' => $multiMedia->getGalleryId(),
+            'activeGallery' => $mediaPaging->getData())
         );
     }
 

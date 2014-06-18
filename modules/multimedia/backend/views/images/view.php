@@ -78,6 +78,7 @@ $this->widget('zii.widgets.CDetailView', array(
         array(
             'label' => AmcWm::t("msgsbase.core", 'In Focus File'),
             'value' => $infocusName,
+            'visible'=> $this->getModule()->appModule->useInfocus,
         ),
     ),
 ));

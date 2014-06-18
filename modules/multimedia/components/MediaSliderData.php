@@ -7,13 +7,13 @@
  */
 
 /**
- * VideosSliderData class,  Gets the videos to displayed inside slider area.
+ * MediaSliderData class,  Gets the media to displayed inside slider area.
  * @package AmcWebManager
  * @subpackage Data
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class VideosSliderData extends VideosListData {
+class MediaSliderData extends MediaListData {
 
     /**
      * Generate the videos list array, each item is associated  array

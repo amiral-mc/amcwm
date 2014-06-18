@@ -42,8 +42,11 @@ class AmcInfocusController extends FrontendController {
         $contentType = Yii::app()->request->getParam('ct', 'news');
         $keywords = Yii::app()->request->getParam('q');
         $infocus = new InFocusItemsData($id, $keywords, $contentType, 10);
-        $infocus->genereateTopResults(true, 1, 3);        
-        $infocus->generate();
+        $options = InFocusListData::getSettings()->options['default']['integer'];
+        if($options['topImages'] || $options['topVideos'] || $options['topText']){
+            $infocus->genereateTopResults(true, $options['topText'], $options['topVideos'], $options['topImages']);             
+        }        
+        $infocus->generate();        
         $this->render('view', array(
             'id' => $id,
             'page' => Yii::app()->request->getParam('page', 1),

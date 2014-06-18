@@ -169,8 +169,9 @@ class MediaDetailsData extends Dataset {
                 ,t.creation_date created
                 ,t.comments
                 ,t.gallery_id
-                ,t.ext
+                ,t.ext                
                 ,t.update_date updated
+                ,tt.tags
                 ,tt.image_header title
                 ,tt.description {$this->generateColumns()}";
         $wheres = $this->generateWheres();

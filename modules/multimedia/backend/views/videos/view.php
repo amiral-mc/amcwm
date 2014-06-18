@@ -1,6 +1,7 @@
 <?php
 $formId = Yii::app()->params["adminForm"];
 $mediaPaths = AmcWm::app()->getController()->getModule()->appModule->mediaPaths;
+$options = $this->module->appModule->options;
 $model = $contentModel->getParentContent();
 $galleryId = $this->gallery->getParentContent()->gallery_id;
 $this->breadcrumbs = array(
@@ -95,6 +96,7 @@ $this->widget('zii.widgets.CDetailView', array(
         array(
             'label' => AmcWm::t("msgsbase.core", 'In Focus File'),
             'value' => $infocusName,
+            'visible'=> $this->getModule()->appModule->useInfocus,
         ),
     ),
 ));

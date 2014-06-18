@@ -10,7 +10,7 @@
             'validateOnSubmit' => true,
         ),
         'htmlOptions' => array('enctype' => 'multipart/form-data')
-            ));
+    ));
     ?>
 
     <p class="note"><?php echo AmcWm::t("amcBack", "Fields with are required", array("{star}" => '<span class="required">*</span>')) ?>.</p>
@@ -40,7 +40,7 @@
         $drawImage = $thumbImage = null;
         if (!$model->isNewRecord && isset($model->internalVideos->img_ext)) {
             $drawImage = Yii::app()->baseUrl . "/" . $mediaPaths['videos']['thumb']['path'] . "/" . $model->video_id . "." . $model->internalVideos->img_ext . "?t=" . time();
-            $drawImage = str_replace("{gallery_id}", $model->gallery_id, $drawImage);                                    
+            $drawImage = str_replace("{gallery_id}", $model->gallery_id, $drawImage);
             $thumbImage = Chtml::image($drawImage, "", array("width" => 100));
         }
         $internalUrlOptions = array('dir' => 'ltr');
@@ -59,10 +59,10 @@
                     $video = $model->videoURL;
                 } else if ($model->videoType == "internalVideos" && $model->internalVideos !== NULL) {
                     $videoFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaPaths['videos']['path']) . "/" . $model->video_id . "." . $model->internalVideos->video_ext;
-                    $videoFile = str_replace("{gallery_id}", $model->gallery_id, $videoFile);                                    
-                    if (is_file($videoFile)) {                        
+                    $videoFile = str_replace("{gallery_id}", $model->gallery_id, $videoFile);
+                    if (is_file($videoFile)) {
                         $video = Yii::app()->request->baseUrl . "/" . $mediaPaths['videos']['path'] . "/{$model->internalVideos->video_id}.{$model->internalVideos->video_ext}";
-                        $video = str_replace("{gallery_id}", $model->gallery_id, $video);                                    
+                        $video = str_replace("{gallery_id}", $model->gallery_id, $video);
                     }
                 }
                 //die($video);
@@ -157,11 +157,13 @@
                 <?php echo $form->dropDownList($model, 'gallery_id', Galleries::getGalleriesList()); ?>
                 <?php echo $form->error($model, 'gallery_id'); ?>
             </div>
-            <div class="row">
-                <?php echo $form->labelEx($model, 'infocusId'); ?>
-                <?php echo $form->dropDownList($model, 'infocusId', $this->getInfocus()); ?>
-                <?php echo $form->error($model, 'infocusId'); ?>
-            </div>            
+            <?php if ($this->getModule()->appModule->useInfocus): ?>
+                <div class="row">
+                    <?php echo $form->labelEx($model, 'infocusId'); ?>
+                    <?php echo $form->dropDownList($model, 'infocusId', $this->getInfocus()); ?>
+                    <?php echo $form->error($model, 'infocusId'); ?>
+                </div>            
+            <?php endif; ?>
             <div class="row">
                 <?php echo $form->labelEx($contentModel, 'video_header'); ?>
                 <?php echo $form->textField($contentModel, 'video_header', array('size' => 60, 'maxlength' => 500)); ?>

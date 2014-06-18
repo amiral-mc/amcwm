@@ -21,14 +21,14 @@ class SearchWidget extends AmcSearchWidget {
      *
      * @var string search route 
      */
-    public $searchRoute = array('/site/search/');
+    public $searchRoute = array('/site/search');
 
     /**
      * Render the widget and display the result
      * @access public
      * @return void
      */
-    public function setContentData() {        
+    public function setContentData() {
         $this->contentData = '<div id="news_search">';
         $this->contentData .= '<div class="news_search_brief">';
         if ($this->items['pager']['count']) {
@@ -54,22 +54,34 @@ class SearchWidget extends AmcSearchWidget {
         $searchTabs = array();
         $activeTab = $this->contentType . "SearchTab";
         $this->searchRoute['q'] = $this->keywords;
-        if ($this->advancedParams['contentType']['news']) {            
+        if ($this->advancedParams['contentType']['news'] && isset($this->routers['news'])) {
             $this->searchRoute['ct'] = 'news';
             $searchTabs["newsSearchTab"] = array('label' => AmcWm::t("{$this->basePath}.core", 'News'));
             $searchTabs["newsSearchTab"]['url'] = $this->createUrl();
         }
 
-        if ($this->advancedParams['contentType']['articles']) {
+        if ($this->advancedParams['contentType']['articles'] && isset($this->routers['articles'])) {
             $this->searchRoute['ct'] = 'articles';
-            $searchTabs["articlesSearchTab"] = array('label' => AmcWm::t("{$this->basePath}.core", 'Articles'));
+            $searchTabs["articlesSearchTab"] = array('label' => AmcWm::t("{$this->basePath}.core", 'Site Pages'));
             $searchTabs["articlesSearchTab"]['url'] = $this->createUrl();
         }
+        
+        if ($this->advancedParams['contentType']['essays'] && isset($this->routers['essays'])) {
+            $this->searchRoute['ct'] = 'essays';
+            $searchTabs["essaysSearchTab"] = array('label' => AmcWm::t("{$this->basePath}.core", 'Articles'));
+            $searchTabs["essaysSearchTab"]['url'] = $this->createUrl();
+        }                
 
-        if ($this->advancedParams['contentType']['multimedia']) {
-            $this->searchRoute['ct'] = 'multimedia';
-            $searchTabs["multimediaSearchTab"] = array('label' => AmcWm::t("{$this->basePath}.core", 'Multimedia'));
-            $searchTabs["multimediaSearchTab"]['url'] = $this->createUrl();
+        if ($this->advancedParams['contentType']['videos'] && isset($this->routers['videos'])) {
+            $this->searchRoute['ct'] = 'videos';
+            $searchTabs["videosSearchTab"] = array('label' => AmcWm::t("{$this->basePath}.core", 'Videos'));
+            $searchTabs["videosSearchTab"]['url'] = $this->createUrl();
+        }
+
+        if ($this->advancedParams['contentType']['images'] && isset($this->routers['images'])) {
+            $this->searchRoute['ct'] = 'images';
+            $searchTabs["imagesSearchTab"] = array('label' => AmcWm::t("{$this->basePath}.core", 'Images'));
+            $searchTabs["imagesSearchTab"]['url'] = $this->createUrl();
         }
 
         if ($this->items['pager']['count']) {

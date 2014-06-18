@@ -5,7 +5,6 @@
  * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.
  * @license http://amc.amiral.com/license/amcwm.txt
  */
-
 /**
  * @todo implement sharethis and comments
  */
@@ -17,23 +16,18 @@
 class AmcImagesController extends FrontendController {
 
     public function actionIndex() {
-        $multiMedia = new MediaListData(Yii::app()->request->getParam('gid'), SiteData::IAMGE_TYPE);
+        $multiMedia = new GalleriesMediaListData(Yii::app()->request->getParam('gid'), SiteData::IAMGE_TYPE);
         $mediaPaging = new PagingDataset($multiMedia, 10, Yii::app()->request->getParam('page'));
-        $galleries = $multiMedia->getGalleries();
-        $galleryId = $multiMedia->getGalleryId();
-        $activeGallery = null;
-        if (count($galleries) && array_key_exists($galleryId, $galleries)) {
-            $activeGallery = $mediaPaging->getData();
-        }
+        $useGalleriesList = !isset(MediaListData::getSettings()->options['default']['check']['useGalleriesList']) ? true : MediaListData::getSettings()->options['default']['check']['useGalleriesList'];
         $this->render('index', array(
-            'route'=> $multiMedia->getRoute(),
-            'galleries' => $galleries,
-            'galleryId' => $galleryId,
-            'activeGallery' => $activeGallery)
+            'route' => $multiMedia->getRoute(),
+            'galleries' => ($useGalleriesList) ? $multiMedia->getGalleries() : array(),
+            'galleryId' => $multiMedia->getGalleryId(),
+            'activeGallery' => $mediaPaging->getData())
         );
     }
 
-    public function actionView($id, $ajax = 0) {        
+    public function actionView($id, $ajax = 0) {
         $media = new MediaDetailsData($id, SiteData::IAMGE_TYPE);
         if ($media->getData()) {
             if ($ajax) {
