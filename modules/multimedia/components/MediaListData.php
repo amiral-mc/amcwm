@@ -176,6 +176,7 @@ class MediaListData extends SiteData {
                 ,t.creation_date created
                 ,t.comments
                 ,t.gallery_id
+                ,t.publish_date
                 ,tt.video_header title
                 ,it.video_ext
                 , it.img_ext
@@ -245,6 +246,7 @@ class MediaListData extends SiteData {
                 ,t.ext
                 ,t.creation_date created
                 ,t.comments
+                ,t.publish_date
                 ,t.gallery_id
                 ,tt.image_header title
                 , comments {$this->generateColumns()}";
@@ -299,9 +301,10 @@ class MediaListData extends SiteData {
             $this->items[$index]['params'] = $urlParams;
             $this->items[$index]['type'] = $this->type;
             $this->items[$index]['created'] = $row["created"];
+            $this->items[$index]['published'] = $row["publish_date"];
             $this->items[$index]['comments'] = $row["comments"];
             $this->items[$index]['hits'] = $row["hits"];
-            $this->items[$index]['internal'] = false;
+            $this->items[$index]['internal'] = true;
             //$this->items[$index]['shared'] = $row["shared"];
             switch ($this->type) {
                 case SiteData::VIDEO_TYPE:
@@ -311,7 +314,7 @@ class MediaListData extends SiteData {
                         $this->items[$index]['thumb'] = $this->thumbMediaPath . "{$row['item_id']}.{$row['img_ext']}?t=" . time();
                         $this->items[$index]['thumb'] = str_replace("{gallery_id}", $row['gallery_id'], $this->items[$index]['thumb']);
                     } else {
-                        $this->items[$index]['internal'] = true;
+                        $this->items[$index]['internal'] = false;
                         $this->items[$index]['url'] = $row['video'];
                         $this->items[$index]['thumb'] = "http://img.youtube.com/vi/" . self::getVideoCode($row['video']) . "/default.jpg";
                     }
