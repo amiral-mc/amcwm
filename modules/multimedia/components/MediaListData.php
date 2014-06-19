@@ -59,10 +59,9 @@ class MediaListData extends SiteData {
      * @param integer $$mediaType videos or images 
      * @param integer $period, Period time in seconds. 
      * @param integer $limit, The numbers of items to fetch from table     
-     * @param integer $sectionId, The section id to get contents from, if equal null then we gets contents from all sections
      * @access public
      */
-    public function __construct($galleryId = null, $mediaType = SiteData::VIDEO_TYPE, $period = 0, $limit = 10, $sectionId = null) {
+    public function __construct($galleryId = null, $mediaType = SiteData::VIDEO_TYPE, $period = 0, $limit = 10) {
         $this->dateCompareField = "creation_date";
         if (!$this->language) {
             $this->language = Yii::app()->getLanguage();
@@ -75,7 +74,6 @@ class MediaListData extends SiteData {
         } else {
             $this->limit = null;
         }
-        $this->sectionId = $sectionId;
         $this->type = $mediaType;
         if ($this->type == SiteData::VIDEO_TYPE) {
             $this->mediaTable = "videos";
@@ -187,7 +185,8 @@ class MediaListData extends SiteData {
         if ($this->limit !== null) {
             $limit = "LIMIT {$this->fromRecord} , {$this->limit}";
         }
-        $videoQuerySearch = sprintf("from videos t
+        $querySearch = sprintf("from videos t
+            inner join galleries g on g.gallery_id = t.gallery_id
             inner join videos_translation tt on t.video_id = tt.video_id
             left join internal_videos it on it.video_id = t.video_id
             left join external_videos et on et.video_id = t.video_id
@@ -195,13 +194,13 @@ class MediaListData extends SiteData {
             where tt.content_lang = %s
             and t.publish_date <= '{$currentDate}'            
             and (t.expire_date  >= '{$currentDate}' or t.expire_date is null)  
+            and g.published = 1                
             and t.published = %d                
             $wheres            
             ", Yii::app()->db->quoteValue($this->language), ActiveRecord::PUBLISHED);
 
-        $this->query = "select {$cols} $videoQuerySearch $orders $limit";
-        // die($this->query);
-        $this->count = Yii::app()->db->createCommand("select count(*) {$videoQuerySearch}")->queryScalar();
+        $this->query = "select {$cols} $querySearch $orders $limit";
+        $this->count = Yii::app()->db->createCommand("select count(*) {$querySearch}")->queryScalar();
         $rows = Yii::app()->db->createCommand($this->query)->queryAll();
         $this->setDataset($rows);
     }
@@ -226,9 +225,14 @@ class MediaListData extends SiteData {
                     $sectionsList = Data::getInstance()->getSectionSubIds($this->sectionId);
                     $sectionsList[] = (int) $this->sectionId;
                 }
-                $this->addWhere("(t.section_id in (" . implode(',', $sectionsList) . "))");
+                if(count($sectionsList) > 1){
+                    $this->addWhere("(g.section_id in (" . implode(',', $sectionsList) . "))");
+                }
+                else{
+                    $this->addWhere("g.section_id = {$this->sectionId}");
+                }                                    
             } else {
-                $this->addWhere("t.section_id = {$this->sectionId}");
+                $this->addWhere("g.section_id = {$this->sectionId}");
             }
         }
     }
@@ -255,19 +259,20 @@ class MediaListData extends SiteData {
         if ($this->limit !== null) {
             $limit = "LIMIT {$this->fromRecord} , {$this->limit}";
         }
-        $videoQuerySearch = sprintf("from images t
+        $querySearch = sprintf("from images t
             inner join images_translation tt on t.image_id = tt.image_id
+            inner join galleries g on g.gallery_id = t.gallery_id
             {$this->joins}
             where tt.content_lang = %s
             and t.publish_date <= '{$currentDate}'            
             and (t.expire_date  >= '{$currentDate}' or t.expire_date is null)  
-            and t.published = %d                
+            and t.published = %d      
+            and g.published = 1        
             $wheres            
             ", Yii::app()->db->quoteValue($this->language), ActiveRecord::PUBLISHED);
 
-        $this->query = "select {$cols} $videoQuerySearch $orders $limit";
-        $this->count = Yii::app()->db->createCommand("select count(*) {$videoQuerySearch}")->queryScalar();
-        // die($this->query);
+        $this->query = "select {$cols} $querySearch $orders $limit";
+        $this->count = Yii::app()->db->createCommand("select count(*) {$querySearch}")->queryScalar();
         $rows = Yii::app()->db->createCommand($this->query)->queryAll();
         $this->setDataset($rows);
     }
