@@ -65,7 +65,8 @@ class ArticlesSectionsDefaultTask extends ArticlesControllerTask {
                         $articleList->addColumn('article_pri_header', 'priHeader');
                     }
                 }
-                $pagingDataset = new PagingDataset($articleList, $limit);
+                $pagingDataset = new PagingDataset($articleList, $limit, Yii::app()->request->getParam("page"));
+                
                 $itemsList = $pagingDataset->getData();
                 if ($this->displayResult && $itemsList['pager']['count']) {
                     $render = true;

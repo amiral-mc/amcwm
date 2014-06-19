@@ -205,6 +205,7 @@ class ArticlesListData extends SiteData {
         $this->language = $language;
     }
 
+    public $uop;
     /**
      * @todo explain the query
      * Set the articles array list    
@@ -235,31 +236,30 @@ class ArticlesListData extends SiteData {
             } else {
                 $this->addWhere("t.section_id = {$this->sectionId}");
             }
-        }
-        $orders = $this->generateOrders();
-        $cols = $this->generateColumns();
-        $wheres = $this->generateWheres();
-        $limit = null;
+        }        
+        $orders = $this->generateOrders(NULL);
+        $cols = $this->generateColumns();        
+        $wheres = sprintf("tt.content_lang = %s
+         and t.publish_date <= '{$currentDate}'            
+         and (t.expire_date  >= '{$currentDate}' or t.expire_date is null)  
+         and t.published = %d",  
+                 Yii::app()->db->quoteValue($this->language),
+                 ActiveRecord::PUBLISHED);
+        $wheres .= $this->generateWheres();                        
+        $command = AmcWm::app()->db->createCommand();                
+        $command->from("articles t force index (articles_create_date_idx)");        
+        $command->join = 'inner join articles_translation tt on t.article_id = tt.article_id';
+        $command->join .= $this->joins ;                
+        $command->select("t.article_id, t.hits, t.thumb, tt.article_header $cols");        
+        $command->where($wheres);        
+        $command->order = $orders; 
+        $this->count = Yii::app()->db->createCommand("select count(*) from articles t {$command->join} where {$command->where}")->queryScalar();        
         if($this->limit !== null){
-            $limit = "LIMIT {$this->fromRecord} , {$this->limit}";
+            $command->limit($this->limit, $this->fromRecord);
         }
-        $this->query = sprintf("SELECT sql_calc_found_rows            
-            t.article_id, t.hits, t.thumb, tt.article_header $cols
-            FROM  `articles` t
-            inner join articles_translation tt on t.article_id = tt.article_id    
-            {$this->joins}
-            where tt.content_lang = %s
-            and t.publish_date <= '{$currentDate}'            
-            and (t.expire_date  >= '{$currentDate}' or t.expire_date is null)  
-            and t.published = %d
-            $wheres
-            $orders
-            $limit
-            ", 
-            Yii::app()->db->quoteValue($this->language), 
-            ActiveRecord::PUBLISHED);
-        $articles = Yii::app()->db->createCommand($this->query)->queryAll();
+        $articles  = $command->queryAll();        
         $this->setDataset($articles);
+        $this->query = $command;
     }
 
     /**
@@ -312,8 +312,6 @@ class ArticlesListData extends SiteData {
             foreach ($this->cols as $colIndex => $col) {
                 $this->items[$index][$colIndex] = $article[$colIndex];
             }
-        }
-        $this->count = Yii::app()->db->createCommand('select found_rows()')->queryScalar();
+        }        
     }
-
 }
