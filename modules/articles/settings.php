@@ -869,6 +869,7 @@ return array(
                 'addToSlider' => true,
                 'addToInfocus' => true,
                 'allowPageImage' => true,
+                'seoImages' => false,
             ),
         ),
         'news' => array(

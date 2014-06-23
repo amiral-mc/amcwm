@@ -285,6 +285,8 @@ class MediaListData extends SiteData {
      * @return void
      */
     protected function setDataset($rows) {
+        $options = self::getSettings()->options;
+        $useSeoImages = isset($options['default']['check']['seoImages']) && $options['default']['check']['seoImages'] ? $options['default']['check']['seoImages'] : false ;
         $index = -1;
         foreach ($rows As $row) {
             if ($this->recordIdAsKey) {
@@ -311,12 +313,14 @@ class MediaListData extends SiteData {
             $this->items[$index]['hits'] = $row["hits"];
             $this->items[$index]['internal'] = true;
             //$this->items[$index]['shared'] = $row["shared"];
+            $seoTitle = ($useSeoImages) ? Html::seoTitle($this->items[$index]['title']) . "." : "";
             switch ($this->type) {
+                
                 case SiteData::VIDEO_TYPE:
                     if (isset($row['video_ext'])) {                        
                         $this->items[$index]['url'] = $this->mediaPath . "{$row['item_id']}.{$row['video_ext']}";
                         $this->items[$index]['url'] = str_replace("{gallery_id}", $row['gallery_id'], $this->items[$index]['url']);
-                        $this->items[$index]['thumb'] = $this->thumbMediaPath . "{$row['item_id']}.{$row['img_ext']}?t=" . time();
+                        $this->items[$index]['thumb'] = $this->thumbMediaPath . "{$seoTitle}{$row['item_id']}.{$row['img_ext']}?t=" . time();
                         $this->items[$index]['thumb'] = str_replace("{gallery_id}", $row['gallery_id'], $this->items[$index]['thumb']);
                     } else {
                         $this->items[$index]['internal'] = false;
@@ -325,9 +329,9 @@ class MediaListData extends SiteData {
                     }
                     break;
                 case SiteData::IAMGE_TYPE:
-                    $this->items[$index]['url'] = $this->mediaPath . "{$row['item_id']}.{$row['ext']}?t=" . time();
+                    $this->items[$index]['url'] = $this->mediaPath . "{$seoTitle}{$row['item_id']}.{$row['ext']}?t=" . time();
                     $this->items[$index]['url'] = str_replace("{gallery_id}", $row['gallery_id'], $this->items[$index]['url']);
-                    $this->items[$index]['thumb'] = $this->mediaPath . "{$row['item_id']}-th.{$row['ext']}?t=" . time();
+                    $this->items[$index]['thumb'] = $this->mediaPath . "{$seoTitle}{$row['item_id']}-th.{$row['ext']}?t=" . time();
                     $this->items[$index]['thumb'] = str_replace("{gallery_id}", $row['gallery_id'], $this->items[$index]['thumb']);
                     break;
             }

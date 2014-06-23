@@ -48,7 +48,10 @@ if ($articleRecord['parentData']) {
 $this->pageTitle = $pageTitle . ' - ' . $this->pageTitle;
 
 if (file_exists($this->getModule()->appModule->mediaPaths['images']['path'] . DIRECTORY_SEPARATOR . $articleRecord["article_id"] . "." . $articleRecord["thumb"]) && $articleModule == "news") {
-    $image = Yii::app()->baseUrl . "/" . $this->getModule()->appModule->mediaPaths['images']['path'] . "/" . $articleRecord["article_id"] . "." . $articleRecord["thumb"];
+    $options = $this->getModule()->appModule->options;        
+    $useSeoImages = isset($options['default']['check']['seoImages']) && $options['default']['check']['seoImages'] ? $options['default']['check']['seoImages'] : false ;
+    $seoTitle = ($useSeoImages) ? Html::seoTitle($articleRecord["article_header"]) . "." : "";
+    $image = Yii::app()->baseUrl . "/" . $this->getModule()->appModule->mediaPaths['images']['path'] . "/{$seoTitle}" . $articleRecord["article_id"] . "." . $articleRecord["thumb"];
     Yii::app()->clientScript->registerMetaTag(Yii::app()->request->getHostInfo() . $image, "og:image");
     $imageSize = getimagesize("multimedia/articles/" . $articleRecord["article_id"] . "." . $articleRecord["thumb"]);
     

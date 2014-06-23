@@ -42,66 +42,29 @@ class Html {
      * @return type 
      */
     public static function link($text, $url = '#', $htmlOptions = array()) {
-        $linkUrl = null;
-        $urlTitle = null;
-        $bookmark = null;
+        $linkUrl = $url;
         if (is_array($url)) {
-            if (!isset($url['lang'])) {
-                $url['lang'] = Controller::getCurrentLanguage();
-            }
+            $route = array_shift($url);
+            $linkUrl = self::createUrl($route, $url);
         }
-        if (Yii::app()->getUrlManager()->getUrlFormat() == 'path') {
-            if (is_array($url) && isset($url[0])) {
-                if (isset($url["#"])) {
-                    $bookmark = "#{$url["#"]}";
-                    unset($url["#"]);
-                }
-                if (isset($url['title'])) {
-                    $urlTitle = "/" . urlencode($url['title']);
-                    unset($url['title']);
-                }
-                $linkUrl = $url[0];
 
-                foreach ($url as $paramKey => $paramVal) {
-                    if (is_array($paramVal)) {
-                        foreach ($paramVal as $paramSubKey => $paramSubVal) {
-                            if ($paramSubKey !== 0) {
-                                $linkUrl .= "/$paramKey" . urlencode("[{$paramSubKey}]") . "/" . urlencode($paramSubVal);
-                            }
-                        }
-                    } else {
-                        $paramVal = urlencode($paramVal);
-                        if ($paramKey !== 0) {
-                            $linkUrl .= "/{$paramKey}/$paramVal";
-                        }
-                    }
-                }
-                $url = array($linkUrl . $urlTitle . $bookmark);
-            } else if (!is_array($url)) {
-                $linkUrl = $url . '/lang=' . Controller::getCurrentLanguage();
-            }
-        } else if (!is_array($url) && strpos($url, '?') === false) {
-            $url .= '?';
-            $linkUrl = $url . '&lang=' . Controller::getCurrentLanguage();
-        }
-        return CHtml::link($text, $url, $htmlOptions);
+        return CHtml::link($text, $linkUrl, $htmlOptions);
     }
 
     public static function createUrl($route, $params = array()) {
         $url = null;
-        $urlTitle = null;
         $bookmark = null;
-        if (!isset($params['lang'])) {
-            $params['lang'] = Controller::getCurrentLanguage();
-        }
         if (Yii::app()->getUrlManager()->getUrlFormat() == 'path') {
             if (isset($params["#"])) {
                 $bookmark = "#{$params["#"]}";
                 unset($params['#']);
             }
-            if (isset($params['title'])) {
-                $urlTitle = "/" . urlencode($params['title']);
+            if (isset($params['title']) && isset($params['id'])) {
+                $params['id'] = "{$params['id']}-" . self::seoTitle($params['title'], false);
                 unset($params['title']);
+            }
+            if (!isset($params['lang'])) {
+                $params['lang'] = Controller::getCurrentLanguage();
             }
             foreach ($params as $paramKey => $paramVal) {
                 if (is_array($paramVal)) {
@@ -115,12 +78,11 @@ class Html {
             }
             $params = array();
         }
-        $url = Yii::app()->createUrl($route, $params) . $urlTitle . $bookmark;
+        $url = Yii::app()->createUrl($route, $params) . $bookmark;
         return $url;
     }
 
     public static function createLinkRoute($link, $route, $params = array()) {
-        $urlTitle = null;
         $bookmark = null;
         if (!isset($params['lang'])) {
             $params['lang'] = Controller::getCurrentLanguage();
@@ -130,15 +92,18 @@ class Html {
                 $bookmark = "#{$params["#"]}";
                 unset($params['#']);
             }
-            if (isset($params['title'])) {
-                $urlTitle = "/" . urlencode($params['title']);
+            if (isset($params['title']) && isset($params['id'])) {
+                $params['id'] = "{$params['id']}-" . self::seoTitle($params['title'], false);
                 unset($params['title']);
+            }
+            if (!isset($params['lang'])) {
+                $params['lang'] = Controller::getCurrentLanguage();
             }
             foreach ($params as $paramKey => $paramVal) {
                 $paramVal = urlencode($paramVal);
                 $route .= "/$paramKey/$paramVal";
             }
-            $link = "$link/$route{$urlTitle}{$bookmark}";
+            $link = "$link/$route{$bookmark}";
         } else {
             foreach ($params as $paramKey => $paramVal) {
                 $route .= "&$paramKey=$paramVal";
@@ -269,6 +234,61 @@ class Html {
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * 
+     * @param string $string
+     * @param boolean $urlEncode
+     * @param integer $wordLimit
+     * @return string
+     */
+    public static function seoTitle($string, $urlEncode = true, $wordLimit = 6) {
+        $string = CHtml::encode($string);
+        $words = explode(' ', $string);
+        $string = implode(' ', array_slice($words, 0, $wordLimit));
+        $string = str_replace(" ", "-", $string);
+        if ($urlEncode) {
+            $string = urlencode($string);
+        }
+        return $string;
+    }
+
+    /**
+     * Get image real content from image seo url
+     */
+    public static function drawSeoImage() {
+        if (isset($_GET['file'])) {
+            $pos = strrpos($_GET['file'], "/");
+            if ($pos !== false) {
+                $file = substr($_GET['file'], $pos + 1);
+                $realFilePos = strpos($file, ".");
+                $folder = substr($_GET['file'], 0, $pos + 1);
+                $info = pathinfo($file);
+                if ($realFilePos !== false) {
+                    $realFile = substr($file, $realFilePos + 1);
+                    if ($realFile == $info['extension']) {
+                        $realFile = $file;
+                    }
+                }
+                switch ($info['extension']) {
+                    case "jpeg":
+                    case "jpg":
+                        header("Content-type:image/jpeg");
+                        break;
+                    case "png":
+                        header("Content-type:image/png");
+                        break;
+                    case "gif":
+                        header("Content-type:image/gif");
+                        break;
+                }
+                ob_clean();
+                flush();
+                readfile($folder . $realFile);
+                exit;
+            }
         }
     }
 

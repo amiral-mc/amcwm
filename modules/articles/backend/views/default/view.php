@@ -39,6 +39,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
 ?>
 <?php
 $drawImage = NULL;
+$imagesInfo = $this->getModule()->appModule->mediaPaths;
 if ($model->article_id && $model->thumb) {
     if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['list']['path'] . "/" . $model->article_id . "." . $model->thumb))) {
         $drawImage = '<div>' . CHtml::image(Yii::app()->baseUrl . "/" . $imagesInfo['list']['path'] . "/" . $model->article_id . "." . $model->thumb . "?" . time(), "", array("class" => "image")) . '</div>';

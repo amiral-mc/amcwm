@@ -81,6 +81,7 @@ return array(
                 'videosGalleryFilterOnStart'=> true,
                 'imagesGalleryFilterOnStart'=>true,
                 'useGalleriesList'=>true,
+                'seoImages' => false,
             ),
             'integer' => array(
                 'presentationId' => 0,

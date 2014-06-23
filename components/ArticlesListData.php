@@ -271,6 +271,8 @@ class ArticlesListData extends SiteData {
      */
     protected function setDataset($articles) {
         $index = -1;
+        $options = self::getSettings()->options;
+        $useSeoImages = isset($options['default']['check']['seoImages']) && $options['default']['check']['seoImages'] ? $options['default']['check']['seoImages'] : false ;
         foreach ($articles As $article) {
             if ($this->recordIdAsKey) {
                 $index = $article['article_id'];
@@ -282,6 +284,8 @@ class ArticlesListData extends SiteData {
             } else {
                 $this->items[$index]['title'] = $article["article_header"];
             }
+            $seoTitle = ($useSeoImages) ? Html::seoTitle($article["article_header"]) . "." : "";
+            
             $this->items[$index]['id'] = $article["article_id"];
             $urlParams = array('id' => $article['article_id'], 'title' => $article["article_header"]);
             foreach ($this->params as $paramIndex => $paramValue) {
@@ -298,7 +302,7 @@ class ArticlesListData extends SiteData {
             }
             if ($article["thumb"]) {
                 $this->items[$index]['imageExt'] = $article["thumb"];
-                $this->items[$index]['image'] = $this->mediaPath . $article["article_id"] . "." . $article["thumb"];
+                $this->items[$index]['image'] = $this->mediaPath ."{$seoTitle}". $article["article_id"] . "." . $article["thumb"];
             } else {
                 $this->items[$index]['imageExt'] = null;
                 $this->items[$index]['image'] = null;

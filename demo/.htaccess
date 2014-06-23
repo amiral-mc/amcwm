@@ -1,12 +1,22 @@
-RewriteEngine on
 allow from all
+RewriteEngine on
+
 #non-www to www
 #RewriteCond %{HTTP_HOST} ^mydomain\.com 
 #RewriteRule (.*) http://www.mydomain.com/$1 [R=301,L]
 
 # if a directory or a file exists, use it directly
+
+RewriteCond %{REQUEST_URI} !^multimedia/default
+RewriteRule ^multimedia/.*(jpg|png|gif)$ images.php?file=$0 [L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
+
 # otherwise forward it to index.php
-RewriteRule . index.php
+
+RewriteRule ^(.)* index.php
+
+
+
