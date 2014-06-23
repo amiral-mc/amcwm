@@ -244,11 +244,12 @@ class Html {
      * @param integer $wordLimit
      * @return string
      */
-    public static function seoTitle($string, $urlEncode = true, $wordLimit = 6) {
-        $string = CHtml::encode($string);
+    public static function seoTitle($string, $urlEncode = true, $wordLimit = 9) {
         $words = explode(' ', $string);
         $string = implode(' ', array_slice($words, 0, $wordLimit));
         $string = str_replace(" ", "-", $string);
+        $string = str_replace(array('"', '.', "/", "\\", "[", "]", ",", "'"), '', $string);
+        $string = CHtml::encode($string);
         if ($urlEncode) {
             $string = urlencode($string);
         }
