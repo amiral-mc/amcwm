@@ -63,9 +63,9 @@ class Html {
                 $params['id'] = "{$params['id']}-" . self::seoTitle($params['title'], false);
                 unset($params['title']);
             }
-//            if (!isset($params['lang'])) {
-//                $params['lang'] = Controller::getCurrentLanguage();
-//            }
+            if (!isset($params['lang'])) {
+                $params['lang'] = Controller::getCurrentLanguage();
+            }
             $myParams = array();
             foreach ($params as $paramKey => $paramVal) {
                 if (!is_array($paramVal) && $paramVal && $paramVal !== 0) {
