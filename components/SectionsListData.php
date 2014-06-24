@@ -98,7 +98,7 @@ class SectionsListData {
                 $items[$section['data']["section_id"]]['data']['settings'] = $section['data']['settings'];
                 
                 //$urlParams = array('list'=>$this->_dataObject->getModuleName(), 'id' => $section['data']['section_id']);
-                $urlParams = array('id' => $section['data']['section_id']);
+                $urlParams = array('id' => $section['data']['section_id'] , 'title'=>$section['data']['section_name']);
                 foreach ($forwardModules as $moduleId => $forwardModule) {
                     if ($dataObject->getModuleName() == key($forwardModule)) {
                         $urlParams['module'] = $moduleId;
