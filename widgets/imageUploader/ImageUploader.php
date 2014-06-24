@@ -59,7 +59,6 @@ class ImageUploader extends CJuiInputWidget {
         $cl->registerScriptFile($assets . '/js/jquery.Jcrop.min.js');
         $cl->registerCssFile($assets . '/css/jquery.Jcrop.min.css');
         //$cl->registerScriptFile($assets . '/js/jquery.color.js');
-        $cl->registerScriptFile($assets . '/js/jcrop.js', CClientScript::POS_HEAD);
         $cl->registerScriptFile($assets . '/js/uploaderCropper.js', CClientScript::POS_END);
 
 

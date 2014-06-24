@@ -207,7 +207,7 @@ class MTinyMce extends CInputWidget {
      *
      * @var boolean
      */
-    private $useCompression = true;
+    private $useCompression = false;
     protected $rteFileManager = array("/backend/uploads/default/index", 'op' => "rte", "dialog" => "");
     //***************************************************************************
     // Local properties

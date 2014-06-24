@@ -63,20 +63,20 @@ class Html {
                 $params['id'] = "{$params['id']}-" . self::seoTitle($params['title'], false);
                 unset($params['title']);
             }
-            if (!isset($params['lang'])) {
-                $params['lang'] = Controller::getCurrentLanguage();
-            }
-            foreach ($params as $paramKey => $paramVal) {
-                if (is_array($paramVal)) {
-                    foreach ($paramVal as $paramSubKey => $paramSubVal) {
-                        $route .= "/$paramKey" . urlencode("[{$paramSubKey}]") . "/" . urlencode($paramSubVal);
-                    }
-                } else {
-                    $paramVal = urlencode($paramVal);
-                    $route .= "/$paramKey/$paramVal";
-                }
-            }
-            $params = array();
+//            if (!isset($params['lang'])) {
+//                $params['lang'] = Controller::getCurrentLanguage();
+//            }
+//            foreach ($params as $paramKey => $paramVal) {
+//                if (is_array($paramVal)) {
+//                    foreach ($paramVal as $paramSubKey => $paramSubVal) {
+//                        $route .= "/$paramKey" . urlencode("[{$paramSubKey}]") . "/" . urlencode($paramSubVal);
+//                    }
+//                } else {
+//                    $paramVal = urlencode($paramVal);
+//                    $route .= "/$paramKey/$paramVal";
+//                }
+//            }
+//            $params = array();
         }
         $url = Yii::app()->createUrl($route, $params) . $bookmark;
         return $url;

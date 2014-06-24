@@ -45,9 +45,14 @@ return array(
             'urlFormat' => 'path',
             'showScriptName' => false,
             'rules' => array(
+                'content/<id:[\d,\D]+>/*' => 'articles/default/view',
+                'images/<id:[\d,\D]+>/<ajax:\d+>*' => 'multimedia/images/view',                
+                'images/<id:[\d,\D]+>/*' => 'multimedia/images/view',                
+                'videos/<id:[\d,\D]+>/<ajax:\d+>*' => 'multimedia/videos/view',
+                'videos/<id:[\d,\D]+>/*' => 'multimedia/videos/view',                
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>', 
             ),
         ),
         // uncomment the following to use a MySQL database
