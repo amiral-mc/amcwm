@@ -66,7 +66,12 @@ class Html {
 //            if (!isset($params['lang'])) {
 //                $params['lang'] = Controller::getCurrentLanguage();
 //            }
-//            foreach ($params as $paramKey => $paramVal) {
+            $myParams = array();
+            foreach ($params as $paramKey => $paramVal) {
+                if (!is_array($paramVal) && $paramVal && $paramVal !== 0) {
+                    $myParams[$paramKey] = $paramVal;
+                }
+            }
 //                if (is_array($paramVal)) {
 //                    foreach ($paramVal as $paramSubKey => $paramSubVal) {
 //                        $route .= "/$paramKey" . urlencode("[{$paramSubKey}]") . "/" . urlencode($paramSubVal);
@@ -78,7 +83,10 @@ class Html {
 //            }
 //            $params = array();
         }
-        $url = Yii::app()->createUrl($route, $params) . $bookmark;
+        else{
+            $myParams = $params;
+        }
+        $url = Yii::app()->createUrl($route, $myParams) . $bookmark;
         return $url;
     }
 
@@ -249,7 +257,7 @@ class Html {
         $string = implode(' ', array_slice($words, 0, $wordLimit));
         $string = str_replace(" ", "-", $string);
         $string = str_replace(array('"', '.', "/", "\\", "[", "]", ",", "'"), '', $string);
-        $string = CHtml::encode($string);
+        
         if ($urlEncode) {
             $string = urlencode($string);
         }

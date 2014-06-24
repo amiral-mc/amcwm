@@ -45,6 +45,7 @@ return array(
             'urlFormat' => 'path',
             'showScriptName' => false,
             'rules' => array(
+                'home' => 'site/index',
                 'content/<id:[\d,\D]+>/*' => 'articles/default/view',
                 'images/<id:[\d,\D]+>/<ajax:\d+>*' => 'multimedia/images/view',                
                 'images/<id:[\d,\D]+>/*' => 'multimedia/images/view',                
