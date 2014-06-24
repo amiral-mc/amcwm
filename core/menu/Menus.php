@@ -774,6 +774,9 @@ class Menus extends Dataset {
                 $module = new $classChilds($param['module_id'], $moduleParam);
                 $menuItem['items'] = $module->getItems();
                 $urlAppendParam = $module->appendParamsToParent();
+                if(is_array($urlAppendParam) && $urlAppendParam){
+                    $urlAppendParam['title'] = $menuItem['label'];
+                }
                 return $urlAppendParam;
             }
         }
