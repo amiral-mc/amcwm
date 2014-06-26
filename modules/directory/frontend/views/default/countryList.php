@@ -115,7 +115,7 @@ if ($countryData) {
         if ($options['default']['check']['attachEnable']) {
             $drawAttach = "&nbsp;";
             if ($data['attach'] && $data['settings']['check']['attachEnable']) {
-                $drawAttach = "<a href='" . $this->createUrl('/site/download', array('f' => $data['attach'])) . "'>" . AmcWm::t("msgsbase.core", "Download Attachment File") . "</a>";
+                $drawAttach = "<a href='" . Html::createUrl('/site/download', array('f' => $data['attach'])) . "'>" . AmcWm::t("msgsbase.core", "Download Attachment File") . "</a>";
             }
             $pageContent .= "  <tr class='{$bgcolor}'>
                             <td class='com_dir_attach'>

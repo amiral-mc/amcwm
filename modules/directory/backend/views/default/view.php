@@ -42,7 +42,7 @@ if ($model->company_id && $model->image_ext) {
 }
 $drawLink = null;
 if ($model->company_id && $model->file_ext && is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaSettings['paths']['attach']['path'] . "/" . $model->company_id . "." . $model->file_ext))) {
-    $drawLink = '<a href="' . $this->createUrl('/site/download', array('f' => "{$mediaSettings['paths']['attach']['path']}/{$model->company_id}.{$model->file_ext}")) . '">' . AmcWm::t("msgsbase.core", 'Download file') . '</a>';
+    $drawLink = '<a href="' . Html::createUrl('/site/download', array('f' => "{$mediaSettings['paths']['attach']['path']}/{$model->company_id}.{$model->file_ext}")) . '">' . AmcWm::t("msgsbase.core", 'Download file') . '</a>';
 }
 
 $drawMap = null;

@@ -90,5 +90,5 @@
 </div>
 <div class="comment_frm">
     <div class="comment_frm_title"><?php echo AmcWm::t('msgsbase.core', 'Add new comment');?></div>
-    <?php $this->renderPartial("commentForm", array('formId' => 'commentsForm', 'model' => $commentsModal, "action" => array("/" . $this->getModule()->getId() . "/default/addComment", "id" => $details["record"]["tender_id"]))); ?>
+    <?php $this->renderPartial("commentForm", array('formId' => 'commentsForm', 'model' => $commentsModal, "action" => array("/" . $this->getModule()->getId() . "/default/addComment", "id" => $details["record"]["tender_id"], 'lang'=>  Controller::getCurrentLanguage()))); ?>
 </div>

@@ -11,8 +11,8 @@ $this->beginClip('tendersList');
     <div>
         <div class="tender_title">
             <span class="title"><?php echo $data['title']; ?></span>
-            <span class="qa"><?php echo CHtml::link(AmcWm::t('msgsbase.core', 'Questions'), '#comments'); ?></span>
-            <span class="doc"><?php echo CHtml::link(AmcWm::t('msgsbase.core', 'RFP download'), array('/site/download', 'f' => "{$mediaSettings['paths']['files']['path']}/{$data['tender_id']}.{$data['file_ext']}")); ?></span>
+            <span class="qa"><?php echo Html::link(AmcWm::t('msgsbase.core', 'Questions'), '#comments'); ?></span>
+            <span class="doc"><?php echo Html::link(AmcWm::t('msgsbase.core', 'RFP download'), array('/site/download', 'f' => "{$mediaSettings['paths']['files']['path']}/{$data['tender_id']}.{$data['file_ext']}")); ?></span>
         </div>
         <div class="tender_details">
             <div>

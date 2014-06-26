@@ -17,7 +17,7 @@ $this->beginClip('tendersList');
                 'columns' => array(
                     array(
                         'name' => AmcWm::t('msgsbase.core', 'Title'),
-                        'value' => 'CHtml::link($data["title"], array("/tenders/default/view", "id"=>$data["id"]), array("class"=>"tender_title_list"));',
+                        'value' => 'Html::link($data["title"], array("/tenders/default/view", "id"=>$data["id"]), array("class"=>"tender_title_list"));',
                         'type' => 'html'
                     ),
                     array(
@@ -56,7 +56,7 @@ $this->beginClip('tendersList');
                 'columns' => array(
                     array(
                         'name' => AmcWm::t('msgsbase.core', 'Title'),
-                        'value' => 'CHtml::link($data["title"], array("/tenders/default/view", "id"=>$data["id"]), array("class"=>"tender_title_list"));',
+                        'value' => 'Html::link($data["title"], array("/tenders/default/view", "id"=>$data["id"]), array("class"=>"tender_title_list"));',
                         'type' => 'html'
                     ),
                     array(

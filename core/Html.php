@@ -54,6 +54,10 @@ class Html {
     public static function createUrl($route, $params = array()) {
         $url = null;
         $bookmark = null;
+        $useLang = count(Yii::app()->params['languages']) || (isset(Yii::app()->params['langAsFoldder']) && Yii::app()->params['langAsFoldder']);
+        if (!isset($params['lang'])) {
+            $params['lang'] = Controller::getCurrentLanguage();
+        }
         if (Yii::app()->getUrlManager()->getUrlFormat() == 'path') {
             if (isset($params["#"])) {
                 $bookmark = "#{$params["#"]}";
@@ -63,27 +67,14 @@ class Html {
                 $params['id'] = "{$params['id']}-" . self::seoTitle($params['title'], false);
                 unset($params['title']);
             }
-            if (!isset($params['lang'])) {
-                $params['lang'] = Controller::getCurrentLanguage();
-            }
             $myParams = array();
+//            $route =  Controller::getCurrentLanguage() . "/" . trim($route, "/");
             foreach ($params as $paramKey => $paramVal) {
                 if (!is_array($paramVal) && $paramVal && $paramVal !== 0) {
                     $myParams[$paramKey] = $paramVal;
                 }
             }
-//                if (is_array($paramVal)) {
-//                    foreach ($paramVal as $paramSubKey => $paramSubVal) {
-//                        $route .= "/$paramKey" . urlencode("[{$paramSubKey}]") . "/" . urlencode($paramSubVal);
-//                    }
-//                } else {
-//                    $paramVal = urlencode($paramVal);
-//                    $route .= "/$paramKey/$paramVal";
-//                }
-//            }
-//            $params = array();
-        }
-        else{
+        } else {
             $myParams = $params;
         }
         $url = Yii::app()->createUrl($route, $myParams) . $bookmark;
@@ -257,7 +248,7 @@ class Html {
         $string = implode(' ', array_slice($words, 0, $wordLimit));
         $string = str_replace(" ", "-", $string);
         $string = str_replace(array('"', '.', "/", "\\", "[", "]", ",", "'"), '', $string);
-        
+
         if ($urlEncode) {
             $string = urlencode($string);
         }
@@ -269,36 +260,30 @@ class Html {
      */
     public static function drawSeoImage() {
         if (isset($_GET['file'])) {
-            $pos = strrpos($_GET['file'], "/");
-            if ($pos !== false) {
-                $file = substr($_GET['file'], $pos + 1);
-                $realFilePos = strpos($file, ".");
-                $folder = substr($_GET['file'], 0, $pos + 1);
-                $info = pathinfo($file);
-                if ($realFilePos !== false) {
-                    $realFile = substr($file, $realFilePos + 1);
-                    if ($realFile == $info['extension']) {
-                        $realFile = $file;
-                    }
-                }
-                switch ($info['extension']) {
-                    case "jpeg":
-                    case "jpg":
-                        header("Content-type:image/jpeg");
-                        break;
-                    case "png":
-                        header("Content-type:image/png");
-                        break;
-                    case "gif":
-                        header("Content-type:image/gif");
-                        break;
-                }
-                ob_clean();
-                flush();
-                readfile($folder . $realFile);
-                exit;
+            $realFile = trim($_GET['file'], "/");
+            $info = pathinfo($realFile);
+            preg_match_all("|^(.*\.)([0-9]+\.\w{3,4})$|", $_GET['file'], $matches);
+            $imageId = NULL;
+            if (isset($matches[2][0])) {
+                $realFile = "{$info['dirname']}/{$matches[2][0]}";
+                $imageId = $matches[2][0];
             }
+            switch ($info['extension']) {
+                case "jpeg":
+                case "jpg":
+                    header("Content-type:image/jpeg");
+                    break;
+                case "png":
+                    header("Content-type:image/png");
+                    break;
+                case "gif":
+                    header("Content-type:image/gif");
+                    break;
+            }
+            ob_clean();
+            flush();
+            readfile($realFile);
+            exit;
         }
     }
-
 }

@@ -176,7 +176,7 @@
                     <input type="checkbox" name="deleteFile" id="deleteFile" style="float: right" onclick="deleteRelatedFile(this);" />
                     <label for="deleteFile" id="labelDelFile" title=""><span><?php echo AmcWm::t("msgsbase.core", 'Delete Document'); ?></span></label>
                     <label for="deleteFile" title="" style='float: right;margin-top: 4px;cursor: pointer'><span id='checlFileLabel'><?php echo AmcWm::t("msgsbase.core", 'Delete File'); ?></span></label>
-                    <label for="downlaodFile" title="" style='float: right;margin-top: 4px;cursor: pointer'><span id='checlFileLabel'> &nbsp;-&nbsp; <a href="<?php echo $this->createUrl('/site/download', array('f' => "{$mediaSettings['paths']['attach']['path']}/{$model->company_id}.{$model->file_ext}")) ?>"><?php echo AmcWm::t("msgsbase.core", 'Download file'); ?></a></span></label>
+                    <label for="downlaodFile" title="" style='float: right;margin-top: 4px;cursor: pointer'><span id='checlFileLabel'> &nbsp;-&nbsp; <a href="<?php echo Html::createUrl('/site/download', array('f' => "{$mediaSettings['paths']['attach']['path']}/{$model->company_id}.{$model->file_ext}")) ?>"><?php echo AmcWm::t("msgsbase.core", 'Download file'); ?></a></span></label>
                 </div>
                 <?php
                 Yii::app()->clientScript->registerScript('displayDeleteFile', "

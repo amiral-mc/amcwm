@@ -21,12 +21,12 @@ $baseScript = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias(AmcWm::
                             <li><b><?php echo $user['username'] ?></b></li>
                             <li>
                                 <ul id="user_access">
-                                    <li class="first"><?php echo CHtml::link(AmcWm::t("amcBack", "profile"), array("/backend/users/default/profile")) ?></li>
-                                    <li><?php echo CHtml::link(AmcWm::t("amcBack", "logout"), array("/backend/default/logout")) ?></li>
-                                    <li class="last"><?php echo CHtml::link(AmcWm::t("amcBack", "View Website"), array("/site/index"), array('target'=>'_blank')) ?></li>
+                                    <li class="first"><?php echo Html::link(AmcWm::t("amcBack", "profile"), array("/backend/users/default/profile")) ?></li>
+                                    <li><?php echo Html::link(AmcWm::t("amcBack", "logout"), array("/backend/default/logout")) ?></li>
+                                    <li class="last"><?php echo Html::link(AmcWm::t("amcBack", "View Website"), array("/site/index"), array('target'=>'_blank')) ?></li>
                                 </ul>
                             </li>
-                            <li><?php echo CHtml::link(Yii::app()->user->getMessagesCount() . ' ' . AmcWm::t("amcBack", "messages"), array("/user/newMessages"), array("class" => "new_messages")) ?></li>
+                            <li><?php echo Html::link(Yii::app()->user->getMessagesCount() . ' ' . AmcWm::t("amcBack", "messages"), array("/user/newMessages"), array("class" => "new_messages")) ?></li>
                         </ul>
                         <div id="server_details">
                             <dl>

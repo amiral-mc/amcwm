@@ -77,7 +77,7 @@ $this->beginClip('directoryList');
             if (count($alphabet)) {
                 foreach ($alphabet as $k => $v) {
                     echo "<li>";
-                    echo CHtml::link(ucfirst($v), array('/directory/default/index', 'q' => $v, 'a' => 1));
+                    echo Html::link(ucfirst($v), array('/directory/default/index', 'q' => $v, 'a' => 1));
                     echo "</li>";
                 }
             }
@@ -150,7 +150,7 @@ $this->beginClip('directoryList');
                 if ($options['default']['check']['attachEnable']) {
                     $drawAttach = "&nbsp;";
                     if ($data['attach'] && $data['settings']['check']['attachEnable']) {
-                        $drawAttach = "<a href='" . $this->createUrl('/site/download', array('f' => $data['attach'])) . "'>" . AmcWm::t("msgsbase.core", "Download Attachment File") . "</a>";
+                        $drawAttach = "<a href='" . Html::createUrl('/site/download', array('f' => $data['attach'])) . "'>" . AmcWm::t("msgsbase.core", "Download Attachment File") . "</a>";
                     }
                     echo "  <tr class='{$bgcolor}'>
                             <td class='com_dir_attach'>

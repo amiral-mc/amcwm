@@ -42,7 +42,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 <?php echo $form->checkBox($model, 'rememberMe') . $form->labelEx($model, 'rememberMe');?>
                 <?php $form->error($model, 'rememberMe');?>
                 |
-                <?php echo CHtml::link(AmcWm::t("amcFront","Forget my password?"));?>
+                <?php echo Html::link(AmcWm::t("amcFront","Forget my password?"));?>
                 <?php echo CHtml::submitButton(AmcWm::t("amcFront", 'login_button'), array("style" => "width:60px;"));?>
                 
                 

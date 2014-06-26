@@ -27,19 +27,15 @@ FormActions.manageOne = function(route, refId, params){
         document.location.href = FormActions.createUrl(route, params);
     }    
 }
-FormActions.createUrl=function(route, params){
+FormActions.createUrl=function(route, params){    
     url = route;    
-    if(FormActions.urlFormat == 'path'){
-        for(var paramKey in params){
-            url += "/"+paramKey +"/" + params[paramKey];                
-        }        
-    }
-    else{
+    if(route.lastIndexOf('?') == -1){
+        url += '?'  ;    
         
-        for(paramKey in params){
-            url += "&" +paramKey +"=" + params[paramKey];
-        }        
-    }
+    }    
+    for(paramKey in params){
+        url += "&" +paramKey +"=" + params[paramKey];
+    }        
     return url;
 }
 FormActions.search = function(formId, itemId){

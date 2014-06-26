@@ -62,7 +62,7 @@ if ($directoryData) {
     if ($options['default']['check']['attachEnable']) {
         $drawAttach = "&nbsp;";
         if ($directoryData['attach'] && $directoryData['settings']['check']['attachEnable']) {
-            $drawAttach = "<a href='" . $this->createUrl('/site/download', array('f' => $directoryData['attach'])) . "'>" . AmcWm::t("msgsbase.core", "Download Attachment File") . "</a>";
+            $drawAttach = "<a href='" . Html::createUrl('/site/download', array('f' => $directoryData['attach'])) . "'>" . AmcWm::t("msgsbase.core", "Download Attachment File") . "</a>";
         }
         $dirContact .= "  <tr class='dirCompany'>
                     <td class='com_dir_attach'>

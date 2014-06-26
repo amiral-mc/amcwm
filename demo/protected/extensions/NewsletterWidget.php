@@ -26,7 +26,7 @@ class NewsletterWidget extends Widget {
             'type' => 'inline',
             'htmlOptions' => array('class' => 'well'),
             
-            'action' => array('/maillist/default/subscribe'),
+            'action' => array('/maillist/default/subscribe', 'lang'=>Controller::getCurrentLanguage()),
 //            'enableClientValidation' => true,
 //            'clientOptions' => array(
 //                'validateOnSubmit' => true,

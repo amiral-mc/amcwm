@@ -15,7 +15,7 @@ $langSettings = AmcWm::app()->appModule->getSettings('languages');
                         $fileLang = $langSettings[$row['file_lang']];
                         $drawDocLink = "#";
                         if ($row['file_ext']) {
-                            $drawDocLink = $this->createUrl('/site/download', array('f' => "{$mediaSettings['paths']['files']['path']}/{$row['id']}.{$row['file_ext']}"));
+                            $drawDocLink = Html::createUrl('/site/download', array('f' => "{$mediaSettings['paths']['files']['path']}/{$row['id']}.{$row['file_ext']}"));
                         }
                         ?>
                         <?php echo Html::link($row['title'], $drawDocLink); ?>

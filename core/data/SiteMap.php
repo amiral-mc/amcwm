@@ -125,7 +125,7 @@ class SiteMap extends Dataset {
      * @return void
      */
     private function _setChilds(&$child, $level) {
-        if (count($child['url']) && $level < Menus::getSettings()->options['default']['integer']['maxLevels']) {                    
+        if (count($child['url']) && isset($child['url']['menu']) && $level < Menus::getSettings()->options['default']['integer']['maxLevels']) {                    
             $taskObj = new ControllerTaskManager($child['url'], $child['url']['menu'], array("limit"=>100));            
             if ($taskObj->isSuccess()) {                
                 $taskObj->run(false);

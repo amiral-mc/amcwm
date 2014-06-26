@@ -20,6 +20,7 @@ class AmcDocumentsController extends FrontendController {
         $presentationSettings = $mediaSettings->settings;
         $view = "documents";
         $presentationViewPathAlias = null;
+        $presentationMsgAlias = null;
         if (isset($presentationSettings['options']['default']['integer']['presentationId']) && $presentationSettings['options']['default']['integer']['presentationId'] && $category == $presentationSettings['options']['default']['integer']['presentationId']) {
 
             //$_GET['c'] = $allOptions['default']['integer']['presentationId'];

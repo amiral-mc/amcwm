@@ -773,11 +773,7 @@ class Menus extends Dataset {
                 $moduleParam['menu'] = "{$this->_id}-{$param['item_id']}";
                 $module = new $classChilds($param['module_id'], $moduleParam);
                 $menuItem['items'] = $module->getItems();
-                $urlAppendParam = $module->appendParamsToParent();
-                if(is_array($urlAppendParam) && $urlAppendParam){
-                    $urlAppendParam['title'] = $menuItem['label'];
-                }
-                return $urlAppendParam;
+                return $module->appendParamsToParent();
             }
         }
     }
@@ -851,9 +847,10 @@ class Menus extends Dataset {
                 $url = $itemUrl;
             }
         }
+        $isHome = ($menuItem['url'] == AmcWm::app()->defaultController . "/index" && !$params);
 
-        if (is_array($url) && count($url)) {
-            $url['menu'] = "{$this->_id}-$itemId";
+        if (is_array($url) && count($url) && !$isHome) {
+            $url['menu'] = "{$this->_id}-$itemId-" . Html::seoTitle($menuItem['label'], false);
         }
         return $url;
     }

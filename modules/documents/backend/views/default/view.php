@@ -22,7 +22,7 @@ $drawDocLink = NULL;
 
 
 if ($model->doc_id && $model->file_ext && is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaSettings['paths']['files']['path'] . "/" . $model->doc_id . "." . $model->file_ext))) {
-    $drawDocLink = '<a href="' . $this->createUrl('/site/download', array('f' => "{$mediaSettings['paths']['files']['path']}/{$model->doc_id}.{$model->file_ext}")) . '">' . AmcWm::t("msgsbase.core", 'Download the file') . '</a>';
+    $drawDocLink = '<a href="' . Html::createUrl('/site/download', array('f' => "{$mediaSettings['paths']['files']['path']}/{$model->doc_id}.{$model->file_ext}")) . '">' . AmcWm::t("msgsbase.core", 'Download the file') . '</a>';
 }
 
 

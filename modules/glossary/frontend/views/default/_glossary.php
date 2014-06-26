@@ -17,16 +17,16 @@ Yii::app()->getClientScript()->registerScript('directoryGetCompanies', $js_code,
         if (count($alphabet)) {
             foreach ($alphabet as $k => $v) {
                 echo "<li>";
-                echo CHtml::link(ucfirst($v), array('/glossary/default/index', 'q' => $v, 'a' => 1));
+                echo Html::link(ucfirst($v), array('/glossary/default/index', 'q' => $v, 'a' => 1));
                 echo "</li>";
             }
 
             // search for the exp. starts with numbers
             echo "<li>";
-            echo CHtml::link("#", array('/glossary/default/index', 'q' => '#', 'a' => 1));
+            echo Html::link("#", array('/glossary/default/index', 'q' => '#', 'a' => 1));
             echo "</li>";
             echo "<li>";
-            echo CHtml::link(AmcWm::t("msgsbase.core",  'All'), array('/glossary/default/index'));
+            echo Html::link(AmcWm::t("msgsbase.core",  'All'), array('/glossary/default/index'));
             echo "</li>";
         }
         ?>

@@ -6,7 +6,7 @@
         'id' => 'maillist-form',
         'type' => 'horizontal',
         'inlineErrors' => true,
-        'action' => array("/maillist/default/subscribe"),
+        'action' => array("/maillist/default/subscribe", "lang"=>Controller::getCurrentLanguage()),
         'enableClientValidation' => true,
         'clientOptions' => array(
             'validateOnSubmit' => true,
@@ -14,7 +14,6 @@
     ));
     $align = (Yii::app()->getLocale()->getOrientation() == "rtl") ? "right" : "left";
     ?>
-    <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage(), array('id' => 'maillist_lang')) ?>
     <?php
     $emailOptions['size'] = 20;
     $nameOptions['size'] = 20;

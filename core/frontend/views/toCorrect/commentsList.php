@@ -117,7 +117,7 @@
             ),
         ),
     ));
-    $this->renderPartial("application.views.site.commentForm", array('formId' => 'repliesForm', 'model' => $repliesModel, "action" => array("/" . $this->getModule()->getId() . "/replies/create", "id" => $comments['content']["id"])));
+    $this->renderPartial("application.views.site.commentForm", array('formId' => 'repliesForm', 'model' => $repliesModel, "action" => array("/" . $this->getModule()->getId() . "/replies/create", "id" => $comments['content']["id"], 'lang'=>  Controller::getCurrentLanguage())));
     $this->endWidget('zii.widgets.jui.CJuiDialog');
     $cs = Yii::app()->getClientScript();
     $cs->registerCoreScript('jquery');
@@ -133,7 +133,7 @@
 <div class="comment_frm">
     <div class="comment_frm_title"><?php echo Yii::t("comments", 'Add new comment') ?></div>
     <?php 
-    $this->renderPartial("application.views.site.commentForm", array('formId' => 'commentsForm', 'model' => $commentsModel, "action" => array("/" . $this->getModule()->getId() . "/comments/create", "id" => $comments['content']["id"]))); ?>
+    $this->renderPartial("application.views.site.commentForm", array('formId' => 'commentsForm', 'model' => $commentsModel, "action" => array("/" . $this->getModule()->getId() . "/comments/create", "id" => $comments['content']["id"], 'lang'=>  Controller::getCurrentLanguage()))); ?>
     <div class="comment_note">
         <?php echo Yii::t("comments", 'CommentsNotes') ?>
     </div>

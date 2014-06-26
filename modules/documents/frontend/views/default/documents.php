@@ -87,7 +87,7 @@ $this->beginClip('documentsList');
                 $fileLang = $langSettings[$data['file_lang']];
                 $drawDocLink = "&nbsp;";
                 if($data['file_ext']){
-                    $drawDocLink = "&nbsp; (<a href='".$this->createUrl('/site/download', array('f'=>"{$mediaSettings['paths']['files']['path']}/{$data['id']}.{$data['file_ext']}"))."' style='color:#16497E; text-decoraion:none; font-weight:bold'>".AmcWm::t('msgsbase.core', 'Download')."</a>)";
+                    $drawDocLink = "&nbsp; (<a href='".Html::createUrl('/site/download', array('f'=>"{$mediaSettings['paths']['files']['path']}/{$data['id']}.{$data['file_ext']}"))."' style='color:#16497E; text-decoraion:none; font-weight:bold'>".AmcWm::t('msgsbase.core', 'Download')."</a>)";
                 }
                 echo "<td width='50%' valign='top'>";
                 echo "<table cellspacing='1'>";
