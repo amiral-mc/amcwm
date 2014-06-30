@@ -136,4 +136,5 @@ return array(
     '_attach_images_name_'=>'ارفاق صورة',
     '_attach_videos_name_'=>'ارفاق فيديو',
     '_attach_backgrounds_name_'=>'ارفاق خلفية',    
+    'Show in home'=>"اظهار في الصفحة الرئيسية",
 );

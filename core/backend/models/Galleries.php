@@ -91,7 +91,7 @@ class Galleries extends ParentTranslatedActiveRecord {
             'published' => AmcWm::t("msgsbase.core", 'Published'),
             'country_code' => AmcWm::t("msgsbase.core", 'Country'),
             'socialIds' => AmcWm::t("msgsbase.core", 'socialIds'),
-            'show_gallery' => 'Show',
+            'show_gallery' => AmcWm::t("msgsbase.core", 'Show in home'),
         );
     }
 

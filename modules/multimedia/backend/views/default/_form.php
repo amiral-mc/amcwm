@@ -23,6 +23,8 @@
             </div>              
             <?php echo $form->checkBox($model, 'published'); ?>
             <?php echo $form->labelEx($model, 'published', array("style" => 'display:inline;')); ?>            
+            <?php echo $form->checkBox($model, 'show_gallery'); ?>
+            <?php echo $form->labelEx($model, 'show_gallery', array("style" => 'display:inline;')); ?>            
         </fieldset> 
     </div>
     <fieldset>              
