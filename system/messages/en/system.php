@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return array(    
     '_NEWS_MODULE_' => 'News',    
     '_BREAKING_MODULE_'=>'Breaking News',
     '_ARTICLES_MODULE_' => 'Website Content',
@@ -136,4 +136,7 @@ return array(
     '_RESET_ACTION_'=> 'Reset',
     '_SOURCES_CONTROLLER_'=>"Sources",
     '_SOURCES_ACTION_'=>"Sources",           
+    '_ADS_MODULE_'=>"Ads",
+    '_ADS_CONTROLLER_' => "Ads",
+    '_SERVERS_CONTROLLER_' => 'Ads Servers',
 );

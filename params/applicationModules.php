@@ -26,4 +26,5 @@ return array(
     'tenders' => array(),
     'logger' => array('inCore'=>true),
     'issues' => array('inCore'=>true),
+    'ads' => array('inCore'=>true),
 );
