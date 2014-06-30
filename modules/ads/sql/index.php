@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `ads_zones` (
   `ad_id` SMALLINT NOT NULL AUTO_INCREMENT,
   `server_id` SMALLINT UNSIGNED NOT NULL,
   `zone_id` TINYINT UNSIGNED NOT NULL,
+  `invocation_code` TEXT NOT NULL,
   INDEX `fk_ads_zones_ads_servers_config1_idx` (`server_id` ASC),
   PRIMARY KEY (`ad_id`),
   INDEX `fk_ads_zones_default_ads_zones1_idx` (`zone_id` ASC),
