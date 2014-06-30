@@ -53,7 +53,7 @@ class SubscribeWidget extends SideWidget {
         echo '<div class="form newsletter_form">';
         $form = $this->beginWidget('CActiveForm', array(
             'id' => 'maillist-form',
-            'action' => array("/maillist/default/subscribe"),
+            'action' => array("/maillist/default/subscribe", 'lang' => Controller::getCurrentLanguage()),
             'enableClientValidation' => true,
             'clientOptions' => array(
                 'validateOnSubmit' => true,

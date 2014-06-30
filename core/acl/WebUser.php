@@ -31,11 +31,7 @@ class WebUser extends CWebUser {
      * @access public
      */
     public function __construct() {
-        if (Yii::app()->getUrlManager()->getUrlFormat() == 'path') {
-            $this->loginUrl = array("/" . AmcWm::app()->defaultController . '/login/lang/' . Controller::getCurrentLanguage());
-        } else {
-            $this->loginUrl = array("/" . AmcWm::app()->defaultController . '/login', 'lang' => Controller::getCurrentLanguage());
-        }
+        $this->loginUrl = array("/" . AmcWm::app()->defaultController . '/login', 'lang' => Controller::getCurrentLanguage());
     }
 
     /**

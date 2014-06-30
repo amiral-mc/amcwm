@@ -756,8 +756,8 @@ class MTinyMce extends CInputWidget {
         if ($this->rteFileManager) {
             $routeParams = $this->rteFileManager;
             $route = array_shift($routeParams);
-            $actionUrl = Yii::app()->createUrl($route, $routeParams);
-            if (Yii::app()->getUrlManager()->getUrlFormat() == 'path') {
+            $actionUrl = Html::createUrl($route, $routeParams);            
+            if (strpos($actionUrl, "?") === false) {
                 $actionUrl .= '?';
             }
             $options['file_browser_callback'] = 'js:function(field_name, url, type, win) {             
