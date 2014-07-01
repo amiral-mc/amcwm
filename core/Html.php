@@ -70,7 +70,7 @@ class Html {
             $myParams = array();
 //            $route =  Controller::getCurrentLanguage() . "/" . trim($route, "/");
             foreach ($params as $paramKey => $paramVal) {
-                if (!is_array($paramVal) && $paramVal && $paramVal !== 0) {
+                if (!is_array($paramVal)) {
                     $myParams[$paramKey] = $paramVal;
                 }
             }
