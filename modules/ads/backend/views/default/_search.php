@@ -14,15 +14,25 @@
     ));
     ?>        
     <div class="row">
-        <?php echo $form->label($model, 'server_id'); ?>
-        <?php echo $form->dropDownList($model, 'server_id', array(), array('prompt' => AmcWm::t("amcTools", 'All'))); ?>
-        <?php echo $form->error($model, 'server_id'); ?>
-    </div>
-     <div class="row">
-        <?php echo $form->label($model, 'zone_id'); ?>
-        <?php echo $form->dropDownList($model, 'zone_id', array(), array('prompt' => AmcWm::t("amcTools", 'All'))); ?>
-        <?php echo $form->error($model, 'zone_id'); ?>
-    </div>
+            <?php echo $form->labelEx($model, 'server_id'); ?>
+            <?php echo $form->dropDownList($model, 'server_id', CHtml::listData(AdsServersConfig::model()->findAll(array('order' => 'server_name ASC')), 'server_id', 'server_name')); ?>
+            <?php echo $form->error($model, 'server_id'); ?>
+        </div>
+        <div class="row">
+            <?php echo $form->labelEx($model, 'zone_id'); ?>
+            <?php echo $form->dropDownList($model, 'zone_id', CHtml::listData(DefaultAdsZones::model()->findAll(array('order' => 'zone_name ASC')), 'zone_id', 'zone_name')); ?>
+            <?php echo $form->error($model, 'zone_id'); ?>
+        </div>
+        <div class="row">
+            <?php echo $form->labelEx($model, 'invocation_code'); ?>
+            <?php echo $form->textArea($model, 'invocation_code', array('dir' => 'ltr')); ?>
+            <?php echo $form->error($model, 'invocation_code'); ?>
+        </div>
+        <div class="row">
+            <?php echo $form->labelEx($model, 'published'); ?>
+            <?php echo $form->checkBox($model, 'published'); ?>
+            <?php echo $form->error($model, 'published'); ?>
+        </div>
     <div class="row buttons">
         <?php echo CHtml::submitButton(AmcWm::t("amcBack", 'Search')); ?>
     </div>

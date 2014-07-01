@@ -19,21 +19,17 @@ class AmcAdsController extends BackendController {
      */
     protected function save(AdsZones $model) {
         if (isset($_POST['AdsZones'])) {
-            $transaction = Yii::app()->db->beginTransaction();
             $model->attributes = $_POST['AdsZones'];
             $validate = $model->validate();
             if ($validate) {
                 try {
                     if ($model->save()) {
-                        $transaction->commit();
-                        Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t("amcTools", 'Record has been saved')));
-                        $this->redirect(array('view', 'id' => $model->parcel_id));
+                        Yii::app()->user->setFlash('success', array
+                            ('class' => 'flash-success', 'content' => AmcWm::t("amcTools", 'Record has been saved')));
+                        $this->redirect(array('view', 'id' => $model->ad_id));
                     }
                 } catch (CDbException $e) {
-//                    echo $e->getMessage();
-                    $transaction->rollback();
                     Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => AmcWm::t("amcTools", "Can't save record")));
-                    //$this->refresh();
                 }
             }
         }
@@ -46,8 +42,7 @@ class AmcAdsController extends BackendController {
     public function actionCreate() {
         $model = new AdsZones;
         $this->save($model);
-        $this->render('create', array(
-            'model' => $model,
+        $this->render('create', array('model' => $model,
         ));
     }
 
@@ -57,9 +52,10 @@ class AmcAdsController extends BackendController {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
-        $model = $this->loadModel($id);     
+        $model = $this->loadModel($id);
         $this->save($model);
-        $this->render('update', array(
+        $this->render('update', array
+            (
             'model' => $model,
         ));
     }
@@ -70,7 +66,8 @@ class AmcAdsController extends BackendController {
     public function actionIndex() {
         $model = new AdsZones();
         $model->unsetAttributes();
-        if (isset($_GET['AdsZones'])) {
+        if (isset($_GET[
+                        'AdsZones'])) {
             $model->attributes = $_GET['AdsZones'];
         }
         $this->render('index', array(
@@ -78,24 +75,26 @@ class AmcAdsController extends BackendController {
         ));
     }
 
-    
     /**
      * Ads servers configuration
      */
     public function actionServers() {
         $this->forward("servers/");
     }
+
     /**
      * Deletes a particular model.
      * If deletion is successful, the browser will be redirected to the 'admin' page.
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete() {
-        $ids = Yii::app()->request->getParam('ids', array());
+        $ids = Yii::app()->request->getParam('ids', array
+                ());
         if (Yii::app()->request->isPostRequest && count($ids)) {
             $messages = array();
             $messages['error'] = array();
             $messages['success'] = array();
+
             foreach ($ids as $id) {
                 $model = $this->loadModel($id);
                 $hasChilds = $model->integrityCheck();
@@ -125,6 +124,17 @@ class AmcAdsController extends BackendController {
     }
 
     /**
+     * Performs the publish action
+     * @see ActiveRecord::publish($published)
+     * @param int $published
+     * @access public 
+     * @return void
+     */
+    public function actionPublish($published) {
+        $this->publish($published, 'index', array(), 'loadModel');
+    }
+
+    /**
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
      * @param integer the ID of the model to be loaded
@@ -134,6 +144,6 @@ class AmcAdsController extends BackendController {
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
-    }   
+    }
 
 }

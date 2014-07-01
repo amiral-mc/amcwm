@@ -46,11 +46,13 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 'checkBoxHtmlOptions' => array("name" => "ids"),
                 'htmlOptions' => array('width' => '16', 'align' => 'center'),
             ),
-            'server_id',
             array(
-                'name' => 'server_name',
-                'htmlOptions' => array('width' => '230'),
+                'name' => 'server_id',
+                'header' => 'ID',
+                'htmlOptions' => array('width' => '30'),
             ),
+            'server_name',
+            'header_code',
         )
     ));
     $this->endWidget();
