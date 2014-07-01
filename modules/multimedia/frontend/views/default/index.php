@@ -12,7 +12,7 @@ $havePresentations = isset($allOptions['default']['integer']['presentationId']) 
         <?php if ($allOptions['default']['blockImages']['videos']): ?>                    
             <img src="<?php echo AmcWm::app()->baseUrl ?>/<?php echo trim($allOptions['default']['blockImages']['images'], "/") ?>" alt="<?php echo AmcWm::t("app", '_BLOCK_IMAGES_TITLE_'); ?>" />
         <?php endif; ?>
-        <h3><?php echo Html::link(AmcWm::t("app", '_BLOCK_IMAGES_TITLE_'), array('/multimedia/default/images')); ?></h3>
+        <h3><?php echo Html::link(AmcWm::t("app", '_BLOCK_IMAGES_TITLE_'), array('/multimedia/images/index')); ?></h3>
         <p><?php echo AmcWm::t("app", '_BLOCK_IMAGES_INFO_'); ?></p>
     </div>	
 
@@ -20,7 +20,7 @@ $havePresentations = isset($allOptions['default']['integer']['presentationId']) 
         <?php if ($allOptions['default']['blockImages']['videos']): ?>                    
             <img src="<?php echo AmcWm::app()->baseUrl ?>/<?php echo trim($allOptions['default']['blockImages']['videos'], "/") ?>" alt="<?php echo AmcWm::t("app", '_BLOCK_VIDEOS_TITLE_'); ?>" />
         <?php endif; ?>
-        <h3><?php echo Html::link(AmcWm::t("app", '_BLOCK_VIDEOS_TITLE_'), array('/multimedia/default/videos')); ?></h3>
+        <h3><?php echo Html::link(AmcWm::t("app", '_BLOCK_VIDEOS_TITLE_'), array('/multimedia/videos/index')); ?></h3>
         <p><?php echo AmcWm::t("app", '_BLOCK_VIDEOS_INFO_'); ?></p>
     </div>	
     <?php if ($havePresentations): ?>
