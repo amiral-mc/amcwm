@@ -9,7 +9,7 @@ if(!isset($msgAlias)){
         <?php        
         $form = $this->beginWidget('CActiveForm', array(
             'id' => 'form-media-libs',
-            'action' => array("/multimedia/default/select"),
+            'action' => array("/multimedia/default/select", 'lang' => Controller::getCurrentLanguage()),
             'method' => "get",
             'htmlOptions' => array(
                 "class" => "form-search",
@@ -29,7 +29,7 @@ if(!isset($msgAlias)){
         <?php
         $form = $this->beginWidget('CActiveForm', array(
             'id' => 'form-media-lib-gallery',
-            'action' => array("/multimedia/{$labSelected}/index"),
+            'action' => array("/multimedia/{$labSelected}/index", 'lang' => Controller::getCurrentLanguage()),
             'method' => "get",
             'htmlOptions' => array(
                 "class" => "form-search",
