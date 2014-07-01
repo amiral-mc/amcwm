@@ -40,8 +40,6 @@ class AmcArticlesController extends FrontendController {
     }
 
     public function actionSections($id = null) {
-        print_r($_GET);
-        die();
         //sisterPostition
         $menuId = Yii::app()->request->getParam("menu");
         if ($menuId) {
