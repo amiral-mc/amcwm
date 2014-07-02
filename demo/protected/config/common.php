@@ -63,7 +63,6 @@ return array(
                 '<lang:\w+>/videos/<id>/<ajax:\d+>' => 'multimedia/videos/view',
                 '<lang:\w+>/videos/<id>' => 'multimedia/videos/view',
                 '<lang:\w+>/videos' => 'multimedia/videos/index',
-                '<lang:\w+>/<menu>' => 'site/index',
                 '<lang:\w+>' => 'site/index',
                 '<lang:\w+>/sections/<id>/<module:\d+>/<menu>' => '/articles/default/sections',
                 '<lang:\w+>/sections/<menu>/<module:\d+>' => '/articles/default/sections',
