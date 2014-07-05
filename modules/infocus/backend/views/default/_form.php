@@ -5,6 +5,7 @@
     $options = $this->module->appModule->options;
     $mediaSettings = $this->getModule()->appModule->mediaSettings;    
     $useBackground = isset($options['system']['check']['useBackground']) && $options['system']['check']['useBackground'];
+    $useBackgroundColor = isset($options['system']['check']['useBackgroundColor']) && $options['system']['check']['useBackgroundColor'];
     $useBanner = isset($options['system']['check']['useBanner']) && $options['system']['check']['useBanner'];
     $form = $this->beginWidget('CActiveForm', array(
         'id' => $formId,
@@ -56,6 +57,15 @@
     <?php if($useBackground || $useBanner):?>
     <fieldset>
         <legend><?php echo AmcWm::t("msgsbase.core", "Media Section"); ?>:</legend>
+        
+        <?php if($useBackgroundColor):?>
+        <div class="row">
+            <?php echo $form->labelEx($model, 'bgcolor'); ?>
+            <?php echo $form->textField($model, 'bgcolor', array('maxlength' => 6, 'style' => 'width:50px;')); ?>
+            <?php echo $form->error($model, 'bgcolor'); ?>
+        </div>
+        <?php endif;?>
+        
         <?php if($useBackground):?>
         <div class="row">
             <?php

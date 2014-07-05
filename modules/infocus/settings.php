@@ -75,6 +75,7 @@ return array(
             'check' => array(
                 'useBanner' => true,
                 'useBackground' => true,
+                'useBackgroundColor'=>true,
             ),
         ),
         'default' => array(
