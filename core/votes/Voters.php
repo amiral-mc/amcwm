@@ -28,6 +28,11 @@
 class Voters extends ActiveRecord {
 
     /**
+     *
+     * @var integer current question id 
+     */
+    public $questionId;
+    /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
      * @return Voters the static model class
@@ -85,7 +90,7 @@ class Voters extends ActiveRecord {
                 $votedQuery = sprintf("select user_id from voters v
                 inner join votes_options o on o.option_id = v.option_id
                 inner join votes_questions q on q.ques_id = o.ques_id
-                where v.user_id = %d limit 0 ,1", $this->user_id);
+                where v.user_id = %d and q.ques_id = %d limit 0 ,1", $this->user_id, $this->questionId);
                 $userId = Yii::app()->db->createCommand($votedQuery)->queryScalar();
                 if ($userId) {
                     $this->addError($attribute, AmcWm::t("amcFront", "Already Voted."));

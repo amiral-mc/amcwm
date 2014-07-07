@@ -45,7 +45,10 @@ return array(
             'urlFormat' => 'path',
             'showScriptName' => false,
             'rules' => array(
+                'gii' => 'gii/default/index',                                
+                'gii/<controller:\w+>/<action:\w+>' => 'gii/<controller>/<action>',
                 'backend' => 'backend/default/index',
+                
                 'backend/<module:\w+>/<controller:\w+>/ajax/<do:\w+>' => '<module>/<controller>/ajax',
                 'backend/<module:\w+>/<controller:\w+>/<action:\w+>/<id>' => 'backend/<module>/<controller>/<action>',
                 'backend/<module:\w+>/<controller:\w+>/<action:\w+>' => 'backend/<module>/<controller>/<action>',
@@ -63,7 +66,6 @@ return array(
                 '<lang:\w+>/videos/<id>/<ajax:\d+>' => 'multimedia/videos/view',
                 '<lang:\w+>/videos/<id>' => 'multimedia/videos/view',
                 '<lang:\w+>/videos' => 'multimedia/videos/index',
-                '<lang:\w+>/<menu>' => 'site/index',
                 '<lang:\w+>' => 'site/index',
                 '<lang:\w+>/sections/<id>/<module:\d+>/<menu>' => '/articles/default/sections',
                 '<lang:\w+>/sections/<menu>/<module:\d+>' => '/articles/default/sections',

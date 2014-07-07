@@ -124,6 +124,7 @@ class Votes {
                 $voterOptions['user_id'] = $user['user_id'];
             }
             $voter->attributes = $voterOptions;
+            $voter->questionId = $this->data['id'];
             if ($voter->validate() && !$this->data['suspend'] && !$this->isVoted()) {
                 if ($voter->save()) {
                     if (!isset($voterOptions['user_id'])) {

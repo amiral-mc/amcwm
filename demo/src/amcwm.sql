@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 18, 2014 at 05:43 PM
+-- Generation Time: Jul 06, 2014 at 03:52 PM
 -- Server version: 5.5.34-0ubuntu0.12.04.1
 -- PHP Version: 5.3.10-1ubuntu3.8
 
@@ -142,6 +142,8 @@ INSERT INTO `access_rights` (`role_id`, `controller_id`, `access`) VALUES
 (2, 207, 31),
 (2, 208, 15),
 (2, 209, 15),
+(2, 1200, 31),
+(2, 1201, 15),
 (3, 12, 63),
 (3, 16, 15),
 (3, 37, 63),
@@ -216,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `actions` (
   `is_system` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`action_id`),
   KEY `fk_actions_controllers1` (`controller_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6631 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6642 ;
 
 --
 -- Dumping data for table `actions`
@@ -1021,7 +1023,62 @@ INSERT INTO `actions` (`action_id`, `controller_id`, `action`, `permissions`, `i
 (6627, 1198, 'view', 1, 0),
 (6628, 1198, 'create', 2, 0),
 (6629, 1199, 'index', 1, 0),
-(6630, 1199, 'view', 1, 0);
+(6630, 1199, 'view', 1, 0),
+(6631, 1200, 'index', 1, 0),
+(6632, 1200, 'view', 1, 0),
+(6633, 1200, 'create', 2, 0),
+(6634, 1200, 'update', 4, 0),
+(6635, 1200, 'delete', 8, 0),
+(6636, 1200, 'servers', 16, 0),
+(6637, 1201, 'index', 1, 0),
+(6638, 1201, 'view', 1, 0),
+(6639, 1201, 'create', 2, 0),
+(6640, 1201, 'update', 4, 0),
+(6641, 1201, 'delete', 8, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ads_servers_config`
+--
+
+CREATE TABLE IF NOT EXISTS `ads_servers_config` (
+  `server_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `header_code` text NOT NULL,
+  `server_name` varchar(35) NOT NULL,
+  PRIMARY KEY (`server_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ads_zones`
+--
+
+CREATE TABLE IF NOT EXISTS `ads_zones` (
+  `ad_id` smallint(6) NOT NULL AUTO_INCREMENT,
+  `server_id` smallint(5) unsigned NOT NULL,
+  `zone_id` tinyint(3) unsigned NOT NULL,
+  `invocation_code` text NOT NULL,
+  `published` tinyint(1) NOT NULL,
+  PRIMARY KEY (`ad_id`),
+  KEY `fk_ads_zones_ads_servers_config1_idx` (`server_id`),
+  KEY `fk_ads_zones_default_ads_zones1_idx` (`zone_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ads_zones_has_sections`
+--
+
+CREATE TABLE IF NOT EXISTS `ads_zones_has_sections` (
+  `ad_id` smallint(6) NOT NULL,
+  `section_id` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`ad_id`,`section_id`),
+  KEY `fk_ads_zones_has_sections_sections1_idx` (`section_id`),
+  KEY `fk_ads_zones_has_sections_ads_zones1_idx` (`ad_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1062,7 +1119,7 @@ CREATE TABLE IF NOT EXISTS `articles` (
   KEY `fk_articles_countries1` (`country_code`),
   KEY `fk_articles_sections1` (`section_id`),
   KEY `fk_articles_articles1` (`parent_article`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=49 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -1214,7 +1271,7 @@ CREATE TABLE IF NOT EXISTS `controllers` (
   `hidden` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`controller_id`),
   KEY `fk_controllers_modules1` (`module_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1200 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1202 ;
 
 --
 -- Dumping data for table `controllers`
@@ -1372,7 +1429,9 @@ INSERT INTO `controllers` (`controller_id`, `module_id`, `controller`, `hidden`)
 (1196, 81, 'manage', 0),
 (1197, 81, 'comments', 0),
 (1198, 81, 'replies', 0),
-(1199, 82, 'default', 0);
+(1199, 82, 'default', 0),
+(1200, 83, 'default', 0),
+(1201, 83, 'servers', 0);
 
 -- --------------------------------------------------------
 
@@ -2721,6 +2780,20 @@ INSERT INTO `currency_translation` (`currency_code`, `content_lang`, `currency_n
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `default_ads_zones`
+--
+
+CREATE TABLE IF NOT EXISTS `default_ads_zones` (
+  `zone_id` tinyint(3) unsigned NOT NULL,
+  `zone_name` varchar(100) NOT NULL,
+  `width` smallint(5) unsigned NOT NULL,
+  `height` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`zone_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `deleted_users`
 --
 
@@ -2939,7 +3012,7 @@ CREATE TABLE IF NOT EXISTS `docs` (
   `create_date` datetime NOT NULL,
   PRIMARY KEY (`doc_id`),
   KEY `fk_docs_docs_categories1` (`category_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2956,7 +3029,7 @@ CREATE TABLE IF NOT EXISTS `docs_categories` (
   `is_system` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`category_id`),
   KEY `fk_dir_categories_dir_categories1` (`parent_category`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -3156,7 +3229,7 @@ CREATE TABLE IF NOT EXISTS `files` (
   PRIMARY KEY (`file_id`),
   KEY `fk_files_folders1` (`folder_id`),
   KEY `fk_files_users1` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=38 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -3272,7 +3345,8 @@ INSERT INTO `forward_actions` (`forward_to`, `forward_from`) VALUES
 (6604, 6596),
 (6608, 6607),
 (6622, 6614),
-(6626, 6625);
+(6626, 6625),
+(6637, 6636);
 
 -- --------------------------------------------------------
 
@@ -3321,7 +3395,7 @@ CREATE TABLE IF NOT EXISTS `galleries` (
   PRIMARY KEY (`gallery_id`),
   KEY `fk_galleries_sections` (`section_id`),
   KEY `fk_galleries_countries1` (`country_code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -3421,7 +3495,7 @@ CREATE TABLE IF NOT EXISTS `images` (
   KEY `fk_images_users1` (`user_id`),
   KEY `fk_images_galleries1` (`gallery_id`),
   KEY `image_sort_idx` (`image_sort`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -3475,7 +3549,7 @@ CREATE TABLE IF NOT EXISTS `infocus` (
   PRIMARY KEY (`infocus_id`),
   KEY `fk_infocus_sections1` (`section_id`),
   KEY `fk_infocus_countries1` (`country_code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -3533,7 +3607,7 @@ CREATE TABLE IF NOT EXISTS `infocus_translation` (
   `tags` varchar(1024) DEFAULT NULL,
   PRIMARY KEY (`infocus_id`,`content_lang`),
   KEY `fk_infocus_translation_1` (`infocus_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -3591,7 +3665,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `publish_date` datetime NOT NULL,
   PRIMARY KEY (`job_id`),
   KEY `fk_jobs_jobs_categories1` (`category_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -3603,7 +3677,7 @@ CREATE TABLE IF NOT EXISTS `jobs_categories` (
   `category_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `published` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`category_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -3655,7 +3729,7 @@ CREATE TABLE IF NOT EXISTS `jobs_requests` (
   PRIMARY KEY (`request_id`),
   KEY `fk_jobs_requests_jobs1` (`job_id`),
   KEY `fk_jobs_requests_countries1` (`nationality`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -3698,7 +3772,7 @@ CREATE TABLE IF NOT EXISTS `maillist` (
   `person_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `person_id` (`person_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -3888,7 +3962,7 @@ CREATE TABLE IF NOT EXISTS `menus` (
   `menu_name` varchar(45) DEFAULT NULL,
   `levels` tinyint(3) unsigned DEFAULT '3',
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `menus`
@@ -4010,7 +4084,7 @@ CREATE TABLE IF NOT EXISTS `modules` (
   `workflow_enabled` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`module_id`),
   KEY `fk_modules_modules1` (`parent_module`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=83 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=84 ;
 
 --
 -- Dumping data for table `modules`
@@ -4070,7 +4144,8 @@ INSERT INTO `modules` (`module_id`, `parent_module`, `module`, `virtual`, `enabl
 (79, NULL, 'usersArticles', 0, 1, 0, 0),
 (80, NULL, 'essays', 0, 0, 0, 0),
 (81, NULL, 'issueArticles', 0, 0, 0, 0),
-(82, 1, 'infocus', 0, 1, 0, 0);
+(82, 1, 'infocus', 0, 1, 0, 0),
+(83, 1, 'ads', 0, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -4356,7 +4431,7 @@ CREATE TABLE IF NOT EXISTS `persons` (
   `date_of_birth` date DEFAULT NULL,
   PRIMARY KEY (`person_id`),
   KEY `fk_persons_countries1` (`country_code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `persons`
@@ -4612,7 +4687,7 @@ CREATE TABLE IF NOT EXISTS `sections` (
   PRIMARY KEY (`section_id`),
   KEY `fk_sections_sections` (`parent_section`),
   KEY `idx_section_sort` (`section_sort`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -5156,7 +5231,15 @@ CREATE TABLE IF NOT EXISTS `users_log` (
   PRIMARY KEY (`log_id`),
   KEY `fk_users_log_user_actions` (`action_id`),
   KEY `fk_users_log_users1` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=448 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+
+--
+-- Dumping data for table `users_log`
+--
+
+INSERT INTO `users_log` (`log_id`, `ip`, `action_id`, `user_id`, `action_date`) VALUES
+(8, '127.0.0.1', 6343, 1, '2014-07-06 14:49:46'),
+(9, '127.0.0.1', 6343, 1, '2014-07-06 14:49:46');
 
 -- --------------------------------------------------------
 
@@ -5200,7 +5283,7 @@ CREATE TABLE IF NOT EXISTS `videos` (
   PRIMARY KEY (`video_id`),
   KEY `fk_videos_users1` (`user_id`),
   KEY `fk_videos_galleries1` (`gallery_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -5501,6 +5584,20 @@ ALTER TABLE `access_rights`
 --
 ALTER TABLE `actions`
   ADD CONSTRAINT `fk_actions_controllers1` FOREIGN KEY (`controller_id`) REFERENCES `controllers` (`controller_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `ads_zones`
+--
+ALTER TABLE `ads_zones`
+  ADD CONSTRAINT `fk_ads_zones_ads_servers_config1` FOREIGN KEY (`server_id`) REFERENCES `ads_servers_config` (`server_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_ads_zones_default_ads_zones1` FOREIGN KEY (`zone_id`) REFERENCES `default_ads_zones` (`zone_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `ads_zones_has_sections`
+--
+ALTER TABLE `ads_zones_has_sections`
+  ADD CONSTRAINT `fk_ads_zones_sections_ads_zones1` FOREIGN KEY (`ad_id`) REFERENCES `ads_zones` (`ad_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_ads_zones_sections_sections1` FOREIGN KEY (`section_id`) REFERENCES `sections` (`section_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `articles`

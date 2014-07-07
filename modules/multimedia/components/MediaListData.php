@@ -311,6 +311,7 @@ class MediaListData extends SiteData {
             $this->items[$index]['published'] = $row["publish_date"];
             $this->items[$index]['comments'] = $row["comments"];
             $this->items[$index]['hits'] = $row["hits"];
+            $this->items[$index]['gallery_id'] = $row["gallery_id"];
             $this->items[$index]['internal'] = true;
             //$this->items[$index]['shared'] = $row["shared"];
             $seoTitle = ($useSeoImages) ? Html::seoTitle($this->items[$index]['title']) . "." : "";
