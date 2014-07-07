@@ -45,7 +45,10 @@ return array(
             'urlFormat' => 'path',
             'showScriptName' => false,
             'rules' => array(
+                'gii' => 'gii/default/index',                                
+                'gii/<controller:\w+>/<action:\w+>' => 'gii/<controller>/<action>',
                 'backend' => 'backend/default/index',
+                
                 'backend/<module:\w+>/<controller:\w+>/ajax/<do:\w+>' => '<module>/<controller>/ajax',
                 'backend/<module:\w+>/<controller:\w+>/<action:\w+>/<id>' => 'backend/<module>/<controller>/<action>',
                 'backend/<module:\w+>/<controller:\w+>/<action:\w+>' => 'backend/<module>/<controller>/<action>',
