@@ -19,6 +19,5 @@ $this->widget('zii.widgets.CDetailView', array(
     'attributes' => array(
         'server_id',
         'server_name',
-        'header_code',
     ),
 ));

@@ -1,5 +1,7 @@
 <?php
 
+Amcwm::import('amcwm.core.backend.models.Sections');
+
 class AmcAdsController extends BackendController {
 
     /**
@@ -24,6 +26,15 @@ class AmcAdsController extends BackendController {
             if ($validate) {
                 try {
                     if ($model->save()) {
+                        AdsZonesHasSections::model()->deleteAll('ad_id = ' . $model->ad_id);
+                        if (isset($_POST['AdsZones']['sections']) && $_POST['AdsZones']['sections']) {
+                            foreach ($_POST['AdsZones']['sections'] as $key) {
+                                $hasSections = new AdsZonesHasSections;
+                                $hasSections->ad_id = $model->ad_id;
+                                $hasSections->section_id = (int) $key;
+                                $hasSections->save();
+                            }
+                        }
                         Yii::app()->user->setFlash('success', array
                             ('class' => 'flash-success', 'content' => AmcWm::t("amcTools", 'Record has been saved')));
                         $this->redirect(array('view', 'id' => $model->ad_id));
@@ -143,6 +154,16 @@ class AmcAdsController extends BackendController {
         $model = AdsZones::model()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
+        return $model;
+    }
+
+    /**
+     * Returns the data model based on the primary key given in the GET variable.
+     * If the data model is not found, an HTTP exception will be raised.
+     * @param integer the ID of the model to be loaded
+     */
+    public function loadAdsHasSectionsModel($id) {
+        $model = AdsZonesHasSections::model()->find("ad_id = {$id}");
         return $model;
     }
 

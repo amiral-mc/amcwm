@@ -13,7 +13,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
         array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array("/backend/ads/default/index"), 'id' => 'admin_list', 'image_id' => 'back'),
     ),
 ));
-
+//print_r($model->sections->getCurrent()->section_name); exit;
 $this->widget('zii.widgets.CDetailView', array(
     'data' => $model,
     'attributes' => array(
@@ -25,6 +25,10 @@ $this->widget('zii.widgets.CDetailView', array(
         array(
             'name' => 'zone_id',
             'value' => $model->server->server_name,
+        ),
+        array(
+            'name' => 'section_name',
+            'value' => $model->section_name,
         ),
         array(
             'name' => 'published',

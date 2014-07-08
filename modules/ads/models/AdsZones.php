@@ -7,8 +7,9 @@
  * @property integer $ad_id
  * @property integer $server_id
  * @property integer $zone_id
- * @property string invocation_code
  * @property integer $published
+ * @property string $invocation_code
+ * @property string $section_name
  *
  * The followings are the available model relations:
  * @property AdsServersConfig $server
@@ -16,7 +17,8 @@
  * @property Sections[] $sections
  */
 class AdsZones extends ActiveRecord {
-
+    
+    public $section_name;
     /**
      * @return string the associated database table name
      */
@@ -61,7 +63,7 @@ class AdsZones extends ActiveRecord {
             'server_id' => AmcWm::t('msgsbase.core', 'Server'),
             'zone_id' => AmcWm::t('msgsbase.core', 'Zone'),
             'invocation_code' => AmcWm::t('msgsbase.core', 'Invocation Code'),
-            'published' => AmcWm::t('msgsbase.core', 'Published'),
+            'published' => AmcWm::t('msgsbase.core', 'Activate'),
         );
     }
 
@@ -100,6 +102,24 @@ class AdsZones extends ActiveRecord {
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
+    }
+
+    /**
+     * This method is invoked after each record is instantiated by a find method.
+     * @access public
+     * @return void
+     */
+    protected function afterFind() {
+        $this->displayTitle = $this->server->server_name . " #" . $this->ad_id;
+        foreach ($this->sections as $section) {
+//            print_r($this->sections); exit;
+            $section->parentSection = $section->parent_section;
+            $current = $section->getCurrent();
+            if ($current instanceof SectionsTranslation) {
+                $this->section_name .= "[" . $current->section_name . "] ";
+            }
+        }
+        parent::afterFind();
     }
 
 }

@@ -55,9 +55,9 @@ class AdsServersConfig extends ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'server_id' => 'Server',
-			'header_code' => 'Header Code',
-			'server_name' => 'Server Name',
+			'server_id' => AmcWm::t('msgsbase.core', 'Server'),
+			'header_code' => AmcWm::t('msgsbase.core', 'Header Code'),
+			'server_name' => AmcWm::t('msgsbase.core', 'Server Name'),
 		);
 	}
 

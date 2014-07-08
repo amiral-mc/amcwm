@@ -52,7 +52,6 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 'htmlOptions' => array('width' => '30'),
             ),
             'server_name',
-            'header_code',
         )
     ));
     $this->endWidget();

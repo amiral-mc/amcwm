@@ -50,8 +50,8 @@ class AdsZonesHasSections extends ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ad_id' => 'Ad',
-			'section_id' => 'Section',
+			'ad_id' => AmcWm::t('msgsbase.core', 'Ad'),
+			'section_id' => AmcWm::t('msgsbase.core', 'Section'),
 		);
 	}
 

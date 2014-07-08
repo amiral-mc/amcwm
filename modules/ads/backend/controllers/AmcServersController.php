@@ -18,7 +18,8 @@ class AmcServersController extends BackendController {
      * @access protected
      */
     protected function save(AdsServersConfig $model) {
-        if (isset($_POST['AdsServersConfig'])) {
+        if (isset($_POST['AdsServersConfig'])) {            
+            $_POST['AdsServersConfig']['header_code'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '$2', $_POST['AdsServersConfig']['header_code']);
             $model->attributes = $_POST['AdsServersConfig'];
             $validate = $model->validate();
             if ($validate) {
