@@ -137,4 +137,6 @@ return array(
     '_ADS_MODULE_' => "الاعلانات",
     '_ADS_CONTROLLER_' => "الاعلانات",
     '_SERVERS_CONTROLLER_' => 'مصادر الاعلانات',
+    '_EXCHANGE_MODULE_' => 'البورصة'
+    
 );

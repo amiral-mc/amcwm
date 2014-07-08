@@ -27,4 +27,5 @@ return array(
     'logger' => array('inCore'=>true),
     'issues' => array('inCore'=>true),
     'ads' => array('inCore'=>true),
+    'exchange' => array('inCore'=>true),
 );
