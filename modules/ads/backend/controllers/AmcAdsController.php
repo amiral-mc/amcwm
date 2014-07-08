@@ -16,7 +16,7 @@ class AmcAdsController extends BackendController {
 
     /**
      * Save model to database
-     * @param DirCompaniesBranches $model
+     * @param AdsZones $model
      * @access protected
      */
     protected function save(AdsZones $model) {

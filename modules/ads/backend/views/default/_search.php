@@ -14,8 +14,8 @@
     ));
     ?>        
     <div class="row">
-        <?php echo $form->labelEx($model, 'published'); ?>
-        <?php echo $form->checkBox($model, 'published'); ?>
+        <?php echo $form->labelEx($model, 'published', array("style" => 'display:inline;')); ?>
+        <?php echo $form->checkBox($model, 'published'); ?>        
         <?php echo $form->error($model, 'published'); ?>
     </div>
     <div class="row">
@@ -25,7 +25,7 @@
     </div>
     <div class="row">
         <?php echo $form->labelEx($model, 'zone_id'); ?>
-        <?php echo $form->dropDownList($model, 'zone_id', CHtml::listData(DefaultAdsZones::model()->findAll(array('order' => 'zone_name ASC')), 'zone_id', 'zone_name')); ?>
+        <?php echo $form->dropDownList($model, 'zone_id', CHtml::listData(DefaultAdsZones::model()->findAll(array('order' => 'zone_name ASC')), 'zone_id', function($zone){return $zone->zone_name . " -- " . $zone->width . " x " . $zone->height;})); ?>
         <?php echo $form->error($model, 'zone_id'); ?>
     </div>
     <div class="row">                       

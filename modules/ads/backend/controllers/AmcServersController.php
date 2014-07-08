@@ -14,7 +14,7 @@ class AmcServersController extends BackendController {
 
     /**
      * Save model to database
-     * @param DirCompaniesBranches $model
+     * @param AdsServersConfig $model
      * @access protected
      */
     protected function save(AdsServersConfig $model) {
