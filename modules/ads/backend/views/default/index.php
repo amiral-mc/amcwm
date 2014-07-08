@@ -8,7 +8,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
         array('label' => AmcWm::t("amcTools", 'Create'), 'url' => array('/backend/ads/default/create'), 'id' => 'add_record', 'image_id' => 'add'),
         array('label' => AmcWm::t("amcTools", 'Edit'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'add_record', 'image_id' => 'edit'),
         array('label' => AmcWm::t("amcTools", 'Preview'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'preview_record', 'image_id' => 'view'),
-        array('label' => AmcWm::t("msgsbase.servers", 'Ad Servers'), 'url' => array('/backend/ads/companies/index'), 'id' => 'servers', 'image_id' => 'listing'),
+        array('label' => AmcWm::t("msgsbase.servers", 'Ad Servers'), 'url' => array('/backend/ads/servers/index'), 'id' => 'servers', 'image_id' => 'listing'),
         array('label' => AmcWm::t("amcTools", 'Publish'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'publish_ad', 'image_id' => 'publish'),
         array('label' => AmcWm::t("amcTools", 'Unpublish'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'unpublish_ad', 'image_id' => 'unpublish'),
         array('label' => AmcWm::t("amcTools", 'Search'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'records_search', 'image_id' => 'search'),
