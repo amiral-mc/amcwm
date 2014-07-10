@@ -5,13 +5,12 @@
  *
  * The followings are the available columns in table 'exchange':
  * @property integer $exchange_id
- * @property integer $company_id
- * @property string $index
- * @property string $percentage
- * @property string $net
+ * @property string $exchange_name
+ * @property string $currency
  *
  * The followings are the available model relations:
- * @property ExchangeCompanies $company
+ * @property ExchangeCompanies[] $exchangeCompanies
+ * @property ExchangeTrading[] $exchangeTradings
  */
 class Exchange extends ActiveRecord
 {
@@ -31,12 +30,10 @@ class Exchange extends ActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('company_id, index, percentage, net', 'required'),
-            array('company_id', 'numerical', 'integerOnly'=>true),
-            array('index, percentage, net', 'length', 'max'=>12),
+            array('exchange_name, currency', 'length', 'max'=>45),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('exchange_id, company_id, index, percentage, net', 'safe', 'on'=>'search'),
+            array('exchange_id, exchange_name, currency', 'safe', 'on'=>'search'),
         );
     }
 
@@ -48,7 +45,8 @@ class Exchange extends ActiveRecord
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'company' => array(self::BELONGS_TO, 'ExchangeCompanies', 'company_id'),
+            'exchangeCompanies' => array(self::HAS_MANY, 'ExchangeCompanies', 'exchange_id'),
+            'exchangeTradings' => array(self::HAS_MANY, 'ExchangeTrading', 'exchange_id'),
         );
     }
 
@@ -59,10 +57,8 @@ class Exchange extends ActiveRecord
     {
         return array(
             'exchange_id' => AmcWm::t('msgsbase.core', 'Exchange'),
-            'company_id' => AmcWm::t('msgsbase.core', 'Company'),
-            'index' => AmcWm::t('msgsbase.core', 'Index'),
-            'percentage' => AmcWm::t('msgsbase.core', 'Percentage'),
-            'net' => AmcWm::t('msgsbase.core', 'Net'),
+            'exchange_name' => AmcWm::t('msgsbase.core', 'Exchange Name'),
+            'currency' => AmcWm::t('msgsbase.core', 'Currency'),
         );
     }
 
@@ -85,10 +81,8 @@ class Exchange extends ActiveRecord
         $criteria=new CDbCriteria;
 
         $criteria->compare('exchange_id',$this->exchange_id);
-        $criteria->compare('company_id',$this->company_id);
-        $criteria->compare('index',$this->index,true);
-        $criteria->compare('percentage',$this->percentage,true);
-        $criteria->compare('net',$this->net,true);
+        $criteria->compare('exchange_name',$this->exchange_name,true);
+        $criteria->compare('currency',$this->currency,true);
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,

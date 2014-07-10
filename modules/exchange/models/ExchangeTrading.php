@@ -1,26 +1,30 @@
 <?php
 
 /**
- * This is the model class for table "exchange_companies".
+ * This is the model class for table "exchange_trading".
  *
- * The followings are the available columns in table 'exchange_companies':
- * @property integer $exchange_companies_id
+ * The followings are the available columns in table 'exchange_trading':
  * @property integer $exchange_id
- * @property string $company_name
- * @property string $code
+ * @property string $exchange_date
+ * @property string $trading_value
+ * @property string $shares_of_stock
+ * @property string $closing_value
+ * @property string $difference_value
+ * @property string $difference_percentage
  *
  * The followings are the available model relations:
  * @property Exchange $exchange
  * @property ExchangeTradingCompanies[] $exchangeTradingCompanies
+ * @property ExchangeTradingCompanies[] $exchangeTradingCompanies1
  */
-class ExchangeCompanies extends ActiveRecord
+class ExchangeTrading extends ActiveRecord
 {
     /**
      * @return string the associated database table name
      */
     public function tableName()
     {
-        return 'exchange_companies';
+        return 'exchange_trading';
     }
 
     /**
@@ -31,12 +35,14 @@ class ExchangeCompanies extends ActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('exchange_id, company_name', 'required'),
+            array('exchange_id, exchange_date, trading_value, shares_of_stock, closing_value, difference_value, difference_percentage', 'required'),
             array('exchange_id', 'numerical', 'integerOnly'=>true),
-            array('company_name, code', 'length', 'max'=>45),
+            array('trading_value, shares_of_stock', 'length', 'max'=>16),
+            array('closing_value', 'length', 'max'=>12),
+            array('difference_value, difference_percentage', 'length', 'max'=>8),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('exchange_companies_id, exchange_id, company_name, code', 'safe', 'on'=>'search'),
+            array('exchange_id, exchange_date, trading_value, shares_of_stock, closing_value, difference_value, difference_percentage', 'safe', 'on'=>'search'),
         );
     }
 
@@ -49,7 +55,8 @@ class ExchangeCompanies extends ActiveRecord
         // class name for the relations automatically generated below.
         return array(
             'exchange' => array(self::BELONGS_TO, 'Exchange', 'exchange_id'),
-            'exchangeTradingCompanies' => array(self::HAS_MANY, 'ExchangeTradingCompanies', 'exchange_companies_exchange_companies_id'),
+            'exchangeTradingCompanies' => array(self::HAS_MANY, 'ExchangeTradingCompanies', 'exchange_trading_exchange_id'),
+            'exchangeTradingCompanies1' => array(self::HAS_MANY, 'ExchangeTradingCompanies', 'exchange_trading_exchange_date'),
         );
     }
 
@@ -59,10 +66,13 @@ class ExchangeCompanies extends ActiveRecord
     public function attributeLabels()
     {
         return array(
-            'exchange_companies_id' => AmcWm::t('msgsbase.core', 'Exchange Companies'),
             'exchange_id' => AmcWm::t('msgsbase.core', 'Exchange ID'),
-            'company_name' => AmcWm::t('msgsbase.core', 'Company Name'),
-            AmcWm::t('msgsbase.core', 'Code'),
+            'exchange_date' => AmcWm::t('msgsbase.core', 'Exchange Date'),
+            'trading_value' => AmcWm::t('msgsbase.core', 'Trading Value'),
+            'shares_of_stock' => AmcWm::t('msgsbase.core', 'Shares of Stock'),
+            'closing_value' => AmcWm::t('msgsbase.core', 'Closing Value'),
+            'difference_value' => AmcWm::t('msgsbase.core', 'Difference in Value'),
+            'difference_percentage' => AmcWm::t('msgsbase.core', 'Percentage Difference '),
         );
     }
 
@@ -84,10 +94,13 @@ class ExchangeCompanies extends ActiveRecord
 
         $criteria=new CDbCriteria;
 
-        $criteria->compare('exchange_companies_id',$this->exchange_companies_id);
         $criteria->compare('exchange_id',$this->exchange_id);
-        $criteria->compare('company_name',$this->company_name,true);
-        $criteria->compare('code',$this->code,true);
+        $criteria->compare('exchange_date',$this->exchange_date,true);
+        $criteria->compare('trading_value',$this->trading_value,true);
+        $criteria->compare('shares_of_stock',$this->shares_of_stock,true);
+        $criteria->compare('closing_value',$this->closing_value,true);
+        $criteria->compare('difference_value',$this->difference_value,true);
+        $criteria->compare('difference_percentage',$this->difference_percentage,true);
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
@@ -98,7 +111,7 @@ class ExchangeCompanies extends ActiveRecord
      * Returns the static model of the specified AR class.
      * Please note that you should have this exact method in all your CActiveRecord descendants!
      * @param string $className active record class name.
-     * @return ExchangeCompanies the static model class
+     * @return ExchangeTrading the static model class
      */
     public static function model($className=__CLASS__)
     {

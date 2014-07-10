@@ -2,7 +2,7 @@
 
 Amcwm::import('amcwm.core.backend.models.Sections');
 
-class AmcExchangeController extends BackendController {
+class AmcExchangeTradingController extends BackendController {
 
     /**
      * Displays a particular model.
@@ -19,16 +19,16 @@ class AmcExchangeController extends BackendController {
      * @param DirCompaniesBranches $model
      * @access protected
      */
-    protected function save(Exchange $model) {
-        if (isset($_POST['Exchange'])) {
-            $model->attributes = $_POST['Exchange'];
+    protected function save(ExchangeTrading $model) {
+        if (isset($_POST['ExchangeTrading'])) {
+            $model->attributes = $_POST['ExchangeTrading'];
             $validate = $model->validate();
             if ($validate) {
                 try {
                     if ($model->save()) {
                         Yii::app()->user->setFlash('success', array
                             ('class' => 'flash-success', 'content' => AmcWm::t("amcTools", 'Record has been saved')));
-                        $this->redirect(array('view', 'id' => $model->exchange_id));
+                        $this->redirect(array('view', 'id' => $model->ad_id));
                     }
                 } catch (CDbException $e) {
                     Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => AmcWm::t("amcTools", "Can't save record")));
@@ -42,7 +42,7 @@ class AmcExchangeController extends BackendController {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
-        $model = new Exchange;
+        $model = new ExchangeTrading;
         $this->save($model);
         $this->render('create', array('model' => $model,
         ));
@@ -66,28 +66,14 @@ class AmcExchangeController extends BackendController {
      * Lists all models.
      */
     public function actionIndex() {
-        $model = new Exchange();
+        $model = new ExchangeTrading();
         $model->unsetAttributes();
-        if (isset($_GET['Exchange'])) {
-            $model->attributes = $_GET['Exchange'];
+        if (isset($_GET['ExchangeTrading'])) {
+            $model->attributes = $_GET['ExchangeTrading'];
         }
         $this->render('index', array(
             'model' => $model,
         ));
-    }
-
-    /**
-     * Exchange Companies configuration
-     */
-    public function actionCompanies() {
-        $this->forward("companies/");
-    }
-    
-    /**
-     * Exchange Tadawol
-     */
-    public function actionTrading() {
-        $this->forward("trading/");
     }
 
     /**
@@ -148,7 +134,7 @@ class AmcExchangeController extends BackendController {
      * @param integer the ID of the model to be loaded
      */
     public function loadModel($id) {
-        $model = Exchange::model()->findByPk($id);
+        $model = ExchangeTrading::model()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;

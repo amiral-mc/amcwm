@@ -14,29 +14,19 @@
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage()); ?>
     <fieldset>
         <div class="row">
-            <?php echo $form->labelEx($model, 'company_id'); ?>
-            <?php echo $form->dropDownList($model, 'company_id', CHtml::listData(ExchangeCompanies::model()->findAll(array('order' => 'company_name ASC')), 'company_id', 'company_name')); ?>
-            <?php echo $form->error($model, 'company_id'); ?>
+            <?php echo $form->labelEx($model, 'exchange_name'); ?>
+            <?php echo $form->textField($model, 'exchange_name', array('size' => 45, 'maxlength' => 45)); ?>
+            <?php echo $form->error($model, 'exchange_name'); ?>
         </div>
+
         <div class="row">
-            <?php echo $form->labelEx($model, 'index'); ?>
-            <?php echo $form->textField($model, 'index'); ?>
-            <?php echo $form->error($model, 'index'); ?>
-        </div>
-        <div class="row">                       
-            <?php echo $form->labelEx($model, 'percentage'); ?>
-            <?php echo $form->textField($model, 'percentage'); ?>
-            <?php echo $form->error($model, 'percentage'); ?>
-        </div>
-        <div class="row">
-            <?php echo $form->labelEx($model, 'net'); ?>
-            <?php echo $form->textField($model, 'net'); ?>
-            <?php echo $form->error($model, 'net'); ?>
+            <?php echo $form->labelEx($model, 'currency'); ?>
+            <?php echo $form->textField($model, 'currency', array('size' => 45, 'maxlength' => 45)); ?>
+            <?php echo $form->error($model, 'currency'); ?>
         </div>
     </fieldset>
 
 
-    <?php     
-    $this->endWidget(); ?>
+    <?php $this->endWidget(); ?>
 
 </div><!-- form -->

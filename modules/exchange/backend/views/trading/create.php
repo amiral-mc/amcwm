@@ -1,11 +1,11 @@
 <?php
-
 $formId = Yii::app()->params["adminForm"];
 $this->breadcrumbs = array(
     AmcWm::t("msgsbase.core", "Exchange") => array('/backend/exchange/default/index'),
-    AmcWm::t("amcTools", "Edit"),
+    AmcWm::t("amcTools", "Create"),
 );
-$this->sectionName = "#{$model->exchange_id}";
+$this->sectionName = AmcWm::t("amcTools", "Create");
+
 $this->widget('amcwm.core.widgets.tools.Tools', array(
     'id' => 'tools-grid',
     'items' => array(
