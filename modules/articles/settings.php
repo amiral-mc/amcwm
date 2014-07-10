@@ -6,7 +6,7 @@ return array(
             'id' => 1,
             'name' => 'articles',
             'translation' => array(
-                'id' => 6,
+                'id' => 8,
                 'key' => 'article_id',
                 'name' => 'articles_translation',
             ),

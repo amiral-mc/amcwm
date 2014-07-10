@@ -33,18 +33,24 @@ class ArticlesListData extends SiteData {
      * @var integer 
      */
     protected $parentArticle = null;
-    
+
     /**
      * Article language
      * @var integer 
      */
     protected $language = null;
-    
+
     /**
      *
      * @var boolean , execlude articles  with empty details
      */
     protected $detailsIsNotEmpty = true;
+    
+    /**
+     * Auto generate data set
+     * @var boolean 
+     */
+    protected $generateDataset = true;
 
     /**
      * Counstructor
@@ -57,15 +63,14 @@ class ArticlesListData extends SiteData {
      * @access public
      */
     public function __construct($tables = array(), $period = 0, $limit = 10, $sectionId = null) {
-        if(!$this->language){
+        if (!$this->language) {
             $this->language = Yii::app()->getLanguage();
         }
         $this->route = "/articles/default/view";
         $this->period = $period;
-        if($limit !== NULL){
+        if ($limit !== NULL) {
             $this->limit = (int) $limit;
-        }           
-        else{
+        } else {
             $this->limit = null;
         }
         $this->tables = $tables;
@@ -86,20 +91,20 @@ class ArticlesListData extends SiteData {
             }
             $this->addWhere("(" . implode(" or ", $wheresForTables) . ")");
         }
-        
-        $this->addWhere("(t.in_list = 1)");        
+
+        $this->addWhere("(t.in_list = 1)");
         if ($this->parentArticle) {
             $this->addWhere("t.parent_article = " . (int) $this->parentArticle);
         } else {
             $this->addWhere("t.parent_article is null");
         }
 
-        if(isset(Yii::app()->useIssue) && Yii::app()->useIssue){
+        if (isset(Yii::app()->useIssue) && Yii::app()->useIssue) {
             $currentIssue = Issue::getInstance()->getCurrentIssueId();
             $this->joins .= " inner JOIN issues_articles isa ON t.article_id = isa.article_id ";
             $this->addWhere("isa.issue_id = " . $currentIssue);
         }
-        
+
         $this->mediaPath = Yii::app()->baseUrl . "/" . self::getSettings()->mediaPaths['list']['path'] . "/";
     }
 
@@ -125,6 +130,13 @@ class ArticlesListData extends SiteData {
     }
 
     /**
+     * Auto generate dataset
+     * @param boolean $ok
+     */
+    public function setAutoGenerate($ok){
+        $this->generateDataset = $ok;
+    }
+    /**
      *
      * Generate articles lists
      * Make sure you call the parent implementation so that the method is raised properly.
@@ -132,7 +144,7 @@ class ArticlesListData extends SiteData {
      * @return void
      */
     public function generate() {
-        if($this->detailsIsNotEmpty){
+        if ($this->detailsIsNotEmpty) {
             $this->addWhere("tt.article_detail is not null");
         }
         if ($this->period) {
@@ -174,7 +186,7 @@ class ArticlesListData extends SiteData {
         $this->detailsIsNotEmpty = $ok;
     }
 
-     /**
+    /**
      * Set the articles parent id
      * @param integer $articleId
      * @access public
@@ -184,8 +196,6 @@ class ArticlesListData extends SiteData {
         $this->parentArticle = $articleId;
     }
 
-    
-    
     /**
      * If the given $ok equal true then append sub titles to the results
      * @param boolean $ok
@@ -195,8 +205,8 @@ class ArticlesListData extends SiteData {
     public function appendTitles($ok) {
         $this->_appendTitles = $ok;
     }
-    
-     /**
+
+    /**
      * set article $language
      * @access public
      * @return void
@@ -206,59 +216,58 @@ class ArticlesListData extends SiteData {
     }
 
     public $uop;
+
     /**
      * @todo explain the query
      * Set the articles array list    
      * @access private
      * @return void
      */
-    protected function setItems() {        
+    protected function setItems() {
         $currentDate = date("Y-m-d H:i:s");
         $sectionsList = array();
-        if ($this->sectionId) {            
+        if ($this->sectionId) {
             if ($this->useSubSections) {
-                if(is_array($this->sectionId)){
+                if (is_array($this->sectionId)) {
                     $sections = $this->sectionId;
-                    foreach ($sections as $section){                                                
+                    foreach ($sections as $section) {
                         $sectionList = Data::getInstance()->getSectionSubIds($section);
-                        $sectionList[] = (int)$section;
-                        if(is_array($sectionList) && $sectionList){
+                        $sectionList[] = (int) $section;
+                        if (is_array($sectionList) && $sectionList) {
                             $sectionsList = array_merge($sectionsList, $sectionList);
                         }
-                        
                     }
-                }
-                else{
+                } else {
                     $sectionsList = Data::getInstance()->getSectionSubIds($this->sectionId);
-                    $sectionsList[] = (int)$this->sectionId;
-                }                               
+                    $sectionsList[] = (int) $this->sectionId;
+                }
                 $this->addWhere("(t.section_id in (" . implode(',', $sectionsList) . "))");
             } else {
                 $this->addWhere("t.section_id = {$this->sectionId}");
             }
-        }        
+        }
         $orders = $this->generateOrders(NULL);
-        $cols = $this->generateColumns();        
+        $cols = $this->generateColumns();
         $wheres = sprintf("tt.content_lang = %s
          and t.publish_date <= '{$currentDate}'            
          and (t.expire_date  >= '{$currentDate}' or t.expire_date is null)  
-         and t.published = %d",  
-                 Yii::app()->db->quoteValue($this->language),
-                 ActiveRecord::PUBLISHED);
-        $wheres .= $this->generateWheres();                        
-        $command = AmcWm::app()->db->createCommand();                
-        $command->from("articles t force index (articles_create_date_idx)");        
+         and t.published = %d", Yii::app()->db->quoteValue($this->language), ActiveRecord::PUBLISHED);
+        $wheres .= $this->generateWheres();
+        $command = AmcWm::app()->db->createCommand();
+        $command->from("articles t force index (articles_create_date_idx)");
         $command->join = 'inner join articles_translation tt on t.article_id = tt.article_id';
-        $command->join .= $this->joins ;                
-        $command->select("t.article_id, t.hits, t.thumb, tt.article_header $cols");        
-        $command->where($wheres);        
-        $command->order = $orders; 
-        $this->count = Yii::app()->db->createCommand("select count(*) from articles t {$command->join} where {$command->where}")->queryScalar();        
-        if($this->limit !== null){
+        $command->join .= $this->joins;
+        $command->select("t.article_id, t.hits, t.thumb, tt.article_header $cols");
+        $command->where($wheres);
+        $command->order = $orders;
+        $this->count = Yii::app()->db->createCommand("select count(*) from articles t {$command->join} where {$command->where}")->queryScalar();
+        if ($this->limit !== null) {
             $command->limit($this->limit, $this->fromRecord);
         }
-        $articles  = $command->queryAll();        
-        $this->setDataset($articles);
+        if ($this->generateDataset) {
+            $articles = $command->queryAll();
+            $this->setDataset($articles);
+        }
         $this->query = $command;
     }
 
@@ -272,7 +281,7 @@ class ArticlesListData extends SiteData {
     protected function setDataset($articles) {
         $index = -1;
         $options = self::getSettings()->options;
-        $useSeoImages = isset($options['default']['check']['seoImages']) && $options['default']['check']['seoImages'] ? $options['default']['check']['seoImages'] : false ;
+        $useSeoImages = isset($options['default']['check']['seoImages']) && $options['default']['check']['seoImages'] ? $options['default']['check']['seoImages'] : false;
         foreach ($articles As $article) {
             if ($this->recordIdAsKey) {
                 $index = $article['article_id'];
@@ -285,7 +294,7 @@ class ArticlesListData extends SiteData {
                 $this->items[$index]['title'] = $article["article_header"];
             }
             $seoTitle = ($useSeoImages) ? Html::seoTitle($article["article_header"]) . "." : "";
-            
+
             $this->items[$index]['id'] = $article["article_id"];
             $urlParams = array('id' => $article['article_id'], 'title' => $article["article_header"]);
             foreach ($this->params as $paramIndex => $paramValue) {
@@ -302,7 +311,7 @@ class ArticlesListData extends SiteData {
             }
             if ($article["thumb"]) {
                 $this->items[$index]['imageExt'] = $article["thumb"];
-                $this->items[$index]['image'] = $this->mediaPath ."{$seoTitle}". $article["article_id"] . "." . $article["thumb"];
+                $this->items[$index]['image'] = $this->mediaPath . "{$seoTitle}" . $article["article_id"] . "." . $article["thumb"];
             } else {
                 $this->items[$index]['imageExt'] = null;
                 $this->items[$index]['image'] = null;
@@ -316,6 +325,7 @@ class ArticlesListData extends SiteData {
             foreach ($this->cols as $colIndex => $col) {
                 $this->items[$index][$colIndex] = $article[$colIndex];
             }
-        }        
+        }
     }
+
 }

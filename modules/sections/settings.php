@@ -3,6 +3,7 @@
 return array(
     'tables' => array(
         array(
+            'id'=>1,
             'name' => 'sections',
             'sorting' => array('sortField' => "section_sort", 'order' => 'asc'),
         ),

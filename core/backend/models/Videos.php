@@ -100,6 +100,7 @@ class Videos extends ParentTranslatedActiveRecord {
             array('votes, hits, user_id, gallery_id, video_sort, comments', 'length', 'max' => 10),
             array('tags', 'length', 'max' => 1024),
             array('creation_date, publish_date, expire_date, update_date', 'safe'),
+            array('socialIds', 'isArray', 'allowEmpty' => true),
             array('update_date', 'default',
                 'value' => $date,
                 'setOnEmpty' => false),
@@ -266,6 +267,8 @@ class Videos extends ParentTranslatedActiveRecord {
      * @return void
      */
     public function afterFind() {
+        $info = new SocialInfo('multimedia', 3 , $this->video_id);     
+        $this->socialIds = $info->getSocialIds();
         if (isset($this->externalVideos->video)) {
             $this->videoURL = $this->externalVideos->video;
             $this->videoType = Videos::EXTERNAL;
@@ -289,6 +292,8 @@ class Videos extends ParentTranslatedActiveRecord {
      * This method is invoked after save record
      */
     protected function afterSave() {
+        $info = new SocialInfo('multimedia', 3 , $this->video_id);     
+        $info->saveSocial($this->socialIds);
         if ($this->infocusId) {
             Yii::app()->db->createCommand('delete from infocus_has_videos where video_id = ' . (int) $this->video_id)->execute();
             Yii::app()->db->createCommand('insert into infocus_has_videos (infocus_id, video_id) values(' . (int) $this->infocusId . ', ' . (int) $this->video_id . ')')->execute();

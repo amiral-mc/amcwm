@@ -108,6 +108,7 @@ class Sections extends ParentTranslatedActiveRecord {
                     'notexact' => 'Image width must be less than {width}, Image height must be less than {height}',
                 )
             ),
+            array('socialIds', 'isArray', 'allowEmpty' => true),
             array('settings', 'length', 'max' => 1024),
             array('settingsOptions', 'isArray', 'allowEmpty' => true),
             // The following rule is used by search().
@@ -221,6 +222,8 @@ class Sections extends ParentTranslatedActiveRecord {
      * @return void
      */
     public function afterFind() {
+        $info = new SocialInfo('sections', 1 , $this->section_id);     
+        $this->socialIds = $info->getSocialIds();
         $this->parentSection = $this->parent_section;
         $current = $this->getCurrent();
         if ($current instanceof SectionsTranslation) {
@@ -239,6 +242,8 @@ class Sections extends ParentTranslatedActiveRecord {
         if ($cache !== null) {
             $cache->delete('data');
         }
+        $info = new SocialInfo('sections', 1 , $this->section_id);     
+        $info->saveSocial($this->socialIds);
         parent::afterSave();
     }
 

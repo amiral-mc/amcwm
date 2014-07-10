@@ -59,6 +59,7 @@ class Galleries extends ParentTranslatedActiveRecord {
         // will receive user inputs.
         return array(
             array('published, section_id, show_gallery', 'numerical', 'integerOnly' => true),
+            array('socialIds', 'isArray', 'allowEmpty' => true),
             array('country_code', 'length', 'max' => 2),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
@@ -121,9 +122,22 @@ class Galleries extends ParentTranslatedActiveRecord {
      * @return void
      */
     public function afterFind() {
+        $info = new SocialInfo('multimedia', 1 , $this->gallery_id);     
+        $this->socialIds = $info->getSocialIds();
         parent::afterFind();
     }
     
+    /**
+     * This method is invoked after each record has been saved
+     * @access public
+     * @return void
+     */
+    public function afterSave() {       
+        $info = new SocialInfo('multimedia', 1 , $this->gallery_id);     
+        $info->saveSocial($this->socialIds);
+        parent::afterSave();
+    }
+
 /**
      * Get Sections list
      * @param string $emptyLabel if not equal null then add empty item with the given $emptyLabel

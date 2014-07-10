@@ -34,7 +34,7 @@ class AmcWeatherService extends AmcService {
         $queryUpdate = "";
         $cities = Yii::app()->db->createCommand('select * from weather_cities')->queryAll();
         foreach ($cities AS $city) {
-            $url = "http://xoap.weather.com/weather/local/{$city['weather_city']}?cc=*&dayf={$forecastingDays}&link=xoap&prod=xoap&par={$weatherConf['par']}&key={$weatherConf['key']}";
+            $url = "http://wxdata.weather.com/wxdata/weather/local/{$city['weather_city']}?cc=*&dayf={$forecastingDays}&link=xoap&prod=xoap&par={$weatherConf['par']}&key={$weatherConf['key']}";
             $xmlData = $this->getXmlFromUrl($url);
             if ($xmlData) {
                 $ok = true;

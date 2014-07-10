@@ -131,7 +131,8 @@ class Articles extends ParentTranslatedActiveRecord {
             array('publish_date', 'required'),
             array('is_system, infocusId, section_id, in_spot , article_sort , comments,  published, archive, published_mobile, in_ticker', 'numerical', 'integerOnly' => true),
             array('in_ticker, in_spot, in_list', 'length', 'max' => 1),
-            array('votes_rate', 'numerical'),
+            array('votes_rate', 'numerical'),            
+            array('socialIds', 'isArray', 'allowEmpty' => true),
             array('article_id, votes, hits, writer_id, comments, article_sort, parent_article', 'length', 'max' => 10),
             array('thumb, page_img, in_slider', 'length', 'max' => 3),
             array('country_code', 'length', 'max' => 2),
@@ -291,8 +292,10 @@ class Articles extends ParentTranslatedActiveRecord {
      * @access public
      * @return void
      */
-    protected function afterFind() {
+    protected function afterFind() {        
         $virtual = AmcWm::app()->appModule->getCurrentVirtual();
+        $info = new SocialInfo($virtual, 1 , $this->article_id);     
+        $this->socialIds = $info->getSocialIds();
         $virtuals = AmcWm::app()->appModule->getVirtuals();
         if (isset($virtuals[$virtual]['customCriteria'])) {
             $conditionGenerationClass = AmcWm::import($virtuals[$virtual]['customCriteria']['conditionGeneration']['class']);
@@ -402,6 +405,8 @@ class Articles extends ParentTranslatedActiveRecord {
             Yii::app()->db->createCommand('delete from infocus_has_articles where article_id = ' . (int) $this->article_id)->execute();
             Yii::app()->db->createCommand('insert into infocus_has_articles (infocus_id, article_id) values(' . (int) $this->infocusId . ', ' . (int) $this->article_id . ')')->execute();
         }
+        $info = new SocialInfo($virtual, 1 , $this->article_id);     
+        $info->saveSocial($this->socialIds);
         $this->saveRelatedVirtual();
         parent::afterSave();
     }

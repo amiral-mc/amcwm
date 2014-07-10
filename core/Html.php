@@ -56,7 +56,7 @@ class Html {
         $bookmark = null;
         $useLang = count(Yii::app()->params['languages']) || (isset(Yii::app()->params['langAsFoldder']) && Yii::app()->params['langAsFoldder']);
         if (!isset($params['lang'])) {
-            $params['lang'] = Controller::getCurrentLanguage();
+            //$params['lang'] = Controller::getCurrentLanguage();
         }
         if (Yii::app()->getUrlManager()->getUrlFormat() == 'path') {
             if (isset($params["#"])) {
@@ -68,7 +68,7 @@ class Html {
                 unset($params['title']);
             }
             $myParams = array();
-//            $route =  Controller::getCurrentLanguage() . "/" . trim($route, "/");
+            $route =  Controller::getCurrentLanguage() . "/" . trim($route, "/");
             foreach ($params as $paramKey => $paramVal) {
                 if (!is_array($paramVal)) {
                     $myParams[$paramKey] = $paramVal;
@@ -81,7 +81,7 @@ class Html {
         return $url;
     }
 
-    public static function createLinkRoute($link, $route, $params = array()) {
+    public static function createLinkRoute($link, $route, $params = array()) {        
         $bookmark = null;
         if (!isset($params['lang'])) {
             $params['lang'] = Controller::getCurrentLanguage();

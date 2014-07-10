@@ -34,20 +34,20 @@ class AmcFacebookSocial extends AmcSocial {
         $postFields['type'] = 'link';
         $postFields['link'] = $itemUrl;        
         if (function_exists('curl_init') && !$this->dontPost) {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            if (count(Yii::app()->params['proxy'])) {
-                curl_setopt($ch, CURLOPT_PROXY, Yii::app()->params['proxy']['host']);
-                curl_setopt($ch, CURLOPT_PROXYPORT, Yii::app()->params['proxy']['port']);
-            }
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.5) Gecko/20041107 Firefox/1.0');
-            $content = curl_exec($ch);
-            curl_close($ch);          
+//            $ch = curl_init();
+//            curl_setopt($ch, CURLOPT_URL, $url);
+//            if (count(Yii::app()->params['proxy'])) {
+//                curl_setopt($ch, CURLOPT_PROXY, Yii::app()->params['proxy']['host']);
+//                curl_setopt($ch, CURLOPT_PROXYPORT, Yii::app()->params['proxy']['port']);
+//            }
+//            curl_setopt($ch, CURLOPT_HEADER, 0);
+//            curl_setopt($ch, CURLOPT_POST, 1);
+//            curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+//            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.5) Gecko/20041107 Firefox/1.0');
+//            $content = curl_exec($ch);
+//            curl_close($ch);          
         } else {
             echo 'Facebook' . PHP_EOL;
             echo "\t Type: " . $type . PHP_EOL;

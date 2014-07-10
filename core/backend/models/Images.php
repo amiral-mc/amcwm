@@ -45,6 +45,7 @@ class Images extends ParentTranslatedActiveRecord {
      * @var string 
      */
     protected $sortField = "image_sort";
+
     /**
      * Sort Dependency attributes
      * @var string 
@@ -87,6 +88,7 @@ class Images extends ParentTranslatedActiveRecord {
             array('publish_date', 'required'),
             array('infocusId, is_background, published, in_slider, show_media', 'numerical', 'integerOnly' => true),
             array('votes_rate', 'numerical'),
+            array('socialIds', 'isArray', 'allowEmpty' => true),
             array('ext', 'length', 'max' => 4),
             array('hits, user_id, gallery_id, image_sort, votes, comments', 'length', 'max' => 10),
             array('expire_date, update_date', 'safe'),
@@ -196,8 +198,8 @@ class Images extends ParentTranslatedActiveRecord {
         $criteria->compare('comments', $this->comments, true);
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
-                ));
+            'criteria' => $criteria,
+        ));
     }
 
     /**
@@ -206,7 +208,9 @@ class Images extends ParentTranslatedActiveRecord {
      * @return void
      */
     public function afterFind() {
-      if (count($this->infocuses)) {
+        $info = new SocialInfo('multimedia', 2, $this->image_id);
+        $this->socialIds = $info->getSocialIds();
+        if (count($this->infocuses)) {
             foreach ($this->infocuses as $infocus) {
                 if (isset($infocus->infocus_id)) {
                     $this->infocusId = $infocus->infocus_id;
@@ -232,7 +236,7 @@ class Images extends ParentTranslatedActiveRecord {
         }
         return parent::beforeSave();
     }
-   
+
     /**
      * Sort the given model acording to $direction order
      * @param string $direction
@@ -246,8 +250,7 @@ class Images extends ParentTranslatedActiveRecord {
         $condition = null;
         if ($this->gallery_id) {
             $conditions[] = "gallery_id = " . (int) $this->gallery_id;
-        }
-         else {
+        } else {
             $condition[] = "gallery_id is null";
         }
         $conditions[] = "is_background = " . (int) $this->is_background;
@@ -265,16 +268,19 @@ class Images extends ParentTranslatedActiveRecord {
      */
     protected function afterDeleteChild($childAttributes) {
         $this->correctSort();
-    }    
+    }
 
     /**
      * This method is invoked after save record
      */
     protected function afterSave() {
+        $info = new SocialInfo('multimedia', 2 , $this->image_id);     
+        $info->saveSocial($this->socialIds);
         if ($this->infocusId) {
             Yii::app()->db->createCommand('delete from infocus_has_images where image_id = ' . (int) $this->image_id)->execute();
             Yii::app()->db->createCommand('insert into infocus_has_images (infocus_id, image_id) values(' . (int) $this->infocusId . ', ' . (int) $this->image_id . ')')->execute();
         }
         parent::afterSave();
     }
+
 }

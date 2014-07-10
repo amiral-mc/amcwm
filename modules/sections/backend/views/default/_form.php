@@ -213,15 +213,6 @@
         </script>
     </fieldset>
 
-    <fieldset>
-        <legend><?php echo AmcWm::t("amcBack", "Publish to the social media sites"); ?>:</legend>
-        <div class="row">
-            <div align="center"><?php echo AmcWm::t("msgsbase.core", 'Social Networks Hints'); ?></div>
-            <?php echo $form->checkBoxList($model, 'socialIds', $this->getSocials(), array("separator" => "<br />", 'labelOptions' => array('class' => 'checkbox_label'))); ?>
-            <?php echo $form->error($model, 'socialIds'); ?>
-        </div>
-    </fieldset>
-
     <?php $this->endWidget(); ?>
 
 </div><!-- form -->

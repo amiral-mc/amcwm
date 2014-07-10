@@ -23,7 +23,6 @@ class Acl extends CApplicationComponent {
     /**
      * guest role name
      */
-
     const GUEST_ROLE = "guest";
 
     /**
@@ -394,7 +393,7 @@ class Acl extends CApplicationComponent {
             $perm = new Permissions($this->accessControllers[$roleId][$routeAccess['controllerId']]['access']);
             $access = $perm->checkPermission($routeAccess['permissions']);
             if (isset($routeAccess["forwardTo"]['controllerId']['permissions']) && isset($this->accessControllers[$roleId][$routeAccess["forwardTo"]['controllerId']])) {
-                $perm = new Permissions($this->accessControllers[$roleId][$routeAccess["forwardTo"]['controllerId']]['access']);                
+                $perm = new Permissions($this->accessControllers[$roleId][$routeAccess["forwardTo"]['controllerId']]['access']);
                 $access = $perm->checkPermission($routeAccess["forwardTo"]['controllerId']['permissions']);
             }
         }
@@ -441,7 +440,7 @@ class Acl extends CApplicationComponent {
         }
         return $userAccessControllers;
     }
-    
+
     /**
      * get role access for the given $roleId;
      * @param integer $roleId
@@ -497,13 +496,21 @@ class Acl extends CApplicationComponent {
     /**
      * Get module structure for the given $moduleName
      * @param string $moduleName
+     * @param boolean $isBack
      * @access public
      * @return array
      */
-    public function getModule($moduleName) {
+    public function getModule($moduleName, $isBack = false) {
         $module = array();
-        if (isset($this->modules[$moduleName])) {
-            $module = $this->modules[$moduleName];
+        if ($isBack) {
+            if (isset($this->modules[AmcWm::app()->backendName]['modules'][$moduleName])) {
+                $module = $this->modules[AmcWm::app()->backendName]['modules'][$moduleName];
+            }
+        }
+        else{
+            if (isset($this->modules[$moduleName])) {
+                $module = $this->modules[$moduleName];
+            }
         }
         return $module;
     }

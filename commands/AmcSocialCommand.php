@@ -5,13 +5,12 @@
  * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.
  * @license http://amc.amiral.com/license/amcwm.txt
  */
-
 /**
  * @author Amiral Management Corporation amc.amiral.com
  * @version 1.0
  */
-
 AmcWm::import("amcwm.commands.components.social.*");
+
 class AmcSocialCommand extends CConsoleCommand {
 
     private $articlesLink = array(
@@ -24,35 +23,38 @@ class AmcSocialCommand extends CConsoleCommand {
         'videos' => 'multimedia/videos/index',
         'images' => 'multimedia/images/index'
     );
-    private $limit = 1;
-    private $updateDate = null;
-    private $lang = null;
+    private $_updateDate = null;
+    private $_moduleId = 1;
+    public function init() {
+        $this->_updateDate = date("Y-m-d H:i:s");
+        set_time_limit(0);
+        ignore_user_abort(true);
+    }
 
-    public function actionIndex($type = 'articles', $lang = 'ar', $limit = 1, $postConfig = true, $post = true) {
-        if ($postConfig) {
-            $dontPost = !Yii::app()->params['socialPost'];
-        } else {
-            $dontPost = !$post;
+    public function actionIndex($module = 'news', $limit = 1, $lang = null, $post = true) {        
+        $moduleClass = ucfirst($module) . "SocialData";
+        
+        $query = sprintf('select module_id from modules where module = %s and parent_module=1', AmcWm::app()->db->quoteValue($module));        
+        $this->_moduleId = AmcWm::app()->db->createCommand($query)->queryScalar();
+        if (!$lang) {
+            $lang = AmcWm::app()->getLanguage();
         }
-        $this->limit = (int) trim($limit);
-        $this->lang = trim($lang);
+
         $socialsQuery = "select * from social_networks";
         $socialsDataset = Yii::app()->db->createCommand($socialsQuery)->queryAll();
-        foreach ($socialsDataset as $socail) {
-            $socailClass = "Amc" . ucfirst($socail['class_name']) . "Social";
-            $socialObject = new $socailClass($dontPost, Yii::app()->params[strtolower($socail['class_name'])][$lang]);
-            $socialObject->connect();
-            switch ($type) {
-                case 'articles':
-                    $this->postArticles($socail['social_id'], $socialObject);
-                    $msg = "AMC Articles Has been Posted";
-                    break;
-                case 'media':
-                    if ($socail['has_media']) {
-                        $this->postMedia($socail['social_id'], $socialObject);
-                    }
-                    $msg = "Multimedia Has been Posted";
-                    break;
+        $moduleClassData = ucfirst($module) . "SocialData";        
+        $msg = '';
+        foreach ($socialsDataset as $social) {
+            $socialClass = "Amc" . ucfirst($social['class_name']) . "Social";
+            if (count(Yii::app()->params[strtolower($social['class_name'])][$lang])) {
+                $socialObject = new $socialClass(!$post, Yii::app()->params[strtolower($social['class_name'])][$lang]);
+                $socialObject->connect();
+                $moduleObject = new $moduleClassData($module, $social['social_id'], $socialObject, $lang , $limit);
+                $moduleObject->post();
+                $msg .= "{$module} has been posted to {$social['network_name']}". PHP_EOL;
+            }
+            else{
+                $msg .= "{$social['network_name']} not configured" . PHP_EOL;
             }
         }
 
@@ -275,142 +277,4 @@ class AmcSocialCommand extends CConsoleCommand {
             }
         }
     }
-
-    private function createPostUrl($route, $params) {
-        if (Yii::app()->getUrlManager()->getUrlFormat() == 'path') {
-            $url = Yii::app()->params['siteUrl'];
-        } else {
-            $url = Yii::app()->params['siteUrl'] . '/index.php';
-        }
-        return Html::createLinkRoute($url, $route, $params);
-    }
-
-    private function generateArticlesQuery($socialId) {
-        // getting news data
-        $langQuery = ($this->lang) ? sprintf(" and a.content_lang = %s", Yii::app()->db->quoteValue($this->lang)) : "";
-        $articlesQueries[] = "select 
-                a.article_header
-                , a.article_id
-                , a.thumb
-                , a.content_lang
-                , a.create_date
-                , 'news' module
-                from articles a
-                inner join news n on n.article_id = a.article_id
-                inner join articles_in_social_networks s on a.article_id = s.article_id and s.social_id = {$socialId}
-                where (s.added_date is null or s.added_date = '0000-00-00')
-                $langQuery
-                and a.published = 1";
-        $articlesQueries[] = "
-                select 
-                a.article_header
-                , a.article_id
-                , a.thumb
-                , a.content_lang
-                , a.create_date
-                , 'articles' module                
-                from articles a
-                left join news n on n.article_id = a.article_id
-                left join users_articles ua on ua.article_id = a.article_id
-                inner join articles_in_social_networks s on a.article_id = s.article_id and s.social_id = {$socialId}
-                where (s.added_date is null or s.added_date = '0000-00-00')
-                and a.published = 1
-                $langQuery
-                and n.article_id is null and ua.article_id is null";
-        return $articlesQueries;
-    }
-
-    private function generateSectionsQuery($sectionsDataset, $socialId) {
-        $langQuery = ($this->lang) ? sprintf(" and a.content_lang = %s", Yii::app()->db->quoteValue($this->lang)) : "";
-        foreach ($sectionsDataset as $section) {
-            $articlesQueries[] = "select 
-                a.article_header
-                , a.article_id
-                , a.thumb
-                , a.content_lang
-                , a.create_date
-                , 'news' module
-                from articles a
-                inner join news n on n.article_id = a.article_id
-                left join articles_in_social_networks s on a.article_id = s.article_id and s.social_id = {$socialId}
-                where (a.create_date > '{$section['added_date']}' and s.article_id is null)
-                $langQuery
-                and a.section_id = {$section['section_id']} and a.published = 1";
-            $articlesQueries[] = "                       
-                select 
-                a.article_header
-                , a.article_id
-                , a.thumb
-                , a.content_lang
-                , a.create_date
-                , 'articles' module                
-                from articles a
-                left join news n on n.article_id = a.article_id
-                left join users_articles ua on ua.article_id = a.article_id
-                left join articles_in_social_networks s on a.article_id = s.article_id and s.social_id = {$socialId}
-                where (a.create_date > '{$section['added_date']}' and s.article_id is null)
-                $langQuery
-                and a.section_id = {$section['section_id']} and a.published = 1
-                and n.article_id is null and ua.article_id is null
-                ";
-        }
-        return $articlesQueries;
-    }
-
-    /**
-     * @todo for add link for each module 
-     * change article links after URL general modifications 
-     * @param type $socialId
-     * @param AmcSocial $socialObject 
-     */
-    private function postArticles($socialId, AmcSocial $socialObject) {
-        $sectionsQuery = "select ss.section_id , ss.added_date 
-            from sections_in_social_networks ss 
-            inner join sections s on s.section_id = ss.section_id            
-            where s.published = 1 and ss.social_id = {$socialId}
-        ";
-        $sectionsDataset = Yii::app()->db->createCommand($sectionsQuery)->queryAll();
-        $articlesQueries = array_merge($this->generateSectionsQuery($sectionsDataset, $socialId), $this->generateArticlesQuery($socialId));
-        $articlesQuery = implode(" union ", $articlesQueries) . " order by create_date asc limit {$this->limit}";
-        $articlesDataset = Yii::app()->db->createCommand($articlesQuery)->queryAll();
-        $posted = false;
-        foreach ($articlesDataset as $article) {
-            $posted = true;
-            $data['type'] = 'text';
-            $data['data']['details'] = NULL;
-            $data['data']['header'] = $article['article_header'];
-            $data['data']['image'] = null;
-            if ($article['thumb']) {
-                $mediaPath = ArticlesListData::getSettings()->mediaPaths['images']['path'] . "/" . $article['article_id'] . "." . $article['thumb'];
-                $mediaFile = Yii::app()->baseUrl . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $mediaPath);
-                if (is_file($mediaFile)) {
-                    $data['data']['image'] = Yii::app()->params['siteUrl'] . '/' . $mediaPath;
-                }
-            }
-            $data['data']['link'] = $this->createPostUrl($this->articlesLink[$article['module']], array('id' => $article['article_id'], 'lang' => $article['content_lang'], 'title' => $article['article_header']));
-            $this->updateDate = $article['create_date'];
-            $socialObject->postData($data);
-            $updateSql = "replace articles_in_social_networks 
-                        (article_id, social_id, added_date) 
-                        values ('{$article['article_id']}', '{$socialId}', '{$this->updateDate}')
-                ";
-            Yii::app()->db->createCommand($updateSql)->execute();
-        }
-        if ($posted) {
-            foreach ($sectionsDataset as $section) {
-                Yii::app()->db->createCommand("UPDATE sections_in_social_networks
-                        SET added_date='{$this->updateDate}'
-                        WHERE section_id='{$section['section_id']}'
-                        AND social_id='{$socialId}'")->execute();
-            }
-        }
-    }
-
-    public function init() {
-        $this->updateDate = date("Y-m-d H:i:s");
-        set_time_limit(0);
-        ignore_user_abort(true);
-    }
-
 }
-
