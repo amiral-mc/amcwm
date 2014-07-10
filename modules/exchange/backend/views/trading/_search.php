@@ -14,24 +14,39 @@
     ));
     ?>
     <div class="row">
-        <?php echo $form->labelEx($model, 'company_id'); ?>
-        <?php echo $form->dropDownList($model, 'company_id', CHtml::listData(ExchangeCompanies::model()->findAll(array('order' => 'company_name ASC')), 'company_id', 'company_name')); ?>
-        <?php echo $form->error($model, 'company_id'); ?>
+        <?php echo $form->labelEx($model, 'exchange_id'); ?>
+        <?php echo $form->dropDownList($model, 'exchange_id', CHtml::listData(Exchange::model()->findAll(array('order' => 'exchange_name DESC')), 'exchange_id', 'exchange_name')); ?>
+        <?php echo $form->error($model, 'exchange_id'); ?>
     </div>
     <div class="row">
-        <?php echo $form->labelEx($model, 'index'); ?>
-        <?php echo $form->textField($model, 'index'); ?>
-        <?php echo $form->error($model, 'index'); ?>
+        <?php echo $form->labelEx($model, 'exchange_date'); ?>
+        <?php echo $form->dateField($model, 'exchange_date'); ?>
+        <?php echo $form->error($model, 'exchange_date'); ?>
     </div>
     <div class="row">                       
-        <?php echo $form->labelEx($model, 'percentage'); ?>
-        <?php echo $form->textField($model, 'percentage'); ?>
-        <?php echo $form->error($model, 'percentage'); ?>
+        <?php echo $form->labelEx($model, 'trading_value'); ?>
+        <?php echo $form->textField($model, 'trading_value'); ?>
+        <?php echo $form->error($model, 'trading_value'); ?>
     </div>
     <div class="row">
-        <?php echo $form->labelEx($model, 'net'); ?>
-        <?php echo $form->textField($model, 'net'); ?>
-        <?php echo $form->error($model, 'net'); ?>
+        <?php echo $form->labelEx($model, 'shares_of_stock'); ?>
+        <?php echo $form->textField($model, 'shares_of_stock'); ?>
+        <?php echo $form->error($model, 'shares_of_stock'); ?>
+    </div>
+    <div class="row">
+        <?php echo $form->labelEx($model, 'closing_value'); ?>
+        <?php echo $form->textField($model, 'closing_value'); ?>
+        <?php echo $form->error($model, 'closing_value'); ?>
+    </div>
+    <div class="row">
+        <?php echo $form->labelEx($model, 'difference_value'); ?>
+        <?php echo $form->textField($model, 'difference_value'); ?>
+        <?php echo $form->error($model, 'difference_value'); ?>
+    </div>
+    <div class="row">
+        <?php echo $form->labelEx($model, 'difference_percentage'); ?>
+        <?php echo $form->textField($model, 'difference_percentage'); ?>
+        <?php echo $form->error($model, 'difference_percentage'); ?>
     </div>
     <div class="row buttons">
         <?php echo CHtml::submitButton(AmcWm::t("amcBack", 'Search')); ?>

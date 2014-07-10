@@ -9,6 +9,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
     'items' => array(
         array('label' => AmcWm::t("amcTools", 'Create'), 'url' => array('/backend/exchange/companies/create'), 'id' => 'add_record', 'image_id' => 'add'),
         array('label' => AmcWm::t("amcTools", 'Edit'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'edit_record', 'image_id' => 'edit'),
+        array('label' => AmcWm::t("amcTools", 'View'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'view_record', 'image_id' => 'view'),
         array('label' => AmcWm::t("amcTools", 'Delete'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'delete_record', 'image_id' => 'delete'),
         array('label' => AmcWm::t("amcTools", 'Search'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'record_search', 'image_id' => 'search'),
         array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array('/backend/exchange/default/index'), 'id' => 'records_list', 'image_id' => 'back'),
@@ -47,11 +48,16 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 'htmlOptions' => array('width' => '16', 'align' => 'center'),
             ),
             array(
-                'name' => 'company_id',
+                'name' => 'exchange_companies_id',
                 'header' => 'ID',
                 'htmlOptions' => array('width' => '30'),
             ),
             'company_name',
+            array(
+                'header' => AmcWm::t('msgsbase.core', 'Exchange Name'),
+                'value' => '$data->exchange->exchange_name',
+            ),
+            'code',
             array(
                 'name' => 'published',
                 'header' => AmcWm::t("msgsbase.core", "Published"),

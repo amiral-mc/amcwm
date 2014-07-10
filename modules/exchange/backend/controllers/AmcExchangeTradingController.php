@@ -28,7 +28,7 @@ class AmcExchangeTradingController extends BackendController {
                     if ($model->save()) {
                         Yii::app()->user->setFlash('success', array
                             ('class' => 'flash-success', 'content' => AmcWm::t("amcTools", 'Record has been saved')));
-                        $this->redirect(array('view', 'id' => $model->ad_id));
+                        $this->redirect(array('view', 'id' => $model->exchange_date));
                     }
                 } catch (CDbException $e) {
                     Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => AmcWm::t("amcTools", "Can't save record")));
@@ -134,7 +134,14 @@ class AmcExchangeTradingController extends BackendController {
      * @param integer the ID of the model to be loaded
      */
     public function loadModel($id) {
-        $model = ExchangeTrading::model()->findByPk($id);
+        $params = explode(',', $id);
+        if(isset($params[1])){
+            $id = $params[1];
+        }
+        else{
+            $id = $params[0];
+        }
+        $model = ExchangeTrading::model()->findByAttributes(array('exchange_date' => $id));
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;

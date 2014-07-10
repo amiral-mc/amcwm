@@ -25,7 +25,7 @@ class AmcExchangeCompaniesController extends BackendController {
                 try {
                     if ($model->save()) {
                         Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t("amcTools", 'Record has been saved')));
-                        $this->redirect(array('view', 'id' => $model->company_id));
+                        $this->redirect(array('view', 'id' => $model->exchange_companies_id));
                     }
                 } catch (CDbException $e) {
                     Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => AmcWm::t("amcTools", "Can't save record")));
