@@ -57,10 +57,10 @@ class DefaultAdsZones extends ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'zone_id' => 'Zone',
-			'zone_name' => 'Zone Name',
-			'width' => 'Width',
-			'height' => 'Height',
+			'zone_id' => AmcWm::t('msgsbase.core', 'Zone'),
+			'zone_name' => AmcWm::t('msgsbase.core', 'Zone Name'),
+			'width' => AmcWm::t('msgsbase.core', 'Width'),
+			'height' => AmcWm::t('msgsbase.core', 'Height'),
 		);
 	}
 

@@ -13,5 +13,5 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
         array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array("/backend/ads/default/index"), 'id' => 'admin_list', 'image_id' => 'back'),
     ),
 ));
-//$this->renderPartial('_form', array('model' => $model, 'formId' => $formId));
+$this->renderPartial('_form', array('model' => $model, 'formId' => $formId));
 ?>

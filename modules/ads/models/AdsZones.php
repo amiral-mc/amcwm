@@ -7,7 +7,9 @@
  * @property integer $ad_id
  * @property integer $server_id
  * @property integer $zone_id
- * @property string invocation_code
+ * @property integer $published
+ * @property string $invocation_code
+ * @property string $section_name
  *
  * The followings are the available model relations:
  * @property AdsServersConfig $server
@@ -15,7 +17,8 @@
  * @property Sections[] $sections
  */
 class AdsZones extends ActiveRecord {
-
+    
+    public $section_name;
     /**
      * @return string the associated database table name
      */
@@ -31,10 +34,10 @@ class AdsZones extends ActiveRecord {
         // will receive user inputs.
         return array(
             array('server_id, zone_id, invocation_code', 'required'),
-            array('server_id, zone_id', 'numerical', 'integerOnly' => true),
+            array('server_id, zone_id, published', 'numerical', 'integerOnly' => true),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('ad_id, server_id, zone_id, invocation_code', 'safe', 'on' => 'search'),
+            array('ad_id, server_id, zone_id, invocation_code, published', 'safe', 'on' => 'search'),
         );
     }
 
@@ -56,10 +59,11 @@ class AdsZones extends ActiveRecord {
      */
     public function attributeLabels() {
         return array(
-            'ad_id' => 'Ad',
-            'server_id' => 'Server',
-            'zone_id' => 'Zone',
-            'invocation_code' => 'Invocation Code',
+            'ad_id' => AmcWm::t('msgsbase.core', 'Ad'),
+            'server_id' => AmcWm::t('msgsbase.core', 'Server'),
+            'zone_id' => AmcWm::t('msgsbase.core', 'Zone'),
+            'invocation_code' => AmcWm::t('msgsbase.core', 'Invocation Code'),
+            'published' => AmcWm::t('msgsbase.core', 'Activate'),
         );
     }
 
@@ -84,6 +88,7 @@ class AdsZones extends ActiveRecord {
         $criteria->compare('server_id', $this->server_id);
         $criteria->compare('zone_id', $this->zone_id);
         $criteria->compare('invocation_code', $this->invocation_code);
+        $criteria->compare('published', $this->published);
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
         ));
@@ -97,6 +102,24 @@ class AdsZones extends ActiveRecord {
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
+    }
+
+    /**
+     * This method is invoked after each record is instantiated by a find method.
+     * @access public
+     * @return void
+     */
+    protected function afterFind() {
+        $this->displayTitle = $this->server->server_name . " #" . $this->ad_id;
+        foreach ($this->sections as $section) {
+//            print_r($this->sections); exit;
+            $section->parentSection = $section->parent_section;
+            $current = $section->getCurrent();
+            if ($current instanceof SectionsTranslation) {
+                $this->section_name .= "[" . $current->section_name . "] ";
+            }
+        }
+        parent::afterFind();
     }
 
 }

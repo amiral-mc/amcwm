@@ -139,4 +139,5 @@ return array(
     '_ADS_MODULE_'=>"Ads",
     '_ADS_CONTROLLER_' => "Ads",
     '_SERVERS_CONTROLLER_' => 'Ads Servers',
+    '_EXCHANGE_MODULE_' => 'Exchange',
 );

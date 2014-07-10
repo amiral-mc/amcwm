@@ -14,26 +14,22 @@ class AmcServersController extends BackendController {
 
     /**
      * Save model to database
-     * @param DirCompaniesBranches $model
+     * @param AdsServersConfig $model
      * @access protected
      */
     protected function save(AdsServersConfig $model) {
-        if (isset($_POST['AdsServersConfig'])) {
-            $transaction = Yii::app()->db->beginTransaction();
+        if (isset($_POST['AdsServersConfig'])) {            
+            $_POST['AdsServersConfig']['header_code'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '$2', $_POST['AdsServersConfig']['header_code']);
             $model->attributes = $_POST['AdsServersConfig'];
             $validate = $model->validate();
             if ($validate) {
                 try {
                     if ($model->save()) {
-                        $transaction->commit();
                         Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t("amcTools", 'Record has been saved')));
-                        $this->redirect(array('view', 'id' => $model->parcel_id));
+                        $this->redirect(array('view', 'id' => $model->server_id));
                     }
                 } catch (CDbException $e) {
-//                    echo $e->getMessage();
-                    $transaction->rollback();
                     Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => AmcWm::t("amcTools", "Can't save record")));
-                    //$this->refresh();
                 }
             }
         }
@@ -57,7 +53,7 @@ class AmcServersController extends BackendController {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
-        $model = $this->loadModel($id);     
+        $model = $this->loadModel($id);
         $this->save($model);
         $this->render('update', array(
             'model' => $model,
@@ -78,13 +74,13 @@ class AmcServersController extends BackendController {
         ));
     }
 
-    
     /**
      * Ads servers configuration
      */
     public function actionServers() {
         $this->forward("servers/");
     }
+
     /**
      * Deletes a particular model.
      * If deletion is successful, the browser will be redirected to the 'admin' page.
@@ -134,6 +130,6 @@ class AmcServersController extends BackendController {
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
-    }   
+    }
 
 }
