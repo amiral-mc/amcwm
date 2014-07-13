@@ -40,7 +40,7 @@ class AmcSocialCommand extends CConsoleCommand {
             $lang = AmcWm::app()->getLanguage();
         }
 
-        $socialsQuery = "select * from social_networks";
+        $socialsQuery = "select * from social_networks where enabled = 1";
         $socialsDataset = Yii::app()->db->createCommand($socialsQuery)->queryAll();
         $moduleClassData = ucfirst($module) . "SocialData";        
         $msg = '';

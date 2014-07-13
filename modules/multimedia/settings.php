@@ -82,6 +82,8 @@ return array(
                 'imagesGalleryFilterOnStart'=>true,
                 'useGalleriesList'=>true,
                 'seoImages' => false,
+                'autoPostImages2social'=> true,
+                'autoPostVideos2social'=> true,
             ),
             'integer' => array(
                 'presentationId' => 0,

@@ -57,8 +57,16 @@ class AmcVideosController extends AmcGalleriesController {
     public function actionCreate() {
         $model = new Videos;
         $model->gallery_id = $this->gallery->getParentContent()->gallery_id;
-        $contentModel = new VideosTranslation();
+        $contentModel = new VideosTranslation();        
         $model->addTranslationChild($contentModel, self::getContentLanguage());
+        $autoPost2social = false;        
+        $options = $this->module->appModule->options;
+        if(isset($options['default']['check']['autoPostVideos2social'])){
+            $autoPost2social = $options['default']['check']['autoPostVideos2social'];
+        }
+        if(!isset($_POST['Videos']) && $autoPost2social){
+            $model->socialIds = array_keys($this->getSocials());
+        }
         $this->save($contentModel);
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);

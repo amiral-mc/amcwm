@@ -870,6 +870,7 @@ return array(
                 'addToInfocus' => true,
                 'allowPageImage' => true,
                 'seoImages' => true,
+                'autoPost2social'=> false,
             ),
         ),
         'news' => array(
@@ -882,6 +883,7 @@ return array(
             'default' => array(
                 'check' => array(
                     'addToBreaking' => true,
+                    'autoPost2social'=> true,
                 ),
                 'integer' => array(
                     'mainTopics' => 4,
@@ -907,6 +909,7 @@ return array(
             ),
             'default' => array(
                 'integer' => array('mainTopics' => 4),
+                'post2social'=> false,
                 'topArticles' => 3,
                 'showListingTitle' => false,
                 'showPrimaryHeader' => false,

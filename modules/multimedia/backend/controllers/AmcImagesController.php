@@ -141,6 +141,14 @@ class AmcImagesController extends AmcGalleriesController {
         $model->gallery_id = $this->gallery->getParentContent()->gallery_id;
         $contentModel = new ImagesTranslation();
         $model->addTranslationChild($contentModel, self::getContentLanguage());
+        $options = $this->module->appModule->options;
+        $autoPost2social = false;        
+        if(isset($options['default']['check']['autoPostImages2social'])){
+            $autoPost2social = $options['default']['check']['autoPostImages2social'];
+        }
+        if(!isset($_POST['Images']) && $autoPost2social){
+            $model->socialIds = array_keys($this->getSocials());
+        }
         $this->save($contentModel);
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);

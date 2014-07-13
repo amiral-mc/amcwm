@@ -110,6 +110,17 @@ class ManageArticles extends ManageContent {
         $contentModel = new ArticlesTranslation();
         $model->addTranslationChild($contentModel, Controller::getContentLanguage());
         $virtualModule = $this->controller->getModule()->appModule->currentVirtual;
+        $options = $this->controller->module->appModule->options;
+        $autoPost2social = false;
+        if(isset($options[$virtualModule]['default']['check']['autoPost2social'])){
+            $autoPost2social = $options[$virtualModule]['default']['check']['autoPost2social'];
+        }
+        else if(isset($options['default']['check']['autoPost2social'])){
+            $autoPost2social = $options['default']['check']['autoPost2social'];
+        }
+        if(!isset($_POST['Articles']) && $autoPost2social){
+            $model->socialIds = array_keys($this->getSocials());
+        }
         $msgsBase = "msgsbase.core";
         if ($virtualModule != "articles") {
             $msgsBase = "msgsbase.{$virtualModule}";
