@@ -55,8 +55,8 @@ class Html {
         $url = null;
         $bookmark = null;
         $useLang = count(Yii::app()->params['languages']) || (isset(Yii::app()->params['langAsFoldder']) && Yii::app()->params['langAsFoldder']);
-        if (!isset($params['lang'])) {
-            //$params['lang'] = Controller::getCurrentLanguage();
+        if (!isset($params['lang']) && $useLang) {
+            $params['lang'] = Controller::getCurrentLanguage();
         }
         if (Yii::app()->getUrlManager()->getUrlFormat() == 'path') {
             if (isset($params["#"])) {
@@ -68,7 +68,6 @@ class Html {
                 unset($params['title']);
             }
             $myParams = array();
-            $route =  Controller::getCurrentLanguage() . "/" . trim($route, "/");
             foreach ($params as $paramKey => $paramVal) {
                 if (!is_array($paramVal)) {
                     $myParams[$paramKey] = $paramVal;
