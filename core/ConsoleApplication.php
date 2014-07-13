@@ -15,4 +15,10 @@
  */
 class ConsoleApplication extends CConsoleApplication {
 
+    /**
+     *
+     * @var string default content language; 
+     */
+    public $contentLang = null;
+
 }
