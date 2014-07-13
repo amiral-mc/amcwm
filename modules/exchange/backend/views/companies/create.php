@@ -10,7 +10,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
     'id' => 'tools-grid',
     'items' => array(
         array('label' => AmcWm::t("amcTools", 'Save'), 'js' => array('formId' => $formId), 'id' => 'add_record', 'image_id' => 'save'),
-        array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array('/backend/exchange/servers/index'), 'id' => 'records_list', 'image_id' => 'back'),
+        array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array('/backend/exchange/companies/index'), 'id' => 'records_list', 'image_id' => 'back'),
     ),
 ));
 $this->renderPartial('_form', array('model' => $model, 'formId' => $formId));

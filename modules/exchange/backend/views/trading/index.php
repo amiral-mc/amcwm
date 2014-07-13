@@ -1,14 +1,12 @@
 <?php
 $this->breadcrumbs = array(AmcWm::t("msgsbase.core", "Exchange"));
 $this->sectionName = AmcWm::t("amcTools", "List");
-
 $this->widget('amcwm.core.widgets.tools.Tools', array(
     'id' => 'tools-grid',
     'items' => array(
-        array('label' => AmcWm::t("amcTools", 'Create'), 'url' => array('/backend/exchange/default/create'), 'id' => 'add_record', 'image_id' => 'add'),
+        array('label' => AmcWm::t("amcTools", 'Create'), 'url' => array('/backend/exchange/trading/create'), 'id' => 'add_record', 'image_id' => 'add'),
         array('label' => AmcWm::t("amcTools", 'Edit'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'add_record', 'image_id' => 'edit'),
         array('label' => AmcWm::t("amcTools", 'Preview'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'preview_record', 'image_id' => 'view'),
-        array('label' => AmcWm::t("msgsbase.companies", 'Exchange Companies'), 'url' => array('/backend/exchange/companies/index'), 'id' => 'companies', 'image_id' => 'listing'),
 //        array('label' => AmcWm::t("amcTools", 'Publish'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'publish_ad', 'image_id' => 'publish'),
 //        array('label' => AmcWm::t("amcTools", 'Unpublish'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'unpublish_ad', 'image_id' => 'unpublish'),
         array('label' => AmcWm::t("amcTools", 'Search'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'records_search', 'image_id' => 'search'),
@@ -47,30 +45,32 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 'htmlOptions' => array('width' => '16', 'align' => 'center'),
             ),
             array(
-                'name' => 'ad_id',
-                'htmlOptions' => array('width' => '10', 'align' => 'center'),
-            ),
-            array(
-                'header' => AmcWm::t("msgsbase.core", "Company Name"),
-                'value' => '$data->company->company_name',
+                'header' => AmcWm::t("msgsbase.core", "Exchange Name"),
+                'value' => '$data->exchange->exchange_name',
                 'htmlOptions' => array('width' => '50', 'align' => 'center'),
             ),
             array(
-//                'header' => AmcWm::t("msgsbase.core", "Index"),
-//                'value' => '$data->server->server_name',
-                'name' => 'index',
+                'name' => 'exchange_date',
                 'htmlOptions' => array('width' => '50', 'align' => 'center'),
             ),
             array(
-//                'header' => AmcWm::t("msgsbase.core", "Section Name"),
-//                'value' => '$data->section_name',
-                'name' => 'percentage',
+                'name' => 'trading_value',
                 'htmlOptions' => array('width' => '50', 'align' => 'center'),
             ),
             array(
-//                'header' => AmcWm::t("msgsbase.core", "Section Name"),
-//                'value' => '$data->section_name',
-                'name' => 'net',
+                'name' => 'shares_of_stock',
+                'htmlOptions' => array('width' => '50', 'align' => 'center'),
+            ),
+            array(
+                'name' => 'closing_value',
+                'htmlOptions' => array('width' => '50', 'align' => 'center'),
+            ),
+            array(
+                'name' => 'difference_value',
+                'htmlOptions' => array('width' => '50', 'align' => 'center'),
+            ),
+            array(
+                'name' => 'difference_percentage',
                 'htmlOptions' => array('width' => '50', 'align' => 'center'),
             ),
         ),

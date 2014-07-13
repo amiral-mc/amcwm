@@ -60,7 +60,7 @@ class ExchangeCompanies extends ActiveRecord
     {
         return array(
             'exchange_companies_id' => AmcWm::t('msgsbase.core', 'Exchange Companies'),
-            'exchange_id' => AmcWm::t('msgsbase.core', 'Exchange ID'),
+            'exchange_id' => AmcWm::t('msgsbase.core', 'Exchange Name'),
             'company_name' => AmcWm::t('msgsbase.core', 'Company Name'),
             AmcWm::t('msgsbase.core', 'Code'),
         );
