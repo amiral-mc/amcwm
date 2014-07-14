@@ -13,7 +13,19 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-abstract class SocialData extends CComponent {
+abstract class AmcSocialData extends CComponent {
+
+    /**
+     *
+     * @var string current route 
+     */
+    protected $route;
+
+    /**
+     *
+     * @var string current route 
+     */
+    protected $customUrlRule;
 
     /**
      * Content language
@@ -61,7 +73,7 @@ abstract class SocialData extends CComponent {
         }
         $this->language = $lang;
         $this->limit = (int) $limit;
-        $this->socialId = $socialId;
+        $this->socialId = (int) $socialId;
         $this->social = $social;
         $query = sprintf('select module_id from modules where module = %s and parent_module=1', AmcWm::app()->db->quoteValue($module));
         $this->moduleId = AmcWm::app()->db->createCommand($query)->queryScalar();
@@ -80,6 +92,28 @@ abstract class SocialData extends CComponent {
             $url = Yii::app()->params['siteUrl'] . '/index.php';
         }
         return Html::createLinkRoute($url, $route, $params);
+    }
+
+    /**
+     * Setting social route used to generate link
+     * @param string $route
+     */
+    public function setRoute($route) {
+        if ($route) {
+            $this->route = $route;
+        }
+    }
+
+    /**
+     * Update social after post 
+     */
+    protected function updateSoicalConfig($tableId, $itemId, $createDate, $langItemId) {
+        $isConfig = AmcWm::app()->db->createCommand("select config_id from module_social_config_langs where config_id = {$langItemId} and content_lang = " . AmcWm::app()->db->quoteValue($this->language))->queryScalar();
+        if (!$isConfig) {
+            AmcWm::app()->db->createCommand("insert into module_social_config_langs (config_id ,content_lang) values({$langItemId}, " . AmcWm::app()->db->quoteValue($this->language) . ")")->execute();
+        }
+        $query = "update module_social_config set post_date = '{$createDate}' where module_id = {$this->moduleId} and table_id = {$tableId} and ref_id = {$itemId} and social_id = {$this->socialId}";
+        AmcWm::app()->db->createCommand($query)->execute();
     }
 
     /**

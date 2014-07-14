@@ -191,6 +191,6 @@ return array(
             'par' => '1211906641',
             'key' => '82b67b9d72b40220',
         ),
-        'siteUrl' => 'http://localhost',
+        'siteUrl' => 'http://localhost/lib/amcwm/demo',
     ),
 );

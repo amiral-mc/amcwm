@@ -13,7 +13,13 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class NewsSocialData extends SocialData {
+class AmcNewsSocialData extends AmcSocialData {
+
+    /**
+     *
+     * @var string current route 
+     */
+    protected $route = 'articles/default/view';
 
     /**
      *
@@ -48,7 +54,7 @@ class NewsSocialData extends SocialData {
                     $data['data']['image'] = Yii::app()->params['siteUrl'] . '/' . $mediaPath;
                 }
             }
-            $data['data']['link'] = $this->createUrl('articles/default/view', array('id' => $article['article_id'], 'lang' => $this->language, 'title' => $article['article_header']));
+            $data['data']['link'] = $this->createUrl($this->route, array('id' => $article['article_id'], 'lang' => $this->language, 'title' => $article['article_header']));
             $isConfig = AmcWm::app()->db->createCommand("select config_id from module_social_config_langs where config_id = {$article['config_id']} and content_lang = " . AmcWm::app()->db->quoteValue($this->language))->queryScalar();
             $query = "updated module_social_config set post_date = '{$article['create_date']}' where module_id = {$this->moduleId} and table_id = 1 and ref_id = {$article['article_id']}";
             if (!$isConfig) {
@@ -56,6 +62,7 @@ class NewsSocialData extends SocialData {
             }
             $query = "update module_social_config set post_date = '{$article['create_date']}' where module_id = {$this->moduleId} and table_id = 1 and ref_id = {$article['article_id']}";
             AmcWm::app()->db->createCommand($query)->execute();
+            $this->updateSoicalConfig(1, $article['article_id'], $article['create_date'], $article['config_id']);
             $this->social->postData($data);
         }
     }

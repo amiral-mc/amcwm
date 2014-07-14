@@ -51,6 +51,13 @@ class MediaListData extends SiteData {
      * @var string thumb media path 
      */
     protected $thumbMediaPath = null;
+    
+    
+     /**
+     * Auto generate data set
+     * @var boolean 
+     */
+    protected $generateDataset = true;
 
     /**
      * Counstructor
@@ -110,6 +117,14 @@ class MediaListData extends SiteData {
         return self::$settings;
     }
 
+    /**
+     * Auto generate dataset
+     * @param boolean $ok
+     */
+    public function setAutoGenerate($ok){
+        $this->generateDataset = $ok;
+    }
+    
     /**
      *
      * Generate media lists
@@ -199,10 +214,14 @@ class MediaListData extends SiteData {
             $wheres            
             ", Yii::app()->db->quoteValue($this->language), ActiveRecord::PUBLISHED);
 
-        $this->query = "select {$cols} $querySearch $orders $limit";
+        $query = "select {$cols} $querySearch $orders $limit";
         $this->count = Yii::app()->db->createCommand("select count(*) {$querySearch}")->queryScalar();
-        $rows = Yii::app()->db->createCommand($this->query)->queryAll();
-        $this->setDataset($rows);
+        $this->query = Yii::app()->db->createCommand($query);
+        if ($this->generateDataset) {
+            $rows = $this->query->queryAll();    
+            $this->setDataset($rows);
+        }        
+        
     }
 
     /**
@@ -271,10 +290,15 @@ class MediaListData extends SiteData {
             $wheres            
             ", Yii::app()->db->quoteValue($this->language), ActiveRecord::PUBLISHED);
 
-        $this->query = "select {$cols} $querySearch $orders $limit";
+        $query = "select {$cols} $querySearch $orders $limit";    
+        $this->query = Yii::app()->db->createCommand($query);
         $this->count = Yii::app()->db->createCommand("select count(*) {$querySearch}")->queryScalar();
-        $rows = Yii::app()->db->createCommand($this->query)->queryAll();
-        $this->setDataset($rows);
+        if ($this->generateDataset) {
+            $rows = $this->query->queryAll();    
+            $this->setDataset($rows);
+        }                            
+        
+                
     }
 
     /**

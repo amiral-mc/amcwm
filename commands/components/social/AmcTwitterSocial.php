@@ -34,8 +34,12 @@ class AmcTwitterSocial extends AmcSocial {
                 $myPostDataLink = $data['data']['link'];
                 break;
             case 'image':
+                $myPostDataHeader = $data['data']['header'];
+                $myPostDataLink = $data['data']['link'];
                 break;
             case 'video':
+                $myPostDataHeader = $data['data']['header'];
+                $myPostDataLink = $data['data']['link'];
                 break;
         }
         if (!$this->dontPost && $postMe) {
