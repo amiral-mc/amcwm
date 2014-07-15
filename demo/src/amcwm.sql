@@ -3860,10 +3860,10 @@ INSERT INTO `modules` (`module_id`, `parent_module`, `module`, `virtual`, `enabl
 (45, 1, 'tenders', 0, 0, 0, 0),
 (46, NULL, 'tenders', 0, 0, 0, 0),
 (76, 1, 'breaking', 0, 1, 0, 0),
-(77, 1, 'essays', 0, 0, 0, 0),
+(77, 1, 'essays', 0, 1, 0, 0),
 (78, 1, 'issueArticles', 0, 0, 0, 0),
 (79, NULL, 'usersArticles', 0, 1, 0, 0),
-(80, NULL, 'essays', 0, 0, 0, 0),
+(80, NULL, 'essays', 0, 1, 0, 0),
 (81, NULL, 'issueArticles', 0, 0, 0, 0),
 (82, 1, 'infocus', 0, 1, 0, 0),
 (83, 1, 'ads', 0, 1, 0, 0);

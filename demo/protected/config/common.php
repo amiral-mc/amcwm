@@ -154,6 +154,8 @@ return array(
                 'info' => array('thumbSize' => '100', 'allowedExtensions' => 'swf,txt,htm,html,zip,gz,rar,cab,tar,7z,mp3,ogg,mid,avi,mpg,flv,mpeg,pdf,ttf',),
             ),
         ),
+        
+        
         // facebook page access taken generate from 
         //https://graph.facebook.com/me/accounts?access_token=[user access taken]
         // see http://www.yorkstreetlabs.com/blog/Publish-to-Your-Facebook-Pages-Wall-with-PHP
@@ -172,13 +174,13 @@ return array(
                 'accessToken' => '',
                 'pageAccessToken' => '',
             ),
-        ),
+        ),        
         'twitter' => array(
             'en' => array(
-                'consumerKey' => '',
-                'consumerSecret' => '',
-                'oAuthToken' => '',
-                'oAuthSecret' => '',
+//                'consumerKey' => '',
+//                'consumerSecret' => '',
+//                'oAuthToken' => '',
+//                'oAuthSecret' => '',
             ),
             'ar' => array(
                 'consumerKey' => '',

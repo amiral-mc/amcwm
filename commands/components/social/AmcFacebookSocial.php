@@ -45,6 +45,7 @@ class AmcFacebookSocial extends AmcSocial {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.5) Gecko/20041107 Firefox/1.0');
             $content = curl_exec($ch);
+            print_r($content);
             curl_close($ch);
         } else {
             echo 'Facebook' . PHP_EOL;

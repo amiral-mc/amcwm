@@ -13,8 +13,8 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class AmcNewsSocialData extends AmcBaseArticlesSocialData {
+class AmcEssaysSocialData extends AmcBaseArticlesSocialData {
 
-    protected $table = "news";
+    protected $table = "essays";
 
 }
