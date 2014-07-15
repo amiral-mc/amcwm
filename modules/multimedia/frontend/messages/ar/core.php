@@ -35,7 +35,7 @@ return array(
     'Galleries'=>"البومات",
     'Library galleries'=>"البومات المكتبة",
     '-- select --'=>"اختر",
-    'Uncategorized' => 'غير مصنف',
+    'All Sections' => 'جميع الأقسام',
     'Select Section' => 'أختر القسم',
 );
 ?>
