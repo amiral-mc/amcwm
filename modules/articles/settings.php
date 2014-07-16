@@ -870,7 +870,7 @@ return array(
                 'addToInfocus' => true,
                 'allowPageImage' => true,
                 'seoImages' => true,
-                'autoPost2social'=> false,
+                'autoPost2social' => false,
             ),
         ),
         'news' => array(
@@ -883,7 +883,7 @@ return array(
             'default' => array(
                 'check' => array(
                     'addToBreaking' => true,
-                    'autoPost2social'=> true,
+                    'autoPost2social' => true,
                 ),
                 'integer' => array(
                     'mainTopics' => 4,
@@ -900,6 +900,46 @@ return array(
                 'noImageListing' => AmcWm::app()->request->baseUrl . '/images/front/news_default.jpg'
             ),
         ),
+        'breaking' => array(
+            'postitions' => array(
+//                'sisterPostition' => 4,
+//                'sideColumn' => array(
+//                    4, 1, 2
+//                ),
+            ),
+            'default' => array(
+                'check' => array(
+                    'autoPost2social' => true,
+                ),
+                'integer' => array(
+                    'breakingExpiredAfter' => 12 * 60 * 60,
+                ),
+            ),
+        ),
+        'essays' => array(
+            'postitions' => array(
+//                'sisterPostition' => 4,
+//                'sideColumn' => array(
+//                    4, 1, 2
+//                ),
+            ),
+            'default' => array(
+                'check' => array(
+                    'autoPost2social' => true,
+                ),
+                'integer' => array('mainTopics' => 4),
+                'post2social' => false,
+                'topArticles' => 3,
+                'showListingTitle' => false,
+                'showPrimaryHeader' => false,
+                'showDate' => false,
+                'showSectionsList' => true,
+                'showSectionName' => true,
+                'showSource' => true,
+                'showDefaultImage' => false,
+                'noImageListing' => AmcWm::app()->request->baseUrl . '/images/front/article_default.jpg'
+            ),
+        ),
         'articles' => array(
             'postitions' => array(
 //                'sisterPostition' => 4,
@@ -909,7 +949,7 @@ return array(
             ),
             'default' => array(
                 'integer' => array('mainTopics' => 4),
-                'post2social'=> false,
+                'post2social' => false,
                 'topArticles' => 3,
                 'showListingTitle' => false,
                 'showPrimaryHeader' => false,

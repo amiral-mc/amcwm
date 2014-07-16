@@ -117,6 +117,16 @@
             <?php echo Chtml::label(AmcWm::t("msgsbase.core", "No expiry date"), "remove_expiry", array("style" => 'display:inline;color:#3E4D57;font-weight:normal')) ?>
             <?php echo $form->error($model, 'expire_date'); ?>
         </div>
+        <div class="row">
+            <fieldset>
+                <legend><?php echo AmcWm::t("amcBack", "Publish to the social media sites"); ?>:</legend>
+                <?php //echo $form->labelEx($model, 'socialIds');       ?>
+                <span>
+                    <?php echo $form->checkBoxList($model, 'socialIds', $this->getSocials(), array("separator" => "<br />", 'labelOptions' => array('class' => 'checkbox_label'))); ?>
+                </span>
+                <?php echo $form->error($model, 'socialIds'); ?>
+            </fieldset>
+        </div>
     </fieldset>   
     <?php $this->endWidget(); ?>
 </div><!-- form -->    

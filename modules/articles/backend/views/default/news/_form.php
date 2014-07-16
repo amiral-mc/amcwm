@@ -312,7 +312,7 @@
             ?>            
         </div>     
     </fieldset>
-
+<?php if (!$model->news->is_breaking): ?>
     <div class="row">
         <fieldset>
             <legend><?php echo AmcWm::t("amcBack", "Publish to the social media sites"); ?>:</legend>
@@ -323,6 +323,7 @@
             <?php echo $form->error($model, 'socialIds'); ?>
         </fieldset>
     </div>
+    <?php endif;?>
     <?php $this->endWidget(); ?>
 </div><!-- form -->    
 <?php
