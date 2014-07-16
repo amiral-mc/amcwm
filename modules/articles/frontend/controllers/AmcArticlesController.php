@@ -122,9 +122,9 @@ class AmcArticlesController extends FrontendController {
             $this->sisterOptions = array('type' => 'menu', 'id' => $menuId);
         } else {
             $this->sisterOptions = array('type' => 'article', 'id' => $articleRecord['section_id']);
-        }
-        unset($_GET['module']);
+        }        
         $this->allowedPositions();
+        unset($_GET['module']);
         $this->render('view', array(
             'articleRecord' => $articleRecord,
             'articlesRelated' => $articlesRelated,
