@@ -382,7 +382,7 @@ class Articles extends ParentTranslatedActiveRecord {
         }
         $cache = Yii::app()->getComponent('cache');
         if ($cache !== null) {
-            if ($this->oldAttributes['parent_article'] != $this->parent_article) {
+            if (isset($this->oldAttributes['parent_article']) && $this->oldAttributes['parent_article'] != $this->parent_article) {
                 $query = "select article_id from articles where parent_article = " . (int) $this->oldAttributes['parent_article'];
                 $subArticles = Yii::app()->db->createCommand($query)->queryAll();
                 $cache->delete('article_' . $this->oldAttributes['parent_article']);
