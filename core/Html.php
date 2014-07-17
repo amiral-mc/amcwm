@@ -259,14 +259,18 @@ class Html {
      */
     public static function drawSeoImage() {
         if (isset($_GET['file'])) {
+            $fileName = $_GET['f'];
             $realFile = trim($_GET['file'], "/");
             $info = pathinfo($realFile);
-            preg_match_all("|^(.*\.)([0-9]+\.\w{3,4})$|", $_GET['file'], $matches);
-            $imageId = NULL;
-            if (isset($matches[2][0])) {
-                $realFile = "{$info['dirname']}/{$matches[2][0]}";
-                $imageId = $matches[2][0];
-            }
+            $fullName = $info['dirname'] .'/'. $fileName;
+            
+//            preg_match_all("|^(.*\.)([0-9]+\.\w{3,4})$|", $_GET['file'], $matches);
+//             die(print_r($matches));
+//            $imageId = NULL;
+//            if (isset($matches[2][0])) {
+//                $realFile = "{$info['dirname']}/{$matches[2][0]}";
+//                $imageId = $matches[2][0];
+//            }
             switch ($info['extension']) {
                 case "jpeg":
                 case "jpg":
@@ -281,7 +285,7 @@ class Html {
             }
             ob_clean();
             flush();
-            readfile($realFile);
+            readfile($fullName);
             exit;
         }
     }
