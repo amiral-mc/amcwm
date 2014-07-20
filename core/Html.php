@@ -88,8 +88,15 @@ class Html {
      * @return string
      */
     public static function createConsoleUrl($url, $route, $params = array()) {            
-        $url =   str_replace(Yii::app()->request->baseUrl, $url, self::createUrl($route, $params));
-        return $url;
+        
+        $createUrl = self::createUrl($route, $params);
+        if(Yii::app()->request->baseUrl){
+            $createUrl =   str_replace(Yii::app()->request->baseUrl, $url, $createUrl);
+        }
+        else{
+            $createUrl = $url . $createUrl;
+        }
+        return $createUrl;
     }
 
     /**
