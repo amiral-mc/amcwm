@@ -113,7 +113,7 @@ abstract class AmcXmlSitemapData extends CComponent {
      * Generate xml sitemap
      */
     public function generate(){
-        $this->createXmlLinks();
+        return $this->createXmlLinks();
     }
 
     /**

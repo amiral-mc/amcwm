@@ -47,8 +47,10 @@ class AmcArticlesXmlSitemapData extends AmcXmlSitemapData {
         $articles = $list->getQuery()->queryAll();
         $fileName = $this->generateXmlFileName($dateTime);
         if (count($articles)) {
-            $this->generateMap($fileName, $articles, 'article_id', 'article_header');
+            $ok = $this->generateMap($fileName, $articles, 'article_id', 'article_header');
+            return $ok;
         }
+        
 //        $query = "update articles set in_xml_map = 1 where  article_id = {$article['article_id']}";            
 //        AmcWm::app()->db->createCommand($query)->execute();
     }
@@ -69,6 +71,7 @@ class AmcArticlesXmlSitemapData extends AmcXmlSitemapData {
         if (function_exists("gzencode")) {
             $fileName = "{$fileName}.gz";
         }
+        $saved = false;
         if (!is_file("{$xmlPath}{$fileName}")) {
             $mapView = Yii::getPathOfAlias('amcwm.commands.components.xmlSitemap.views.sitemap') . ".php";
             $xml = $this->console->renderFile($mapView, array('records' => $records, 'model' => $this, 'titleIndex' => $titleIndex, 'idIndex' => $idIndex), true);
@@ -93,6 +96,7 @@ class AmcArticlesXmlSitemapData extends AmcXmlSitemapData {
                 file_put_contents(Yii::app()->basePath . "/../sitemap_index.xml", $doc->saveXML());
             }
         }
+        return $saved;
     }
 
 }
