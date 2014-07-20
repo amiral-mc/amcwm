@@ -82,7 +82,7 @@ class AmcMaillistCommand extends CConsoleCommand {
         } else {
             $url = Yii::app()->params['siteUrl'] . '/index.php';
         }
-        return Html::createLinkRoute($url, $route, $params);
+        return Html::createConsoleUrl($url, $route, $params);
     }
 
     public function init() {
