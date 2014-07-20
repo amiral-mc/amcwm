@@ -37,13 +37,7 @@ abstract class AmcSocialData extends CComponent {
      * Article language
      * @var integer 
      */
-    protected $socialId = null;
-
-    /**
-     *
-     * @var AmcSocial Social class
-     */
-    protected $social = true;
+    protected $socialId = null;    
 
     /**
      *
@@ -83,15 +77,17 @@ abstract class AmcSocialData extends CComponent {
      * 
      * @param type $route
      * @param type $params
-     * @return type
+     * @return string
      */
     protected function createUrl($route, $params) {
+        
         if (Yii::app()->getUrlManager()->getUrlFormat() == 'path') {
             $url = Yii::app()->params['siteUrl'];
         } else {
             $url = Yii::app()->params['siteUrl'] . '/index.php';
-        }
-        return Html::createLinkRoute($url, $route, $params);
+        }        
+        return  Html::createConsoleUrl($url, $route, $params);
+        
     }
 
     /**

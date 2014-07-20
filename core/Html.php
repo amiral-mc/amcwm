@@ -80,36 +80,16 @@ class Html {
         return $url;
     }
 
-    public static function createLinkRoute($link, $route, $params = array()) {        
-        $bookmark = null;
-        if (!isset($params['lang'])) {
-            $params['lang'] = Controller::getCurrentLanguage();
-        }
-        if (Yii::app()->getUrlManager()->getUrlFormat() == 'path') {
-            if (isset($params["#"])) {
-                $bookmark = "#{$params["#"]}";
-                unset($params['#']);
-            }
-            if (isset($params['title']) && isset($params['id'])) {
-                $params['id'] = "{$params['id']}-" . self::seoTitle($params['title'], false);
-                unset($params['title']);
-            }
-            if (!isset($params['lang'])) {
-                $params['lang'] = Controller::getCurrentLanguage();
-            }
-            foreach ($params as $paramKey => $paramVal) {
-                $paramVal = urlencode($paramVal);
-                $route .= "/$paramKey/$paramVal";
-            }
-            $link = "$link/$route{$bookmark}";
-        } else {
-            foreach ($params as $paramKey => $paramVal) {
-                $route .= "&$paramKey=$paramVal";
-            }
-            $link = "$link?r=$route";
-        }
-
-        return $link;
+    /**
+     * createLinkRoute
+     * @param type $url
+     * @param type $route
+     * @param type $params
+     * @return string
+     */
+    public static function createConsoleUrl($url, $route, $params = array()) {            
+        $url =   str_replace(Yii::app()->request->baseUrl, $url, self::createUrl($route, $params));
+        return $url;
     }
 
     /**
