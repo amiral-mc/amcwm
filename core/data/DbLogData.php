@@ -111,29 +111,42 @@ abstract class DbLogData {
             $primaryKey = $this->_model->primaryKey;
             $module = $this->_settings['module'];
             $queries = array();
-            
+
             foreach ($this->_settings['tables'] as $tableInfo) {
-                $queries[$tableInfo['name']]['method'] = 'queryRow';
-                $queries[$tableInfo['name']]['translation'] = array();
+                $logNameKey = isset($tableInfo['logNameKey']) ? $tableInfo['logNameKey'] : $tableInfo['name'];
+                $queries[$logNameKey]['method'] = 'queryRow';
+                $queries[$logNameKey]['translation'] = array();
+
                 if (isset($tableInfo['hasMany'])) {
-                    $queries[$tableInfo['name']]['method'] = 'queryAll';
+                    $queries[$logNameKey]['method'] = 'queryAll';
                 }
-                
-                if(isset($tableInfo['key']))
-                    $queries[$tableInfo['name']]['query'] = sprintf("select * from {$tableInfo['name']} where {$tableInfo['key']} = %s", AmcWm::app()->db->quoteValue($primaryKey));
-                    
+                if (isset($tableInfo['key'])) {
+                    if (isset($tableInfo['onRelations'])) {
+                        $tableKey = isset($tableInfo['onRelationsWhereKey']) ? $tableInfo['onRelationsWhereKey'] : $tableInfo['key'];
+                        $select = isset($tableInfo['logSelect']) ? $tableInfo['logSelect'] : "{$tableInfo['name']}.*";
+                        $queries[$logNameKey]['query'] = sprintf("select $select from {$tableInfo['name']} {$tableInfo['onRelations']} where {$tableKey} = %s", AmcWm::app()->db->quoteValue($primaryKey));
+                    } else {
+                        $queries[$logNameKey]['query'] = sprintf("select * from {$tableInfo['name']} where {$tableInfo['key']} = %s", AmcWm::app()->db->quoteValue($primaryKey));
+                    }
+                }
+
                 if (isset($tableInfo['translation'])) {
-                    $queries[$tableInfo['name']]['translation']['tableName'] = $tableInfo['translation']['name'];
-                    $queries[$tableInfo['name']]['translation']['query'] = sprintf("select * from {$tableInfo['translation']['name']} where {$tableInfo['translation']['key']} = %s", AmcWm::app()->db->quoteValue($primaryKey));
+                    $queries[$logNameKey]['translation']['tableName'] = $tableInfo['translation']['name'];
+                    if (isset($tableInfo['onRelations'])) {
+                        $relationTrans = isset($tableInfo['translation']['onRelations']) ? $tableInfo['translation']['onRelations'] : null;
+                        $tableKey = isset($tableInfo['onRelationsWhereKey']) ? $tableInfo['onRelationsWhereKey'] : $tableInfo['translation']['key'];
+                        $queries[$logNameKey]['translation']['query'] = sprintf("select {$tableInfo['translation']['name']}.* from {$tableInfo['translation']['name']} {$relationTrans} {$tableInfo['onRelations']} where {$tableKey} = %s", AmcWm::app()->db->quoteValue($primaryKey));
+                    } else {
+                        $queries[$logNameKey]['translation']['query'] = sprintf("select {$tableInfo['translation']['name']}.* from {$tableInfo['translation']['name']} where {$tableInfo['translation']['key']} = %s", AmcWm::app()->db->quoteValue($primaryKey));
+                    }
                 }
             }
             $db = $this->_model->dbConnection;
             $data = array(
-                'data'=>array(),
-                'options'=>array(
-                    'template'=>$this->_settings['log']['template'],
+                'data' => array(),
+                'options' => array(
+                    'template' => $this->_settings['log']['template'],
                 )
-            
             );
             foreach ($queries as $tableName => $querySettings) {
                 $method = $querySettings['method'];
@@ -171,4 +184,3 @@ abstract class DbLogData {
      */
     abstract public function getFileSystem($tableName);
 }
-

@@ -43,14 +43,27 @@ $contentLang = $logDetails['articles']['db']['translation']['contentLang'];
         <?php echo $logDetails['articles']['db']['translation']['db'][$contentLang]['article_header']; ?>
     </td>     
 </tr>
-  <tr>
-        <td  valign="top" nowrap="nowrap">
-            <?php echo AmcWm::t("amcwm.modules.articles.backend.messages.news", "Source"); ?>:
-        </td>
-        <td valign="top">            
-            <?php echo $logDetails['news']['db']['translation']['db'][$contentLang]['source']; ?>
-        </td>    
-    </tr>
+<tr>
+    <td  valign="top" nowrap="nowrap">
+        <?php echo AmcWm::t("amcwm.modules.articles.backend.messages.news", "Source"); ?>:
+    </td>        
+    <td valign="top">            
+        <?php echo $logDetails['news_sources']['db']['translation']['db'][$contentLang]['source']; ?>
+    </td>    
+</tr>
+<tr>
+    <td valign="top" nowrap="nowrap">
+        <?php echo AmcWm::t("amcwm.modules.articles.backend.messages.news", "Editors"); ?>:
+    </td>
+    <td valign="top">         
+        <?php
+        if (isset($logDetails['news_editors']['db']['master']))
+            foreach ($logDetails['news_editors']['db']['master'] as $editorRow) {
+                echo '<div>' . $editorRow['name'] . '</div>';
+            }
+        ?>
+    </td>        
+</tr>
 <tr>
     <td valign="top" nowrap="nowrap">
         <?php echo AmcWm::t("amcwm.modules.articles.backend.messages.core", "Titles"); ?>:

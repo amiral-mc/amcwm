@@ -1,15 +1,19 @@
 <?php
 
-return array(
+return array(    
     'tables' => array(
         't1' => array(
             'id' => 1,
-            'name' => 'articles',
+            'name' => 'articles',            
+            'logMethods'=> array(
+                
+                "select * from persons p inner join persons_translation on p.person_id = pt.person_id where person_id = %d'"
+                ),
             'translation' => array(
                 'id' => 8,
                 'key' => 'article_id',
                 'name' => 'articles_translation',
-            ),
+            ),            
             'key' => 'article_id',
             'sorting' => array('sortField' => "article_sort", 'order' => 'asc'),
             'extendsTables' => array(
@@ -22,7 +26,7 @@ return array(
         ),
         't2' => array(
             'id' => 2,
-            'name' => 'news',
+            'name' => 'news',            
             'key' => 'article_id',
             'sorting' => array('sortField' => "create_date", 'order' => 'desc'),
         ),
@@ -61,7 +65,47 @@ return array(
             'name' => 'essays',
             'key' => 'article_id',
             'sorting' => array('sortField' => "create_date", 'order' => 'desc'),
+        ),        
+        't8' => array(
+            'id' => 8,
+            'name' => 'news_sources',
+            'onRelations'=> 'inner join news on news_sources.source_id = news.source_id',
+            'onRelationsWhereKey'=>'article_id', 
+            'hasMany' => true,
+            'translation' => array(
+                'id' => 9,
+                'key' => 'source_id',
+                'onRelations'=> 'left join news_sources on news_sources_translation.source_id = news_sources.source_id',
+                'name' => 'news_sources_translation',                
+            ),
+            'key' => 'source_id', 
+            
         ),
+        't9' => array(
+            'id' => 10,
+            'name' => 'persons',
+            'logNameKey'=>'writers',
+            //'hasMany' => true,
+            'onRelations'=> 'inner join articles on persons.person_id = articles.writer_id',
+            'translation' => array(
+                'id' => 11,
+                'onRelations'=> 'left join persons on persons_translation.person_id = persons.person_id',
+                'key' => 'article_id',
+                'name' => 'persons_translation',                
+            ),
+            'key' => 'article_id',            
+        ),
+        't10' => array(
+            'id' => 12,
+            'name' => 'persons',
+            'logNameKey'=>'news_editors',
+            'hasMany' => true,
+            'onRelations'=> sprintf('inner join news_editors on persons.person_id = news_editors.editor_id'
+            . ' inner join persons_translation on persons_translation.person_id = persons.person_id and persons_translation.content_lang = %s', AmcWm::app()->db->quoteValue(Controller::getContentLanguage())),            
+            'logSelect'=> 'email, name',
+            'key' => 'article_id',            
+        ),
+        
     ),
     'backend' => array(
         'log' => array(
