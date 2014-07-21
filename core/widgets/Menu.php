@@ -51,10 +51,10 @@ class Menu extends CMenu {
     protected function isItemActive($item, $route) {
         $isActive = false;
         if (isset($item['url'][0])) {
-            $useLang = count(Yii::app()->params['languages']) || (isset(Yii::app()->params['langAsFoldder']) && Yii::app()->params['langAsFoldder']);
-            if (!isset($item['url']['lang']) && $useLang) {
-                $item['url']['lang'] = Controller::getCurrentLanguage();
-            }
+//            $useLang = count(Yii::app()->params['languages']) || (isset(Yii::app()->params['langAsFoldder']) && Yii::app()->params['langAsFoldder']);
+//            if (!isset($item['url']['lang']) && $useLang) {
+//                $item['url']['lang'] = Controller::getCurrentLanguage();
+//            }
             $isActive = parent::isItemActive($item, $route);
         }
         return $isActive;
