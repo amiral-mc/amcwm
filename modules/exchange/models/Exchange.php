@@ -56,7 +56,7 @@ class Exchange extends ActiveRecord
     public function attributeLabels()
     {
         return array(
-            'exchange_id' => AmcWm::t('msgsbase.core', 'Exchange'),
+            'exchange_id' => AmcWm::t('msgsbase.core', 'Exchange ID'),
             'exchange_name' => AmcWm::t('msgsbase.core', 'Exchange Name'),
             'currency' => AmcWm::t('msgsbase.core', 'Currency'),
         );

@@ -9,8 +9,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `exchange_companies` (
   `exchange_companies_id` INT NOT NULL AUTO_INCREMENT,
   `exchange_id` INT NOT NULL,
-  `company_name` VARCHAR(45) NOT NULL,
   `code` VARCHAR(45) NULL,
+  `published` TINYINT(1) NOT NULL,
   PRIMARY KEY (`exchange_companies_id`),
   INDEX `fk_exchange_companies_exchange1_idx` (`exchange_id` ASC),
   CONSTRAINT `fk_exchange_companies_exchange1`
@@ -57,4 +57,16 @@ CREATE TABLE IF NOT EXISTS `exchange_trading_companies` (
     REFERENCES `exchange_companies` (`exchange_companies_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;';
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `exchange_companies_translation` (
+  `exchange_companies_id` INT NOT NULL,
+  `company_name` VARCHAR(100) NOT NULL,
+  `content_lang` CHAR(2) NOT NULL,
+  PRIMARY KEY (`exchange_companies_id`),
+  CONSTRAINT `fk_exchange_companies_translation_exchange_companies1`
+    FOREIGN KEY (`exchange_companies_id`)
+    REFERENCES `exchange_companies` (`exchange_companies_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB';

@@ -86,7 +86,7 @@ class AmcExchangeController extends BackendController {
     /**
      * Exchange Tadawol
      */
-    public function actionTrading() {
+    public function actionTrading($eid) {
         $this->forward("trading/");
     }
 
