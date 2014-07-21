@@ -58,13 +58,6 @@ class AmcBaseArticlesSocialData extends AmcSocialData {
                 }
             }
             $data['data']['link'] = $this->createUrl($this->route, array('id' => $article['article_id'], 'lang' => $this->language, 'title' => $article['article_header']));
-            $isConfig = AmcWm::app()->db->createCommand("select config_id from module_social_config_langs where config_id = {$article['config_id']} and content_lang = " . AmcWm::app()->db->quoteValue($this->language))->queryScalar();
-            $query = "updated module_social_config set post_date = '{$article['create_date']}' where module_id = {$this->moduleId} and table_id = 1 and ref_id = {$article['article_id']}";
-            if (!$isConfig) {
-                AmcWm::app()->db->createCommand("insert into module_social_config_langs (config_id ,content_lang) values({$article['config_id']}, " . AmcWm::app()->db->quoteValue($this->language) . ")")->execute();
-            }
-            $query = "update module_social_config set post_date = '{$article['create_date']}' where module_id = {$this->moduleId} and table_id = 1 and ref_id = {$article['article_id']}";
-            AmcWm::app()->db->createCommand($query)->execute();
             $this->updateSoicalConfig(1, $article['article_id'], $article['create_date'], $article['config_id']);
             $this->social->postData($data);
         }
