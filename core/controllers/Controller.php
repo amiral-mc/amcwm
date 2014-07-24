@@ -502,4 +502,14 @@ class Controller extends CController {
         return Yii::app()->getLocale()->getMonthNames();
     }
 
+    /**
+     * Get months list
+     * @access public
+     * @return void
+     */
+    public function getCurrencies() {
+        $countries = CHtml::listData(Yii::app()->db->createCommand("select currency_code from currency")->queryAll(), 'currency_code', "currency_code");
+        return $countries;
+    }
+
 }

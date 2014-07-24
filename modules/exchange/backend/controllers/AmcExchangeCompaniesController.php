@@ -28,6 +28,7 @@ class AmcExchangeCompaniesController extends BackendController {
             $transaction = Yii::app()->db->beginTransaction();
             $model = $contentModel->getParentContent();
             $model->attributes = $_POST['ExchangeCompanies'];
+            $model->exchange_id = (int) Yii::app()->request->getParam('eid');
             $contentModel->attributes = $_POST['ExchangeCompaniesTranslation'];
             $validate = $model->validate();
             $validate &= $contentModel->validate();
@@ -54,12 +55,14 @@ class AmcExchangeCompaniesController extends BackendController {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
+        $eid = (int) $_GET['eid'];
         $model = new ExchangeCompanies;
         $contentModel = new ExchangeCompaniesTranslation();
         $model->addTranslationChild($contentModel, self::getContentLanguage());
         $this->save($contentModel);
         $this->render('create', array(
             'contentModel' => $contentModel,
+            'eid' => $eid,
         ));
 
 //        $model = new ExchangeCompanies;
@@ -76,11 +79,13 @@ class AmcExchangeCompaniesController extends BackendController {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
+        $eid = (int) $_GET['eid'];
         $contentModel = $this->loadChildModel($id);
         if ($contentModel) {
             $this->save($contentModel);
             $this->render('update', array(
                 'contentModel' => $contentModel,
+                'eid' => $eid,
             ));
         } else {
             throw new CHttpException(404, 'The requested page does not exist.');
@@ -96,11 +101,14 @@ class AmcExchangeCompaniesController extends BackendController {
         $model->unsetTranslationsAttributes();
         $model->addTranslationChild(new ExchangeCompaniesTranslation('search'), self::getContentLanguage());
         $contentModel = $model->getTranslated(self::getContentLanguage());
-        if (isset($_GET['ExchangeCompanies'])) {
-            $model->attributes = $_GET['ExchangeCompanies'];
-        } else {
-            $model->exchange_id = (int) $_GET['eid'];
+//        if (isset($_GET['ExchangeCompanies'])) {
+//            $model->attributes = $_GET['ExchangeCompanies'];
+//        } 
+//        else {
+        if(isset($_GET['eid'])) {
+            $contentModel->parentContent()->exchange_id = (int) $_GET['eid'];
         }
+//        }
         if ($contentModel) {
             if (isset($_GET['ExchangeCompaniesTranslation'])) {
                 $contentModel->attributes = $_GET['ExchangeCompaniesTranslation'];
@@ -138,6 +146,7 @@ class AmcExchangeCompaniesController extends BackendController {
                     $deleted = false;
                 } else {
                     $deleted = $model->delete();
+                    $deleted &= $model->parentContent()->delete();
                 }
                 if ($deleted) {
                     $messages['success'][] = AmcWm::t("amcTools", 'Record has been deleted');
@@ -218,7 +227,7 @@ class AmcExchangeCompaniesController extends BackendController {
      */
     public function loadChildModel($id) {
         $pk = ChildTranslatedActiveRecord::getCompositeValues($id);
-        $model = ExchangeCompaniesTranslation::model()->findByPk(array("exchange_id" => $pk['id'], 'content_lang' => $pk['lang']));
+        $model = ExchangeCompaniesTranslation::model()->findByPk(array("exchange_companies_id" => $pk['id'], 'content_lang' => $pk['lang']));
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;

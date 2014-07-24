@@ -8,6 +8,7 @@
  * @property integer $exchange_id 
  * @property string $code
  * @property integer $published
+ * @property string $currency
  *
  * The followings are the available model relations:
  * @property Exchange $exchange
@@ -33,10 +34,10 @@ class ExchangeCompanies extends ParentTranslatedActiveRecord
         return array(
             array('exchange_id', 'required'),
             array('exchange_id, published', 'numerical', 'integerOnly'=>true),
-            array('code', 'length', 'max'=>45),
+            array('code, currency', 'length', 'max'=>45),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('exchange_companies_id, exchange_id, code', 'safe', 'on'=>'search'),
+            array('exchange_companies_id, exchange_id, code, currency', 'safe', 'on'=>'search'),
         );
     }
 
@@ -61,9 +62,10 @@ class ExchangeCompanies extends ParentTranslatedActiveRecord
     {
         return array(
             'exchange_companies_id' => AmcWm::t('msgsbase.companies', 'Company ID'),
-            'exchange_id' => AmcWm::t('msgsbase.core', 'Exchange Name'),
+            'exchange_id' => AmcWm::t('msgsbase.companies', 'Exchange ID'),
             'code' => AmcWm::t('msgsbase.companies', 'Code'),
-            'published' => AmcWm::t('amcTools', 'Publish'),
+            'published' => AmcWm::t('amcBack', 'Published'),
+            'currency' => AmcWm::t('amcCore', 'Currency'),
         );
     }
 
@@ -84,12 +86,12 @@ class ExchangeCompanies extends ParentTranslatedActiveRecord
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria=new CDbCriteria;
-
         $criteria->compare('exchange_companies_id',$this->exchange_companies_id);
         $criteria->compare('exchange_id',$this->exchange_id);
         $criteria->compare('code',$this->code,true);
         $criteria->compare('published',$this->published);
-
+        $criteria->compare('currency',$this->currency);
+        
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
         ));
@@ -110,8 +112,8 @@ class ExchangeCompanies extends ParentTranslatedActiveRecord
      * Get companies
      * @return array
      */
-    public static function getCompanies($asObject = false){
-        $query = sprintf("SELECT exchange_companies_id, company_name FROM exchange_companies_translation WHERE content_lang = %s", Yii::app()->db->quoteValue(Controller::getContentLanguage()));
+    public static function getCompanies($eid, $asObject = false){
+        $query = sprintf("SELECT et.exchange_companies_id, company_name FROM exchange_companies e INNER JOIN exchange_companies_translation et on e.exchange_companies_id = et.exchange_companies_id WHERE exchange_id = %d and content_lang = %s", $eid, Yii::app()->db->quoteValue(Controller::getContentLanguage()));
         $rows = AmcWm::app()->db->createCommand($query)->queryAll();
         if($asObject){
             return $rows;

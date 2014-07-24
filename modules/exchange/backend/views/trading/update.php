@@ -5,8 +5,8 @@ $this->breadcrumbs = array(
     AmcWm::t("msgsbase.core", "Exchange") => array('/backend/exchange/default/index'),
     AmcWm::t("amcTools", "Edit"),
 );
-$eid = (int) $_GET['eid'];
-$this->sectionName = "#{$model->exchange_id}";
+
+$this->sectionName = AmcWm::t("msgsbase.core", "Trading Date") . " - " . $model->exchange_date;
 $this->widget('amcwm.core.widgets.tools.Tools', array(
     'id' => 'tools-grid',
     'items' => array(
@@ -14,5 +14,5 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
         array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array("/backend/exchange/trading/index", 'eid' => $eid), 'id' => 'admin_list', 'image_id' => 'back'),
     ),
 ));
-$this->renderPartial('_form', array('model' => $model, 'formId' => $formId, 'childModel' => $childModel, 'companies' => $companies, 'tradingsModel' => $tradingsModel));
+$this->renderPartial('_form', array('model' => $model, 'formId' => $formId, 'childModel' => $childModel, 'companies' => $companies, 'tradingsModel' => $tradingsModel, 'eid' => $eid));
 ?>

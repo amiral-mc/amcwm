@@ -14,7 +14,7 @@
         <?php echo $form->checkBox($model->parentContent(), 'published'); ?>
         <?php echo $form->error($model->parentContent(), 'published'); ?>
     </div>
-    
+
     <div class="row">
         <?php echo $form->labelEx($model->parentContent(), 'exchange_id'); ?>
         <?php echo $form->dropDownList($model->parentContent(), 'exchange_id', CHtml::listData(Exchange::model()->findAll(array('order' => 'exchange_name DESC')), 'exchange_id', 'exchange_name')); ?>
@@ -31,6 +31,12 @@
         <?php echo $form->labelEx($model->parentContent(), 'code'); ?>
         <?php echo $form->textField($model->parentContent(), 'code', array('size' => 45, 'maxlength' => 45)); ?>
         <?php echo $form->error($model->parentContent(), 'code'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model->parentContent(), 'currency'); ?>
+        <?php echo $form->dropDownList($model->parentContent(), 'currency', $this->getCurrencies()); ?>
+        <?php echo $form->error($model->parentContent(), 'currency'); ?>
     </div>
     <div class="row buttons">
         <?php echo CHtml::submitButton(AmcWm::t("amcBack", 'Search')); ?>

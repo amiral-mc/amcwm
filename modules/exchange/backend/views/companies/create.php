@@ -5,7 +5,6 @@ $this->breadcrumbs = array(
     AmcWm::t("msgsbase.companies", 'Exchange Companies') => array('/backend//exchange/companies/index'),
     AmcWm::t("amcTools", "Create"),
 );
-$eid = (int) $_GET['eid'];
 $this->sectionName = AmcWm::t("amcTools", "New");
 $this->widget('amcwm.core.widgets.tools.Tools', array(
     'id' => 'tools-grid',
@@ -14,5 +13,5 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
         array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array('/backend/exchange/companies/index', 'eid' => $eid), 'id' => 'records_list', 'image_id' => 'back'),
     ),
 ));
-$this->renderPartial('_form', array('contentModel' => $contentModel, 'formId' => $formId));
+$this->renderPartial('_form', array('contentModel' => $contentModel, 'formId' => $formId, 'eid' => $eid));
 ?>

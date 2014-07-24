@@ -11,4 +11,5 @@ return array(
     'Difference %' => 'قيمة التغيير',
     'New Company' => 'إضافة شركة جديدة',
     'Select Company' => 'أختر الشركة',
+    'Company No.' => 'شركة رقم',
 );

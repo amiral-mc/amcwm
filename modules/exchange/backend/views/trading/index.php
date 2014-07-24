@@ -48,11 +48,6 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 'htmlOptions' => array('width' => '20', 'align' => 'center'),
             ),
             array(
-                'header' => AmcWm::t("msgsbase.core", "Exchange Name"),
-                'value' => '$data->exchange->exchange_name',
-                'htmlOptions' => array('width' => '50', 'align' => 'center'),
-            ),
-            array(
                 'name' => 'trading_value',
                 'htmlOptions' => array('width' => '50', 'align' => 'center'),
             ),

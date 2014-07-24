@@ -13,12 +13,13 @@ return array(
     'The requested page does not exist.' => 'الصفحة المطلوبة غير موجودة',
     'You are not authorized to perform this action.' => 'غير مصرح لك لأداء هذا العمل.',
     'Year' => "سنة",
-    'Month'=>'شهر',
-    'Day'=>'يوم',
-    'Hour'=>'ساعة',
-    'Minute'=>'دقيقة',
+    'Month' => 'شهر',
+    'Day' => 'يوم',
+    'Hour' => 'ساعة',
+    'Minute' => 'دقيقة',
     'sexLabels' => array(
         'm' => 'ذكر',
         'f' => 'انثي',
     ),
+    'Currency' => 'العملة',
 );

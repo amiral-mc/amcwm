@@ -21,23 +21,30 @@ class AmcExchangeTradingController extends BackendController {
      */
     protected function save(ExchangeTrading $model) {
         if (isset($_POST['ExchangeTrading'])) {
+            $eid = (int) Yii::app()->request->getParam('eid');
             $model->attributes = $_POST['ExchangeTrading'];
-            $validate = $model->validate();
+            $tradingsModelSave = array();
+            $validate = false;
+            if (isset($_POST['ExchangeTradingCompanies'])) {
+                ExchangeTradingCompanies::model()->deleteAll('exchange_trading_exchange_id = ' . $eid);
+                foreach ($_POST['ExchangeTradingCompanies'] as $key => $value) {
+                    $tradingsModel = new ExchangeTradingCompanies;
+                    $tradingsModel->opening_value = $value['opening_value'];
+                    $tradingsModel->closing_value = $value['closing_value'];
+                    $tradingsModel->difference_percentage = $value['difference_percentage'];
+                    $tradingsModel->exchange_companies_exchange_companies_id = $value['exchange_companies_exchange_companies_id'];
+                    $tradingsModel->exchange_trading_exchange_id = $eid;
+                    $tradingsModel->exchange_trading_exchange_date = $_POST['ExchangeTrading']['exchange_date'];
+                    $validate = $tradingsModel->validate();
+                    $tradingsModelSave[] = $tradingsModel;
+                }
+            }
+            $validate &= $model->validate();
             if ($validate) {
                 try {
-                    if ($model->save()) {
-                        ExchangeTradingCompanies::model()->deleteAll('exchange_trading_exchange_id = ' . (int) $_POST['ExchangeTrading']['exchange_id']);
-                        if (isset($_POST['ExchangeTradingCompanies'])) {
-                            foreach ($_POST['ExchangeTradingCompanies'] as $key => $value) {
-                                $tradingsModel = new ExchangeTradingCompanies;
-                                $tradingsModel->opening_value = $value['opening_value'];
-                                $tradingsModel->closing_value = $value['closing_value'];
-                                $tradingsModel->difference_percentage = $value['difference_percentage'];
-                                $tradingsModel->exchange_companies_exchange_companies_id = $value['exchange_companies_exchange_companies_id'];
-                                $tradingsModel->exchange_trading_exchange_id = $_POST['ExchangeTrading']['exchange_id'];
-                                $tradingsModel->exchange_trading_exchange_date = $_POST['ExchangeTrading']['exchange_date'];
-                                $tradingsModel->save();
-                            }
+                    if ($model->save() && $tradingsModelSave) {
+                        foreach ($tradingsModelSave as $record) {
+                            $record->save();
                         }
                         Yii::app()->user->setFlash('success', array
                             ('class' => 'flash-success', 'content' => AmcWm::t("amcTools", 'Record has been saved')));
@@ -46,6 +53,8 @@ class AmcExchangeTradingController extends BackendController {
                 } catch (CDbException $e) {
                     Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => AmcWm::t("amcTools", "Can't save record")));
                 }
+            } else {
+                Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => AmcWm::t("msgsbase.tradings", "Please fill in at least 1 company and missing company's data")));
             }
         }
     }
@@ -55,17 +64,19 @@ class AmcExchangeTradingController extends BackendController {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
+        $eid = (int) $_GET['eid'];
         $model = new ExchangeTrading;
         $tradingsModel = new ExchangeTradingCompanies;
         $companies = Yii::app()->db->createCommand(''
                         . 'SELECT * FROM exchange_companies e '
                         . 'INNER JOIN exchange_companies_translation et on e.exchange_companies_id = et.exchange_companies_id '
-                        . 'WHERE exchange_id = ' . (int) $_GET['eid'])->queryAll();
+                        . 'WHERE exchange_id = ' . $eid)->queryAll();
         $this->save($model);
         $this->render('create', array(
             'model' => $model,
             'companies' => $companies,
             'tradingsModel' => $tradingsModel,
+            'eid' => $eid,
         ));
     }
 
@@ -89,6 +100,7 @@ class AmcExchangeTradingController extends BackendController {
             'companies' => $companies,
             'tradingsModel' => $tradingsModel,
             'childModel' => $childModel,
+            'eid' => $eid,
         ));
     }
 

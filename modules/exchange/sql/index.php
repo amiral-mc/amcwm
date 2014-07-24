@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `exchange_companies` (
   `exchange_id` INT NOT NULL,
   `code` VARCHAR(45) NULL,
   `published` TINYINT(1) NOT NULL,
+  `currency` VARCHAR(45) NULL,
   PRIMARY KEY (`exchange_companies_id`),
   INDEX `fk_exchange_companies_exchange1_idx` (`exchange_id` ASC),
   CONSTRAINT `fk_exchange_companies_exchange1`
@@ -18,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `exchange_companies` (
     REFERENCES `exchange` (`exchange_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
 
 CREATE TABLE IF NOT EXISTS `exchange_trading` (
   `exchange_id` INT NOT NULL,

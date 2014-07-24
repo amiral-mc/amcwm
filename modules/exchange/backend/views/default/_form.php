@@ -23,7 +23,9 @@
             <?php echo $form->labelEx($model, 'currency'); ?>
             <?php echo $form->dropDownList($model, 'currency', $this->getCurrencies()); ?>
             <?php echo $form->error($model, 'currency'); ?>
+            <?php echo $form->labelEx($model, AmcWm::t('msgsbase.core', "Modifying the exchange's currency will over write all exchange's related companies' currencies")); ?>
         </div>
+        
     </fieldset>
 
 

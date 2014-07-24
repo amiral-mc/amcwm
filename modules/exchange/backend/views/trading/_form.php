@@ -15,9 +15,7 @@
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage()); ?>
     <fieldset>
         <div class="row">
-            <?php echo $form->labelEx($model, 'exchange_id'); ?>
-            <?php echo $form->dropDownList($model, 'exchange_id', CHtml::listData(Exchange::model()->findAll(array('order' => 'exchange_name DESC')), 'exchange_id', 'exchange_name')); ?>
-            <?php echo $form->error($model, 'exchange_id'); ?>
+            <?php echo $form->hiddenField($model, 'exchange_id'); ?>
         </div>
         <div class="row">
             <?php echo $form->labelEx($model, 'exchange_date'); ?>
@@ -73,16 +71,18 @@
             <div>
                 <table cellpadding="2" cellspasing ="0" id="companyGrid">
                     <tr>
+                        <th></th>
                         <th><?php echo AmcWm::t("msgsbase.companies", "Company Name"); ?></th>
                         <th><?php echo AmcWm::t("msgsbase.companies", "Opening Value"); ?></th>
                         <th><?php echo AmcWm::t("msgsbase.companies", "Closing Value"); ?></th>
                         <th><?php echo AmcWm::t("msgsbase.companies", "Difference %"); ?></th>
 
                     </tr>
-                    <?php if($childModel) { ?>
+                    <?php if(isset($childModel) && $childModel) { ?>
                         <?php foreach ($childModel as $key => $company): ?>
                             <tr id="companyRow<?php echo $key ?>"> 
-                                <td valign="top"><?php echo $form->dropDownList($company, "[$key]exchange_companies_exchange_companies_id", ExchangeCompanies::getCompanies(), array('prompt' => AmcWm::t("msgsbase.companies", 'Select Company'), 'options' => array($company['exchange_companies_exchange_companies_id'] => array('label' => $company->exchangeCompaniesExchangeCompanies->getCurrent()->company_name, 'selected' => true)))); ?></td>
+                                <td valign="top"><?php echo $form->labelEx($model, "($key)"); ?> </td>
+                                <td valign="top"><?php echo $form->dropDownList($company, "[$key]exchange_companies_exchange_companies_id", ExchangeCompanies::getCompanies($eid), array('style' => 'width:100px', 'prompt' => AmcWm::t("msgsbase.companies", 'Select Company'), 'options' => array($company['exchange_companies_exchange_companies_id'] => array('label' => $company->exchangeCompaniesExchangeCompanies->getCurrent()->company_name, 'selected' => true)))); ?></td>
                                 <td valign="top"><?php echo $form->textField($company, "[$key]opening_value", array('style' => 'width:100px', 'value' => $company->opening_value)); ?></td>
                                 <td valign="top"><?php echo $form->textField($company, "[$key]closing_value", array('style' => 'width:100px', 'value' => $company->closing_value)); ?></td>
                                 <td valign="top"><?php echo $form->textField($company, "[$key]difference_percentage", array('style' => 'width:100px', 'value' => $company->difference_percentage)); ?></td>
@@ -93,8 +93,9 @@
                         <?php endforeach; ?>
                     <?php } else {?>
                     <?php foreach ($companies as $key => $company): ?>
-                        <tr id="companyRow<?php echo $key ?>"> 
-                            <td valign="top"><?php echo $form->dropDownList($tradingsModel, "[$key]exchange_companies_exchange_companies_id", ExchangeCompanies::getCompanies(), array('prompt' => AmcWm::t("msgsbase.companies", 'Select Company'), 'options' => array($company['exchange_companies_id'] => array('label' => $company['company_name'], 'selected' => true)))); ?></td>
+                        <tr id="companyRow<?php echo $key ?>">
+                            <td valign="top"><?php echo $form->labelEx($model, "($key)"); ?> </td>
+                            <td valign="top"><?php echo $form->dropDownList($tradingsModel, "[$key]exchange_companies_exchange_companies_id", ExchangeCompanies::getCompanies($eid), array('style' => 'width:100px', 'prompt' => AmcWm::t("msgsbase.companies", 'Select Company'), 'options' => array($company['exchange_companies_id'] => array('label' => $company['company_name'], 'selected' => true)))); ?></td>
                             <td valign="top"><?php echo $form->textField($tradingsModel, "[$key]opening_value", array('style' => 'width:100px')); ?></td>
                             <td valign="top"><?php echo $form->textField($tradingsModel, "[$key]closing_value", array('style' => 'width:100px')); ?></td>
                             <td valign="top"><?php echo $form->textField($tradingsModel, "[$key]difference_percentage", array('style' => 'width:100px')); ?></td>
@@ -119,12 +120,30 @@
 
 <?php
 Yii::app()->clientScript->registerScript('companiesManager', "
-    $('#newCompany').hide();
+    var count = 0;
+    company = {};
+    company.options = {};
+    company.name = " . CJSON::encode(ExchangeCompanies::getCompanies($eid, true)) . ";
+    company.check = function(){
+        var table = document.getElementById('companyGrid');
+        for (var i = 0, row; row = table.rows[i]; i++) {
+            if(table.rows[i].style.display != 'none'){
+                count++;
+            }
+        }
+        if(count > {$companiesCount}){
+            $('#newCompany').hide();
+        }
+        else{
+            $('#newCompany').show();
+        }
+    }
+    company.check();
+    
     $('#newCompany').click(function(){    
         company.add();
         return false;
     });    
-    company = {};
     company.hideShowDeleteIcon = function(ref, checked){
     removeNumber = parseInt(ref.substring(13));
         if(checked){
@@ -134,13 +153,11 @@ Yii::app()->clientScript->registerScript('companiesManager', "
             $('#companyRowLink'+removeNumber).show();        
         }
     }
-    var count = 0;
-    company.options = {};
-    company.name = " . CJSON::encode(ExchangeCompanies::getCompanies(true)) . ";
     company.add = function(){
         count = 0;
         lastRow = ($('#companyGrid tr').length -1);
         var companyRow = '<tr id=\"companyRow'+lastRow+'\">';
+        companyRow += '<td valign=\"top\">(' + $('#companyGrid').find('tr').index() + ')</td>';
         companyRow += '<td valign=\"top\">';
         companyRow += '<select name=\"ExchangeTradingCompanies['+lastRow+'][exchange_companies_exchange_companies_id]\" id=\"ExchangeTradingCompanies_'+lastRow+'_type\">';
         companyRow += '<option value=\"\">" . AmcWm::t("msgsbase.companies", 'Select Company') . "</option>';
@@ -164,19 +181,6 @@ Yii::app()->clientScript->registerScript('companiesManager', "
         $('#companyRow'+removeNumber).hide();
         company.check();
     }
-    company.check = function(){
-        var table = document.getElementById('companyGrid');
-        for (var i = 0, row; row = table.rows[i]; i++) {
-            if(table.rows[i].style.display != 'none'){
-                count++;
-            }
-        }
-        if(count > {$companiesCount}){
-            $('#newCompany').hide();
-        }
-        else{
-            $('#newCompany').show();
-        }
-    }
+    
 ");
 ?>

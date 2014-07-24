@@ -35,7 +35,6 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
             'validateOnSubmit' => true,
         ),
     ));
-
     $dataProvider = $model->parentContent()->search();
     $dataProvider->pagination->pageSize = Yii::app()->params["pageSize"];
     $this->widget('zii.widgets.grid.CGridView', array(
@@ -57,11 +56,8 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 'header' => AmcWm::t('msgsbase.companies', 'Company Name'),
                 'value' => '$data->getCurrent()->company_name',
             ),
-            array(
-                'header' => AmcWm::t('msgsbase.core', 'Exchange Name'),
-                'value' => '$data->exchange->exchange_name',
-            ),
             'code',
+            'currency',
             array(
                 'name' => 'published',
                 'value' => '($data->published) ? CHtml::image(Yii::app()->baseUrl . "/images/yes.png", "", array("border" => 0)) : CHtml::image(Yii::app()->baseUrl . "/images/no.png", "", array("border" => 0))',

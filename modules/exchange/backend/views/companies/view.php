@@ -26,5 +26,6 @@ $this->widget('zii.widgets.CDetailView', array(
             'name' => 'published',
             'value' => $model->published ? AmcWm::t("msgsbase.core", "Yes") : AmcWm::t("msgsbase.core", "No"),
         ),
+        'currency',
     ),
 ));

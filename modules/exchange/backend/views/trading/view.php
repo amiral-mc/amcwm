@@ -5,7 +5,7 @@ $this->breadcrumbs = array(
     AmcWm::t("amcTools", "View"),
 );
 $eid = (int) $_GET['eid'];
-$this->sectionName = "#{$model->exchange_id}";
+$this->sectionName = AmcWm::t("msgsbase.core", "Trading Date") . " - " . $model->exchange_date;
 $this->widget('amcwm.core.widgets.tools.Tools', array(
     'id' => 'tools-grid',
     'items' => array(
