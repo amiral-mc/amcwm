@@ -34,9 +34,10 @@ class ExchangeTradingCompanies extends ActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('exchange_trading_exchange_id, exchange_trading_exchange_date, exchange_companies_exchange_companies_id', 'required'),
+            array('exchange_trading_exchange_id, exchange_trading_exchange_date, exchange_companies_exchange_companies_id, opening_value, closing_value, difference_percentage', 'required'),
             array('exchange_trading_exchange_id, exchange_companies_exchange_companies_id', 'numerical', 'integerOnly'=>true),
             array('opening_value, closing_value', 'length', 'max'=>12),
+            array('opening_value, closing_value, difference_percentage', 'default', 'value' => null),
             array('difference_percentage', 'length', 'max'=>8),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.

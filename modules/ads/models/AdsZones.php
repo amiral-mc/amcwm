@@ -112,7 +112,6 @@ class AdsZones extends ActiveRecord {
     protected function afterFind() {
         $this->displayTitle = $this->server->server_name . " #" . $this->ad_id;
         foreach ($this->sections as $section) {
-//            print_r($this->sections); exit;
             $section->parentSection = $section->parent_section;
             $current = $section->getCurrent();
             if ($current instanceof SectionsTranslation) {

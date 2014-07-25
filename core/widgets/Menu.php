@@ -23,7 +23,7 @@ class Menu extends CMenu {
      * @since 1.1.6
      */
     protected function renderMenuItem($item) {
-        if (isset($item['url']) ) {
+        if (isset($item['url'])) {
             $label = $this->linkLabelWrapper === null ? $item['label'] : '<' . $this->linkLabelWrapper . '>' . $item['label'] . '</' . $this->linkLabelWrapper . '>';
             $url = "#";
             if (is_array($item['url']) && count($item['url'])) {
@@ -34,10 +34,9 @@ class Menu extends CMenu {
                 if (isset($linkData['scheme'])) {
                     $item['linkOptions']['target'] = "_blank";
                 }
-            }           
+            }
             return Html::link($label, $url, isset($item['linkOptions']) ? $item['linkOptions'] : array());
-        }
-        else
+        } else
             return CHtml::tag('span', isset($item['linkOptions']) ? $item['linkOptions'] : array(), $item['label']);
     }
 
@@ -52,10 +51,15 @@ class Menu extends CMenu {
     protected function isItemActive($item, $route) {
         $isActive = false;
         if (isset($item['url'][0])) {
+//            $useLang = count(Yii::app()->params['languages']) || (isset(Yii::app()->params['langAsFoldder']) && Yii::app()->params['langAsFoldder']);
+//            if (!isset($item['url']['lang']) && $useLang) {
+//                $item['url']['lang'] = Controller::getCurrentLanguage();
+//            }
             $isActive = parent::isItemActive($item, $route);
-        } 
-        return $isActive ;
+        }
+        return $isActive;
     }
+
 }
 
 ?>

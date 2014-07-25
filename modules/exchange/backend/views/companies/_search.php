@@ -10,15 +10,15 @@
     ?>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'published', array("style" => 'display:inline;')); ?>
-        <?php echo $form->checkBox($model, 'published'); ?>
-        <?php echo $form->error($model, 'published'); ?>
+        <?php echo $form->labelEx($model->parentContent(), 'published', array("style" => 'display:inline;')); ?>
+        <?php echo $form->checkBox($model->parentContent(), 'published'); ?>
+        <?php echo $form->error($model->parentContent(), 'published'); ?>
     </div>
-    
+
     <div class="row">
-        <?php echo $form->labelEx($model, 'exchange_id'); ?>
-        <?php echo $form->dropDownList($model, 'exchange_id', CHtml::listData(Exchange::model()->findAll(array('order' => 'exchange_name DESC')), 'exchange_id', 'exchange_name')); ?>
-        <?php echo $form->error($model, 'exchange_id'); ?>
+        <?php echo $form->labelEx($model->parentContent(), 'exchange_id'); ?>
+        <?php echo $form->dropDownList($model->parentContent(), 'exchange_id', CHtml::listData(Exchange::model()->findAll(array('order' => 'exchange_name DESC')), 'exchange_id', 'exchange_name')); ?>
+        <?php echo $form->error($model->parentContent(), 'exchange_id'); ?>
     </div>
 
     <div class="row">
@@ -28,9 +28,15 @@
     </div>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'code'); ?>
-        <?php echo $form->textField($model, 'code', array('size' => 45, 'maxlength' => 45)); ?>
-        <?php echo $form->error($model, 'code'); ?>
+        <?php echo $form->labelEx($model->parentContent(), 'code'); ?>
+        <?php echo $form->textField($model->parentContent(), 'code', array('size' => 45, 'maxlength' => 45)); ?>
+        <?php echo $form->error($model->parentContent(), 'code'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model->parentContent(), 'currency'); ?>
+        <?php echo $form->dropDownList($model->parentContent(), 'currency', $this->getCurrencies()); ?>
+        <?php echo $form->error($model->parentContent(), 'currency'); ?>
     </div>
     <div class="row buttons">
         <?php echo CHtml::submitButton(AmcWm::t("amcBack", 'Search')); ?>

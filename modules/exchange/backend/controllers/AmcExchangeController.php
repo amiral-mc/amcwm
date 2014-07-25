@@ -26,6 +26,7 @@ class AmcExchangeController extends BackendController {
             if ($validate) {
                 try {
                     if ($model->save()) {
+                        Yii::app()->db->createCommand('UPDATE exchange_companies SET currency = "' . $model->currency . '" WHERE exchange_id = ' . $model->exchange_id)->execute();
                         Yii::app()->user->setFlash('success', array
                             ('class' => 'flash-success', 'content' => AmcWm::t("amcTools", 'Record has been saved')));
                         $this->redirect(array('view', 'id' => $model->exchange_id));
@@ -86,7 +87,7 @@ class AmcExchangeController extends BackendController {
     /**
      * Exchange Tadawol
      */
-    public function actionTrading() {
+    public function actionTrading($eid) {
         $this->forward("trading/");
     }
 
@@ -114,7 +115,7 @@ class AmcExchangeController extends BackendController {
                 if ($deleted) {
                     $messages['success'][] = AmcWm::t("amcTools", 'Record has been deleted');
                 } else {
-                    $messages['error'][] = AmcWm::t("amcTools", "Can't delete record");
+                    $messages['error'][] = AmcWm::t("msgsbase.core", "Can't deleted exchange that contains companies or tradings");
                 }
             }
             if (count($messages['error'])) {
