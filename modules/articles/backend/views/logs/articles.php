@@ -1,7 +1,17 @@
 <?php
 $contentLang = $logDetails['articles']['db']['translation']['contentLang'];
+$published = $logDetails['articles']['db']['master']['published'];
+$actionMsg = "ACTION_" . strtoupper($logInfo['action'] ." {DATE} {USER}");
+if(!$published && $logInfo['action']=="publish"){
+    $actionMsg = "ACTION_UNPUBLISH {DATE} {USER}";    
+}
 ?>
 <table cellpadding="1" cellspacing="2" border="0">
+    <tr>
+        <td valign="top" nowrap="nowrap" colspan="2">
+            <?php echo AmcWm::t("amcwm.modules.logger.backend.messages.core", $actionMsg, array('{USER}' => $logInfo['username'], '{DATE}' => $logInfo['action_date'])); ?>
+        </td>
+    </tr>
     <tr>
         <td valign="top" nowrap="nowrap">
             <?php echo AmcWm::t("amcwm.modules.articles.backend.messages.core", "Creation Date"); ?>:
@@ -20,14 +30,6 @@ $contentLang = $logDetails['articles']['db']['translation']['contentLang'];
     </tr>
 </tr>
 <tr>
-    <td valign="top" nowrap="nowrap">
-        <?php echo AmcWm::t("amcwm.modules.articles.backend.messages.core", "Expire Date"); ?>:
-    </td>
-    <td valign="top">            
-        <?php echo $logDetails['articles']['db']['master']['expire_date']; ?>
-    </td>        
-</tr>
-<tr>
     <td valign="top" valign="top" nowrap="nowrap">
         <?php echo AmcWm::t("amcwm.modules.articles.backend.messages.core", "Article Primary Header"); ?>:
     </td>
@@ -42,20 +44,6 @@ $contentLang = $logDetails['articles']['db']['translation']['contentLang'];
     <td valign="top">            
         <?php echo $logDetails['articles']['db']['translation']['db'][$contentLang]['article_header']; ?>
     </td>     
-</tr>
-
-<tr>
-    <td valign="top" nowrap="nowrap">
-        <?php echo AmcWm::t("amcwm.modules.articles.backend.messages.core", "Titles"); ?>:
-    </td>
-    <td valign="top">         
-        <?php
-        if (isset($logDetails['articles_titles']['db']['master']))
-            foreach ($logDetails['articles_titles']['db']['master'] as $titleRow) {
-                echo '<div>' . $titleRow['title'] . '</div>';
-            }
-        ?>
-    </td>        
 </tr>
 <tr>
     <td  valign="top" nowrap="nowrap">

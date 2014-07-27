@@ -20,6 +20,7 @@ class DbLogManager extends LogManager {
     const INSERT = 1;
     const UPDATED = 2;
     const DELETE = 3;
+    const PUBLISH = 4;
 
     /**
      * Class used for generating database logs
@@ -84,9 +85,11 @@ class DbLogManager extends LogManager {
     public function getLogData() {        
         if ($this->getLogid()) {
             $row = Yii::app()->db->createCommand("
-                select * 
+                select users_log.* , log_data.* , users.username, persons.email
                 from users_log 
                 inner join log_data on users_log.log_id = log_data.log_id 
+                inner join users on users_log.user_id = users.user_id 
+                inner join persons on users.user_id = persons.person_id 
                 where log_data.log_id = {$this->getLogid()}")->queryRow();
             if($row){
                 $row['data'] = unserialize(gzinflate($row['data']));
@@ -103,7 +106,7 @@ class DbLogManager extends LogManager {
      */
     static public function logAction(ActiveRecord $model, $action) {
         $isSystem = isset($model->is_system) && $model->is_system;
-        if ($action == self::DELETE && $isSystem) {
+        if (($action == self::DELETE || $action == self::PUBLISH) && $isSystem) {
             return;
         }
         $logManager = new DbLogManager();

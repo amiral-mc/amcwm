@@ -3,3 +3,38 @@ html,body {
     padding:0;
     height:100%;
 }
+.action_area{
+    border-bottom:1.88px solid #CAE4F0;
+    overflow: auto;
+}
+
+.dialogBoxs{
+    display: none;
+}
+
+.btn_area{
+    padding:6px; 
+    text-align: center;
+    float:left;
+}
+
+.btn_label,
+.btn_label a,
+.btn_label a:link,
+.btn_label a:visited, 
+.btn_label a:active{
+    padding-top: 2px;
+    font-family: Tahoma, Arial, Verdana, sans-serif;
+    color: #004891;
+    font-size: 10px;
+    font-weight: bold;
+    text-decoration:none;	
+}
+
+.btn_label a:hover{
+    font-family: Tahoma, Arial, Verdana, sans-serif;
+    color: #004891; 
+    font-size: 10px; 
+    font-weight: bold;
+    text-decoration:underline;
+}

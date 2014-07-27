@@ -80,6 +80,7 @@ class ManageContent extends CComponent {
                 }
 
                 if ($model->publish($published)) {
+                    DbLogManager::logAction($model, DbLogManager::DELETE);
                     $messages['success'][] = AmcWm::t("amcBack", $okMessage, array("{displayTitle}" => $itemName));
                 } else {
                     $messages['error'][] = AmcWm::t("amcBack", 'Can not publish item "{displayTitle}"', array("{displayTitle}" => $itemName));

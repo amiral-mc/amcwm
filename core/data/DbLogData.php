@@ -169,7 +169,12 @@ abstract class DbLogData {
             $command->bindValue(":logId", $this->_manager->getLogid(), PDO::PARAM_INT);
             $command->bindValue(":logTitle", $title, PDO::PARAM_STR);
             $command->bindValue(":logData", gzdeflate(serialize($data)), PDO::PARAM_STR);
-            $command->execute();
+            $command->execute();           
+            if (isset($this->_settings['log']['useTableLog']) && $this->_settings['log']['useTableLog']) {
+                $table = $this->_model->tableName() ."_log";
+                $lastId = $this->_manager->getLogid();
+                $db->createCommand("insert into {$table} (log_id, item_id) values($lastId, $primaryKey) ")->execute();
+            }
         }
     }
 

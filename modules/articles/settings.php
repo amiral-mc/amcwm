@@ -110,6 +110,7 @@ return array(
     'backend' => array(
         'log' => array(
             'use' => true,
+            'useTableLog'=> true,
             'title' => '$data["data"]["articles"]["db"]["translation"]["db"][$data["data"]["articles"]["db"]["translation"]["contentLang"]]["article_header"]',
         ),
         'structure' => array(

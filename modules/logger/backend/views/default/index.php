@@ -2,14 +2,20 @@
 $this->breadcrumbs = array(
     AmcWm::t("msgsbase.core", "Logger"),
 );
-
+$params = array();
+if($this->logTable){
+    $params['from'] = $this->logTable;
+}
+if($this->itemId){
+    $params['itemId'] = $this->itemId;
+}
 $this->sectionName = AmcWm::t("msgsbase.core", "View system logs");
 $this->widget('amcwm.core.widgets.tools.Tools', array(
     'id' => 'tools-grid',
     'items' => array(
-        array('label' => AmcWm::t("msgsbase.core", 'Details'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'view_article', 'image_id' => 'show', 'action'=>'view'),
+        array('label' => AmcWm::t("msgsbase.core", 'Details'), 'js' => array('formId' => Yii::app()->params["adminForm"], 'params'=>$params), 'id' => 'view_article', 'image_id' => 'show', 'action'=>'view'),
         //array('label' => AmcWm::t("amcTools", 'Search'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'log_search', 'image_id' => 'search'),
-        array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array('/backend/default/index'), 'id' => 'articles_list', 'image_id' => 'back'),
+        array('label' => AmcWm::t("amcTools", 'Back'), 'visible'=> !$this->logTable,'url' => array('/backend/default/index'), 'id' => 'articles_list', 'image_id' => 'back'),
     ),
     'htmlOptions' => array('style' => 'padding:5px;')
 ));

@@ -16,6 +16,18 @@
 class LoggingListData extends Dataset {
 
     /**
+     *
+     * @var string table to get listing from
+     */
+    public $logTable = null;
+
+    /**
+     *
+     * @var integer item id to list log acording to it
+     */
+    public $itemId = null;
+
+    /**
      * Setting instance generated from settings.php inside an application module folder
      * @var Settings
      * @var array
@@ -24,22 +36,21 @@ class LoggingListData extends Dataset {
 
     /**
      * Counstructor
-     * Make sure you call the parent counstructor so that the method is raised properly.
-     * @todo fix bug if $limit = 0
-     * @param array $tables, Tables information to get data from, its array contain's tables list , 
-     * @param integer $period, Period time in seconds. 
-     * @param integer $limit, The numbers of items to fetch from table     
-     * @param integer $sectionId, The section id to get contents from, if equal null then we gets contents from all sections
+     * @param string $logTable table to get listing from
+     * @param integer $itemId to list log acording to it
      * @access public
      */
-    public function __construct() {
-        
+    public function __construct($logTable = null, $itemId = null) {
+        $this->logTable = $logTable;
+        if ($itemId && $this->logTable) {
+            $this->itemId = (int)$itemId;
+        }
     }
 
     /**
      * Get logs setting used in the system
      * @return Settings
-     * @access public 
+     * @access public
      */
     static public function getSettings() {
         if (self::$_settings == null) {
@@ -59,13 +70,19 @@ class LoggingListData extends Dataset {
         if (!count($this->orders)) {
             $this->addOrder("ul.action_date desc");
         }
+        if ($this->logTable) {
+            $this->addJoin("inner join {$this->logTable}_log lt on ul.log_id = lt.log_id");
+        }
+        if($this->itemId){
+            $this->addWhere("lt.item_id = {$this->itemId}");
+        }
 
         $this->setItems();
     }
 
     /**
      * @todo explain the query
-     * Set the articles array list    
+     * Set the articles array list
      * @access private
      * @return void
      */
@@ -73,37 +90,38 @@ class LoggingListData extends Dataset {
 //        $currentDate = date("Y-m-d H:i:s");
         $orders = $this->generateOrders();
         $cols = $this->generateColumns();
+
         $wheres = $this->generateWheres('where');
-        $this->query = "SELECT sql_calc_found_rows    
-            u.username, a.action, ul.ip, 
+        $this->query = "SELECT sql_calc_found_rows
+            u.username, a.action, ul.ip,
             ul.log_id, ul.action_date,
             ld.title, c.controller, m.module , m.parent_module
             $cols
-            from users_log ul            
+            from users_log ul
             inner join actions a on a.action_id = ul.action_id
             inner join controllers c on c.controller_id = a.controller_id
-            inner join modules m on m.module_id = c.module_id                        
+            inner join modules m on m.module_id = c.module_id
             inner join users u on u.user_id = ul.user_id
             left join log_data ld on ld.log_id = ul.log_id
             {$this->joins}
             $wheres
             $orders
             LIMIT {$this->fromRecord} , {$this->limit}
-            ";
+            ";            
         $loggers = Yii::app()->db->createCommand($this->query)->queryAll();
         $this->setDataset($loggers);
     }
 
     /**
      *
-     * Sets the the ArticlesListData.items array      
-     * @param array $loggers 
-     * @access protected     
+     * Sets the the ArticlesListData.items array
+     * @param array $loggers
+     * @access protected
      * @return void
      */
     protected function setDataset($loggers) {
         $index = -1;
-        $modules = amcwm::app()->acl->getModules();        
+        $modules = amcwm::app()->acl->getModules();
         foreach ($loggers As $logger) {
             if ($this->recordIdAsKey) {
                 $index = $logger['log_id'];
@@ -114,12 +132,11 @@ class LoggingListData extends Dataset {
             $this->items[$index]['id'] = $logger["log_id"];
             $this->items[$index]['action'] = 'logger["action_name"]';
             $messageSystem = "amcwm.system.messages.system";
-            if($logger['parent_module'] == 1){
-                if(isset($modules[AmcWm::app()->backendName]['modules'][$logger["module"]]['messageSystem'])){
-                    $messageSystem = $modules[AmcWm::app()->backendName]['modules'][$logger["module"]]['messageSystem'];    
+            if ($logger['parent_module'] == 1) {
+                if (isset($modules[AmcWm::app()->backendName]['modules'][$logger["module"]]['messageSystem'])) {
+                    $messageSystem = $modules[AmcWm::app()->backendName]['modules'][$logger["module"]]['messageSystem'];
                 }
-            }
-            else if(isset($modules[$logger["module"]]['messageSystem'])){
+            } else if (isset($modules[$logger["module"]]['messageSystem'])) {
                 $messageSystem = $modules[$logger["module"]]['messageSystem'];
             }
 //            $this->items[$index]['action'] = AmcWm::t($backendModule['modules'][$logger["module"]]['messageSystem'], $backendModule['modules'][$logger["module"]]['label']);

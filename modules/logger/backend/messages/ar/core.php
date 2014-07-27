@@ -2,7 +2,11 @@
 
 return array(
     'Action' => 'الحدث',
-    'Username' => 'اسم المستخدم',
+    'ACTION_CREATE {DATE} {USER}'=>'اضيف في {DATE} [ بواسطة {USER} ]',
+    'ACTION_DELETE {DATE} {USER}'=>'ألغاء في {DATE} [ بواسطة {USER} ]',
+    'ACTION_UPDATE {DATE} {USER}'=>'تحديث في {DATE} [ بواسطة {USER} ]',
+    'ACTION_PUBLISH {DATE} {USER}'=>'نشر في {DATE} [ بواسطة {USER} ]',
+    'ACTION_UNPUBLISH {DATE} {USER}'=>'إلغاء نشر في {DATE} [ بواسطة {USER} ]',
     'IP' => 'رقم IP',
     'Refere Name' => 'مكان الحدث',
     'Refere Title' => 'العنوان',
@@ -19,8 +23,8 @@ return array(
     'Copy' => 'نسخ',
     'Date' => 'التاريخ',
     'Copy Content' => 'نسخ المحتوي',
-    '' => '',
-    '' => '',
+    'Username' => 'اسم المستخدم',
+    'Log Details' => 'التفاصيل',
     '' => '',
     '' => '',
     '' => '',

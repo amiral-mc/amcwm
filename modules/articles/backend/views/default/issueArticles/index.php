@@ -91,10 +91,9 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 'header' => AmcWm::t("msgsbase.core", 'Content Lang'),
             ),
             array(
-                'name' => 'comments',
-                'value' => '$data->getParentContent()->comments',
+                'value' => '$data->getParentContent()->hits',
                 'htmlOptions' => array('width' => '60', 'align' => 'center'),
-                'header' => AmcWm::t("msgsbase.core", 'Comments Counts'),
+                'header' => AmcWm::t("msgsbase.core", 'Hits'),
             ),
             array(
                 'name' => 'in_list',
@@ -128,22 +127,46 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 ),
                 'htmlOptions' => array('width' => '40', 'align' => 'center', 'class' => 'dataGridLinkCol'),
             ),
+             array(
+                'header' => AmcWm::t("amcwm.modules.logger.backend.messages.core", "Log Details"),
+                'type' => 'html',
+                'value' => 'Html::link(CHtml::image(AmcWm::app()->getController()->backendBaseUrl . "/images/log_view.png", "", array("border" => 0)), array("/backend/logger/default/index" , "itemId"=>$data->article_id, "from"=>"articles"), array("class"=>"log-link"))',
+                'htmlOptions' => array('width' => '40', 'align' => 'center', 'class' => 'dataGridLinkCol'),
+            ),
         )
+        
     ));
     $this->endWidget();
     ?>
 </div>
+<?php
+$this->beginWidget('zii.widgets.jui.CJuiDialog', array(
+    'id' => "articles_log_dialog",
+    'options' => array(
+        'title' => AmcWm::t("msgsbase.core", "Log Details"),
+        'width' => 800,
+        'height' => 600,
+        'resizable' => false,
+        'autoResize' => false,
+        'autoOpen' => false,
+        'iframe' => true,
+        'modal' => true,
+    ),
+    'htmlOptions' => array("class" => "filemanager-wdg"),
+));
+$url = Html::createUrl('/backend/logger/default/index', array());
+echo '<iframe class="filemanager-iframe" id="articles_log_dialog_iframe" marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto" title=""></iframe>';
+$this->endWidget('zii.widgets.jui.CJuiDialog');
 
-<?php /* $this->widget('zii.widgets.grid.CGridView', array(
-  'id'=>'articles-grid',
-  'dataProvider'=>$model->search(),
-  'filter'=>$model,
-  'columns'=>array(
-  'article_id',
-  'article_sort',
-  array(
-  'class'=>'CButtonColumn',
-  ),
-  ),
-  )); */
-?>
+
+
+Yii::app()->clientScript->registerScript('popupVidew', "    
+    $('.log-link').click(
+        function(event){
+            //event.preventDefault();                       
+            $('#articles_log_dialog_iframe').attr('src', $(this).attr('href'));
+            $('#articles_log_dialog').dialog( 'open' )
+            return false;
+        }        
+    );    
+");

@@ -102,7 +102,7 @@ return array(
     '_REJECT_CONTENTAPPROVAL_' => 'رفض الموافقة',
     '_PUBLISHCONTENT_' => 'موافقة ونشر',
     '_REJECT_PUBLISHCONTENT_' => 'رفض الموافقة والنشر',
-    '' => '',
+    'Hits' => 'المشاهدات',
     '' => '',
     '' => '',
     '' => '',
