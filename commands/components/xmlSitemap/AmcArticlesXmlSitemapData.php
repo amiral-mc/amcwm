@@ -89,7 +89,7 @@ class AmcArticlesXmlSitemapData extends AmcXmlSitemapData {
                 $doc->loadXML($xmlIndexData);
                 $sitemap = $doc->createElement('sitemap');
                 $loc = $doc->createElement('loc', Yii::app()->params['siteUrl'] . "{$fileName}");
-                $lastmod = $doc->createElement('lastmod', Yii::app()->dateFormatter->format("yyyy-MM-dd:THH:mm:ssZZ", time()));
+                $lastmod = $doc->createElement('lastmod', date('c',time()));
                 $sitemap->appendChild($loc);
                 $sitemap->appendChild($lastmod);
                 $doc->documentElement->appendChild($sitemap);

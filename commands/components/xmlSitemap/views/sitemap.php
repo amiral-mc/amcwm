@@ -3,7 +3,7 @@
     <?php foreach ($records as $record): ?>
         <url>
               <loc><?php echo CHtml::encode($model->createUrl($model->getRoute(), array('id' => $record[$idIndex], 'lang' => $model->language, 'title' => $record[$titleIndex]))); ?></loc> 
-              <lastmod><?php echo Yii::app()->dateFormatter->format("yyyy-MM-dd:THH:mm:ss+02:00", $record['publish_date']); ?></lastmod> 
+              <lastmod><?php echo date('c', strtotime($record['publish_date'])); ?></lastmod> 
         </url>
     <?php endforeach; ?>
 </urlset>

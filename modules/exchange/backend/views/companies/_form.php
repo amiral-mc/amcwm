@@ -8,34 +8,39 @@
             'validateOnSubmit' => true,
         ),
     ));
+    if($contentModel->parentContent()->currency)
+        $currency = $contentModel->parentContent()->currency;
+    else
+        $currency = Yii::app()->db->createCommand('SELECT currency FROM exchange WHERE exchange_id = ' . $eid)->queryScalar();
     ?>
     <p class="note"><?php echo AmcWm::t("amcBack", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
-    <?php echo $form->errorSummary(array($model, $model)); ?>
+    <?php echo $form->errorSummary(array($contentModel)); ?>
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage()); ?>
     <fieldset>
         <div class="row">
-            <?php echo $form->labelEx($model, 'published', array("style" => 'display:inline;')); ?>
-            <?php echo $form->checkBox($model, 'published'); ?>
-            <?php echo $form->error($model, 'published'); ?>
-        </div>
-        <div class="row">
-            <?php echo $form->labelEx($model, 'exchange_id'); ?>
-            <?php echo $form->dropDownList($model, 'exchange_id', CHtml::listData(Exchange::model()->findAll(array('order' => 'exchange_name DESC')), 'exchange_id', 'exchange_name')); ?>
-            <?php echo $form->error($model, 'exchange_id'); ?>
+            <?php echo $form->labelEx($contentModel->parentContent(), 'published', array("style" => 'display:inline;')); ?>
+            <?php echo $form->checkBox($contentModel->parentContent(), 'published'); ?>
+            <?php echo $form->error($contentModel->parentContent(), 'published'); ?>
         </div>
 
         <div class="row">
-            <?php echo $form->labelEx($model, 'company_name'); ?>
-            <?php echo $form->textField($model, 'company_name', array('size' => 45, 'maxlength' => 45)); ?>
-            <?php echo $form->error($model, 'company_name'); ?>
+            <?php echo $form->labelEx($contentModel, 'company_name'); ?>
+            <?php echo $form->textField($contentModel, 'company_name', array('size' => 45, 'maxlength' => 45)); ?>
+            <?php echo $form->error($contentModel, 'company_name'); ?>
         </div>
 
         <div class="row">
-            <?php echo $form->labelEx($model, 'code'); ?>
-            <?php echo $form->textField($model, 'code', array('size' => 45, 'maxlength' => 45)); ?>
-            <?php echo $form->error($model, 'code'); ?>
+            <?php echo $form->labelEx($contentModel->parentContent(), 'code'); ?>
+            <?php echo $form->textField($contentModel->parentContent(), 'code', array('size' => 45, 'maxlength' => 45)); ?>
+            <?php echo $form->error($contentModel->parentContent(), 'code'); ?>
         </div>
-    </fieldset>        
+
+        <div class="row">
+            <?php echo $form->labelEx($contentModel->parentContent(), 'currency'); ?>
+            <?php echo $form->dropDownList($contentModel->parentContent(), 'currency', $this->getCurrencies(), array('options' => array($currency => array('label' => $currency, 'selected' => true)))); ?>
+            <?php echo $form->error($contentModel->parentContent(), 'currency'); ?>
+        </div>
+    </fieldset>
 
 
     <?php $this->endWidget(); ?>

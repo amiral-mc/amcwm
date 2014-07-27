@@ -5,7 +5,7 @@ $this->breadcrumbs = array(
     AmcWm::t("msgsbase.core", "Exchange") => array('/backend/exchange/default/index'),
     AmcWm::t("amcTools", "Edit"),
 );
-$this->sectionName = "#{$model->exchange_id}";
+$this->sectionName = "{$model->exchange_name}";
 $this->widget('amcwm.core.widgets.tools.Tools', array(
     'id' => 'tools-grid',
     'items' => array(

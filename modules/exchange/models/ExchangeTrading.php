@@ -68,11 +68,11 @@ class ExchangeTrading extends ActiveRecord
         return array(
             'exchange_id' => AmcWm::t('msgsbase.core', 'Exchange ID'),
             'exchange_date' => AmcWm::t('msgsbase.core', 'Exchange Date'),
-            'trading_value' => AmcWm::t('msgsbase.core', 'Trading Value'),
-            'shares_of_stock' => AmcWm::t('msgsbase.core', 'Shares of Stock'),
-            'closing_value' => AmcWm::t('msgsbase.core', 'Closing Value'),
-            'difference_value' => AmcWm::t('msgsbase.core', 'Difference in Value'),
-            'difference_percentage' => AmcWm::t('msgsbase.core', 'Percentage Difference '),
+            'trading_value' => AmcWm::t('msgsbase.tradings', 'Exchange Trading Value'),
+            'shares_of_stock' => AmcWm::t('msgsbase.tradings', 'Exchange Shares of Stock'),
+            'closing_value' => AmcWm::t('msgsbase.tradings', 'Exchange Closing Value'),
+            'difference_value' => AmcWm::t('msgsbase.tradings', 'Exchange Difference in Value'),
+            'difference_percentage' => AmcWm::t('msgsbase.tradings', 'Exchange Percentage Difference'),
         );
     }
 
