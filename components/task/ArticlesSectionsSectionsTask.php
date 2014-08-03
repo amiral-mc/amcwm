@@ -39,7 +39,7 @@ class ArticlesSectionsSectionsTask extends ArticlesControllerTask {
             if ($this->dataset->getSections()) {
                 $list = $this->dataset->getSections()->getItems();
             }
-            if ($this->viewType == "default") {
+            if ($this->viewType == "default" || $this->viewType == "titles") {
                 $itemsList['records'] = $list;
                 $itemsList['pager'] = array(
                     'count' => count($itemsList['records']),

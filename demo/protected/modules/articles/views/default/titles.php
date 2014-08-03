@@ -5,7 +5,7 @@ $this->pageTitle = $data['pageSiteTitle'] . ' - ' . $this->pageTitle;
 $virtualModule = $data['task']->getSettings()->currentVirtual;
 $currentAppLang = Yii::app()->getLanguage();
 $msgsBase = ($virtualModule == "articles") ? "msgsbase.core" : "msgsbase.{$virtualModule}";
-$extension = "ContentList";
+$extension = "ContentTitlesList";
 $removeLastItem = false;
 $searchForm = '';
 

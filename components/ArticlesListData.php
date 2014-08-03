@@ -215,8 +215,6 @@ class ArticlesListData extends SiteData {
         $this->language = $language;
     }
 
-    public $uop;
-
     /**
      * @todo explain the query
      * Set the articles array list    

@@ -38,6 +38,7 @@ return array(
             'views' => array(
                 'default',
                 'blocks',
+                'titles',
                 'cols',
                 'links',
             ),

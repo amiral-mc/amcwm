@@ -35,7 +35,7 @@ class ArticlesSectionsMixedTask extends ArticlesControllerTask {
         $this->dataset->generate();
         if ($this->displayResult) {
             $section = $this->dataset->getItems();
-            if ($this->viewType == "default") {
+            if ($this->viewType == "default" || $this->viewType == "titles") {
                 $itemsList['records'] = $this->dataset->getContents();
                 $itemsList['pager'] = array(
                     'count' => count($itemsList['records']),
