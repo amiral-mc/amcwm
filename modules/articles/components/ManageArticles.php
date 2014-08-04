@@ -609,7 +609,7 @@ class ManageArticles extends ManageContent {
                 }
                 $imageFile = $path . DIRECTORY_SEPARATOR . $article->article_id . "." . $article->thumb;
                 $oldThumbFile = $path . DIRECTORY_SEPARATOR . $article->article_id . "." . $oldThumb;
-                if ($oldThumb && is_file($oldThumbFile)) {
+                if ($oldThumb && is_file($oldThumbFile) && $imageInfo['autoSave']) {
                     unlink($oldThumbFile);
                 }
                 if ($ok && $article->thumb) {
