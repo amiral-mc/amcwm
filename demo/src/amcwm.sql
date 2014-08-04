@@ -3489,6 +3489,25 @@ CREATE TABLE IF NOT EXISTS `log_data` (
   PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+
+CREATE TABLE IF NOT EXISTS `articles_log` (
+  `log_id` BIGINT(20) UNSIGNED NOT NULL,
+  `item_id` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`log_id`, `item_id`),
+  INDEX `fk_articles_log_log_data1_idx` (`log_id` ASC),
+  CONSTRAINT `fk_articles_log_articles1`
+    FOREIGN KEY (`item_id`)
+    REFERENCES `articles` (`article_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_articles_log_log_data1`
+    FOREIGN KEY (`log_id`)
+    REFERENCES `log_data` (`log_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
 -- --------------------------------------------------------
 
 --
@@ -4997,16 +5016,8 @@ CREATE TABLE IF NOT EXISTS `users_log` (
   PRIMARY KEY (`log_id`),
   KEY `fk_users_log_user_actions` (`action_id`),
   KEY `fk_users_log_users1` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
---
--- Dumping data for table `users_log`
---
-
-INSERT INTO `users_log` (`log_id`, `ip`, `action_id`, `user_id`, `action_date`) VALUES
-(10, '101.101.1.239', 591, 1, '2014-07-07 11:18:12'),
-(11, '127.0.0.1', 591, 1, '2014-07-07 11:51:55'),
-(12, '127.0.0.1', 591, 1, '2014-07-08 10:45:15');
 
 -- --------------------------------------------------------
 
