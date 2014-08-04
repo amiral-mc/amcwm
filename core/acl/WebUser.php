@@ -16,9 +16,9 @@ class WebUser extends CWebUser {
 
     // default return URL property
     public $defaultReturnUrl;
-    
-     // default login after 
+    // default login after 
     public $defaultLoggedRoute = "/site/index";
+
     /**
      * $allowLoginView weather to allow the website to view the login as a page or as a widget
      * true to be viewed as a page, false to be viewed as a widget
@@ -43,16 +43,14 @@ class WebUser extends CWebUser {
      * @return string the URL that the user should be redirected to after login.
      * @see loginRequired
      */
-    public function getReturnUrl($defaultUrl = null) {        
+    public function getReturnUrl($defaultUrl = null) {
         if ($defaultUrl === null) {
-            if(AmcWm::app()->getIsBackend()){
-                $defaultUrl = array("/". AmcWm::app()->backendName . "/default/index");
-            }
-            else{
-                if($this->isGuest){
-                    $defaultUrl = array("/" . AmcWm::app()->defaultController. "/index");
-                }
-                else{
+            if (AmcWm::app()->getIsBackend()) {
+                $defaultUrl = array("/" . AmcWm::app()->backendName . "/default/index");
+            } else {
+                if ($this->isGuest) {
+                    $defaultUrl = array("/" . AmcWm::app()->defaultController . "/index");
+                } else {
                     $defaultUrl = array($this->defaultLoggedRoute);
                 }
             }
@@ -77,7 +75,6 @@ class WebUser extends CWebUser {
             $record = Yii::app()->db->createCommand($statement)->queryRow();
             $errorCode = UserIdentity::ERROR_USERNAME_INVALID;
             if (is_array($record)) {
-                $this->setState('userData', $record);                
                 $this->setId($record['user_id']);
                 $log = new LogManager();
                 $lastLogIp = $log->getLastIP();
@@ -86,33 +83,7 @@ class WebUser extends CWebUser {
                 }
                 $this->setState('lastLogIp', $lastLogIp);
                 $errorCode = ($record['published']) ? UserIdentity::ERROR_NONE : UserIdentity::ERROR_ACCOUNT_IS_INACTIVE;
-                $log->log();                
-            }
-        }
-        return $errorCode;
-    }
-    
-    /**
-     * login to system using the given $userName and $password
-     * @param string $userName
-     * @param string $password
-     * @return int
-     */
-    public function authenticatex($userName, $password) {
-        if ($userName && $password) {
-            $statement = sprintf("
-                    select u.published, u.role_id, u.user_id user_id, u.username, p.email
-                    from users u
-                    inner join persons p on u.user_id = p.person_id
-                    where u.passwd = %s and u.username =%s
-                ", Yii::app()->db->quoteValue(md5($password)), Yii::app()->db->quoteValue($userName));
-            $record = Yii::app()->db->createCommand($statement)->queryRow();
-            $errorCode = UserIdentity::ERROR_USERNAME_INVALID;
-            if (is_array($record)) {
-               
-                $errorCode = ($record['published']) ? UserIdentity::ERROR_NONE : UserIdentity::ERROR_ACCOUNT_IS_INACTIVE;
-                $this->setState('userData', $record);
-                $this->setId($record['user_id']);
+                $log->log();
             }
         }
         return $errorCode;
@@ -227,20 +198,20 @@ class WebUser extends CWebUser {
      * @access public
      */
     public function getInfo() {
-        $user = $this->getState("userData");
-        if (!is_array($user) || !isset($user['user_id'])) {
-            if ($this->getId()) {
-                $statement = sprintf("
+        $info = array();
+        if ($this->getId()) {
+            $statement = sprintf("
                select u.published, u.role_id, u.user_id user_id, u.username, p.email
                 from users u
                 inner join persons p on u.user_id = p.person_id
-                where u.user_id = %d
-            ", $this->getId());
-                $record = Yii::app()->db->createCommand($statement)->queryRow();
-                $this->setState("userData", $record);
+                where u.user_id = %d and published = %d
+            ", $this->getId(), ActiveRecord::PUBLISHED);
+            $info = Yii::app()->db->createCommand($statement)->queryRow();
+            if(!$info){
+                $this->logout();
             }
         }
-        return $user;
+        return $info;
     }
 
     /**
