@@ -244,13 +244,15 @@ class Html {
     /**
      * Get image real content from image seo url
      */
-    public static function drawSeoImage() {
-        if (isset($_GET['file'])) {
-            $fileName = $_GET['f'];
+    public static function drawSeoImage() {                
+        die();
+        if (isset($_GET['file']) && isset($_GET['f'])) {
+            
+            $fileName = $_GET['f'];            
             $realFile = trim($_GET['file'], "/");
             $info = pathinfo($realFile);
-            $fullName = $info['dirname'] .'/'. $fileName;
             
+            $fullName = $info['dirname'] .'/'. $fileName;
 //            preg_match_all("|^(.*\.)([0-9]+\.\w{3,4})$|", $_GET['file'], $matches);
 //             die(print_r($matches));
 //            $imageId = NULL;

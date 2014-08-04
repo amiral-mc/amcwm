@@ -8,15 +8,15 @@ RewriteEngine on
 # if a directory or a file exists, use it directly
 
 RewriteCond %{REQUEST_URI} !^multimedia/default
-RewriteRule ^multimedia/.*(jpg|png|gif)$ images.php?file=$0 [L]
+RewriteRule ^multimedia/.*\.([0-9]*)\.(jpg|png|gif) images.php?file=$0&f=$1.$2 [L]
+#RewriteRule ^multimedia/.*(jpg|png|gif)$ images.php?file=$0 [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 
 # otherwise forward it to index.php
-
-RewriteRule ^(.)* index.php
+RewriteRule ^(.)* index.php [L]
 
 
 
