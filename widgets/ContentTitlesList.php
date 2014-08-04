@@ -82,7 +82,7 @@ class ContentTitlesList extends PageContentWidget {
                             $this->contentData.= Html::link($image, $this->items['records'][$rowIndex]['link']);                        
                         }
                         else{
-                            $this->contentData.= '&nbsp;';
+                            $this->contentData.= '<img alt="" src="' . Yii::app()->request->baseUrl . '/images/front/' .AmcWm::app()->getLanguage(). '/articles-listing-no-image.jpg"/>';
                         }
                         $this->contentData.= '</div>';
                         $titleHeader = $this->items['records'][$rowIndex]['title'];
