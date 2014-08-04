@@ -104,15 +104,18 @@ class Image {
         
         switch ($this->info[self::IMAGE_TYPE]) {
             case IMAGETYPE_GIF:
+                $source = imagecreatefromgif($this->imageFile);
                 $header = "Content-type: image/gif";
                 $createFrom = "imagegif";
                 break;
             case IMAGETYPE_JPEG:
+                $source = imagecreatefromjpeg($this->imageFile);
                 $header = "Content-type: image/jpeg";
                 $createFrom = "imagejpeg";
                 $quality = 90;
                 break;
             case IMAGETYPE_PNG:
+                $source = imagecreatefrompng($this->imageFile);
                 $header = "Content-type: image/png";
                 $createFrom = "imagepng";
                 break;
@@ -128,8 +131,10 @@ class Image {
                 break;
         }
         $target = imageCreateTrueColor($iWidth, $iHeight);
-        $imageLayer = AmcWm::app()->imageworkshop->initFromPath($this->imageFile);
-        if (isset($watermarkOptions['image'])) {            
+        if (isset($watermarkOptions['image'])) {      
+            $waterPosition['y'] = $this->info[self::IMAGE_HEIGHT] - ($sourceHeight + $ySource);
+            $waterPosition['x'] = $xSource;
+            $imageLayer = AmcWm::app()->imageworkshop->initFromResourceVar($source);
             $watermarkLayer = AmcWm::app()->imageworkshop->initFromPath(AmcWm::app()->basePath . '/../' . $watermarkOptions['image']);
             if (isset($watermarkOptions['opacity'])) {
                 $watermarkLayer->opacity($watermarkOptions['opacity']);
@@ -137,9 +142,10 @@ class Image {
             if (!isset($watermarkOptions['position'])) {
                 $watermarkOptions['position'] = 'LB';
             }
-            $imageLayer->addLayerOnTop($watermarkLayer, 12, 12, $watermarkOptions['position']);            
+            $imageLayer->addLayerOnTop($watermarkLayer, $waterPosition['x'] + 10, $waterPosition['y'] + 10, $watermarkOptions['position']);            
+            $source = $imageLayer->getResult();
         } 
-        $source = $imageLayer->getResult();
+        
         imagecopyresampled($target, $source, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $sourceWidth, $sourceHeight);
         imagedestroy($source);
         if (!$saveTo) {
@@ -203,15 +209,18 @@ class Image {
         }
         switch ($this->info[self::IMAGE_TYPE]) {
             case IMAGETYPE_GIF:
+                $source = imagecreatefromgif($this->imageFile);
                 $header = "Content-type: image/gif";
                 $createFrom = "imagegif";
                 break;
             case IMAGETYPE_JPEG:
+                $source = imagecreatefromjpeg($this->imageFile);
                 $header = "Content-type: image/jpeg";
                 $createFrom = "imagejpeg";
                 $quality = 90;
                 break;
             case IMAGETYPE_PNG:
+                $source = imagecreatefrompng($this->imageFile);
                 $header = "Content-type: image/png";
                 $createFrom = "imagepng";
                 break;
@@ -227,6 +236,8 @@ class Image {
                 //print_r($face);
             }
         }
+        $waterPosition['y'] = $this->info[self::IMAGE_HEIGHT] - ($sourceHeight + $ySource);
+        $waterPosition['x'] = $xSource;
         if ($height <= $sourceHeight / $wRatio) {
             // scale based on width                 
             $iWidth = $width;
@@ -249,8 +260,10 @@ class Image {
 
         if ($face) {
             $yAfteRatio = ceil($face['y'] / $ratio);
-            $xAfteRatio = ceil($face['x'] / $ratio);
-            if (($iHeight - $yAfteRatio >= $height)) {
+            $xAfteRatio = ceil($face['x'] / $ratio);            
+            $waterPosition['y'] = $this->info[self::IMAGE_HEIGHT] - ($sourceHeight + $face['y']);
+            $waterPosition['x'] = $face['x'];
+            if (($iHeight - $yAfteRatio >= $height)) {                
                 $ySource = $face['y'];
             } else {
                 $ySource = $sourceHeight - ceil($height * $ratio);
@@ -271,11 +284,9 @@ class Image {
 
         $target = imageCreateTrueColor($width, $height);
         $bg = imagecolorallocate($target, $this->background[0], $this->background[1], $this->background[2]);
-        imagefilledrectangle($target, 0, 0, $width, $height, $bg);
-        $imageLayer = AmcWm::app()->imageworkshop->initFromPath($this->imageFile);
-        if (isset($watermarkOptions['image'])) {            
-            
-            //$imageLayer = AmcWm::app()->imageworkshop->initFromResourceVar($source);
+        imagefilledrectangle($target, 0, 0, $width, $height, $bg);        
+        if (isset($watermarkOptions['image'])) {                        
+            $imageLayer = AmcWm::app()->imageworkshop->initFromResourceVar($source);
             $watermarkLayer = AmcWm::app()->imageworkshop->initFromPath(AmcWm::app()->basePath . '/../' . $watermarkOptions['image']);
             if (isset($watermarkOptions['opacity'])) {
                 $watermarkLayer->opacity($watermarkOptions['opacity']);
@@ -283,9 +294,10 @@ class Image {
             if (!isset($watermarkOptions['position'])) {
                 $watermarkOptions['position'] = 'LB';
             }
-            $imageLayer->addLayerOnTop($watermarkLayer, 12, 12, $watermarkOptions['position']);            
+            $imageLayer->addLayerOnTop($watermarkLayer,  $waterPosition['x'] + 10 ,$waterPosition['y'] + 10, $watermarkOptions['position']);            
+            $source = $imageLayer->getResult();
         } 
-        $source = $imageLayer->getResult();
+        
         // The cropped coordinates from original
 //        $crop = imageCreateTrueColor($cropWidth, $cropHeight);
 //        imagecopyresampled($crop, $im, 0, 0, $xSource, $ySource, $cropWidth, $cropHeight, $sourceWidth, $sourceHeight);        
@@ -301,7 +313,4 @@ class Image {
         }
         ImageDestroy($target);
     }
-
 }
-
-?>
