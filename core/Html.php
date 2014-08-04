@@ -245,7 +245,6 @@ class Html {
      * Get image real content from image seo url
      */
     public static function drawSeoImage() {                
-        die();
         if (isset($_GET['file']) && isset($_GET['f'])) {
             
             $fileName = $_GET['f'];            
