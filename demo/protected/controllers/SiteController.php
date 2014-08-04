@@ -23,6 +23,7 @@ class SiteController extends HomeFrontendController {
     public function actionWater() {
         $imageLayer = AmcWm::app()->imageworkshop->initFromPath(AmcWm::app()->basePath . '/../resources/images/sample1.jpg');
         $watermarkLayer = AmcWm::app()->imageworkshop->initFromPath(AmcWm::app()->basePath . '/../resources/images/w.png');
+        $watermarkLayer->opacity(40);
         $imageLayer->addLayerOnTop($watermarkLayer, 12, 12, "LB");
         $image = $imageLayer->getResult();
         header('Content-type: image/jpeg');

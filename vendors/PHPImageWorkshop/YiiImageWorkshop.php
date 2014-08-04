@@ -9,6 +9,7 @@
 
 /**
  * YiiImageWorkshop class.
+ * @link http://phpimageworkshop.com
  * @package Images
  * @author Amiral Management Corporation
  * @version 1.0
@@ -33,7 +34,7 @@ class YiiImageWorkshop extends CApplicationComponent {
         Amcwm::import("PHPImageWorkshop.Core.Exception.*");
         Amcwm::import("PHPImageWorkshop.Core.*");
         Amcwm::import("PHPImageWorkshop.ImageWorkshop");
-        $class = new ReflectionClass("PHPImageWorkshop\ImageWorkshop");
+        $class = new ReflectionClass($this->_getShopClass());
         $methods = $class->getMethods(ReflectionMethod::IS_STATIC);
         foreach ($methods as $method) {
             $this->methods[$method->name] = "{$method->class}::{$method->name}";
@@ -60,7 +61,7 @@ class YiiImageWorkshop extends CApplicationComponent {
         }
     }
 
-    public function getShop() {
+    private function _getShopClass() {
         return "PHPImageWorkshop\ImageWorkshop";
     }
 
