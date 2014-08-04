@@ -172,7 +172,7 @@ class AmcUsersController extends BackendController {
                 if ($writer) {
                     $articlesCount = count($model->writers->articles);
                 }
-                $checkRelated = ($articlesCount || count($model->sections) || $user->is_system || $userInfo['username'] == $user->username);
+                $checkRelated = ($articlesCount || count($model->sections) || count($user->usersLogs) || $user->is_system || $userInfo['username'] == $user->username);
                 if ($checkRelated) {
                     $messages['error'][] = AmcWm::t("msgsbase.core", 'Can not delete user "{username}"', array("{username}" => $user->username));
                 } else {
