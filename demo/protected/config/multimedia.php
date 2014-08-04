@@ -7,8 +7,8 @@ if ($videoMaxSize > $iniSize) {
 }
 return array(
     'attributes' => array(
-        'useDopeSheet'=>0
-    ),    
+        'useDopeSheet' => 0
+    ),
     'frontend' => array(
         'structure' => array(
             'controllers' => array(
@@ -22,16 +22,27 @@ return array(
             ),
         ),
     ),
-    'options' => array(       
+    'options' => array(
         'default' => array(
-            'widgetImage' => '/images/front/media_center.jpg',            
+            'widgetImage' => '/images/front/media_center.jpg',
             'integer' => array(
                 'presentationId' => 1,
                 'presentationViewInSite' => true,
-                'presentationMsgInSite'=> false,
+                'presentationMsgInSite' => false,
                 'imageWidth' => "600px",
+            ),
+            'watermark' => array(
+                'videos' => array(
+                    'image' => "resources/images/watermark.png",
+                    'position' => 'LB',
+                    'opacity' => "40",
+                ),
+                'images' => array(
+                    'image' => "resources/images/watermark.png",
+                    'position' => 'LB',
+                    'opacity' => "40",
+                ),
             ),
         ),
     ),
-  
 );

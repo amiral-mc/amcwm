@@ -22,13 +22,15 @@ class SiteController extends HomeFrontendController {
 
     public function actionWater() {
         $imageLayer = AmcWm::app()->imageworkshop->initFromPath(AmcWm::app()->basePath . '/../resources/images/sample1.jpg');
-        $watermarkLayer = AmcWm::app()->imageworkshop->initFromPath(AmcWm::app()->basePath . '/../resources/images/w.png');
-        $watermarkLayer->opacity(40);
+        $watermarkLayer = AmcWm::app()->imageworkshop->initFromPath(AmcWm::app()->basePath . '/../resources/images/watermark.png');
+        $watermarkLayer->opacity(100);
         $imageLayer->addLayerOnTop($watermarkLayer, 12, 12, "LB");
         $image = $imageLayer->getResult();
         header('Content-type: image/jpeg');
         imagejpeg($image, null, 95); // We chose to show a JPG with a quality of 95%
-        exit;
+        exit;//
     }
 
+    
 }
+

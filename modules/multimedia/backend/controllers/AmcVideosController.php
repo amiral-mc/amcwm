@@ -10,7 +10,6 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-
 class AmcVideosController extends AmcGalleriesController {
 
     /**
@@ -57,14 +56,14 @@ class AmcVideosController extends AmcGalleriesController {
     public function actionCreate() {
         $model = new Videos;
         $model->gallery_id = $this->gallery->getParentContent()->gallery_id;
-        $contentModel = new VideosTranslation();        
+        $contentModel = new VideosTranslation();
         $model->addTranslationChild($contentModel, self::getContentLanguage());
-        $autoPost2social = false;        
+        $autoPost2social = false;
         $options = $this->module->appModule->options;
-        if(isset($options['default']['check']['autoPostVideos2social'])){
+        if (isset($options['default']['check']['autoPostVideos2social'])) {
             $autoPost2social = $options['default']['check']['autoPostVideos2social'];
         }
-        if(!isset($_POST['Videos']) && $autoPost2social){
+        if (!isset($_POST['Videos']) && $autoPost2social) {
             $model->socialIds = array_keys($this->getSocials());
         }
         $this->save($contentModel);
@@ -246,7 +245,12 @@ class AmcVideosController extends AmcGalleriesController {
                                     $thumbFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaPaths['videos']['thumb']['path']) . "/" . $model->video_id . "." . $model->internalVideos->img_ext;
                                     $thumbFile = str_replace("{gallery_id}", $model->gallery_id, $thumbFile);
                                     $image = new Image($model->videoThumb->getTempName());
-                                    $image->resize($mediaPaths['videos']['thumb']['info']['width'], $mediaPaths['videos']['thumb']['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $thumbFile);
+                                    $watermarkOptions = array();
+                                    $options = $this->module->appModule->options;
+                                    if (isset($options['default']['watermark']['videos']['image'])) {
+                                        $watermarkOptions = $options['default']['watermark']['videos'];
+                                    }
+                                    $image->resize($mediaPaths['videos']['thumb']['info']['width'], $mediaPaths['videos']['thumb']['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $thumbFile, array(), $watermarkOptions);
                                 }
                                 break;
                         }
@@ -320,7 +324,7 @@ class AmcVideosController extends AmcGalleriesController {
                 if ($deleted) {
                     switch ($model->videoType) {
                         case Videos::EXTERNAL:
-                            if ($model->uploadedViaApi() && $this->getModule()->appModule->youtubeApiIsEnabled()) {                                
+                            if ($model->uploadedViaApi() && $this->getModule()->appModule->youtubeApiIsEnabled()) {
                                 $youtubeApi = VendorApiManager::getApi("youtube", "manage", array(), AmcWm::app()->params['proxy']);
                                 $videoCode = Html::getVideoCode($model->videoURL);
                                 if ($videoCode) {
@@ -351,8 +355,7 @@ class AmcVideosController extends AmcGalleriesController {
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax']))
                 $this->redirect(array('index', 'gid' => $this->gallery->gallery_id));
-        }
-        else
+        } else
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 

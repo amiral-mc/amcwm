@@ -1,6 +1,6 @@
 <?php
 
-return array(   
+return array(
     'backend' => array(
         'structure' => array(
             'controllers' => array(
@@ -77,8 +77,8 @@ return array(
             'check' => array(
                 'addToSlider' => true,
                 'addToInfocus' => true,
-            ),            
-        ),        
+            ),
+        ),
         'news' => array(
             'postitions' => array(
                 'sisterPostition' => 4,
@@ -90,12 +90,17 @@ return array(
                 'check' => array(
                     'addToBreaking' => true,
                 ),
-                'menu'=>array(
+                'menu' => array(
                     'section' => array(
-                        'linkOnTop'=> true,
+                        'linkOnTop' => true,
                     ),
                 ),
-                'listingRowOrders' => array('infoBar' => 'infoBar','header' => 'header', 'details' => 'details'),
+                'watermark' => array(
+                    'image' => "resources/images/watermark.png",
+                    'position' => 'LB',
+                    'opacity' => "40",
+                ),
+                'listingRowOrders' => array('infoBar' => 'infoBar', 'header' => 'header', 'details' => 'details'),
                 'topArticles' => 0,
                 'showListingTitle' => false,
                 'showPrimaryHeader' => true,
@@ -113,7 +118,12 @@ return array(
                 ),
             ),
             'default' => array(
-                'listingRowOrders' => array('infoBar' => 'infoBar','header' => 'header', 'image' => 'image', 'details' => 'details'),
+                'watermark' => array(
+                    'image' => "resources/images/watermark.png",
+                    'position' => 'LB',
+                    'opacity' => "40",
+                ),
+                'listingRowOrders' => array('infoBar' => 'infoBar', 'header' => 'header', 'image' => 'image', 'details' => 'details'),
                 'topArticles' => 0,
                 'showListingTitle' => false,
                 'showPrimaryHeader' => false,
@@ -121,6 +131,44 @@ return array(
                 'showSectionsList' => true,
                 'showSectionName' => true,
                 'showSource' => true,
+            ),
+        ),
+        'breaking' => array(
+            'watermark' => array(
+                'image' => "resources/images/watermark.png",
+                'position' => 'LB',
+                'opacity' => "40",
+            ),
+            'default' => array(
+                'check' => array(
+                    'autoPost2social' => true,
+                ),
+                'integer' => array(
+                    'breakingExpiredAfter' => 12 * 60 * 60,
+                ),
+            ),
+        ),
+        'essays' => array(
+            'default' => array(
+                'check' => array(
+                    'autoPost2social' => true,
+                ),
+                'watermark' => array(
+                    'image' => "resources/images/watermark.png",
+                    'position' => 'LB',
+                    'opacity' => "40",
+                ),
+                'integer' => array('mainTopics' => 4),
+                'post2social' => false,
+                'topArticles' => 3,
+                'showListingTitle' => false,
+                'showPrimaryHeader' => false,
+                'showDate' => false,
+                'showSectionsList' => true,
+                'showSectionName' => true,
+                'showSource' => true,
+                'showDefaultImage' => false,
+                'noImageListing' => AmcWm::app()->request->baseUrl . '/images/front/article_default.jpg'
             ),
         ),
     ),

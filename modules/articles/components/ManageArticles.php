@@ -112,13 +112,12 @@ class ManageArticles extends ManageContent {
         $virtualModule = $this->controller->getModule()->appModule->currentVirtual;
         $options = $this->controller->module->appModule->options;
         $autoPost2social = false;
-        if(isset($options[$virtualModule]['default']['check']['autoPost2social'])){
+        if (isset($options[$virtualModule]['default']['check']['autoPost2social'])) {
             $autoPost2social = $options[$virtualModule]['default']['check']['autoPost2social'];
-        }
-        else if(isset($options['default']['check']['autoPost2social'])){
+        } else if (isset($options['default']['check']['autoPost2social'])) {
             $autoPost2social = $options['default']['check']['autoPost2social'];
         }
-        if(!isset($_POST['Articles']) && $autoPost2social){
+        if (!isset($_POST['Articles']) && $autoPost2social) {
             $model->socialIds = array_keys($this->getSocials());
         }
         $msgsBase = "msgsbase.core";
@@ -291,7 +290,7 @@ class ManageArticles extends ManageContent {
                         $success = true;
                     }
                 } catch (CDbException $e) {
-                    //echo $e->getMessage();
+//                    echo $e->getMessage();
                     $transaction->rollback();
                     $success = false;
                 }
@@ -584,6 +583,12 @@ class ManageArticles extends ManageContent {
         $deleteImage = isset($articlesParams['imageFile_deleteImage']) && $articlesParams['imageFile_deleteImage'];
         $imageSizesInfo = $this->controller->getModule()->appModule->mediaPaths;
         if ($article->imageFile instanceof CUploadedFile) {
+            $virtualModule = $this->controller->getModule()->appModule->currentVirtual;
+            $options = $this->controller->module->appModule->options;
+            $watermarkOptions = array();
+            if (isset($options[$virtualModule]['default']['watermark']['image'])) {
+                $watermarkOptions = $options[$virtualModule]['default']['watermark'];
+            }
             $image = new Image($article->imageFile->getTempName());
             foreach ($imageSizesInfo as $imageInfo) {
                 $path = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']);
@@ -608,10 +613,11 @@ class ManageArticles extends ManageContent {
                     unlink($oldThumbFile);
                 }
                 if ($ok && $article->thumb) {
+
                     if ($imageInfo['info']['crob']) {
-                        $image->resizeCrop($imageInfo['info']['width'], $imageInfo['info']['height'], $imageFile, $coords);
+                        $image->resizeCrop($imageInfo['info']['width'], $imageInfo['info']['height'], $imageFile, $coords, $watermarkOptions);
                     } else {
-                        $image->resize($imageInfo['info']['width'], $imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $imageFile, $coords);
+                        $image->resize($imageInfo['info']['width'], $imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $imageFile, $coords, $watermarkOptions);
                     }
                 }
             }
@@ -666,11 +672,17 @@ class ManageArticles extends ManageContent {
         $imageSizesInfo = $this->controller->getModule()->appModule->mediaPaths;
         $imageInfo = $imageSizesInfo['slider'];
         if ($item->sliderFile instanceof CUploadedFile && $item->in_slider) {
+            $virtualModule = $this->controller->getModule()->appModule->currentVirtual;
+            $options = $this->controller->module->appModule->options;
+            $watermarkOptions = array();
+            if (isset($options[$virtualModule]['default']['watermark']['image'])) {
+                $watermarkOptions = $options[$virtualModule]['default']['watermark'];
+            }
             $imageFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $item->article_id . "." . $item->in_slider;
             $thumbFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['thumb']['path']) . "/" . $item->article_id . "." . $item->in_slider;
             $image = new Image($item->sliderFile->getTempName());
-            $image->resize($imageInfo['info']['width'], $imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $imageFile);
-            $image->resize($imageInfo['thumb']['info']['width'], $imageInfo['thumb']['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $thumbFile);
+            $image->resize($imageInfo['info']['width'], $imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $imageFile, array(), $watermarkOptions);
+            $image->resize($imageInfo['thumb']['info']['width'], $imageInfo['thumb']['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $thumbFile, array(), $watermarkOptions);
         }
         if ($oldSlider != $item->in_slider && $oldSlider) {
             $old = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $item->article_id . "." . $oldSlider;
@@ -929,8 +941,7 @@ class ManageArticles extends ManageContent {
         header('Content-type: application/json');
         echo CJSON::encode($writers);
     }
-    
-    
+
     /**
      * required for ajax requests
      * @param boolean $printResult

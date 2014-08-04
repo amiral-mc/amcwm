@@ -83,10 +83,12 @@ class Image {
      * @param int $height
      * @param int $resizeOption
      * @param string $saveTo
+     * @param array $coords
+     * @param array $watermarkOptions
      * @access public
      * @return bool
      */
-    public function resize($width, $height, $resizeOption = self::RESIZE_BASED_ON_WIDTH, $saveTo = null, $coords = array()) {
+    public function resize($width, $height, $resizeOption = self::RESIZE_BASED_ON_WIDTH, $saveTo = null, $coords = array(), $watermarkOptions = array()) {
         $saveTo = str_replace("/", DIRECTORY_SEPARATOR, $saveTo);
         $quality = null;
         $xSource = 0;
@@ -102,18 +104,18 @@ class Image {
         
         switch ($this->info[self::IMAGE_TYPE]) {
             case IMAGETYPE_GIF:
-                $im = imagecreatefromgif($this->imageFile);
+                $source = imagecreatefromgif($this->imageFile);
                 $header = "Content-type: image/gif";
                 $createFrom = "imagegif";
                 break;
             case IMAGETYPE_JPEG:
-                $im = imagecreatefromjpeg($this->imageFile);
+                $source = imagecreatefromjpeg($this->imageFile);
                 $header = "Content-type: image/jpeg";
                 $createFrom = "imagejpeg";
                 $quality = 90;
                 break;
             case IMAGETYPE_PNG:
-                $im = imagecreatefrompng($this->imageFile);
+                $source = imagecreatefrompng($this->imageFile);
                 $header = "Content-type: image/png";
                 $createFrom = "imagepng";
                 break;
@@ -128,18 +130,29 @@ class Image {
                 $iWidth = ceil($sourceWidth / ($sourceHeight / $iHeight));
                 break;
         }
-        $in = imageCreateTrueColor($iWidth, $iHeight);
-
-        imagecopyresampled($in, $im, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $sourceWidth, $sourceHeight);
-        imagedestroy($im);
+        $target = imageCreateTrueColor($iWidth, $iHeight);
+        if (isset($watermarkOptions['image'])) {
+            $imageLayer = AmcWm::app()->imageworkshop->initFromResourceVar($source);
+            $watermarkLayer = AmcWm::app()->imageworkshop->initFromPath(AmcWm::app()->basePath . '/../' . $watermarkOptions['image']);
+            if (isset($watermarkOptions['opacity'])) {
+                $watermarkLayer->opacity($watermarkOptions['opacity']);
+            }
+            if (!isset($watermarkOptions['position'])) {
+                $watermarkOptions['position'] = 'LB';
+            }
+            $imageLayer->addLayerOnTop($watermarkLayer, 12, 12, $watermarkOptions['position']);
+            $source = $imageLayer->getResult();
+        } 
+        imagecopyresampled($target, $source, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $sourceWidth, $sourceHeight);
+        imagedestroy($source);
         if (!$saveTo) {
             header($header);
         }
-        $createFrom($in, $saveTo, $quality);
+        $createFrom($target, $saveTo, $quality);
         if ($saveTo) {
             //chmod($saveTo, 0777);
         }
-        imagedestroy($in);
+        imagedestroy($target);
     }
 
     /**
@@ -173,10 +186,12 @@ class Image {
      * @param int $width
      * @param int $height
      * @param string $saveTo
+     * @param array $coords
+     * @param array $watermarkOptions
      * @access public
      * @return bool
      */
-    public function resizeCrop($width, $height, $saveTo = null, $coords = array()) {
+    public function resizeCrop($width, $height, $saveTo = null, $coords = array(), $watermarkOptions = array()) {
         $saveTo = str_replace("/", DIRECTORY_SEPARATOR, $saveTo);
         $quality = null;
         $xSource = 0;
@@ -191,18 +206,18 @@ class Image {
         }
         switch ($this->info[self::IMAGE_TYPE]) {
             case IMAGETYPE_GIF:
-                $im = imagecreatefromgif($this->imageFile);
+                $source = imagecreatefromgif($this->imageFile);
                 $header = "Content-type: image/gif";
                 $createFrom = "imagegif";
                 break;
             case IMAGETYPE_JPEG:
-                $im = imagecreatefromjpeg($this->imageFile);
+                $source = imagecreatefromjpeg($this->imageFile);
                 $header = "Content-type: image/jpeg";
                 $createFrom = "imagejpeg";
                 $quality = 90;
                 break;
             case IMAGETYPE_PNG:
-                $im = imagecreatefrompng($this->imageFile);
+                $source = imagecreatefrompng($this->imageFile);
                 $header = "Content-type: image/png";
                 $createFrom = "imagepng";
                 break;
@@ -260,23 +275,35 @@ class Image {
 //        imagecopyresampled($in, $im, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $sourceWidth, $sourceHeight);
 //        ImageDestroy($im);
 
-        $in = imageCreateTrueColor($width, $height);
-        $bg = imagecolorallocate($in, $this->background[0], $this->background[1], $this->background[2]);
-        imagefilledrectangle($in, 0, 0, $width, $height, $bg);
+        $target = imageCreateTrueColor($width, $height);
+        $bg = imagecolorallocate($target, $this->background[0], $this->background[1], $this->background[2]);
+        imagefilledrectangle($target, 0, 0, $width, $height, $bg);
+        if (isset($watermarkOptions['image'])) {
+            $imageLayer = AmcWm::app()->imageworkshop->initFromResourceVar($source);
+            $watermarkLayer = AmcWm::app()->imageworkshop->initFromPath(AmcWm::app()->basePath . '/../' . $watermarkOptions['image']);
+            if (isset($watermarkOptions['opacity'])) {
+                $watermarkLayer->opacity($watermarkOptions['opacity']);
+            }
+            if (!isset($watermarkOptions['position'])) {
+                $watermarkOptions['position'] = 'LB';
+            }
+            $imageLayer->addLayerOnTop($watermarkLayer, 12, 12, $watermarkOptions['position']);
+            $source = $imageLayer->getResult();
+        } 
         // The cropped coordinates from original
 //        $crop = imageCreateTrueColor($cropWidth, $cropHeight);
 //        imagecopyresampled($crop, $im, 0, 0, $xSource, $ySource, $cropWidth, $cropHeight, $sourceWidth, $sourceHeight);        
 //        $im = $crop;
-        imagecopyresampled($in, $im, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $sourceWidth, $sourceHeight);
-        ImageDestroy($im);
+        imagecopyresampled($target, $source, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $sourceWidth, $sourceHeight);
+        ImageDestroy($source);
         if (!$saveTo) {
             header($header);
         }
-        $createFrom($in, $saveTo, $quality);
+        $createFrom($target, $saveTo, $quality);
         if ($saveTo) {
             //chmod($saveTo, 0777);
         }
-        ImageDestroy($in);
+        ImageDestroy($target);
     }
 
 }

@@ -10,7 +10,6 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-
 class AmcImagesController extends AmcGalleriesController {
 
     protected $isBackground = 0;
@@ -57,15 +56,20 @@ class AmcImagesController extends AmcGalleriesController {
         $this->createGalleryDir($model->gallery);
         $path = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $this->imageInfo['path']) . DIRECTORY_SEPARATOR;
         $path = str_replace("{gallery_id}", $galleryFolder, $path);
+        $options = $this->module->appModule->options;
+        $watermarkOptions = array();
+        if (isset($options['default']['watermark']['images']['image'])) {
+            $watermarkOptions = $options['default']['watermark']['images'];
+        }        
         if ($this->imageInfo['info']['exact'] && $this->imageInfo['info']['allowedUploadRatio'] == 1) {
             $model->imageFile->saveAs($path . $model->image_id . "." . $model->ext);
             chmod($path . $model->image_id . "." . $model->ext, 0777);
         } else {
             $image = new Image($model->imageFile->getTempName());
-            $image->resize($this->imageInfo['info']['width'], $this->imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $path . $model->image_id . "." . $model->ext);
+            $image->resize($this->imageInfo['info']['width'], $this->imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $path . $model->image_id . "." . $model->ext, array(), $watermarkOptions);
         }
         $image = new Image($path . $model->image_id . "." . $model->ext);
-        $image->resizeCrop($this->imageInfo['info']['thumbSize']['width'], $this->imageInfo['info']['thumbSize']['height'], $path . DIRECTORY_SEPARATOR . $model->image_id . "-th." . $model->ext);
+        $image->resizeCrop($this->imageInfo['info']['thumbSize']['width'], $this->imageInfo['info']['thumbSize']['height'], $path . DIRECTORY_SEPARATOR . $model->image_id . "-th." . $model->ext, array(), $watermarkOptions);
         if ($oldExt) {
             if ($oldExt && $oldExt != $model->ext) {
                 if (is_file($path . DIRECTORY_SEPARATOR . $model->image_id . "." . $oldExt)) {
@@ -142,11 +146,11 @@ class AmcImagesController extends AmcGalleriesController {
         $contentModel = new ImagesTranslation();
         $model->addTranslationChild($contentModel, self::getContentLanguage());
         $options = $this->module->appModule->options;
-        $autoPost2social = false;        
-        if(isset($options['default']['check']['autoPostImages2social'])){
+        $autoPost2social = false;
+        if (isset($options['default']['check']['autoPostImages2social'])) {
             $autoPost2social = $options['default']['check']['autoPostImages2social'];
         }
-        if(!isset($_POST['Images']) && $autoPost2social){
+        if (!isset($_POST['Images']) && $autoPost2social) {
             $model->socialIds = array_keys($this->getSocials());
         }
         $this->save($contentModel);
@@ -246,8 +250,7 @@ class AmcImagesController extends AmcGalleriesController {
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax']))
                 $this->redirect(array('index', 'gid' => $this->gallery->gallery_id));
-        }
-        else
+        } else
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
