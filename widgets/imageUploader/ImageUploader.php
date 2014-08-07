@@ -13,10 +13,10 @@ Yii::import('zii.widgets.jui.CJuiInputWidget');
  * @version 1.0
  */
 class ImageUploader extends CJuiInputWidget {
-    /*
+
+    /**
      * The sizes of images in different view modes, e.g. list view, grid view, etc...
      */
-
     public $sizesInfo = array();
 
     /*
@@ -34,6 +34,12 @@ class ImageUploader extends CJuiInputWidget {
      * @var boolean add delete icon if thumbnailSrc is not empty
      */
     protected $deleteIcon = false;
+    
+    /**
+     *
+     * @var boolean , if true then crop must fit all sizes info  
+     */
+    protected $cropAllSizes = true;
 
     /**
      * Initializes the widget.
@@ -42,8 +48,11 @@ class ImageUploader extends CJuiInputWidget {
      * If you override this method, make sure you call the parent implementation first.
      */
     public function init() {
-        if($this->thumbnailSrc){
+        if ($this->thumbnailSrc) {
             $this->deleteIcon = true;
+        }
+        if(isset(AmcWm::app()->params['cropAllSizes'])){
+            $this->cropAllSizes = AmcWm::app()->params['cropAllSizes'];    
         }
         parent::init();
     }
@@ -54,7 +63,8 @@ class ImageUploader extends CJuiInputWidget {
      */
     public function run() {
 
-        $assets = Yii::app()->getAssetManager()->publish(dirname(__FILE__) . '/assets', false, -1, true);
+        //$assets = Yii::app()->getAssetManager()->publish(dirname(__FILE__) . '/assets', false, -1, true);
+        $assets = Yii::app()->getAssetManager()->publish(dirname(__FILE__) . '/assets');
         $cl = Yii::app()->getClientScript();
         $cl->registerScriptFile($assets . '/js/jquery.Jcrop.min.js');
         $cl->registerCssFile($assets . '/css/jquery.Jcrop.min.css');
@@ -99,22 +109,23 @@ class ImageUploader extends CJuiInputWidget {
                 $iconsBar .= '<div><img id="icon_size_' . $key . '" src="' . $noIcon . '"><span class="icon_size_label">' . $value['info']['width'] . ' x ' . $value['info']['height'] . '</span></div>';
             }
         }
-
+        $iconsBar .= '<div id="icon_size_info"></div>';
         $this->options['setSelect'] = array(0, 0, max($widthSizes), max($heightSizes));
 //        $this->options['aspectRatio'] = 16 / 9;
         $this->options['minSize'] = array(min($widthSizes), min($heightSizes));
         $this->options['maxSize'] = array(max($widthSizes), max($heightSizes));
         $allOptions['cropOptions'] = $this->options;
-
+        
         $allOptions['sizes'] = $sizes;
+        $allOptions['cropAllSizesMsg'] = AmcWm::t("amcBack", 'Some photo sizes cannot be generated, please select another photo');
         $allOptions['removeIcon'] = $removeIcon;
         $allOptions['undoIcon'] = $undoIcon;
         $allOptions['yesIcon'] = $yesIcon;
         $allOptions['noIcon'] = $noIcon;
         $allOptions['undoLabel'] = AmcWm::t("amcBack", 'undo delete image');
         $allOptions['removeLabel'] = AmcWm::t("amcBack", 'Delete Image');
+        $allOptions['cropAllSizes'] = $this->cropAllSizes;
 
-        
         $allOptions['thumbnailInfo'] = $this->thumbnailInfo;
         $options = CJavaScript::encode($allOptions);
         Yii::app()->clientScript->registerScript('cropping', "var cropper{$uploaderId} = $('#{$uploaderId}').uploaderCropper({$options});", CClientScript::POS_READY);
@@ -123,8 +134,8 @@ class ImageUploader extends CJuiInputWidget {
         } else {
             echo '<div id="thumb_prev_' . $uploaderId . '"></div>';
         }
-        if($this->deleteIcon){
-            echo '<label style="cursor: pointer;" id="remove_image_' . $uploaderId . '"><img id="remove_image_icon_' . $uploaderId . '" src="' .$removeIcon  .'" style="vertical-align: middle;" /><span id="remove_image_label_' . $uploaderId . '">' . $allOptions['removeLabel'] . '</span></label>';
+        if ($this->deleteIcon) {
+            echo '<label style="cursor: pointer;" id="remove_image_' . $uploaderId . '"><img id="remove_image_icon_' . $uploaderId . '" src="' . $removeIcon . '" style="vertical-align: middle;" /><span id="remove_image_label_' . $uploaderId . '">' . $allOptions['removeLabel'] . '</span></label>';
         }
         $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
             'id' => "dialog_{$uploaderId}",
@@ -133,9 +144,11 @@ class ImageUploader extends CJuiInputWidget {
                 'autoOpen' => false,
                 'modal' => true,
                 'buttons' => array(
-                    AmcWm::t("amcBack", 'Crop') => "js: function(){
-                            cropper{$uploaderId}.crop();
-                    }",
+                    'myCrop' => array(
+                        'text' => AmcWm::t("amcBack", 'Crop'),
+                        'id' => "dialog-{$uploaderId}-crop",
+                        'click' => "js: function(){}",
+                    ),
                     AmcWm::t("amcBack", 'Cancel') => 'js:function(){ $(this).dialog("close");}',
                 ),
 //                        'width' => 'js:function(){return imgWidth;}',

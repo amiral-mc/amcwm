@@ -7,17 +7,20 @@
     }
 })(function($) {
     'use strict';
-    var defaults = {'sizes': {}};
+    var defaults = {'sizes': {}, cropAllSizes: false, cropAllSizesMsg: 'Some photo sizes cannot be generated, please select another photo'};
     $.fn.uploaderCropper = function(options) {
         options = $.extend(true, {}, defaults, options);
+        if (options.cropAllSizes) {
+            options.cropOptions.allowResize = false;
+        }
         var $this = this;
-        var id = $this.attr('id');        
+        var id = $this.attr('id');
         $("#remove_image_" + id).click(function() {
             if (parseInt($("#" + id + "_deleteImage").val())) {
                 $('#thumb_prev_' + id).slideDown();
                 $("#remove_image_label_" + id).html(options.removeLabel);
                 $("#" + id + "_deleteImage").val('');
-                $("#remove_image_icon_" + id).attr('src', options.removeIcon);                
+                $("#remove_image_icon_" + id).attr('src', options.removeIcon);
             }
             else {
                 $($this).val(null);
@@ -38,6 +41,7 @@
             sizes: options.sizes
         };
         options.cropOptions.onSelect = function(c) {
+            $("#icon_size_info").text('');
             imageCropper.data.currentCoords.x = c.x
             imageCropper.data.currentCoords.x2 = c.x2
             imageCropper.data.currentCoords.y = c.y
@@ -60,7 +64,22 @@
                 }
             }
             $.each(imageCropper.sizes, checkSize);
-        }        
+            $("body").off("click", '#dialog-' + id + '-crop');
+            $("body").on("click", '#dialog-' + id + '-crop', function(e) {
+                var cropClose = (options.cropAllSizes) ? false : true;
+                if(cropWidth == options.cropOptions.maxSize[0] && cropHeight == options.cropOptions.maxSize[1]){
+                    cropClose = true;
+                }
+                if(cropClose){
+                //console.log("cropWidth:%f cropHeight:%f maxWidth:%f maxHeight:%f", cropWidth , cropHeight, options.cropOptions.maxSize[0], options.cropOptions.maxSize[1]);
+                    $this.crop();
+                }
+                else{
+                    $("#icon_size_info").text(options.cropAllSizesMsg);
+                }
+            });
+
+        }
         $($this).click(function(e) {
             $($this).val(null);
         });
