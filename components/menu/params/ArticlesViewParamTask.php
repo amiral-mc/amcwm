@@ -25,12 +25,16 @@ class ArticlesViewParamTask extends ParamsTask {
         $dataset = new ArticlesListData(array("articles"));
         $dataset->setLanguage(Controller::getContentLanguage());
         $dataset->useRecordIdAsKey(false);
-        $dataset->addWhere("tt.article_header like " . Yii::app()->db->quoteValue('%%' . $this->searchFor . '%%'));        
-        $dataset->addJoin('LEFT JOIN news n ON t.article_id = n.article_id');
-        $dataset->addWhere('n.article_id is null');        
+        $dataset->addWhere("tt.article_header like " . Yii::app()->db->quoteValue('%%' . $this->searchFor . '%%'));
+        $tables = ArticlesListData::getArticlesTables();
+        foreach ($tables as $table) {
+            $dataset->addJoin("LEFT JOIN {$table} ON t.article_id = {$table}.article_id");
+            $dataset->addWhere("{$table}.article_id is null");
+        }
+
         if ($this->selectedRow)
             $dataset->addOrder('FIELD(t.article_id, ' . $this->selectedRow . ') DESC, t.article_id');
-        $paging = new PagingDataset($dataset, $this->pageSize, $page);        
+        $paging = new PagingDataset($dataset, $this->pageSize, $page);
         $this->setDataProvider($paging);
         $this->success = true;
     }
@@ -63,4 +67,3 @@ class ArticlesViewParamTask extends ParamsTask {
     }
 
 }
-
