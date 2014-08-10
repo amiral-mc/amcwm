@@ -179,21 +179,4 @@ class Writers extends ActiveRecord {
         return $list;
     }
 
-    /**
-     * Get writers
-     * @access public 
-     * @return array     
-     */
-    static public function x() {
-        $language = Controller::getContentLanguage();
-        $query = sprintf("
-            select t.writer_id, tt.name
-            from writers t
-            inner join persons_translation tt on t.writer_id = tt.person_id
-            where writer_type in (". Writers::WRITER_TYPE . ", ". Writers::BOTH_TYPE .") and content_lang = %s", Yii::app()->db->quoteValue($language));
-        $writers = CHtml::listData(Yii::app()->db->createCommand($query)->queryAll(), 'writer_id', 'name');       
-        return $writers;
-    }
-
-
 }
