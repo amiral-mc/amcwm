@@ -25,7 +25,9 @@ class DocumentsIndexParamTask extends ParamsTask {
         $dataset = new DocumentsCategoriesData();
         $dataset->setLanguage(Controller::getContentLanguage());
         $dataset->useRecordIdAsKey(false);
-        $dataset->addWhere("category_name like " . Yii::app()->db->quoteValue('%%' . $this->searchFor . '%%'));
+        if($this->searchFor){
+            $dataset->addWhere("category_name like " . Yii::app()->db->quoteValue('%%' . $this->searchFor . '%%'));
+        }
         if ($this->selectedRow)
             $dataset->addOrder('FIELD(t.category_id, ' . $this->selectedRow . ') DESC, t.category_id');
         $paging = new PagingDataset($dataset, $this->pageSize, $page);

@@ -26,7 +26,9 @@ class ArticlesSectionsParamTask extends ParamsTask {
         $dataset->setLanguage(Controller::getContentLanguage());
         $dataset->getTopParentOnly(false);
         $dataset->useRecordIdAsKey(false);
-        $dataset->addWhere("section_name like " . Yii::app()->db->quoteValue('%%' . $this->searchFor . '%%'));
+        if($this->searchFor){
+            $dataset->addWhere("section_name like " . Yii::app()->db->quoteValue('%%' . $this->searchFor . '%%'));
+        }
         if ($this->selectedRow)
             $dataset->addOrder('FIELD(t.section_id, ' . $this->selectedRow . ') DESC, t.section_id');
         $dataset->addColumn('(select count(*) from sections s1 where s1.parent_section = t.section_id)', "subsCount");

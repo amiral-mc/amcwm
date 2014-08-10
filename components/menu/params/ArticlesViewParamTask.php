@@ -25,13 +25,15 @@ class ArticlesViewParamTask extends ParamsTask {
         $dataset = new ArticlesListData(array("articles"));
         $dataset->setLanguage(Controller::getContentLanguage());
         $dataset->useRecordIdAsKey(false);
-        $dataset->addWhere("tt.article_header like " . Yii::app()->db->quoteValue('%%' . $this->searchFor . '%%'));
+        if($this->searchFor){
+            $dataset->addWhere("tt.article_header like " . Yii::app()->db->quoteValue('%%' . $this->searchFor . '%%'));
+        }
+        
         $tables = ArticlesListData::getArticlesTables();
         foreach ($tables as $table) {
             $dataset->addJoin("LEFT JOIN {$table} ON t.article_id = {$table}.article_id");
             $dataset->addWhere("{$table}.article_id is null");
-        }
-
+        }        
         if ($this->selectedRow)
             $dataset->addOrder('FIELD(t.article_id, ' . $this->selectedRow . ') DESC, t.article_id');
         $paging = new PagingDataset($dataset, $this->pageSize, $page);

@@ -26,7 +26,9 @@ class NewsViewParamTask extends ParamsTask {
         $dataset = new ArticlesListData(array("news"));    
         $dataset->setLanguage(Controller::getContentLanguage());
         $dataset->useRecordIdAsKey(false);
-        $dataset->addWhere("tt.article_header like " . Yii::app()->db->quoteValue('%%' . $this->searchFor . '%%'));
+        if($this->searchFor){
+            $dataset->addWhere("tt.article_header like " . Yii::app()->db->quoteValue('%%' . $this->searchFor . '%%'));
+        }
         if ($this->selectedRow)
             $dataset->addOrder('FIELD(t.article_id, ' . $this->selectedRow . ') DESC, t.article_id');
         $paging = new PagingDataset($dataset, $this->pageSize, $page);
