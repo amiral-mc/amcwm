@@ -83,8 +83,22 @@
             <?php echo $form->error($model->news, 'source_id'); ?>
         </div>
         <div class="row">                       
-            <?php echo $form->labelEx($model, 'section_id'); ?>
-            <?php echo $form->dropDownList($model, 'section_id', Sections::getSectionsList(), array('empty' => Yii::t('zii', 'Not set'))); ?>
+            <?php echo $form->labelEx($model, 'section_id'); ?>            
+            <?php
+            $this->widget('amcwm.core.widgets.select2.ESelect2', array(
+                    'model' => $model,
+                    'attribute' => "section_id",
+                    'useSelect'=>true,
+                    'data'=>Sections::getSectionsList(),
+                    'options' => array(
+                        "dropdownCssClass" => "bigdrop",
+                        "placeholder" => AmcWm::t('amcTools', 'Enter Search Keywords'),                        
+                    ),
+                    'htmlOptions' => array(
+                        'style' => 'style="width:80%"',
+                    ),
+                ));
+            ?>
             <?php echo $form->error($model, 'section_id'); ?>
         </div>
 

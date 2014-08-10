@@ -68,17 +68,17 @@
         ?>
         <legend><?php echo AmcWm::t("msgsbase.core", "Image Options"); ?>:</legend>       
         <div class="row">
-        <?php echo $form->labelEx($model, 'imageFile'); ?>
-        <?php        
-        $this->widget('amcwm.widgets.imageUploader.ImageUploader', array(
-            'model' => $model,
-            'attribute' => 'imageFile',
-            'thumbnailSrc' => $imageFile,
-            'thumbnailInfo' => $imagesInfo['list']['info'],
-            'sizesInfo' => $imagesInfo,
-        ));
-        ?>
-        <?php echo $form->error($model, 'imageFile'); ?>
+            <?php echo $form->labelEx($model, 'imageFile'); ?>
+            <?php
+            $this->widget('amcwm.widgets.imageUploader.ImageUploader', array(
+                'model' => $model,
+                'attribute' => 'imageFile',
+                'thumbnailSrc' => $imageFile,
+                'thumbnailInfo' => $imagesInfo['list']['info'],
+                'sizesInfo' => $imagesInfo,
+            ));
+            ?>
+            <?php echo $form->error($model, 'imageFile'); ?>
         </div>    
         <div class="row">
             <?php echo $form->labelEx($contentModel, 'image_description'); ?>
@@ -136,7 +136,21 @@
         </div>       
         <div class="row">                       
             <?php echo $form->labelEx($model, 'section_id'); ?>
-            <?php echo $form->dropDownList($model, 'section_id', Sections::getSectionsList(), array('empty' => Yii::t('zii', 'Not set'))); ?>
+            <?php
+            $this->widget('amcwm.core.widgets.select2.ESelect2', array(
+                'model' => $model,
+                'attribute' => "section_id",
+                'useSelect' => true,
+                'data' => Sections::getSectionsList(),
+                'options' => array(
+                    "dropdownCssClass" => "bigdrop",
+                    "placeholder" => AmcWm::t('amcTools', 'Enter Search Keywords'),
+                ),
+                'htmlOptions' => array(
+                    'style' => 'style="width:80%"',
+                ),
+            ));
+            ?>
             <?php echo $form->error($model, 'section_id'); ?>
         </div>                 
         <div class="row">
