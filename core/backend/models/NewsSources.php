@@ -19,6 +19,7 @@
  */
 class NewsSources extends ParentTranslatedActiveRecord {
 
+    const REF_PAGE_SIZE = 30;
     /**
      * @return string the associated database table name
      */
@@ -108,14 +109,43 @@ class NewsSources extends ParentTranslatedActiveRecord {
 
     /**
      * Get Sources list
-     * @param string $language if not equal null then get sources according to the given $language,
-      =     * @access public
+     * @param string $keywords
+     * @param integer $pageNumber
+     * @param string $prompt
      * @return array 
      */
-    static public function getSourcesList($language = null) {
-        if (!$language) {
-            $language = Controller::getContentLanguage();
+    static public function getSourcesList($keywords = null, $pageNumber = 1, $prompt = null) {
+        $language = Controller::getContentLanguage();
+        $pageNumber = (int) $pageNumber;
+        $keywords = trim($keywords);
+        $queryCount = "SELECT count(*) FROM news_sources t        
+        inner join news_sources_translation tt on t.source_id = tt.source_id
+        ";
+        $command = AmcWm::app()->db->createCommand();
+        $command->select("t.source_id, tt.source");
+        $command->from = "news_sources t";
+        $command->join("news_sources_translation tt", 't.source_id = tt.source_id');
+        $where = sprintf("tt.content_lang = %s", AmcWm::app()->db->quoteValue(Controller::getContentLanguage()));        
+        if ($keywords) {
+            $keywords = "%{$keywords}%";
+            $where .= sprintf(" and source like %s "
+                    , AmcWm::app()->db->quoteValue($keywords)
+            );
         }
+        $command->where($where);
+        $queryCount.=" where {$where}";
+        $command->limit(self::REF_PAGE_SIZE, self::REF_PAGE_SIZE * ($pageNumber - 1));
+        $data = $command->queryAll();
+        $list = array('records' => array(), 'total' => 0);
+        if ($prompt) {
+            $list['records'][] = array("id" => null, "text" => $prompt);
+        }
+        foreach ($data as $row) {
+            $list['records'][] = array("id" => $row['source_id'], "text" => $row['source']);
+        }
+        $list['total'] = AmcWm::app()->db->createCommand($queryCount)->queryScalar();
+        return $list;
+        
         $query = sprintf(
                 "select 
                     s.source_id,

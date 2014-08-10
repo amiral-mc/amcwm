@@ -199,6 +199,13 @@ class AmcArticlesController extends BackendController {
         $this->manager->findEditors();
     }    
     
+     /**
+     * required for ajax requests
+     */
+    public function ajaxFindSources() {
+        $this->manager->findSources();
+    }    
+    
     
 
     /**

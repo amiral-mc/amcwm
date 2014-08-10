@@ -944,7 +944,6 @@ class ManageArticles extends ManageContent {
 
     /**
      * required for ajax requests
-     * @param boolean $printResult
      */
     public function findEditors() {
         $editors = Writers::getEditorsList(Yii::app()->request->getParam('q'), Yii::app()->request->getParam('page'), AmcWm::app()->request->getParam('prompt'));
@@ -952,6 +951,17 @@ class ManageArticles extends ManageContent {
         echo CJSON::encode($editors);
     }
 
+    
+    /**
+     * required for ajax requests
+     */
+    public function findSources() {
+        $list = NewsSources::getSourcesList(Yii::app()->request->getParam('q'), Yii::app()->request->getParam('page'), AmcWm::app()->request->getParam('prompt'));
+        header('Content-type: application/json');
+        echo CJSON::encode($list);
+    }
+
+    
     /**
      * Performs the AJAX validation.
      * @param CModel the model to be validated
