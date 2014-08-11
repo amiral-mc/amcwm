@@ -78,7 +78,7 @@ class DropDownMenu extends CMenu {
          * Rtl added by ashrafakl@yahoo.com
          */
         if(Yii::app()->getLocale()->getOrientation() == 'rtl'){
-            $cs->registerCssFile($baseUrl . '/css/' . $this->cssFile . "-rtl");
+            $cs->registerCssFile($baseUrl . "/css/superfish-rtl.css");
         }
         if ($this->style == 'navbar')
             $cs->registerCssFile($baseUrl . '/css/' . 'superfish-navbar.css');
