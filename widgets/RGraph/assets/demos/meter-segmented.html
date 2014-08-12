@@ -1,0 +1,99 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.dynamic.js" ></script>
+    <script src="../libraries/RGraph.meter.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="../excanvas/excanvas.js"></script><![endif]-->
+    
+    <title>A basic Meter chart</title>
+    
+    <meta name="description" content="A basic Meter chart" />
+     
+</head>
+<body>
+
+    <h1>A segmented Meter chart</h1>
+
+    <canvas id="cvs" width="600" height="450">[No canvas support]</canvas>
+    
+    <script>
+        $(document).ready(function ()
+        {
+            var meter = new RGraph.Meter({
+                id: 'cvs',
+                min: 0,
+                max: 100,
+                value:75,
+                options: {
+                    adjustable: true,
+                    angles: {
+                        start: RGraph.PI - 0.55,
+                        end: RGraph.TWOPI + 0.5
+                    },
+                    centery: 300,
+                    linewidth: {
+                        segments: 15
+                    },
+                    text: {
+                        size: 22,
+                        color: 'black'
+                    },
+                    green: {
+                        color: '#0a0'
+                    },
+                    segment: {
+                        radius: {
+                            start: 175
+                        }
+                    },
+                    border: false,
+                    strokestyle: 'white',
+                    tickmarks: {
+                        small: {
+                            num: 0
+                        },
+                        big: {
+                            num: 0
+                        }
+                    },
+                    needle: {
+                        radius: 150,
+                        color: 'gray'
+                    },
+                    text: {
+                        valign: 'bottom'
+                    },
+                    centerpin: {
+                        fill: 'white',
+                        stroke: 'gray'
+                    },
+                    colors: {
+                        ranges: [
+                                 [0,10,'Gradient(#c00:#c00:#600)'],
+                                 [10,20,'Gradient(#cc0:#cc0:#330)'],
+                                 [20,30,'Gradient(#cc0:#cc0:#330)'],
+                                 [30,40,'Gradient(#0c0:#0c0:#030)'],
+                                 [40,50,'Gradient(#0c0:#0c0:#030)'],
+                                 [50,60,'Gradient(#0c0:#0c0:#030)'],
+                                 [60,70,'Gradient(#0c0:#0c0:#030)'],
+                                 [70,80,'Gradient(#0c0:#0c0:#030)'],
+                                 [80,90,'Gradient(#0c0:#0c0:#030)'],
+                                 [90,100,'Gradient(#0c0:#0c0:#030)']
+                                ]
+                    }
+                }
+            }).draw();
+
+        })
+    </script>
+
+    <p>
+        <a href="./">&laquo; Back</a>
+    </p>
+
+</body>
+</html>

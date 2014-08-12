@@ -1,0 +1,89 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.dynamic.js" ></script>
+    <script src="../libraries/RGraph.meter.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="../excanvas/excanvas.js"></script><![endif]-->
+    
+    <title>An adjustable (black) Meter chart</title>
+    <meta name="description" content="An adjustable (black) Meter chart" />
+     
+</head>
+<body>
+
+    <h1>An adjustable (black) Meter chart</h1>
+
+    <canvas id="cvs" width="600" height="500" style="background-color: black; border-radius: 15px; box-shadow:3px 3px 3px gray">[No canvas support]</canvas>
+    <script>
+        $(document).ready(function ()
+        {
+            var meter = new RGraph.Meter({
+                id: 'cvs',
+                min: 0,
+                max: 100,
+                value: 75,
+                options: {
+                    background: {
+                        color: 'black'
+                    },
+                    angles: {
+                        start: RGraph.PI - 0.55,
+                        end: RGraph.TWOPI + 0.5
+                    },
+                    centery: 300,
+                    text: {
+                        size: 22,
+                        color: 'white',
+                        valign: 'bottom'
+                    },
+                    green: {
+                        color: '#0a0'
+                    },
+                    segment: {
+                        radius: {
+                            start: 175
+                        }
+                    },
+                    border: 0,
+                    tickmarks: {
+                        small: {
+                            num: 0
+                        },
+                        big: {
+                            num: 0
+                        }
+                    },
+                    needle: {
+                        radius: 250,
+                        color: '#ddd'
+                    },
+                    centerpin: {
+                        stroke: 'black',
+                        fill: '#ddd'
+                    }
+                }
+            }).on('beforedraw', function (obj)
+            {
+                RGraph.clear(obj.canvas, 'black');
+            }).draw()
+
+            meter.canvas.onclick = function (e)
+            {
+                var newvalue = meter.getValue(e);
+                
+                meter.value = newvalue;
+                meter.grow();
+            }
+        })
+    </script>
+
+    <p>
+        <a href="./">&laquo; Back</a>
+    </p>
+
+</body>
+</html>

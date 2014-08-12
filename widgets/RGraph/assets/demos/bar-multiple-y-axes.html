@@ -1,0 +1,163 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.drawing.yaxis.js" ></script>
+    <script src="../libraries/RGraph.bar.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="../excanvas/excanvas.js"></script><![endif]-->
+    
+    <title>A Bar chart with multiple independent Y axes</title>
+
+    <meta name="description" content="Multiple Bar charts each with their own Y axis using the drawing API Y axis object" />
+     
+</head>
+<body>
+
+    <h1>A Bar chart with multiple independent Y axes</h1>
+    
+    <p>
+        This demonstration shows how you can use the YAxis drawing API object to draw multiple axes on your chart.
+    </p>
+
+    <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
+    
+    <script>
+        $(document).ready(function ()
+        {
+            var colors = ['Gradient(#600:red:red:red)',
+                          'Gradient(#600:brown:brown:brown)',
+                          'Gradient(#006:blue:blue:blue)'];
+            
+            var bar1 = new RGraph.Bar({
+                id: 'cvs',
+                data: [[2,0,0],[4,0,0],[6,0,0]],
+                options: {
+                    shadow: false,
+                    noaxes: true,
+                    ylabels: false,
+                    gutter: {
+                        left: 150
+                    },
+                    colors: colors,
+                    background: {
+                        grid: {
+                            autofit: {
+                                numvlines: 3
+                            }
+                        }
+                    },
+                    hmargin: {
+                        self: 25,
+                        grouped: 3
+                    },
+                    shadow: {
+                        color: '#666',
+                        offsetx: 0,
+                        offsety: 0,
+                        blur: 20
+                    }
+                }
+            }).draw()
+            
+            var bar2 = new RGraph.Bar({
+                id: 'cvs',
+                data: [[0,20,0],[0,30,0],[0,40,0]],
+                options: {
+                    shadow: false,
+                    noaxes: true,
+                    ylabels: false,
+                    gutter: {
+                        left: 150
+                    },
+                    colors: colors,
+                    background: {
+                        grid: false
+                    },
+                    hmargin: {
+                        self: 25,
+                        grouped: 3
+                    },
+                    shadow: {
+                        color: '#666',
+                        offsetx: 0,
+                        offsety: 0,
+                        blur: 20
+                    },
+                    ymax: 50
+                }
+            }).draw()
+
+
+            var bar3 = new RGraph.Bar({
+                id: 'cvs',
+                data: [[0,0,70],[0,0,80],[0,0,90]],
+                options: {
+                    labels: ['Monday','Tuesday','Wednesday'],
+                    shadow: false,
+                    noyaxis: true,
+                    ylabels: false,
+                    gutter: {
+                        left: 150
+                    },
+                    colors: colors,
+                    background: {
+                        grid: false
+                    },
+                    hmargin: {
+                        self: 25,
+                        grouped: 3
+                    },
+                    shadow: {
+                        color: '#666',
+                        offsetx: 0,
+                        offsety: 0,
+                        blur: 20
+                    },
+                    ymax: 100
+                }
+            }).draw()
+            
+
+            
+            var yaxis1 = new RGraph.Drawing.YAxis({
+                id: 'cvs',
+                x: 25,
+                options: {
+                    max: 10,
+                    colors: [colors[0]]
+                }
+            }).draw()
+            
+
+            
+            var yaxis2 = new RGraph.Drawing.YAxis({
+                id: 'cvs',
+                x: 75,
+                options: {
+                    max: 50,
+                    colors: [colors[1]]
+                }
+            }).draw()
+            
+
+            
+            var yaxis3 = new RGraph.Drawing.YAxis({
+                id: 'cvs',
+                x: 125,
+                options: {
+                    max: 100,
+                    colors: [colors[2]]
+                }
+            }).draw()
+        })
+    </script>
+
+    <p>
+        <a href="./">&laquo; Back</a>
+    </p>
+
+</body>
+</html>

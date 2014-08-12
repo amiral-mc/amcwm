@@ -27,6 +27,11 @@
         </div>
         <div class="clm_left">							
             <?php echo $this->generatePositions("sideColumn"); ?>
+            <?php
+            $this->widget('amcwm.widgets.stockData.ExchangeSideWidget', array(
+                'id' => 'stockDataGraph',
+            ));
+            ?>
         </div>
     </div>
 

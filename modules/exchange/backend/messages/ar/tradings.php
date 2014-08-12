@@ -1,4 +1,5 @@
 <?php
+
 return array(
     'Exchange Tradings' => 'جلسات التداول',
     'Exchange Trading Value' => 'القيمة المتداولة',
@@ -6,5 +7,7 @@ return array(
     'Exchange Closing Value' => 'سعر الإغلاق',
     'Exchange Difference in Value' => 'قيمة التغيير',
     'Exchange Percentage Difference' => 'نسبة التغيير',
+    'Difference Percentage' => 'نسبة التغيير',
+    'General Index' => 'المؤشر العام',
     "Please fill in at least 1 company and missing company's data" => 'برجاء إدخال شركة واحدة على الأقل مع ملئ بيانات الشركة'
 );

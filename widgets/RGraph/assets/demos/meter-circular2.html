@@ -1,0 +1,78 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.dynamic.js" ></script>
+    <script src="../libraries/RGraph.meter.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="../excanvas/excanvas.js"></script><![endif]-->
+    
+    <meta name="description" content="A circular and adjustable Meter chart" />
+     
+</head>
+<body>
+
+    <h1>A circular and adjustable Meter chart</h1>
+
+    <canvas id="cvs" width="400" height="250" style="border: 1px solid #ccc; border-radius: 15px">[No canvas support]</canvas>
+    <script>
+        $(document).ready(function ()
+        {
+            var meter = new RGraph.Meter({
+                id: 'cvs',
+                min: -100,
+                max: 100,
+                value: -25,
+                options: {
+                    angles: {
+                        start: RGraph.PI - 0.5,
+                        end: RGraph.TWOPI + 0.5
+                    },
+                    linewidth: {
+                        segments: 15
+                    },
+                    text: {
+                        size: 16
+                    },
+                    strokestyle: 'white',
+                    segment: {
+                        radius: {
+                            start: 95
+                        }
+                    },
+                    needle: {
+                        radius: 75
+                    },
+                    border: 0,
+                    tickmarks: {
+                        small: {
+                            num: 0
+                        },
+                        big: {
+                            num: 0
+                        }
+                    },
+                    colors: {
+                        ranges: [[-100,-70, 'red'],[-70,70, '#0f0'],[70,100, 'red']]
+                    },
+                    centery: 155,
+                    radius: 125,
+                    adjustable: true
+            }
+        }).draw()
+
+            meter.onbeforedraw = function (obj)
+            {
+              RGraph.clear(obj.canvas, 'white');
+            }
+        })
+    </script>
+
+    <p>
+        <a href="./">&laquo; Back</a>
+    </p>
+
+</body>
+</html>

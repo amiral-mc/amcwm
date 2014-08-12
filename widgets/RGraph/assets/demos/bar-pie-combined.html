@@ -1,0 +1,119 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.dynamic.js" ></script>
+    <script src="../libraries/RGraph.common.tooltips.js" ></script>
+    <script src="../libraries/RGraph.bar.js" ></script>
+    <script src="../libraries/RGraph.pie.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="../excanvas/excanvas.js"></script><![endif]-->
+    <link rel="stylesheet" href="../css/animate.css" type="text/css" media="screen" />
+    
+    <title>A combined Bar and Pie chart</title>
+    <meta name="description" content="A combined Bar and Pie chart that uses gradients. " />
+    
+</head>
+<body>
+
+    <h1>A combined Bar and Pie chart</h1>
+    
+    <p>
+        This is the chart that was used on the front page (as of 13th December 2013)    
+    </p>
+
+
+    <canvas id="cvs" width="450" height="200">[No canvas support]</canvas>
+
+    <script>
+        $(document).ready(function ()
+        {
+            var bar = new RGraph.Bar({
+                id: 'cvs',
+                data: [[50,60,52],[65,30,50],[40,80,70],[115,100,92]],
+                options: {
+                    gutter: {
+                        top: 15,
+                        left: 35,
+                        right: 15
+                    },
+                    background: {
+                        grid: {
+                            vlines: false,
+                            border: false
+                        }
+                    },
+                    colors: ['Gradient(white:#f11:#f11)', 'Gradient(white:#1cc:#1cc)', 'Gradient(white:#00f:#00f)'],
+                    tooltips: [
+                               'Bob on Monday: 50 sales', 'Bob on Tuesday: 60 sales', 'Bob on Wednesday: 112 sales',
+                               'Jamie on Monday: 65 sales', 'Jamie on Tuesday: 30 sales', 'Jamie on Wednesday: 50 sales',
+                               'Cynthia on Monday: 40 sales', 'Cynthia on Tuesday: 80 sales', 'Cynthia on Wednesday: 70 sales',
+                               'Peter on Monday: 115 sales', 'Peter on Tuesday: 100 sales', 'Peter on Wednesday: 92 sales'
+                              ],
+                    highlight: {
+                        stroke: 'rgba(0,0,0,0.1)'
+                    },
+                    strokestyle: 'rgba(0,0,0,0)',
+                    shadow: {
+                        offsetx: -2,
+                        offsety: -2,
+                        blur: 15
+                    },
+                    ymax: 150,
+                    noyaxis: true,
+                    ylabels: false,
+                    labels: {
+                        self: ['Bob', 'Jamie', 'Cynthia', 'Peter'],
+                        above: true
+                    },
+                    linewidth: 2,
+                    hmargin: 15
+                }
+            }).draw()
+
+
+
+            var pie = new RGraph.Pie({
+                id: 'cvs',
+                data: [270,270,164],
+                options: {
+                    exploded: [7,2,],
+                    labels: {
+                        self: ['Mondays sales'],
+                        sticks: {
+                            self: [true],
+                            color: 'black'
+                        }
+                    },
+                    centerx: 60,
+                    centery: 45,
+                    radius: 30,
+                    shadow: {
+                        blur: 5,
+                        offsetx: 2,
+                        offsety: 2,
+                        color: '#aaa'
+                    },
+                    colors: ['Gradient(white:#c11:#c11:#c11)', 'Gradient(white:#1cc:#1cc:#1cc)', 'Gradient(white:#11c:#11c:#11c)'],
+                    tooltips: {
+                        self: ['Total Monday sales: 270', 'Total Tuesday sales: 270', 'Total Wednesday sales: 264'],
+                        event: 'mousemove'
+                    },
+                    strokestyle: 'rgba(0,0,0,0)'
+                }
+            }).draw()
+
+
+
+            !RGraph.ISOLD ? $('#cvs').addClass('animated expand') : null;;
+        })
+    </script>
+
+    <p>
+        <a href="./">&laquo; Back</a>
+    </p>
+
+</body>
+</html>

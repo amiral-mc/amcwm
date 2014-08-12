@@ -1,0 +1,81 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.dynamic.js" ></script>
+    <script src="../libraries/RGraph.common.tooltips.js" ></script>
+    <script src="../libraries/RGraph.drawing.rect.js" ></script>
+    <script src="../libraries/RGraph.line.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="../excanvas/excanvas.js"></script><![endif]-->
+    
+    <title>A demo of a logarithmic chart</title>
+    
+    <meta name="description" content="A Line chart using specific labels to give a logarithmic axis" />
+     
+</head>
+<body>
+
+    <h1>A demo of a logarithmic chart</h1>
+    
+    <p>
+        This demonstrates a logarithmic chart using log(10). It has custom Y labels.
+    </p>
+
+    <canvas id="cvs" width="600" height="300">[No canvas support]</canvas>
+    
+    <script>
+        $(document).ready(function ()
+        {
+            
+            var data = [999999,5,6,4,6,8012,12,7];
+
+
+            for (var i=0;i<data.length; ++i) {
+                data[i] = RGraph.log(data[i], 10); // This function is in RGraph.common.core.js
+            }
+
+
+
+
+            var line = new RGraph.Line({id: 'cvs', data: data})
+
+            line.set({
+                numyticks: 6,
+                ymax: 6,
+                ylabels: {
+                    specific: [
+                               RGraph.numberFormat(line, 1000000),
+                               RGraph.numberFormat(line, 100000),
+                               RGraph.numberFormat(line, 10000),
+                               RGraph.numberFormat(line, 1000),
+                               100, // No need to format this
+                               10,   // No need to format this
+                               ''
+                              ]
+                },
+                gutter: {
+                    left: 65
+                },
+                labels: ['Pob','Libby','June','Hoolio','Jane','Daz','Luis','John'],
+                numxticks: 7,
+                background: {
+                    grid: {
+                        autofit: {
+                            numhlines: 6,
+                            numvlines: 7
+                        }
+                    }
+                }
+            }).draw()
+        })
+    </script>
+
+    <p>
+        <a href="./">&laquo; Back</a>
+    </p>
+
+</body>
+</html>

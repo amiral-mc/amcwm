@@ -1,0 +1,56 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.line.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="../excanvas/excanvas.js"></script><![endif]-->
+    
+    <title>Line chart with null values</title>
+    
+    <meta name="description" content="A Line chart with null values" />
+     
+</head>
+<body>
+
+    <h1>Line chart with null values</h1>
+
+    <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
+    
+    <script>
+        $(document).ready(function ()
+        {
+            var line = new RGraph.Line({
+                id: 'cvs',
+                data: [1059990.29, 90000.97,508116.23, 54790.12, null,null,null],
+                options: {
+                    gutter: {
+                        left: 75
+                    },
+                    background: {
+                        grid: {
+                            autofit: {
+                                numvlines: 6
+                            }
+                        }
+                    },
+                    tickmarks: 'filledcircle',
+                    ticksize: 5,
+                    numxticks: 6,
+                    labels: ['John','Fred','Lucy','John','Luis','Pete','Kevin'],
+                    colors: ['#c00', 'pink'],
+                    linewidth: 2,
+                    shadow: false
+                }
+            }).draw()
+        })
+    </script>
+
+    <p>
+        <a href="./">&laquo; Back</a>
+    </p>
+
+</body>
+</html>

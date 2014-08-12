@@ -1,0 +1,88 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.gauge.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="../excanvas/excanvas.js"></script><![endif]-->
+    
+    <title>A customised Gauge chart</title>
+    
+    <meta name="description" content="A customised Gauge chart" />
+     
+</head>
+<body>
+
+    <h1>A customised Gauge chart</h1>
+
+    <canvas id="cvs" width="300" height="300">[No canvas support]</canvas>
+    
+    <script>
+        $(document).ready(function ()
+        {
+            var gauge = new RGraph.Gauge({
+                id: 'cvs',
+                min: 0,
+                max: 200,
+                value: [184,12],
+                options: {
+                    title: {
+                        top: {
+                            self: 'Air Speed',
+                            size: 'Italic 22',
+                            font: 'Impact',
+                            color: 'white'
+                        },
+                        bottom: {
+                            self: 'Knots',
+                            size: 'Italic 14',
+                            font: 'Impact',
+                            color: '#ccc',
+                            pos: 0.4
+                        },
+                    },
+                    background: {
+                        color: 'black',
+                        gradient: true
+                    },
+                    centerpin: {
+                        color: '#666'
+                    },
+                    needle: {
+                        size: [null, 50],
+                        colors: ['Gradient(transparent:white:white:white:white:white)', 'Gradient(transparent:#d66:#d66:#d66:#d66)']
+                    },
+                    text: {
+                        color: 'white'
+                    },
+                    tickmarks: {
+                        big: {
+                            color: 'white'
+                        },
+                        medium: {
+                            color: 'white'
+                        },
+                        small: {
+                            color: 'white'
+                        }
+                    },
+                    border: {
+                        outer: '#666',
+                        inner: '#333'
+                    },
+                    colors: {
+                        ranges: []
+                    }
+                }
+            }).draw();
+        })
+    </script>
+
+    <p>
+        <a href="./">&laquo; Back</a>
+    </p>
+
+</body>
+</html>

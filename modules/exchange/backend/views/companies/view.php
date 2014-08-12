@@ -12,6 +12,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
     'items' => array(
         array('label' => AmcWm::t("amcTools", 'Edit'), 'url' => array('/backend//exchange/companies/update', 'id' => $model->exchange_companies_id, 'eid' => $eid), 'id' => 'edit_record', 'image_id' => 'edit'),
         array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array('/backend//exchange/companies/index', 'eid' => $eid), 'id' => 'records_list', 'image_id' => 'back'),
+        array('label' => AmcWm::t("amcTools", 'Create'), 'url' => array('/backend/exchange/companies/create', 'eid' => $model->exchange_id), 'id' => 'add_record', 'image_id' => 'add')
     ),
 ));
 $this->widget('zii.widgets.CDetailView', array(

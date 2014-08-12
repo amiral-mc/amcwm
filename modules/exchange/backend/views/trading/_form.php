@@ -1,6 +1,6 @@
 <div class="form">
     <?php
-    $companiesCount = count($companies);
+    $companiesCount = count($model->tradingCompanies);
     $form = $this->beginWidget('CActiveForm', array(
         'id' => $formId,
         'enableAjaxValidation' => false,
@@ -15,7 +15,7 @@
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage()); ?>
     <fieldset>
         <div class="row">
-            <?php echo $form->hiddenField($model, 'exchange_id'); ?>
+            <?php echo $form->hiddenField($model, 'exchange_id', array('value' => $eid)); ?>
         </div>
         <div class="row">
             <?php echo $form->labelEx($model, 'exchange_date'); ?>
@@ -78,24 +78,11 @@
                         <th><?php echo AmcWm::t("msgsbase.companies", "Difference %"); ?></th>
 
                     </tr>
-                    <?php if(isset($childModel) && $childModel) { ?>
-                        <?php foreach ($childModel as $key => $company): ?>
-                            <tr id="companyRow<?php echo $key ?>"> 
-                                <td valign="top"><?php echo $form->labelEx($model, "($key)"); ?> </td>
-                                <td valign="top"><?php echo $form->dropDownList($company, "[$key]exchange_companies_exchange_companies_id", ExchangeCompanies::getCompanies($eid), array('style' => 'width:100px', 'prompt' => AmcWm::t("msgsbase.companies", 'Select Company'), 'options' => array($company['exchange_companies_exchange_companies_id'] => array('label' => $company->exchangeCompaniesExchangeCompanies->getCurrent()->company_name, 'selected' => true)))); ?></td>
-                                <td valign="top"><?php echo $form->textField($company, "[$key]opening_value", array('style' => 'width:100px', 'value' => $company->opening_value)); ?></td>
-                                <td valign="top"><?php echo $form->textField($company, "[$key]closing_value", array('style' => 'width:100px', 'value' => $company->closing_value)); ?></td>
-                                <td valign="top"><?php echo $form->textField($company, "[$key]difference_percentage", array('style' => 'width:100px', 'value' => $company->difference_percentage)); ?></td>
-                                <td valign="top">
-                                    <?php echo CHtml::link(CHtml::image(Yii::app()->baseUrl . "/images/remove.png", "", array("border" => 0, "align" => 'absmiddle')), "javascript:void(0);", array("id" => "companyRowLink{$key}", "onclick" => "company.remove(this.id)", "class" => "btn_label")); ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php } else {?>
-                    <?php foreach ($companies as $key => $company): ?>
+                 
+                    <?php foreach ($model->tradingCompanies as $key => $tradingsModel): ?>
                         <tr id="companyRow<?php echo $key ?>">
                             <td valign="top"><?php echo $form->labelEx($model, "($key)"); ?> </td>
-                            <td valign="top"><?php echo $form->dropDownList($tradingsModel, "[$key]exchange_companies_exchange_companies_id", ExchangeCompanies::getCompanies($eid), array('style' => 'width:100px', 'prompt' => AmcWm::t("msgsbase.companies", 'Select Company'), 'options' => array($company['exchange_companies_id'] => array('label' => $company['company_name'], 'selected' => true)))); ?></td>
+                            <td valign="top"><?php echo $form->dropDownList($tradingsModel, "[$key]exchange_companies_exchange_companies_id", ExchangeCompanies::getCompanies($eid), array('style' => 'width:100px', 'prompt' => AmcWm::t("msgsbase.companies", 'Select Company'))); ?></td>
                             <td valign="top"><?php echo $form->textField($tradingsModel, "[$key]opening_value", array('style' => 'width:100px')); ?></td>
                             <td valign="top"><?php echo $form->textField($tradingsModel, "[$key]closing_value", array('style' => 'width:100px')); ?></td>
                             <td valign="top"><?php echo $form->textField($tradingsModel, "[$key]difference_percentage", array('style' => 'width:100px')); ?></td>
@@ -103,7 +90,7 @@
                                 <?php echo CHtml::link(CHtml::image(Yii::app()->baseUrl . "/images/remove.png", "", array("border" => 0, "align" => 'absmiddle')), "javascript:void(0);", array("id" => "companyRowLink{$key}", "onclick" => "company.remove(this.id)", "class" => "btn_label")); ?>
                             </td>
                         </tr>
-                    <?php endforeach; }?>
+                    <?php endforeach; ?>
                 </table>
                 <div style="text-align: right;">
                     <?php

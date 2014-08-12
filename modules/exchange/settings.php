@@ -108,4 +108,28 @@ return array(
             ),
         ),
     ),
+    'frontend' => array(
+        'structure' => array(
+            'controllers' => array(
+                'default' => 'AmcStockController',
+            ),
+        ),
+        'install' => array(
+            'controllers' => array(
+                'default' => array(
+                    "actions" => array(
+                        "stock" => array(
+                            "perm" => 1,
+                            'roles' => array('guest'),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+        'options' => array(
+            'tickerLimit' => 4,
+            'companiesGridLimit' => 5,
+            'graphDaysLimit' => 6,
+        ),
+    ),
 );

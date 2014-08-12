@@ -1,6 +1,6 @@
 <?php
 $this->breadcrumbs = array(AmcWm::t("msgsbase.core", "Exchange"));
-$this->sectionName = AmcWm::t("msgsbase.tradings", "Exchange Tradings");
+$this->sectionName = $model->exchange->exchange_name;
 $this->widget('amcwm.core.widgets.tools.Tools', array(
     'id' => 'tools-grid',
     'items' => array(
@@ -43,9 +43,8 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 'htmlOptions' => array('width' => '16', 'align' => 'center'),
             ),
             array(
-                'header' => AmcWm::t("msgsbase.core", "Exchange ID"),
-                'value' => '$data->exchange_id',
-                'htmlOptions' => array('width' => '20', 'align' => 'center'),
+                'name' => 'exchange_date',
+                'htmlOptions' => array('width' => '50', 'align' => 'center'),
             ),
             array(
                 'name' => 'trading_value',
@@ -65,10 +64,6 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
             ),
             array(
                 'name' => 'difference_percentage',
-                'htmlOptions' => array('width' => '50', 'align' => 'center'),
-            ),
-            array(
-                'name' => 'exchange_date',
                 'htmlOptions' => array('width' => '50', 'align' => 'center'),
             ),
         ),

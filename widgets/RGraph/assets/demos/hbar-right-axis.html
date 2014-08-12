@@ -1,0 +1,53 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.hbar.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="../excanvas/excanvas.js"></script><![endif]-->
+    
+    <title>A HBar chart with a right Y axis</title>
+    
+    <meta name="description" content="A HBar chart with a right Y axis" />
+     
+</head>
+<body>
+
+    <h1>A HBar chart with a right Y axis</h1>
+
+    <canvas id="cvs" width="600" height="500">[No canvas support]</canvas>
+    
+    <script>
+        $(document).ready(function ()
+        {
+            var hbar = new RGraph.HBar({
+                id: 'cvs',
+                data: [56,45,57,58,51,48,47,46,61],
+                options: {
+                    labels: ['Venus','Felicity','Cynthia','Frederick','Hoolio','Peter','Jennifer','Richard','Joathan'],
+                    yaxispos: 'right',
+                    gutter: {
+                        left: 5,
+                        right: 75
+                    },
+                    xmax: 100,
+                    background: {
+                        grid: {
+                            autofit: {
+                                numhlines: 9
+                            }
+                        }
+                    }
+                }
+            }).draw()
+        })
+    </script>
+
+    <p>
+        <a href="./">&laquo; Back</a>
+    </p>
+
+</body>
+</html>

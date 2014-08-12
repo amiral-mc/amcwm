@@ -1,0 +1,81 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script type="text/javascript" src="../libraries/RGraph.common.core.js" ></script>
+    <script type="text/javascript" src="../libraries/RGraph.drawing.image.js" ></script>
+    <script type="text/javascript" src="../libraries/RGraph.odo.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="../excanvas/excanvas.js"></script><![endif]-->
+    
+    <title>A Odo chart using a background image</title>
+
+    <meta name="description" content="A Odo chart using a background image" />
+     
+</head>
+<body>
+
+    <h1>An Odometer chart using a background image</h1>
+
+
+    <canvas id="cvs" width="300" height="300">[No canvas support]</canvas>
+    
+    <script>
+        $(document).ready(function ()
+        {
+            var img = new RGraph.Drawing.Image({
+                id: 'cvs',
+                x: -4,
+                y: 0,
+                src: '../images/odometer-background.png'
+            }).draw()
+            
+            var odo = new RGraph.Odometer({
+                id: 'cvs',
+                min: 0,
+                max: 360,
+                value: 56,
+                options: {
+                    green: {
+                        color: 'rgba(0,0,0,0)'
+                    },
+                    yellow: {
+                        color: 'rgba(0,0,0,0)'
+                    },
+                    red: {
+                        color: 'rgba(0,0,0,0)'
+                    },
+                    background: {
+                        color: 'rgba(0,0,0,0)',
+                        border: 'rgba(0,0,0,0)',
+                        lines: {
+                            color: 'rgba(0,0,0,0)'
+                        }
+                    },
+                    tickmarks: {
+                        self: false,
+                        big: {
+                            color: 'rgba(0,0,0,0)'
+                        }
+                    },
+                    text: {
+                        color: 'rgba(0,0,0,0)'
+                    },
+                    needle: {
+                        color: '#ddd',
+                        tail: false,
+                        head: false,
+                        thickness: 5
+                    }                    
+                }
+            }).draw()
+        })
+    </script>
+
+    <p>
+        <a href="./">&laquo; Back</a>
+    </p>
+
+</body>
+</html>

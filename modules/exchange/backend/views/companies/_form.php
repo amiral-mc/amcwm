@@ -19,7 +19,7 @@
     <fieldset>
         <div class="row">
             <?php echo $form->labelEx($contentModel->parentContent(), 'published', array("style" => 'display:inline;')); ?>
-            <?php echo $form->checkBox($contentModel->parentContent(), 'published'); ?>
+            <?php echo $form->checkBox($contentModel->parentContent(), 'published', array('style' => 'float:right;', 'checked' => 'checked')); ?>
             <?php echo $form->error($contentModel->parentContent(), 'published'); ?>
         </div>
 

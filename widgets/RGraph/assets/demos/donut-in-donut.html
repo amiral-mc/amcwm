@@ -1,0 +1,97 @@
+<html>
+<head>
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.pie.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="../excanvas/excanvas.js"></script><![endif]-->
+
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    <title>a Donut-in-sonut example</title>
+
+    <meta name="description" content="An example of a nested Donut chart" />
+     
+</head>
+<body>
+
+    <h1>Donut-in-donut</h1>
+    
+    <p>
+        This example of three donut charts shows how they can be nested inside each other.
+    </p>
+
+    <canvas id="cvs" width="550" height="550">[No canvas support]</canvas>
+    <script>
+            $(document).ready(function ()
+        {
+            var pie1 = new RGraph.Pie({
+                id: 'cvs',
+                data: [4,3,5,6,8],
+                options: {
+                    variant: {
+                        self: 'donut',
+                        donut: {
+                            width: 50
+                        }
+                    },
+                    strokestyle: 'white',
+                    linewidth: 5,
+                    gutter: {
+                        left: 15,
+                        right: 15,
+                        top: 15,
+                        bottom: 15
+                    },
+                    shadow: {
+                        blur: 25,
+                        offsetx: 0,
+                        offsety: 0
+                    }
+                }
+            }).draw()
+    
+            var pie2 = new RGraph.Pie({
+                id: 'cvs',
+                data: [5,4,8,6,2],
+                options: {
+                    radius: pie1.radius - 50,
+                    variant: {
+                        self: 'donut',
+                        donut: {
+                            width: 50
+                        }
+                    },
+                    strokestyle: 'white',
+                    linewidth: 5,
+                    shadow: false
+                }
+            }).draw()
+
+
+    
+            var pie3 = new RGraph.Pie({
+                id: 'cvs',
+                data: [4,1,5,6,3],
+                options: {
+                    radius: pie2.radius - 50,
+                    variant: {
+                        self: 'donut',
+                        donut: {
+                            width: 50
+                        }
+                    },
+                    strokestyle: 'white',
+                    linewidth: 5,
+                    shadow: {
+                        blur: 25,
+                        offsetx: 0,
+                        offsety: 0
+                    }
+                }
+            }).draw()
+            
+            RGraph.ObjectRegistry.bringToFront(pie2);
+        })
+    </script>
+
+</body>
+</html>

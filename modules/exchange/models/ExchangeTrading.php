@@ -14,8 +14,7 @@
  *
  * The followings are the available model relations:
  * @property Exchange $exchange
- * @property ExchangeTradingCompanies[] $exchangeTradingCompanies
- * @property ExchangeTradingCompanies[] $exchangeTradingCompanies1
+ * @property tradingCompanies[] $exchangeTradingCompanies
  */
 class ExchangeTrading extends ActiveRecord
 {
@@ -55,8 +54,7 @@ class ExchangeTrading extends ActiveRecord
         // class name for the relations automatically generated below.
         return array(
             'exchange' => array(self::BELONGS_TO, 'Exchange', 'exchange_id'),
-            'exchangeTradingCompanies' => array(self::HAS_MANY, 'ExchangeTradingCompanies', 'exchange_trading_exchange_id'),
-            'exchangeTradingCompanies1' => array(self::HAS_MANY, 'ExchangeTradingCompanies', 'exchange_trading_exchange_date'),
+            'tradingCompanies' => array(self::HAS_MANY, 'ExchangeTradingCompanies', 'exchange_trading_exchange_id, exchange_trading_exchange_date'),
         );
     }
 

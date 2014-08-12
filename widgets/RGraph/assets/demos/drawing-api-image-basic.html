@@ -1,0 +1,74 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.dynamic.js" ></script>
+    <script src="../libraries/RGraph.common.tooltips.js" ></script>
+    <script src="../libraries/RGraph.line.js" ></script>
+    <script src="../libraries/RGraph.drawing.image.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="../excanvas/excanvas.js"></script><![endif]-->
+    
+    <title>A basic example of the drawing API rect object</title>
+
+    <meta name="description" content="A basic example of the drawing API rect object" />
+    
+    
+
+    <style>
+        .RGraph_tooltip {
+            opacity: 0.8 ! important;
+        }
+    </style>
+</head>
+<body>
+        
+    <h1>A basic example of the drawing API image object</h1>
+
+    <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
+
+    <script>
+        $(document).ready(function ()
+        {
+            var line = new RGraph.Line({
+                id: 'cvs',
+                data: [5,4,8,4,3,5,2],
+                options: {
+                    hmargin: 5,
+                    labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                    background: {
+                        grid: {
+                            vlines: false,
+                            border: false
+                        }
+                    },
+                    tickmarks: 'circle'
+                }
+            }).draw()
+            
+            var coords = line.coords[2];
+            
+            var img = new RGraph.Drawing.Image({
+                id: 'cvs',
+                x: coords[0],
+                y: coords[1],
+                src: '../images/logo.png',
+                options: {
+                    halign: 'center',
+                    valign: 'center',
+                    alpha: 0.6,
+                    tooltips: ['The tooltip!']
+                }
+            }).draw()
+        })
+    </script>
+
+
+    <p>
+        <a href="./">&laquo; Back</a>
+    </p>
+
+</body>
+</html>

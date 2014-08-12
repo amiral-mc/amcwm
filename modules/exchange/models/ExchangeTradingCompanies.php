@@ -55,7 +55,7 @@ class ExchangeTradingCompanies extends ActiveRecord
         return array(
             'exchangeTradingExchange' => array(self::BELONGS_TO, 'ExchangeTrading', 'exchange_trading_exchange_id'),
             'exchangeTradingExchangeDate' => array(self::BELONGS_TO, 'ExchangeTrading', 'exchange_trading_exchange_date'),
-            'exchangeCompaniesExchangeCompanies' => array(self::BELONGS_TO, 'ExchangeCompanies', 'exchange_companies_exchange_companies_id'),
+            'exchangeCompanies' => array(self::BELONGS_TO, 'ExchangeCompanies', 'exchange_companies_exchange_companies_id'),
         );
     }
 
@@ -70,7 +70,8 @@ class ExchangeTradingCompanies extends ActiveRecord
             'exchange_companies_exchange_companies_id' => 'Exchange Companies Exchange Companies',
             'opening_value' => 'Opening Value',
             'closing_value' => 'Closing Value',
-            'difference_percentage' => 'Difference Percentage',
+            'difference_percentage' => AmcWm::t('msgsbase.tradings', 'Difference Percentage'),
+            
         );
     }
 

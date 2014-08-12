@@ -8,7 +8,7 @@ return array(
     'Companies' => 'الشركات',
     'Opening Value' => 'سعر الفتح',
     'Closing Value' => 'سعر الإغلاق',
-    'Difference %' => 'قيمة التغيير',
+    'Difference %' => 'نسبة التغيير',
     'New Company' => 'إضافة شركة جديدة',
     'Select Company' => 'أختر الشركة',
     'Company No.' => 'شركة رقم',

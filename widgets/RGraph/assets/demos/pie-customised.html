@@ -1,0 +1,59 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.tooltips.js" ></script>
+    <script src="../libraries/RGraph.common.dynamic.js" ></script>
+    <script src="../libraries/RGraph.pie.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="../excanvas/excanvas.js"></script><![endif]-->
+    
+    <title>A customised Pie chart</title>
+    
+    <meta name="description" content="A customised Pie chart" />
+     
+</head>
+<body>
+
+    <h1>A customised Pie chart</h1>
+
+    <canvas id="cvs" width="480" height="250" !style="border:1px solid #ccc">[No canvas support]</canvas>
+    
+    <script>
+        $(document).ready(function ()
+        {
+            var data     = [20,13.43,2.83,4.24,7.42,13.43,38.65];
+            var labels   = ['Miscellaneous','Cooking','Office equipment','Refridgeration','Cooling','Ventilation','Lighting'];
+            
+            for (var i=0; i<data.length; ++i) {
+                labels[i] = labels[i] + ', ' + data[i] + '%';
+            }
+
+            var pie = new RGraph.Pie({
+                id: 'cvs',
+                data: data,
+                options: {
+                    labels: labels,
+                    tooltips: labels,
+                    colors: ['#EC0033','#A0D300','#FFCD00','#00B869','#999999','#FF7300','#004CB0'],
+                    strokestyle: 'white',
+                    linewidth: 0,
+                    shadow: {
+                        offsetx: 2,
+                        offsety: 2,
+                        blur: 3
+                    },
+                    exploded: 7
+                }
+            }).draw()
+        })
+    </script>
+
+    <p>        
+        <a href="./">&laquo; Back</a>
+    </p>
+
+</body>
+</html>

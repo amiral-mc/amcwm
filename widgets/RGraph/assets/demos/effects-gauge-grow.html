@@ -1,0 +1,47 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.gauge.js" ></script>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    
+    <title>Gauge chart Grow effect</title>
+    
+    <meta name="description" content="Gauge chart Grow effect" />
+    
+</head>
+<body>
+
+    <h1>Gauge chart Grow effect</h1>
+
+    <canvas id="cvs1" width="300" height="300">[No canvas support]</canvas>
+    <canvas id="cvs2" width="300" height="300">[No canvas support]</canvas>
+    
+    <script>
+        $(document).ready(function ()
+        {
+            var gauge = new RGraph.Gauge({
+                id: 'cvs1',
+                min: 0,
+                max: 100,
+                value: [80,100]
+            }).grow();
+
+            var gauge = new RGraph.Gauge({
+                id: 'cvs2',
+                min: 0,
+                max: 100,
+                value: 100
+            }).grow({frames: 25});
+        })
+    </script>
+
+    <p>
+        <a href="./">&laquo; Back</a>
+    </p>
+
+</body>
+</html>

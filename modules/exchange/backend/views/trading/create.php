@@ -13,5 +13,5 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
         array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array("/backend/exchange/trading/index", 'eid' => $eid), 'id' => 'admin_list', 'image_id' => 'back'),
     ),
 ));
-$this->renderPartial('_form', array('model' => $model, 'formId' => $formId, 'companies' => $companies, 'tradingsModel' => $tradingsModel, 'eid' => $eid));
+$this->renderPartial('_form', array('model' => $model, 'formId' => $formId, 'eid' => $eid));
 ?>

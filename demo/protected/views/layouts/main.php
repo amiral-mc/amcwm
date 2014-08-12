@@ -129,10 +129,14 @@ $locale = Yii::app()->getLocale();
                             'items' => Menus::getMenu("MainMenu")->getMenuItems(),
                             'encodeLabel' => false,
                         ));
-                        ?>                                      
+
+                        $this->widget('amcwm.widgets.stockData.StockDataTicker', array(
+                            'id' => 'stockDataTicker',
+                        ));
+                        ?>
                     </div>
                     <?php if ($this->isHomePage): ?>
-                        
+
                     <?php endif; ?>
                 </div>
             </div>            
