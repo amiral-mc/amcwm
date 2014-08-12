@@ -92,7 +92,7 @@ class Image {
         $saveTo = str_replace("/", DIRECTORY_SEPARATOR, $saveTo);
         $quality = null;
         $xSource = 0;
-        $ySource = 0;        
+        $ySource = 0;
         $sourceWidth = $this->info[self::IMAGE_WIDTH];
         $sourceHeight = $this->info[self::IMAGE_HEIGHT];
         if ($coords) {
@@ -101,7 +101,7 @@ class Image {
             $sourceWidth = $coords['x2'] - $coords['x'];
             $sourceHeight = $coords['y2'] - $coords['y'];
         }
-        
+
         switch ($this->info[self::IMAGE_TYPE]) {
             case IMAGETYPE_GIF:
                 $source = imagecreatefromgif($this->imageFile);
@@ -128,26 +128,40 @@ class Image {
             case self::RESIZE_BASED_ON_HEIGHT:
                 $iHeight = ($sourceHeight < $height) ? $sourceHeight : $height;
                 $iWidth = ceil($sourceWidth / ($sourceHeight / $iHeight));
+
                 break;
         }
         $target = imageCreateTrueColor($iWidth, $iHeight);
-        if (isset($watermarkOptions['image'])) {      
-            $waterPosition['y'] = $this->info[self::IMAGE_HEIGHT] - ($sourceHeight + $ySource);
-            $waterPosition['x'] = $xSource;
-            $imageLayer = AmcWm::app()->imageworkshop->initFromResourceVar($source);
+        imagecopyresampled($target, $source, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $sourceWidth, $sourceHeight);
+        imagedestroy($source);
+        if (isset($watermarkOptions['image'])) {
+            if (!isset($watermarkOptions['position'])) {
+                $watermarkOptions['position'] = 'MM';
+            }
             $watermarkLayer = AmcWm::app()->imageworkshop->initFromPath(AmcWm::app()->basePath . '/../' . $watermarkOptions['image']);
+            if ($iWidth < $sourceWidth && $watermarkLayer->getWidth() / $sourceWidth > 0.05) {
+                $watermarkWidthPercentage = ceil(($iWidth / $sourceWidth) * 100);
+                $watermarkLayer->resizeInPercent($watermarkWidthPercentage, null, true);
+            }
             if (isset($watermarkOptions['opacity'])) {
                 $watermarkLayer->opacity($watermarkOptions['opacity']);
             }
-            if (!isset($watermarkOptions['position'])) {
-                $watermarkOptions['position'] = 'LB';
+
+            $imageLayer = AmcWm::app()->imageworkshop->initFromResourceVar($target);
+            $waterPosition['x'] = 10;
+            $waterPosition['y'] = 10;
+            switch ($watermarkOptions['position']) {
+                case 'LM':
+                    $waterPosition['y'] = 0;
+                    break;
+                case 'MM':
+                    $waterPosition['x'] = 0;
+                    $waterPosition['y'] = 0;
+                    break;
             }
-            $imageLayer->addLayerOnTop($watermarkLayer, $waterPosition['x'] + 10, $waterPosition['y'] + 10, $watermarkOptions['position']);            
-            $source = $imageLayer->getResult();
-        } 
-        
-        imagecopyresampled($target, $source, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $sourceWidth, $sourceHeight);
-        imagedestroy($source);
+            $imageLayer->addLayerOnTop($watermarkLayer, $waterPosition['x'], $waterPosition['y'], $watermarkOptions['position']);
+            $target = $imageLayer->getResult();
+        }
         if (!$saveTo) {
             header($header);
         }
@@ -155,6 +169,10 @@ class Image {
         if ($saveTo) {
             //chmod($saveTo, 0777);
         }
+        //die($saveTo);
+//                header($header);
+//        $createFrom($target, null, $quality);       
+//        die();
         imagedestroy($target);
     }
 
@@ -198,7 +216,7 @@ class Image {
         $saveTo = str_replace("/", DIRECTORY_SEPARATOR, $saveTo);
         $quality = null;
         $xSource = 0;
-        $ySource = 0;        
+        $ySource = 0;
         $sourceWidth = $this->info[self::IMAGE_WIDTH];
         $sourceHeight = $this->info[self::IMAGE_HEIGHT];
         if ($coords) {
@@ -236,14 +254,12 @@ class Image {
                 //print_r($face);
             }
         }
-        $waterPosition['y'] = $this->info[self::IMAGE_HEIGHT] - ($sourceHeight + $ySource);
-        $waterPosition['x'] = $xSource;
         if ($height <= $sourceHeight / $wRatio) {
             // scale based on width                 
             $iWidth = $width;
             $iHeight = ceil($sourceHeight / $wRatio);
             $ySource = abs(ceil(($height - $iHeight)));
-            if($coords){
+            if ($coords) {
                 $ySource += $coords['y'];
             }
             $ratio = $wRatio;
@@ -252,7 +268,7 @@ class Image {
             $iHeight = $height;
             $iWidth = ceil($sourceWidth / $hRatio);
             $xSource = abs(ceil($width - $iWidth));
-            if($coords){
+            if ($coords) {
                 $xSource += $coords['x'];
             }
             $ratio = $hRatio;
@@ -260,10 +276,8 @@ class Image {
 
         if ($face) {
             $yAfteRatio = ceil($face['y'] / $ratio);
-            $xAfteRatio = ceil($face['x'] / $ratio);            
-            $waterPosition['y'] = $this->info[self::IMAGE_HEIGHT] - ($sourceHeight + $face['y']);
-            $waterPosition['x'] = $face['x'];
-            if (($iHeight - $yAfteRatio >= $height)) {                
+            $xAfteRatio = ceil($face['x'] / $ratio);
+            if (($iHeight - $yAfteRatio >= $height)) {
                 $ySource = $face['y'];
             } else {
                 $ySource = $sourceHeight - ceil($height * $ratio);
@@ -284,25 +298,42 @@ class Image {
 
         $target = imageCreateTrueColor($width, $height);
         $bg = imagecolorallocate($target, $this->background[0], $this->background[1], $this->background[2]);
-        imagefilledrectangle($target, 0, 0, $width, $height, $bg);        
-        if (isset($watermarkOptions['image'])) {                        
-            $imageLayer = AmcWm::app()->imageworkshop->initFromResourceVar($source);
-            $watermarkLayer = AmcWm::app()->imageworkshop->initFromPath(AmcWm::app()->basePath . '/../' . $watermarkOptions['image']);
-            if (isset($watermarkOptions['opacity'])) {
-                $watermarkLayer->opacity($watermarkOptions['opacity']);
-            }
-            if (!isset($watermarkOptions['position'])) {
-                $watermarkOptions['position'] = 'LB';
-            }
-            $imageLayer->addLayerOnTop($watermarkLayer,  $waterPosition['x'] + 10 ,$waterPosition['y'] + 10, $watermarkOptions['position']);            
-            $source = $imageLayer->getResult();
-        } 
-        
+        imagefilledrectangle($target, 0, 0, $width, $height, $bg);
         // The cropped coordinates from original
 //        $crop = imageCreateTrueColor($cropWidth, $cropHeight);
 //        imagecopyresampled($crop, $im, 0, 0, $xSource, $ySource, $cropWidth, $cropHeight, $sourceWidth, $sourceHeight);        
 //        $im = $crop;
+        
         imagecopyresampled($target, $source, 0, 0, $xSource, $ySource, $iWidth, $iHeight, $sourceWidth, $sourceHeight);
+        if (isset($watermarkOptions['image'])) {
+            if (!isset($watermarkOptions['position'])) {
+                $watermarkOptions['position'] = 'MM';
+            }
+            $watermarkLayer = AmcWm::app()->imageworkshop->initFromPath(AmcWm::app()->basePath . '/../' . $watermarkOptions['image']);
+            if ($iWidth < $sourceWidth && $watermarkLayer->getWidth() / $sourceWidth > 0.05) {
+                $watermarkWidthPercentage = ceil(($iWidth / $sourceWidth) * 100);
+                $watermarkLayer->resizeInPercent($watermarkWidthPercentage, null, true);
+            }
+            if (isset($watermarkOptions['opacity'])) {
+                $watermarkLayer->opacity($watermarkOptions['opacity']);
+            }
+
+            $imageLayer = AmcWm::app()->imageworkshop->initFromResourceVar($target);
+            $waterPosition['x'] = 10;
+            $waterPosition['y'] = 10;
+            switch ($watermarkOptions['position']) {
+                case 'LM':
+                    $waterPosition['y'] = 0;
+                    break;
+                case 'MM':
+                    $waterPosition['x'] = 0;
+                    $waterPosition['y'] = 0;
+                    break;
+            }
+
+            $imageLayer->addLayerOnTop($watermarkLayer, $waterPosition['x'], $waterPosition['y'], $watermarkOptions['position']);
+            $target = $imageLayer->getResult();
+        }
         ImageDestroy($source);
         if (!$saveTo) {
             header($header);
@@ -311,6 +342,6 @@ class Image {
         if ($saveTo) {
             //chmod($saveTo, 0777);
         }
-        ImageDestroy($target);
     }
+
 }
