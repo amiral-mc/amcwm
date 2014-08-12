@@ -54,12 +54,13 @@ class AmcStockController extends FrontendController {
         $data = $stock->getData();
         $output = "";
         if ($isJson && $data) {
-            $output .= "<table>";
+            $output = '<div class="table-grid stock-companies-grid">';
+            $output .= '<table class="items">';
             $output .= "<tr>";
-            $output .= "<td class ='header'>" . AmcWm::t('msgsbase.companies', 'Company Name') . "</td>";
-            $output .= "<td class ='header'>" . AmcWm::t('msgsbase.companies', 'Opening Value') . "</td>";
-            $output .= "<td class ='header'>" . AmcWm::t('msgsbase.companies', 'Closing Value') . "</td>";
-            $output .= "<td class ='header'>" . AmcWm::t('msgsbase.companies', 'Difference %') . "</td>";
+            $output .= "<th>" . AmcWm::t('msgsbase.companies', 'Company Name') . "</th>";
+            $output .= "<th>" . AmcWm::t('msgsbase.companies', 'Opening Value') . "</th>";
+            $output .= "<th>" . AmcWm::t('msgsbase.companies', 'Closing Value') . "</th>";
+            $output .= "<th>" . AmcWm::t('msgsbase.companies', 'Difference %') . "</th>";
             $output .= "</tr>";
             foreach ($data as $key => $value) {
                 if ($key % 2 == 0) {
@@ -75,6 +76,7 @@ class AmcStockController extends FrontendController {
                 $output .= "</tr>";
             }
             $output .= "</table>";
+            $output .= "</div>" . PHP_EOL;
             echo json_encode($output);
         } else {
             $eachCols = ceil(count($data) / $rowLimit);
@@ -88,7 +90,7 @@ class AmcStockController extends FrontendController {
 
                     for ($childIndex = 0; $childIndex < $rowLimit && $itemsCount > 0; $childIndex++) {
                         $value = current($data);
-                        $output .= '<td class="ms_company" style="direction:ltr;white-space: nowrap;" >' . PHP_EOL;
+                        $output .= '<td style="direction:ltr;white-space: nowrap;" >' . PHP_EOL;
                         $output .= CHtml::openTag("span", array("class" => "ms_name"));
                         $output .= " " . $value['company_name'] . " ";
                         $output .= CHtml::closeTag("span");

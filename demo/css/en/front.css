@@ -346,7 +346,7 @@ div#footer {
 
 div#footer .footer_wrapper{    
     margin: 0 auto;
-    
+
 }
 
 div#footer_line{
@@ -3222,117 +3222,201 @@ ul.borsaSwitch li div.borsaArrow {
 /* START STOCK Market */
 
 div#stock-market{
-	padding:5px 10px;
+    padding:5px 10px;
 }
 
 div#stock-market .index-details{
-	text-align:right;
+    text-align:right;
 }
 
 div#stock-market .index-details .index-date{
-	font-family:Tahoma, Arial, Verdana, sans-serif;
-	font-size:11px;
-	color:#000;
-	padding-bottom:10px;
+    font-family:Tahoma, Arial, Verdana, sans-serif;
+    font-size:11px;
+    color:#000;
+    padding-bottom:10px;
 }
 
 div#stock-market .index-details .index-date span{
-	padding-right:5px;
-	font-weight:bold;
+    padding-right:5px;
+    font-weight:bold;
 }
 
 div#stock-market .index-details .index-value-line{
-	font-size:18px;
-	font-weight:bold;
-	border-bottom:1px #D9D9D9 solid;
-	padding:5px 0px;
-	display: inline-block;
-	width: 100%;
+    font-size:18px;
+    font-weight:bold;
+    border-bottom:1px #D9D9D9 solid;
+    padding:5px 0px;
+    display: inline-block;
+    width: 100%;
 }
 
 div#stock-market .index-details .index-price{
-	display:inline;
+    display:inline;
 }
 
 div#stock-market .index-details .price-down{
-	background: transparent url(../../images/arrow_red.png) no-repeat left 6px;
-	padding-left: 25px;
-	padding-right: 0;
+    background: transparent url(../../images/arrow_red.png) no-repeat left 6px;
+    padding-left: 25px;
+    padding-right: 0;
 }
 
 div#stock-market .index-details .price-up{
-	background: transparent url(../../images/arrow_green.png) no-repeat left 6px;
-	padding-left: 25px;
-	padding-right: 0;
+    background: transparent url(../../images/arrow_green.png) no-repeat left 6px;
+    padding-left: 25px;
+    padding-right: 0;
 }
 
 
 div#stock-market .index-details .index-change{
-	display:inline;
-	padding-right:15px;
-	position: absolute!important;
-	margin-top: -2px!important;
+    display:inline;
+    padding-right:15px;
+    position: absolute!important;
+    margin-top: -2px!important;
 }
 
 div#stock-market .index-details .change-label{
-	font-size:14px;
+    font-size:14px;
 }
 
 div#stock-market .index-details .change-value{
-	font-size:11px;
+    font-size:11px;
 }
 
 div#stock-market .index-details .change-percentage{
-	font-size:11px;
+    font-size:11px;
 }
 
 .p-down{
-	color:#E70000;
+    color:#E70000;
 }
 
 .p-up{
-	color:#00A427;
+    color:#00A427;
 }
 
 .index-turnover{
-	font-size:11px;
-	float:right;
-	border-left:1px #D9D9D9 solid;
-	padding-left:15px;
+    font-size:11px;
+    float:right;
+    border-left:1px #D9D9D9 solid;
+    padding-left:15px;
 }
 
 .index-volume{
-	font-size:11px;
-	float:right;
-	padding-right:15px;
+    font-size:11px;
+    float:right;
+    padding-right:15px;
 }
 
 .index-label{
-	font-size:14px;
-	padding-bottom:5px;
+    font-size:14px;
+    padding-bottom:5px;
 }
 
 div#stock-market .title{
-	text-align:center;
-	color:#828282;
-	font-size:11px;
-	padding:5px 0px;
+    text-align:center;
+    color:#828282;
+    font-size:11px;
+    padding:5px 0px;
 }
 
 div#stock-market .index-chart{
-	text-align:center;
+    text-align:center;
 }
 
 div#stock-market #index-companies{
-	border-bottom:0px !important;
+    border-bottom:0px !important;
 }
 
 div#stock-market #stock-markets{
-	text-align:right;
-	margin-bottom:10px;
-	padding-bottom:10px;
-	font-size:11px;
-	border-bottom:1px #D9D9D9 solid;
+    text-align:right;
+    margin-bottom:10px;
+    padding-bottom:10px;
+    font-size:11px;
+    border-bottom:1px #D9D9D9 solid;
 }
 
 /* END STOCK Market */
+
+.table-grid{
+    padding: 5px 0;
+    font-size:14px;
+}
+
+.table-grid table.items{
+    background: white;
+    border-collapse: collapse;    
+    border: 1px #D0E3EF solid;
+}
+
+.table-grid table.items th, .table-grid table.items td{
+    font-size: 0.9em;
+    border: 1px white solid;
+    padding: 0.3em;    
+}
+
+.table-grid table.items th{
+    color: white;
+    background: url("../../images/grid-header.gif") repeat-x scroll left top white;
+    text-align: center;
+}
+.table-grid table.items tr.even
+{
+    background: #F8F8F8;
+}
+
+.table-grid table.items tr.odd
+{
+    background: #E5F1F4;
+}
+
+
+.table-grid div div.even
+{
+    background: #F8F8F8;
+    margin-bottom: 2px;
+}
+
+.table-grid div div.odd
+{
+    background: #E5F1F4;
+    margin-bottom: 2px;
+}
+
+.table-grid table.items tr:hover
+{
+    background: #ECFBD4;
+}
+
+.table-grid .link-column img
+{
+    border: 0;
+    padding:2px;
+    vertical-align: middle;
+}
+.table-grid .empty
+{
+    font-style: italic;
+}
+.table-grid table.items td
+{
+    vertical-align: top;
+}
+.table-grid  td input,
+.table-grid  td textarea,
+.table-grid td select
+{
+    width: 100%;
+    border: 1px solid #ccc;    
+}
+.table-grid  td textarea{
+    height:30px;
+}
+.table-grid .list-footer{
+
+}
+
+/* STOCK Market Companies */
+.stock-companies-grid{
+    
+}
+/* STOCK Market Companies */
