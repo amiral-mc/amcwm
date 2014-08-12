@@ -18,6 +18,7 @@ abstract class RGraphWidget extends CWidget {
     public $allowResizing = false;
     public $allowTooltips = false;
     public $allowZoom = false;
+    public $allowDynamic = false;
     public $drawFunction = 'Draw()';
 
     /**
@@ -119,6 +120,8 @@ abstract class RGraphWidget extends CWidget {
         $this->registerScriptFile('RGraph.common.core.js');
         if ($this->allowAdjusting)
             $this->registerScriptFile('RGraph.common.adjusting.js');
+        if ($this->allowDynamic)
+            $this->registerScriptFile('RGraph.common.dynamic.js');        
         if ($this->allowAnnotate)
             $this->registerScriptFile('RGraph.common.annotate.js');
         if ($this->allowContext)

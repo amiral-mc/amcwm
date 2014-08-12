@@ -130,6 +130,7 @@ return array(
             'tickerLimit' => 4,
             'companiesGridLimit' => 5,
             'graphDaysLimit' => 6,
+            'graphLabelsLimit' => 7,
         ),
     ),
 );

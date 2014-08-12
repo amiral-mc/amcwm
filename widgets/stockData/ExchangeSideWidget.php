@@ -31,6 +31,8 @@ class ExchangeSideWidget extends SideWidget {
             $assetsFolder = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias('amcwm.widgets.stockData.assets'));
             $this->baseScriptUrl = $assetsFolder . "/stockData";
         }
+        $settings = Data::getInstance()->getSettings('exchange');
+        $graphLabelsLimit = $settings->settings['frontend']['options']['graphLabelsLimit'];
         $cs = Yii::app()->getClientScript();
         $cs->registerCoreScript('jquery');
         $jsCode = "
@@ -45,10 +47,46 @@ class ExchangeSideWidget extends SideWidget {
                         'cache': false,
                         'success':function(data){
                             RGraph.reset(document.getElementById('exchangeRgraph'));
+                            var labels = [];
+                            var xsticks = " . $graphLabelsLimit . " - 1;
+                            var interval = Math.ceil(data['labels'].length / xsticks);
+                            var minimum = Math.floor(data['labels'].length / xsticks);
+                            console.log('to=%d , interval=%d, xsticks: %d', xsticks * minimum, interval , xsticks);
+                            if(data['labels'].length < (xsticks + 1)){
+                                labels = data['labels'];
+                                xsticks = labels.length - 1;
+                            }
+                            else{
+                                for(i = 0; i < (xsticks * minimum); i = i + interval){
+                                    console.log('I=%d, label=%s', i, data['labels'][i]);
+                                    labels.push(data['labels'][i]);                            
+                                }
+                                labels.push(data['labels'][data['labels'].length - 1]);
+                            }
+                            console.log(labels);
                             var myChart = new RGraph.Line({
                                 id: 'exchangeRgraph',
                                 data: data['values'],
                                 options: {
+                                    tooltips: {
+                                        self: function (idx) {                                                       
+                                            var label = '';
+                                            if(typeof data['labels'][idx] != 'undefined'){
+                                                label += data['labels'][idx];
+                                            }
+                                            if(typeof data['values'][idx] != 'undefined'){
+                                                label += ' [' + data['values'][idx] + ']';
+                                            }
+                                            return label;
+
+                                            //return labels[idx];
+                //                            if()
+                                            //return idx.toString();
+                                        },
+                                        hotspot: {
+                                            xonly: true
+                                        }
+                                    },
                                     title: '" . AmcWm::t('msgsbase.tradings', 'General Index') . "',
                                     gutter: {
                                         left: 40,
@@ -57,7 +95,8 @@ class ExchangeSideWidget extends SideWidget {
                                     hmargin: 10,
                                     linewidth: 2,
                                     tickmarks: 'endcircle',
-                                    labels: data['labels'],
+                                    numxticks: xsticks,
+                                    labels: labels,
                                 }
                             }).draw();
                             setData(data);
@@ -81,6 +120,7 @@ class ExchangeSideWidget extends SideWidget {
             StockData.getData($('#stock_tradings').val());
             StockData.getCompanies($('#stock_tradings').val());
             function setData(data){
+                console.log(data);
                 if(data['latest'].difference_percentage > 0){
                     $('#stock-difference-percentage').removeClass('p-down');
                     $('#stock-difference-percentage').addClass('p-up');
@@ -119,6 +159,7 @@ class ExchangeSideWidget extends SideWidget {
 
     public function setContentData() {
         echo $this->_companies;
+        
         $exchangeTradings = Exchange::model()->findAll(array('order' => 'exchange_name ASC'));
         $this->contentData = '<div id="stock-market">';
         $this->contentData .= '<div id="stock-markets">';
@@ -149,7 +190,9 @@ class ExchangeSideWidget extends SideWidget {
 //        $this->contentData .= '<div class="title">المؤشر العام</div>';
         $this->contentData .= $this->widget('amcwm.widgets.RGraph.RGraphLine', array(
             'id' => "exchangeRgraph",
-                ), true);
+            'allowDynamic' => true,
+            'allowTooltips' => true,
+        ), true);
         $this->contentData .= '</div>';
         $this->contentData .= '<div id="index-companies" class="index-value-line">';
         $this->contentData .= '</div>';
