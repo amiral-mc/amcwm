@@ -95,11 +95,7 @@ return array(
                         'linkOnTop' => true,
                     ),
                 ),
-                'watermark' => array(
-                    'image' => "resources/images/watermark.png",
-                    'position' => 'LB',
-                    'opacity' => "40",
-                ),
+               
                 'listingRowOrders' => array('infoBar' => 'infoBar', 'header' => 'header', 'details' => 'details'),
                 'topArticles' => 0,
                 'showListingTitle' => false,
@@ -117,12 +113,7 @@ return array(
                     4, 2, 1
                 ),
             ),
-            'default' => array(
-                'watermark' => array(
-                    'image' => "resources/images/watermark.png",
-                    'position' => 'LB',
-                    'opacity' => "40",
-                ),
+            'default' => array(                
                 'listingRowOrders' => array('infoBar' => 'infoBar', 'header' => 'header', 'image' => 'image', 'details' => 'details'),
                 'topArticles' => 0,
                 'showListingTitle' => false,
@@ -133,12 +124,7 @@ return array(
                 'showSource' => true,
             ),
         ),
-        'breaking' => array(
-            'watermark' => array(
-                'image' => "resources/images/watermark.png",
-                'position' => 'LB',
-                'opacity' => "40",
-            ),
+        'breaking' => array(          
             'default' => array(
                 'check' => array(
                     'autoPost2social' => true,
@@ -152,12 +138,7 @@ return array(
             'default' => array(
                 'check' => array(
                     'autoPost2social' => true,
-                ),
-                'watermark' => array(
-                    'image' => "resources/images/watermark.png",
-                    'position' => 'LB',
-                    'opacity' => "40",
-                ),
+                ),               
                 'integer' => array('mainTopics' => 4),
                 'post2social' => false,
                 'topArticles' => 3,

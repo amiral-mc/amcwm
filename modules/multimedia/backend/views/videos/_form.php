@@ -124,6 +124,7 @@
                         . "<div id='row'>"
                         . $form->labelEx($model, 'videoThumb')
                         . $form->fileField($model, 'videoThumb')
+                        . '<input id="Videos_videoThumb_watermark" name="Videos[videoThumb_watermark]" type="checkbox" />' . AmcWm::t("amcBack", 'Use watermark')
                         . $form->error($model, 'videoThumb')
                         . "<br />" . AmcWm::t("msgsbase.core", "Video Thumb notes")
                         . "<br /><br />" . $thumbImage

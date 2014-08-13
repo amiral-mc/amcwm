@@ -40,6 +40,7 @@
         <div class="row">
             <?php echo $form->labelEx($model, 'imageFile'); ?>
             <?php echo $form->fileField($model, 'imageFile'); ?>
+            <input id="Images_imageFile_watermark" name="Images[imageFile_watermark]" type="checkbox" /> <?php echo AmcWm::t("amcBack", 'Use watermark');?>
             <?php echo $form->error($model, 'imageFile'); ?>
         </div>
         <?php

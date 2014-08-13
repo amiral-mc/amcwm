@@ -245,10 +245,10 @@ class AmcVideosController extends AmcGalleriesController {
                                     $thumbFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $mediaPaths['videos']['thumb']['path']) . "/" . $model->video_id . "." . $model->internalVideos->img_ext;
                                     $thumbFile = str_replace("{gallery_id}", $model->gallery_id, $thumbFile);
                                     $image = new Image($model->videoThumb->getTempName());
+                                    $postParams = Yii::app()->request->getParam('Videos');
                                     $watermarkOptions = array();
-                                    $options = $this->module->appModule->options;
-                                    if (isset($options['default']['watermark']['videos']['image'])) {
-                                        $watermarkOptions = $options['default']['watermark']['videos'];
+                                    if (isset($postParams['videoThumb_watermark']) && (isset(AmcWm::app()->params['watermark']['image']) || isset(AmcWm::app()->params['watermark']['text']))) {
+                                        $watermarkOptions = AmcWm::app()->params['watermark'];
                                     }
                                     $image->resize($mediaPaths['videos']['thumb']['info']['width'], $mediaPaths['videos']['thumb']['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $thumbFile, array(), $watermarkOptions);
                                 }

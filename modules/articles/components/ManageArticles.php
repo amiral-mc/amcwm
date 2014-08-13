@@ -583,12 +583,11 @@ class ManageArticles extends ManageContent {
         $deleteImage = isset($articlesParams['imageFile_deleteImage']) && $articlesParams['imageFile_deleteImage'];
         $imageSizesInfo = $this->controller->getModule()->appModule->mediaPaths;
         if ($article->imageFile instanceof CUploadedFile) {
-            $virtualModule = $this->controller->getModule()->appModule->currentVirtual;
-            $options = $this->controller->module->appModule->options;
             $watermarkOptions = array();
-            if (isset($options[$virtualModule]['default']['watermark']['image'])) {
-                $watermarkOptions = $options[$virtualModule]['default']['watermark'];
+            if (isset($articlesParams['imageFile_watermark']) && (isset(AmcWm::app()->params['watermark']['image']) || isset(AmcWm::app()->params['watermark']['text']))) {
+                $watermarkOptions = AmcWm::app()->params['watermark'];
             }
+            //if(isset(AmcWm::app()->params['watermark']['image']) || isset(AmcWm::app()->params['watermark']['text'])){
             $image = new Image($article->imageFile->getTempName());
             foreach ($imageSizesInfo as $imageInfo) {
                 $path = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']);
@@ -671,12 +670,11 @@ class ManageArticles extends ManageContent {
     protected function saveSlider(ActiveRecord $item, $oldSlider) {
         $imageSizesInfo = $this->controller->getModule()->appModule->mediaPaths;
         $imageInfo = $imageSizesInfo['slider'];
+        $articlesParams = Yii::app()->request->getParam('Articles');
         if ($item->sliderFile instanceof CUploadedFile && $item->in_slider) {
-            $virtualModule = $this->controller->getModule()->appModule->currentVirtual;
-            $options = $this->controller->module->appModule->options;
             $watermarkOptions = array();
-            if (isset($options[$virtualModule]['default']['watermark']['image'])) {
-                $watermarkOptions = $options[$virtualModule]['default']['watermark'];
+            if (isset($articlesParams['sliderFile_watermark']) && (isset(AmcWm::app()->params['watermark']['image']) || isset(AmcWm::app()->params['watermark']['text']))) {
+                $watermarkOptions = AmcWm::app()->params['watermark'];
             }
             $imageFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['path']) . "/" . $item->article_id . "." . $item->in_slider;
             $thumbFile = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imageInfo['thumb']['path']) . "/" . $item->article_id . "." . $item->in_slider;
@@ -951,7 +949,6 @@ class ManageArticles extends ManageContent {
         echo CJSON::encode($editors);
     }
 
-    
     /**
      * required for ajax requests
      */
@@ -961,7 +958,6 @@ class ManageArticles extends ManageContent {
         echo CJSON::encode($list);
     }
 
-    
     /**
      * Performs the AJAX validation.
      * @param CModel the model to be validated

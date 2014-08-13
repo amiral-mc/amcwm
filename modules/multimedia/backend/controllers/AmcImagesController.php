@@ -56,11 +56,12 @@ class AmcImagesController extends AmcGalleriesController {
         $this->createGalleryDir($model->gallery);
         $path = str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $this->imageInfo['path']) . DIRECTORY_SEPARATOR;
         $path = str_replace("{gallery_id}", $galleryFolder, $path);
-        $options = $this->module->appModule->options;
+        $postParams = Yii::app()->request->getParam('Images');
+
         $watermarkOptions = array();
-        if (isset($options['default']['watermark']['images']['image'])) {
-            $watermarkOptions = $options['default']['watermark']['images'];
-        }        
+        if (isset($postParams['imageFile_watermark']) && (isset(AmcWm::app()->params['watermark']['image']) || isset(AmcWm::app()->params['watermark']['text']))) {
+            $watermarkOptions = AmcWm::app()->params['watermark'];
+        }
         if ($this->imageInfo['info']['exact'] && $this->imageInfo['info']['allowedUploadRatio'] == 1) {
             $model->imageFile->saveAs($path . $model->image_id . "." . $model->ext);
             chmod($path . $model->image_id . "." . $model->ext, 0777);

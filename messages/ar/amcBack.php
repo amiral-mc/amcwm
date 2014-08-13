@@ -74,5 +74,6 @@ return array(
     'Sub sections' => 'الاقسام الفرعية',
     'Sub Articles' => 'المقالات الفرعيه',
     'Some photo sizes cannot be generated, please select another photo' => 'لا يمكن أن تتولد بعض مقاسات الصورة، الرجاء اختيار صورة أخرى',
+    'Use watermark'=>'استخدام العلامة المائية',
     '' => '',
 );

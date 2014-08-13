@@ -40,6 +40,12 @@ class ImageUploader extends CJuiInputWidget {
      * @var boolean , if true then crop must fit all sizes info  
      */
     protected $cropAllSizes = true;
+    
+      /**
+     *
+     * @var boolean , Display the watermark checkbox options if equal true 
+     */
+    protected $watermark = false;
 
     /**
      * Initializes the widget.
@@ -53,6 +59,10 @@ class ImageUploader extends CJuiInputWidget {
         }
         if(isset(AmcWm::app()->params['cropAllSizes'])){
             $this->cropAllSizes = AmcWm::app()->params['cropAllSizes'];    
+        }
+        
+        if(isset(AmcWm::app()->params['watermark']['image']) || isset(AmcWm::app()->params['watermark']['text'])){
+            $this->watermark = true;    
         }
         parent::init();
     }
@@ -82,16 +92,24 @@ class ImageUploader extends CJuiInputWidget {
         else
             $this->htmlOptions['name'] = $name;
 
+        $watermarkInput = '';
         if ($this->hasModel()) {
             echo CHtml::activeFileField($this->model, $this->attribute, $this->htmlOptions);
             echo '<input id="' . $uploaderId . '_coords" name="' . $this->model->getClassName() . '[' . $this->attribute . '_coords]" type="hidden" />';
             echo '<input id="' . $uploaderId . '_deleteImage" name="' . $this->model->getClassName() . '[' . $this->attribute . '_deleteImage]" type="hidden" />';
+            if($this->watermark){
+                $watermarkInput = '<input id="' . $uploaderId . '_watermark" name="' . $this->model->getClassName() . '[' . $this->attribute . '_watermark]" type="checkbox" />' . AmcWm::t("amcBack", 'Use watermark');
+            }
             //<input type="checkbox" name="deleteImage" id="deleteImage" style="float: right" onclick="deleteRelatedImage(this);" />
         } else {
             echo CHtml::fileField($name, $this->value, $this->htmlOptions);
             echo '<input id="' . $uploaderId . '_coords" name="' . $name . '_coords]" type="hidden" />';
             echo '<input id="' . $uploaderId . '_deleteImage" name="' . $name . '_deleteImage]" type="hidden" />';
+            if($this->watermark){
+                $watermarkInput .='<input id="' . $uploaderId . '_watermark" name="' . $name . '_watermark]" type="checkbox" />'. AmcWm::t("amcBack", 'Use watermark');
+            }
         }
+        echo $watermarkInput;
         $yesIcon = $assets . '/images/yes.png';
         $noIcon = $assets . '/images/no.png';
         $removeIcon = $assets . '/images/remove.png';
@@ -128,7 +146,7 @@ class ImageUploader extends CJuiInputWidget {
 
         $allOptions['thumbnailInfo'] = $this->thumbnailInfo;
         $options = CJavaScript::encode($allOptions);
-        Yii::app()->clientScript->registerScript('cropping', "var cropper{$uploaderId} = $('#{$uploaderId}').uploaderCropper({$options});", CClientScript::POS_READY);
+        Yii::app()->clientScript->registerScript('cropping', "var cropper{$uploaderId} = $('#{$uploaderId}').uploaderCropper({$options});", CClientScript::POS_READY);        
         if ($this->thumbnailSrc) {
             echo '<div id="thumb_prev_' . $uploaderId . '"><img src="' . $this->thumbnailSrc . '"/></div>';
         } else {
@@ -137,6 +155,7 @@ class ImageUploader extends CJuiInputWidget {
         if ($this->deleteIcon) {
             echo '<label style="cursor: pointer;" id="remove_image_' . $uploaderId . '"><img id="remove_image_icon_' . $uploaderId . '" src="' . $removeIcon . '" style="vertical-align: middle;" /><span id="remove_image_label_' . $uploaderId . '">' . $allOptions['removeLabel'] . '</span></label>';
         }
+        
         $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
             'id' => "dialog_{$uploaderId}",
             'options' => array(

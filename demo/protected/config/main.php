@@ -67,6 +67,11 @@ return CMap::mergeArray(
                     require($path . 'config/contacts.php'), require_once($path . 'config/configProperties.php'), array(
                 'pageSize' => 30,
                 'adminForm' => 'adminForm',
+                'watermark' => array(
+                    'image' => "resources/images/watermark.png",
+                    'position' => 'LB',
+                    'opacity' => "40",
+                ),
                 'reservedContent' => array(
                     'cruiseSectionId' => 1,
                     'membershipsJointVentures' => 2,
