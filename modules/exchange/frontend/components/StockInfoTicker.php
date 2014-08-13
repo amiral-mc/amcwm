@@ -31,8 +31,8 @@ class StockInfoTicker extends Dataset {
     protected function setItems() {
         $currentDate = date("Y-m-d");
         $cols = $this->generateColumns();
-//        $wheres = sprintf("exchange_trading_exchange_date = '{$currentDate}' AND exchange_trading_exchange_id = {$this->_exchangeId}");
-        $wheres = sprintf('exchange_trading_exchange_date = "' . date("Y-m-d", strtotime(date("Y-m-d") . "-6 days")) . '" AND exchange_trading_exchange_id = ' . $this->_exchangeId);
+        $wheres = sprintf("exchange_trading_exchange_date = '{$currentDate}' AND exchange_trading_exchange_id = {$this->_exchangeId}");
+//        $wheres = sprintf('exchange_trading_exchange_date = "' . date("Y-m-d", strtotime(date("Y-m-d") . "-7 days")) . '" AND exchange_trading_exchange_id = ' . $this->_exchangeId);
         $wheres .= $this->generateWheres();
         $this->query = AmcWm::app()->db->createCommand();
         $this->query->from("exchange_trading_companies etc");
