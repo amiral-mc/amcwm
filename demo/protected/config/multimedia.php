@@ -31,18 +31,6 @@ return array(
                 'presentationMsgInSite' => false,
                 'imageWidth' => "600px",
             ),
-            'watermark' => array(
-                'videos' => array(
-                    'image' => "resources/images/watermark.png",
-                    'position' => 'LB',
-                    'opacity' => "40",
-                ),
-                'images' => array(
-                    'image' => "resources/images/watermark.png",
-                    'position' => 'LB',
-                    'opacity' => "40",
-                ),
-            ),
         ),
     ),
 );
