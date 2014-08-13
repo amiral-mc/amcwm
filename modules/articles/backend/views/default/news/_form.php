@@ -77,6 +77,7 @@
             <div id="sliderImage" style="display:<?php echo $sliderUploadDisplay ?>;">            
                 <?php echo $form->labelEx($model, 'sliderFile', array("style" => 'display:inline;')); ?>
                 <?php echo $form->fileField($model, 'sliderFile', array("style" => 'display:inline;')); ?>
+                <input id="Articles_sliderFile_watermark" name="Articles[sliderFile_watermark]" type="checkbox" /> <?php echo AmcWm::t("amcBack", 'Use watermark');?>
                 <?php echo $form->error($model, 'sliderFile'); ?>
                 <?php echo $drawSliderImage ?>
             </div>
