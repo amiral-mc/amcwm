@@ -31,8 +31,8 @@ class StockInfoGraph extends Dataset {
     protected function setItems() {
         $currentDate = date("Y-m-d");
         $cols = $this->generateColumns();
-//        $wheres = sprintf("exchange_date = '{$currentDate}' AND exchange_id = {$this->_exchangeId}");
-        $wheres = sprintf('exchange_date = "' . date("Y-m-d", strtotime(date("Y-m-d") . "-6 days")) . '" AND e.exchange_id = ' . $this->_exchangeId);
+        $wheres = sprintf("exchange_date = '{$currentDate}' AND exchange_id = {$this->_exchangeId}");
+//        $wheres = sprintf('exchange_date = "' . date("Y-m-d", strtotime(date("Y-m-d") . "-7 days")) . '" AND e.exchange_id = ' . $this->_exchangeId);
         $wheres .= $this->generateWheres();
         $this->query = AmcWm::app()->db->createCommand();
         $this->query->from("exchange e");
@@ -51,6 +51,18 @@ class StockInfoGraph extends Dataset {
         if (isset($this->items[$index])) {
             return $this->items[$index];
         }
+    }
+
+    public function graphData() {
+        $settings = Data::getInstance()->getSettings('exchange');
+        $graphDaysLimit = $settings->settings['frontend']['options']['graphDaysLimit'];
+        return Yii::app()->db->createCommand()
+                        ->select('exchange_date, closing_value')
+                        ->from('exchange_trading')
+                        ->where('exchange_id =' . $this->_exchangeId)
+                        ->order('exchange_date ASC')
+                        ->limit($graphDaysLimit)
+                        ->queryAll();
     }
 
 }

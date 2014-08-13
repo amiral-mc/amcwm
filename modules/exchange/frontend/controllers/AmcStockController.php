@@ -14,8 +14,8 @@
 class AmcStockController extends FrontendController {
 
     public function actionStockDetails() {
-        $settings = Data::getInstance()->getSettings('exchange');
-        $graphDaysLimit = $settings->settings['frontend']['options']['graphDaysLimit'];
+//        $settings = Data::getInstance()->getSettings('exchange');
+//        $graphDaysLimit = $settings->settings['frontend']['options']['graphDaysLimit'];
         $data = array();
         $dates = array();
         $closingValues = array();
@@ -24,13 +24,14 @@ class AmcStockController extends FrontendController {
         $stock->generate();
         $stockData = $stock->getRow(0);
         
-        $exchangeData = Yii::app()->db->createCommand()
-                ->select('exchange_date, closing_value')
-                ->from('exchange_trading')
-                ->where('exchange_id =' . $exchangeId)
-                ->order('exchange_date ASC')
-                ->limit($graphDaysLimit)
-                ->queryAll();
+        $exchangeData = $stock->graphData();
+//        $exchangeData = Yii::app()->db->createCommand()
+//                ->select('exchange_date, closing_value')
+//                ->from('exchange_trading')
+//                ->where('exchange_id =' . $exchangeId)
+//                ->order('exchange_date ASC')
+//                ->limit($graphDaysLimit)
+//                ->queryAll();
         //@TODO Check why RGRaph does not work with decimals in this scenario, having to use round below
         foreach ($exchangeData as $key => $value) {
             $dates[] = $value['exchange_date'];
@@ -54,73 +55,9 @@ class AmcStockController extends FrontendController {
         $data = $stock->getData();
         $output = "";
         if ($isJson && $data) {
-            $output = '<div class="table-grid stock-companies-grid">';
-            $output .= '<table class="items">';
-            $output .= "<tr>";
-            $output .= "<th>" . AmcWm::t('msgsbase.companies', 'Company Name') . "</th>";
-            $output .= "<th>" . AmcWm::t('msgsbase.companies', 'Opening Value') . "</th>";
-            $output .= "<th>" . AmcWm::t('msgsbase.companies', 'Closing Value') . "</th>";
-            $output .= "<th>" . AmcWm::t('msgsbase.companies', 'Difference %') . "</th>";
-            $output .= "</tr>";
-            foreach ($data as $key => $value) {
-                if ($key % 2 == 0) {
-                    $class = "even";
-                } else {
-                    $class = "odd";
-                }
-                $output .= "<tr class =" . $class . ">";
-                $output .= "<td>" . $value['company_name'] . "</td>";
-                $output .= "<td>" . $value['opening_value'] . "</td>";
-                $output .= "<td>" . $value['closing_value'] . "</td>";
-                $output .= "<td>" . $value['difference_percentage'] . "</td>";
-                $output .= "</tr>";
-            }
-            $output .= "</table>";
-            $output .= "</div>" . PHP_EOL;
-            echo json_encode($output);
+            echo $this->renderPartial('companyGrid', array('data' => $data), true);
         } else {
-            $eachCols = ceil(count($data) / $rowLimit);
-            if ($eachCols) {
-                $output .= CHtml::openTag("ul", array("id" => "stockSlider", "class" => "market_stock"));
-                $itemsCount = count($data);
-                for ($rowIndex = 1; $rowIndex <= $eachCols; $rowIndex++) {
-                    $output .= CHtml::openTag("li", array("style" => "right:0px !important"));
-                    $output .= '<table border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse;direction:rtl">' . PHP_EOL;
-                    $output .= "<tr>" . PHP_EOL;
-
-                    for ($childIndex = 0; $childIndex < $rowLimit && $itemsCount > 0; $childIndex++) {
-                        $value = current($data);
-                        $output .= '<td style="direction:ltr;white-space: nowrap;" >' . PHP_EOL;
-                        $output .= CHtml::openTag("span", array("class" => "ms_name"));
-                        $output .= " " . $value['company_name'] . " ";
-                        $output .= CHtml::closeTag("span");
-
-                        $class = "ms_nochange";
-                        if ($value['difference_percentage'] < 0) {
-                            $class = "ms_dwn";
-                            $classPercentage = "ms_dwn_percentage";
-                        } elseif (intval($value['difference_percentage'])) {
-                            $class = "ms_up";
-                            $classPercentage = "ms_up_percentage";
-                        }
-                        $output .= CHtml::openTag("span", array("class" => $class));
-                        $output .= "%" . $value['difference_percentage'] . " ";
-                        $output .= CHtml::closeTag("span");
-                        $output .= CHtml::openTag("span", array("class" => $classPercentage));
-                        $output .= " " . $value['closing_value'] . " ";
-                        $output .= CHtml::closeTag("span");
-                        $output .= '</td>' . PHP_EOL;
-                        next($data);
-                        $itemsCount--;
-                    }
-
-                    $output .= "</tr>" . PHP_EOL;
-                    $output .= "</table>" . PHP_EOL;
-                    $output .= CHtml::closeTag("li");
-                }
-                $output .= CHtml::closeTag("ul");
-            }
-            echo $output;
+            echo $this->renderPartial('ticker', array('data' => $data, 'rowLimit' => $rowLimit), true);
         }
         Yii::app()->end();
     }

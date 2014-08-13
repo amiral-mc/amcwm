@@ -122,6 +122,10 @@ return array(
                             "perm" => 1,
                             'roles' => array('guest'),
                         ),
+                        "stockDetails" => array(
+                            "perm" => 1,
+                            'roles' => array('guest'),
+                        ),
                     ),
                 ),
             ),

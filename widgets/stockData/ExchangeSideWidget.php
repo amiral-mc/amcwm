@@ -51,19 +51,16 @@ class ExchangeSideWidget extends SideWidget {
                             var xsticks = " . $graphLabelsLimit . " - 1;
                             var interval = Math.ceil(data['labels'].length / xsticks);
                             var minimum = Math.floor(data['labels'].length / xsticks);
-                            console.log('to=%d , interval=%d, xsticks: %d', xsticks * minimum, interval , xsticks);
                             if(data['labels'].length < (xsticks + 1)){
                                 labels = data['labels'];
                                 xsticks = labels.length - 1;
                             }
                             else{
                                 for(i = 0; i < (xsticks * minimum); i = i + interval){
-                                    console.log('I=%d, label=%s', i, data['labels'][i]);
                                     labels.push(data['labels'][i]);                            
                                 }
                                 labels.push(data['labels'][data['labels'].length - 1]);
                             }
-                            console.log(labels);
                             var myChart = new RGraph.Line({
                                 id: 'exchangeRgraph',
                                 data: data['values'],
@@ -78,10 +75,6 @@ class ExchangeSideWidget extends SideWidget {
                                                 label += ' [' + data['values'][idx] + ']';
                                             }
                                             return label;
-
-                                            //return labels[idx];
-                //                            if()
-                                            //return idx.toString();
                                         },
                                         hotspot: {
                                             xonly: true
@@ -120,7 +113,6 @@ class ExchangeSideWidget extends SideWidget {
             StockData.getData($('#stock_tradings').val());
             StockData.getCompanies($('#stock_tradings').val());
             function setData(data){
-                console.log(data);
                 if(data['latest'].difference_percentage > 0){
                     $('#stock-difference-percentage').removeClass('p-down');
                     $('#stock-difference-percentage').addClass('p-up');
