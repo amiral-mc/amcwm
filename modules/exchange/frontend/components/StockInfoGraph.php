@@ -1,15 +1,15 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @author Amiral Management Corporation amc.amiral.com
+ * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.
+ * @license http://amc.amiral.com/license/amcwm.txt
  */
 
 /**
- * Description of StockInfo
- *
- * @author Abdallah
+ * StockInfoGraph
+ * @author Amiral Management Corporation
+ * @version 1.0
  */
 class StockInfoGraph extends Dataset {
 
@@ -31,7 +31,9 @@ class StockInfoGraph extends Dataset {
     protected function setItems() {
         $currentDate = date("Y-m-d");
         $cols = $this->generateColumns();
-        $wheres = sprintf("exchange_date = '{$currentDate}' AND exchange_id = {$this->_exchangeId}");
+        $wheres = "";
+//        $wheres = sprintf("exchange_date = '{$currentDate}' AND e.exchange_id = {$this->_exchangeId}");
+        $wheres = sprintf("e.exchange_id = {$this->_exchangeId} AND e.published = 1");
 //        $wheres = sprintf('exchange_date = "' . date("Y-m-d", strtotime(date("Y-m-d") . "-7 days")) . '" AND e.exchange_id = ' . $this->_exchangeId);
         $wheres .= $this->generateWheres();
         $this->query = AmcWm::app()->db->createCommand();
@@ -39,7 +41,9 @@ class StockInfoGraph extends Dataset {
         $this->query->join = 'inner join exchange_trading et on e.exchange_id = et.exchange_id';
         $this->query->join .= $this->joins . " ";
         $this->query->select("exchange_name, exchange_date, trading_value, shares_of_stock, closing_value, difference_value, difference_percentage $cols");
-        $this->query->where($wheres);
+        if($wheres != null) {
+            $this->query->where($wheres);
+        }
         if ($this->limit !== null) {
             $this->query->limit($this->limit, $this->fromRecord);
         }

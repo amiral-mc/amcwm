@@ -9,7 +9,7 @@ $output .= "<th>" . AmcWm::t('msgsbase.companies', 'Closing Value') . "</th>";
 $output .= "<th>" . AmcWm::t('msgsbase.companies', 'Difference %') . "</th>";
 $output .= "</tr>";
 foreach ($data as $key => $value) {
-    $class = $articleIndex % 2 == 1 ? "odd" : "even";
+    $class = $key % 2 == 1 ? "odd" : "even";
     $output .= "<tr class =" . $class . ">";
     $output .= "<td>" . $value['company_name'] . "</td>";
     $output .= "<td>" . $value['opening_value'] . "</td>";

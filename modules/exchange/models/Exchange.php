@@ -7,6 +7,7 @@
  * @property integer $exchange_id
  * @property string $exchange_name
  * @property string $currency
+ * @property int $published
  *
  * The followings are the available model relations:
  * @property ExchangeCompanies[] $exchangeCompanies
@@ -29,9 +30,10 @@ class Exchange extends ActiveRecord {
         // will receive user inputs.
         return array(
             array('exchange_name, currency', 'length', 'max' => 45),
+            array('published', 'numerical', 'integerOnly' => true),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('exchange_id, exchange_name, currency', 'safe', 'on' => 'search'),
+            array('exchange_id, exchange_name, currency, published', 'safe', 'on' => 'search'),
         );
     }
 
@@ -55,6 +57,7 @@ class Exchange extends ActiveRecord {
             'exchange_id' => AmcWm::t('msgsbase.core', 'Exchange ID'),
             'exchange_name' => AmcWm::t('msgsbase.core', 'Exchange Name'),
             'currency' => AmcWm::t('msgsbase.core', 'Currency'),
+            'published' => AmcWm::t('msgsbase.core', 'Publish'),
         );
     }
 
@@ -78,6 +81,7 @@ class Exchange extends ActiveRecord {
         $criteria->compare('exchange_id', $this->exchange_id);
         $criteria->compare('exchange_name', $this->exchange_name, true);
         $criteria->compare('currency', $this->currency, true);
+        $criteria->compare('published', $this->published);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

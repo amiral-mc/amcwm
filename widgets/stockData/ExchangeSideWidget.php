@@ -57,7 +57,7 @@ class ExchangeSideWidget extends SideWidget {
                             }
                             else{
                                 for(i = 0; i < (xsticks * minimum); i = i + interval){
-                                    labels.push(data['labels'][i]);                            
+                                    labels.push(data['labels'][i]);
                                 }
                                 labels.push(data['labels'][data['labels'].length - 1]);
                             }
@@ -113,32 +113,40 @@ class ExchangeSideWidget extends SideWidget {
             StockData.getData($('#stock_tradings').val());
             StockData.getCompanies($('#stock_tradings').val());
             function setData(data){
-                if(data['latest'].difference_percentage > 0){
-                    $('#stock-difference-percentage').removeClass('p-down');
-                    $('#stock-difference-percentage').addClass('p-up');
+                if(data['latest'] === null){
+                    $('#index-details-message').show();
+                    $('#index-details').hide();
                 }
                 else{
-                    $('#stock-difference-percentage').removeClass('p-up');
-                    $('#stock-difference-percentage').addClass('p-down');
+                    $('#index-details-message').hide();
+                    $('#index-details').show();
+                    if(data['latest'].difference_percentage > 0){
+                        $('#stock-difference-percentage').removeClass('p-down');
+                        $('#stock-difference-percentage').addClass('p-up');
+                    }
+                    else{
+                        $('#stock-difference-percentage').removeClass('p-up');
+                        $('#stock-difference-percentage').addClass('p-down');
+                    }
+                    $('#stock-difference-percentage').html('%' + data['latest'].difference_percentage);
+                    if(data['latest'].difference_value > 0){
+                        $('#stock-difference-value').removeClass('p-down');
+                        $('#stock-closing-value').removeClass('price-down');
+                        $('#stock-difference-value').addClass('p-up');
+                        $('#stock-closing-value').addClass('price-up');
+                    }
+                    else{
+                        $('#stock-difference-value').removeClass('p-up');
+                        $('#stock-closing-value').removeClass('price-up');
+                        $('#stock-difference-value').addClass('p-down');
+                        $('#stock-closing-value').addClass('price-down');
+                    }
+                    $('#stock-difference-value').html(data['latest'].difference_value);
+                    $('#stock-closing-value').html(data['latest'].closing_value);
+                    $('#stock-date').html(data['latest'].exchange_date);
+                    $('#stock-trading-value').html(data['latest'].trading_value);
+                    $('#stock-shares').html(data['latest'].shares_of_stock);
                 }
-                $('#stock-difference-percentage').html('%' + data['latest'].difference_percentage);
-                if(data['latest'].difference_value > 0){
-                    $('#stock-difference-value').removeClass('p-down');
-                    $('#stock-closing-value').removeClass('price-down');
-                    $('#stock-difference-value').addClass('p-up');
-                    $('#stock-closing-value').addClass('price-up');
-                }
-                else{
-                    $('#stock-difference-value').removeClass('p-up');
-                    $('#stock-closing-value').removeClass('price-up');
-                    $('#stock-difference-value').addClass('p-down');
-                    $('#stock-closing-value').addClass('price-down');
-                }
-                $('#stock-difference-value').html(data['latest'].difference_value);
-                $('#stock-closing-value').html(data['latest'].closing_value);
-                $('#stock-date').html(data['latest'].exchange_date);
-                $('#stock-trading-value').html(data['latest'].trading_value);
-                $('#stock-shares').html(data['latest'].shares_of_stock);
             }
             $('#stock_tradings').change(function(e){
                 StockData.getData($(this).val());
@@ -152,13 +160,14 @@ class ExchangeSideWidget extends SideWidget {
     public function setContentData() {
         echo $this->_companies;
         
-        $exchangeTradings = Exchange::model()->findAll(array('order' => 'exchange_name ASC'));
+        $exchangeTradings = Exchange::model()->findAll(array('order' => 'exchange_name ASC', 'condition'=>'published=:published', 'params'=>array(':published'=> 1)));
         $this->contentData = '<div id="stock-market">';
         $this->contentData .= '<div id="stock-markets">';
         $this->contentData .= 'سوق المال:';
         $this->contentData .= CHtml::dropDownList('stock_tradings', 'exchange_id', CHtml::listData($exchangeTradings, 'exchange_id', 'exchange_name'));
         $this->contentData .= '</div>';
-        $this->contentData .= '<div class="index-details">';
+        $this->contentData .= '<div id="index-details-message" style="display:none;"><h6>' . AmcWm::t('msgsbase.companies', "No Data Available") . '</h6></div>';
+        $this->contentData .= '<div class="index-details" id="index-details">';
         $this->contentData .= '<div class="index-date">' . AmcWm::t('msgsbase.companies', 'Last Update') . '<span id = "stock-date"></span></div>';
         $this->contentData .= '<div class="index-value-line">';
         $this->contentData .= '<div class="index-price" id = "stock-closing-value"></div>';

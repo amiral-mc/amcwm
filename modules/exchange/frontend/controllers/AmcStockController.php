@@ -1,21 +1,19 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @author Amiral Management Corporation amc.amiral.com
+ * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.
+ * @license http://amc.amiral.com/license/amcwm.txt
  */
 
 /**
- * Description of StockInfoController
- *
- * @author Abdallah
+ * AmcStockController
+ * @author Amiral Management Corporation
+ * @version 1.0
  */
 class AmcStockController extends FrontendController {
 
     public function actionStockDetails() {
-//        $settings = Data::getInstance()->getSettings('exchange');
-//        $graphDaysLimit = $settings->settings['frontend']['options']['graphDaysLimit'];
         $data = array();
         $dates = array();
         $closingValues = array();
@@ -23,18 +21,11 @@ class AmcStockController extends FrontendController {
         $stock = new StockInfoGraph($exchangeId);
         $stock->generate();
         $stockData = $stock->getRow(0);
-        
+
         $exchangeData = $stock->graphData();
-//        $exchangeData = Yii::app()->db->createCommand()
-//                ->select('exchange_date, closing_value')
-//                ->from('exchange_trading')
-//                ->where('exchange_id =' . $exchangeId)
-//                ->order('exchange_date ASC')
-//                ->limit($graphDaysLimit)
-//                ->queryAll();
         //@TODO Check why RGRaph does not work with decimals in this scenario, having to use round below
         foreach ($exchangeData as $key => $value) {
-            $dates[] = $value['exchange_date'];
+            $dates[] = date("d M", strtotime($value['exchange_date']));
             $closingValues[] = round($value['closing_value']);
         }
         $data['latest'] = $stockData;
@@ -50,11 +41,12 @@ class AmcStockController extends FrontendController {
         $companiesLimit = $settings->settings['frontend']['options']['companiesGridLimit'];
         $isJson = Yii::app()->request->getParam('is_json', 0);
         $exchangeId = (int) Yii::app()->request->getParam('exchange_id');
-        $stock = new StockInfoTicker($exchangeId, $companiesLimit);
+        $stock = new StockInfoTicker($exchangeId);
         $stock->generate();
         $data = $stock->getData();
         $output = "";
         if ($isJson && $data) {
+            $data = array_slice($data, 0, $companiesLimit);
             echo $this->renderPartial('companyGrid', array('data' => $data), true);
         } else {
             echo $this->renderPartial('ticker', array('data' => $data, 'rowLimit' => $rowLimit), true);

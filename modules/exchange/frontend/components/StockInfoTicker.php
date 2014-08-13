@@ -1,15 +1,15 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @author Amiral Management Corporation amc.amiral.com
+ * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.
+ * @license http://amc.amiral.com/license/amcwm.txt
  */
 
 /**
- * Description of StockInfo
- *
- * @author Abdallah
+ * StockInfoTicker
+ * @author Amiral Management Corporation
+ * @version 1.0
  */
 class StockInfoTicker extends Dataset {
 
@@ -31,7 +31,8 @@ class StockInfoTicker extends Dataset {
     protected function setItems() {
         $currentDate = date("Y-m-d");
         $cols = $this->generateColumns();
-        $wheres = sprintf("exchange_trading_exchange_date = '{$currentDate}' AND exchange_trading_exchange_id = {$this->_exchangeId}");
+//        $wheres = sprintf("exchange_trading_exchange_date = '{$currentDate}' AND exchange_trading_exchange_id = {$this->_exchangeId}");
+        $wheres = sprintf("exchange_trading_exchange_id = {$this->_exchangeId} AND e.published = 1");
 //        $wheres = sprintf('exchange_trading_exchange_date = "' . date("Y-m-d", strtotime(date("Y-m-d") . "-7 days")) . '" AND exchange_trading_exchange_id = ' . $this->_exchangeId);
         $wheres .= $this->generateWheres();
         $this->query = AmcWm::app()->db->createCommand();

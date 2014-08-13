@@ -3181,6 +3181,7 @@ ul.borsaSwitch li div.borsaArrow {
 .ms_name{
     font-size: 10.88px;
     font-weight: 600;
+    padding-right: 14px;
 }
 
 .ms_point{
@@ -3190,29 +3191,34 @@ ul.borsaSwitch li div.borsaArrow {
 .ms_up{
     color: #129D14;
     background: url('../../images/front/exch_up.png') no-repeat center left;
-    padding-left:19px;
+    padding-left:15px;
 }
 
-.ms_up_percentage{
+.ms_up-without{
     color: #129D14;
-    padding-right:19px;
+    padding-right:5px;
 }
 
 .ms_dwn{
     color: #C90100;
     background: url('../../images/front/exch_down.png') no-repeat center left;
-    padding-left:19px;
+    padding-left:15px;
 }
 
-.ms_dwn_percentage{
+.ms_dwn-without{
     color: #C90100;
-    padding-right:19px;
+    padding-right:5px;
 }
 
 .ms_nochange{
     color: #6B6B6B;
     background: url('../../images/front/exch_0.png') no-repeat center left;
-    padding-left:19px;
+    padding-left:15px;
+}
+
+.ms_nochange-without{
+color: #6B6B6B;
+padding-right: 5px;
 }
 
 /* End of Exchange CSS */
@@ -3420,3 +3426,5 @@ div#stock-market #stock-markets{
     
 }
 /* STOCK Market Companies */
+
+

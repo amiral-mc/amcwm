@@ -9,6 +9,8 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
         array('label' => AmcWm::t("amcTools", 'Preview'), 'js' => array('formId' => Yii::app()->params["adminForm"], 'params' => array('eid' => $model->exchange_id)), 'id' => 'preview_record', 'image_id' => 'view'),
         array('label' => AmcWm::t("msgsbase.companies", 'Exchange Companies'), 'js' => array('formId' => Yii::app()->params["adminForm"], 'action' => 'companies', 'refId' => 'eid'), 'id' => 'manage_companies', 'image_id' => 'listing'),
         array('label' => AmcWm::t("msgsbase.tradings", 'Exchange Tradings'), 'js' => array('formId' => Yii::app()->params["adminForm"], 'action' => 'trading', 'refId' => 'eid'), 'id' => 'manage_tradings', 'image_id' => 'listing'),
+        array('label' => AmcWm::t("amcTools", 'Publish'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'publish_ad', 'image_id' => 'publish'),
+        array('label' => AmcWm::t("amcTools", 'Unpublish'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'unpublish_ad', 'image_id' => 'unpublish'),
         array('label' => AmcWm::t("amcTools", 'Search'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'records_search', 'image_id' => 'search'),
         array('label' => AmcWm::t("amcTools", 'Delete'), 'js' => array('formId' => Yii::app()->params["adminForm"]), 'id' => 'delete_record', 'image_id' => 'delete'),
         array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array('/backend/default/index'), 'id' => 'admin_list', 'image_id' => 'back'),
@@ -54,6 +56,13 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
             ),
             array(
                 'name' => 'currency',
+                'htmlOptions' => array('width' => '50', 'align' => 'center'),
+            ),
+            array(
+                'name' => 'published',
+                'header' => AmcWm::t("msgsbase.core", "Published"),
+                'value' => '($data->published) ? CHtml::image(Yii::app()->baseUrl . "/images/yes.png", "", array("border" => 0)) : CHtml::image(Yii::app()->baseUrl . "/images/no.png", "", array("border" => 0))',
+                'type' => 'html',
                 'htmlOptions' => array('width' => '50', 'align' => 'center'),
             ),
         ),

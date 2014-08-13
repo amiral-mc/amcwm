@@ -3,6 +3,7 @@
   `exchange_id` INT NOT NULL AUTO_INCREMENT,
   `exchange_name` VARCHAR(45) NULL,
   `currency` VARCHAR(45) NULL,
+  `published` TINYINT(1) NOT NULL,
   PRIMARY KEY (`exchange_id`))
 ENGINE = InnoDB;
 

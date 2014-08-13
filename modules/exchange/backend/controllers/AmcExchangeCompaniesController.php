@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * @author Amiral Management Corporation amc.amiral.com
+ * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.
+ * @license http://amc.amiral.com/license/amcwm.txt
+ */
+
+/**
+ * AmcExchangeCompaniesController
+ * @author Amiral Management Corporation
+ * @version 1.0
+ */
 class AmcExchangeCompaniesController extends BackendController {
 
     /**
@@ -64,13 +75,6 @@ class AmcExchangeCompaniesController extends BackendController {
             'contentModel' => $contentModel,
             'eid' => $eid,
         ));
-
-//        $model = new ExchangeCompanies;
-//        $model->exchange_id = Yii::app()->request->getParam('eid');
-//        $this->save($model);
-//        $this->render('create', array(
-//            'model' => $model,
-//        ));
     }
 
     /**
@@ -101,14 +105,9 @@ class AmcExchangeCompaniesController extends BackendController {
         $model->unsetTranslationsAttributes();
         $model->addTranslationChild(new ExchangeCompaniesTranslation('search'), self::getContentLanguage());
         $contentModel = $model->getTranslated(self::getContentLanguage());
-//        if (isset($_GET['ExchangeCompanies'])) {
-//            $model->attributes = $_GET['ExchangeCompanies'];
-//        } 
-//        else {
-        if(isset($_GET['eid'])) {
+        if (isset($_GET['eid'])) {
             $contentModel->parentContent()->exchange_id = (int) $_GET['eid'];
         }
-//        }
         if ($contentModel) {
             if (isset($_GET['ExchangeCompaniesTranslation'])) {
                 $contentModel->attributes = $_GET['ExchangeCompaniesTranslation'];

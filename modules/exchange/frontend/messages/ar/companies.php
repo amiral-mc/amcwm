@@ -14,4 +14,5 @@ return array(
     'New Company' => 'إضافة شركة جديدة',
     'Select Company' => 'أختر الشركة',
     'Company No.' => 'شركة رقم',
+    'No Data Available' => 'لاتوجد بيانات'
 );

@@ -34,6 +34,7 @@
                     'style' => 'direction:ltr',
                     'readonly' => 'readonly',
                     'value' => ($model->exchange_date) ? date("Y-m-d", strtotime($model->exchange_date)) : date("Y-m-d"),
+                    'style' => 'width:150px',
                 )
             ));
             ?>
@@ -41,31 +42,31 @@
         </div>
         <div class="row">                       
             <?php echo $form->labelEx($model, 'trading_value'); ?>
-            <?php echo $form->textField($model, 'trading_value'); ?>
+            <?php echo $form->textField($model, 'trading_value', array('style' => 'width:150px')); ?>
             <?php echo $form->error($model, 'trading_value'); ?>
         </div>
         <div class="row">
             <?php echo $form->labelEx($model, 'shares_of_stock'); ?>
-            <?php echo $form->textField($model, 'shares_of_stock'); ?>
+            <?php echo $form->textField($model, 'shares_of_stock', array('style' => 'width:150px')); ?>
             <?php echo $form->error($model, 'shares_of_stock'); ?>
         </div>
         <div class="row">
             <?php echo $form->labelEx($model, 'closing_value'); ?>
-            <?php echo $form->textField($model, 'closing_value'); ?>
+            <?php echo $form->textField($model, 'closing_value', array('style' => 'width:150px')); ?>
             <?php echo $form->error($model, 'closing_value'); ?>
         </div>
         <div class="row">
             <?php echo $form->labelEx($model, 'difference_value'); ?>
-            <?php echo $form->textField($model, 'difference_value'); ?>
+            <?php echo $form->textField($model, 'difference_value', array('style' => 'width:150px')); ?>
             <?php echo $form->error($model, 'difference_value'); ?>
         </div>
         <div class="row">
             <?php echo $form->labelEx($model, 'difference_percentage'); ?>
-            <?php echo $form->textField($model, 'difference_percentage'); ?>
+            <?php echo $form->textField($model, 'difference_percentage', array('style' => 'width:150px')); ?>
             <?php echo $form->error($model, 'difference_percentage'); ?>
         </div>
     </fieldset>
-    <?php // if (isset($companies) && $companies) { ?>
+    <?php if ($model->tradingCompanies) { ?>
         <fieldset>
             <legend><?php echo AmcWm::t("msgsbase.companies", "Companies"); ?></legend>
             <div>
@@ -99,7 +100,7 @@
                 </div>
             </div>
         </fieldset>
-    <?php // } ?>
+    <?php } ?>
 
     <?php $this->endWidget(); ?>
 

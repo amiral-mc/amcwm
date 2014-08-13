@@ -42,13 +42,26 @@ return array(
                             'roles' => array('editor'),
                         ),
                         'companies' => array(
-                            "perm" => 16,
+                            "perm" => 8,
                             'roles' => array('editor'),
                             'forwardTo' => array(
                                 'controller' => 'companies',
                                 'action' => 'index',
                             ),
                         ),
+                        'trading' => array(
+                            "perm" => 8,
+                            'roles' => array('editor'),
+                            'forwardTo' => array(
+                                'controller' => 'trading',
+                                'action' => 'index',
+                            ),
+                        ),
+                        "publish" => array(
+                            "perm" => 8,
+                            'roles' => array('editor'),
+                        ),
+                        
                     ),
                 ),
                 'companies' => array(
@@ -73,6 +86,18 @@ return array(
                             'roles' => array('editor'),
                         ),
                         "delete" => array(
+                            "perm" => 8,
+                            'roles' => array('editor'),
+                        ),
+                        "companies" => array(
+                            "perm" => 8,
+                            'roles' => array('editor'),
+                        ),
+                        "translate" => array(
+                            "perm" => 8,
+                            'roles' => array('editor'),
+                        ),
+                        "publish" => array(
                             "perm" => 8,
                             'roles' => array('editor'),
                         ),
@@ -103,6 +128,10 @@ return array(
                             "perm" => 8,
                             'roles' => array('editor'),
                         ),
+                        "publish" => array(
+                            "perm" => 8,
+                            'roles' => array('editor'),
+                        ),
                     ),
                 ),
             ),
@@ -117,6 +146,9 @@ return array(
         'install' => array(
             'controllers' => array(
                 'default' => array(
+//                    'options' => array(
+//                        'hidden' => 0,
+//                    ),
                     "actions" => array(
                         "stock" => array(
                             "perm" => 1,
@@ -133,7 +165,7 @@ return array(
         'options' => array(
             'tickerLimit' => 4,
             'companiesGridLimit' => 5,
-            'graphDaysLimit' => 6,
+            'graphDaysLimit' => 5,
             'graphLabelsLimit' => 7,
         ),
     ),

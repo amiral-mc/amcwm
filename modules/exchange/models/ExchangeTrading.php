@@ -70,7 +70,7 @@ class ExchangeTrading extends ActiveRecord
             'shares_of_stock' => AmcWm::t('msgsbase.tradings', 'Exchange Shares of Stock'),
             'closing_value' => AmcWm::t('msgsbase.tradings', 'Exchange Closing Value'),
             'difference_value' => AmcWm::t('msgsbase.tradings', 'Exchange Difference in Value'),
-            'difference_percentage' => AmcWm::t('msgsbase.tradings', 'Exchange Percentage Difference'),
+            'difference_percentage' => AmcWm::t('msgsbase.tradings', 'Exchange Percentage Difference %'),
         );
     }
 

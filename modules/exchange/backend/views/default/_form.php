@@ -26,6 +26,12 @@
             <?php echo $form->labelEx($model, AmcWm::t('msgsbase.core', "Modifying the exchange's currency will over write all exchange's related companies' currencies")); ?>
         </div>
         
+        <div class="row">
+            <?php echo $form->labelEx($model, 'published', array("style" => 'display:inline;')); ?>
+            <?php echo $form->checkBox($model, 'published'); ?>
+            <?php echo $form->error($model, 'published'); ?>
+        </div>
+        
     </fieldset>
 
 

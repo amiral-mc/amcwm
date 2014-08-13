@@ -50,7 +50,7 @@ class StockDataTicker extends CWidget {
     }
 
     public function run() {
-        $exchangeTradings = Exchange::model()->findAll(array('order' => 'exchange_name ASC'));
+        $exchangeTradings = Exchange::model()->findAll(array('order' => 'exchange_name ASC', 'condition' => 'published=:published', 'params' => array(':published' => 1)));
         $output = '<div id="exchange">
                         <div id="marketStocksSelection">
                             <ul id="borsaSwitchTop" class="borsaSwitch">

@@ -7,7 +7,7 @@
  */
 
 /**
- * AdsApplicationModule
+ * ExchangeApplicationModule
  * @package AmcWm.modules
  * @author Amiral Management Corporation
  * @version 1.0

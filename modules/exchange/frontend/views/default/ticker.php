@@ -17,13 +17,16 @@ if ($eachCols) {
             $output .= " " . $value['company_name'] . " ";
             $output .= CHtml::closeTag("span");
 
-            $class = "ms_nochange";
+//            print_r($value); exit;
             if ($value['difference_percentage'] < 0) {
                 $class = "ms_dwn";
-                $classPercentage = "ms_dwn_percentage";
-            } elseif (intval($value['difference_percentage'])) {
+                $classPercentage = "ms_dwn-without";
+            } elseif ($value['difference_percentage'] > 0) {
                 $class = "ms_up";
-                $classPercentage = "ms_up_percentage";
+                $classPercentage = "ms_up-without";
+            } else {
+                $class = "ms_nochange";
+                $classPercentage = "ms_nochange-without";
             }
             $output .= CHtml::openTag("span", array("class" => $class));
             $output .= "%" . $value['difference_percentage'] . " ";
