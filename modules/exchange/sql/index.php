@@ -71,4 +71,7 @@ CREATE TABLE IF NOT EXISTS `exchange_companies_translation` (
     REFERENCES `exchange_companies` (`exchange_companies_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB';
+ENGINE = InnoDB
+
+INSERT INTO `modules` (`module_id`, `parent_module`, `module`, `virtual`, `enabled`, `system`, `workflow_enabled`) VALUES
+(84, 1, "exchange", 0, 1, 0, 0);';
