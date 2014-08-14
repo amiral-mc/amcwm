@@ -3326,6 +3326,7 @@ div#stock-market .title{
 }
 
 div#stock-market .index-chart{
+    font-size: 1px;
     text-align:center;
 }
 

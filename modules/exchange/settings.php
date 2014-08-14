@@ -167,6 +167,7 @@ return array(
             'companiesGridLimit' => 5,
             'graphDaysLimit' => 5,
             'graphLabelsLimit' => 7,
+            'graphColor' => "purple",
         ),
     ),
 );
