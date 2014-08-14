@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `exchange_companies` (
     REFERENCES `exchange` (`exchange_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
+ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `exchange_trading` (
   `exchange_id` INT NOT NULL,
@@ -73,5 +73,5 @@ CREATE TABLE IF NOT EXISTS `exchange_companies_translation` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 
-INSERT INTO `modules` (`module_id`, `parent_module`, `module`, `virtual`, `enabled`, `system`, `workflow_enabled`) VALUES
-(84, 1, "exchange", 0, 1, 0, 0);';
+INSERT INTO `modules` (`parent_module`, `module`, `virtual`, `enabled`, `system`, `workflow_enabled`) VALUES
+(1, "exchange", 0, 1, 0, 0);';
