@@ -32,7 +32,7 @@ class StockInfoTicker extends Dataset {
         $currentDate = date("Y-m-d");
         $cols = $this->generateColumns();
 //        $wheres = sprintf("exchange_trading_exchange_date = '{$currentDate}' AND exchange_trading_exchange_id = {$this->_exchangeId}");
-        $wheres = sprintf("exchange_trading_exchange_id = {$this->_exchangeId} AND e.published = 1");
+        $wheres = sprintf("exchange_trading_exchange_id = {$this->_exchangeId} AND e.published = 1 AND ect.content_lang = " . Yii::app()->db->quoteValue(Yii::app()->getLanguage()));
 //        $wheres = sprintf('exchange_trading_exchange_date = "' . date("Y-m-d", strtotime(date("Y-m-d") . "-7 days")) . '" AND exchange_trading_exchange_id = ' . $this->_exchangeId);
         $wheres .= $this->generateWheres();
         $this->query = AmcWm::app()->db->createCommand();

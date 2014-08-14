@@ -84,7 +84,7 @@ class ExchangeSideWidget extends SideWidget {
                                             xonly: true
                                         }
                                     },
-                                    title: '" . AmcWm::t('msgsbase.tradings', 'General Index') . "',
+                                    title: '" . AmcWm::t('amcwm.modules.exchange.frontend.messages.tradings', 'General Index') . "',
                                     gutter: {
                                         left: 40,
                                         right: 30,
@@ -171,27 +171,27 @@ class ExchangeSideWidget extends SideWidget {
         $exchangeTradings = Exchange::model()->findAll(array('order' => 'exchange_name ASC', 'condition'=>'published=:published', 'params'=>array(':published'=> 1)));
         $this->contentData = '<div id="stock-market">';
         $this->contentData .= '<div id="stock-markets">';
-        $this->contentData .= 'سوق المال:';
+        $this->contentData .= AmcWm::t('amcwm.modules.exchange.frontend.messages.companies', 'Capital Market');
         $this->contentData .= CHtml::dropDownList('stock_tradings', 'exchange_id', CHtml::listData($exchangeTradings, 'exchange_id', 'exchange_name'));
         $this->contentData .= '</div>';
-        $this->contentData .= '<div id="index-details-message" style="display:none;"><h6>' . AmcWm::t('msgsbase.companies', "No Data Available") . '</h6></div>';
+        $this->contentData .= '<div id="index-details-message" style="display:none;"><h6>' . AmcWm::t('amcwm.modules.exchange.frontend.messages.companies', "No Data Available") . '</h6></div>';
         $this->contentData .= '<div class="index-details" id="index-details">';
-        $this->contentData .= '<div class="index-date">' . AmcWm::t('msgsbase.companies', 'Last Update') . '<span id = "stock-date"></span></div>';
+        $this->contentData .= '<div class="index-date">' . AmcWm::t('amcwm.modules.exchange.frontend.messages.companies', 'Last Update') . '<span id = "stock-date"></span></div>';
         $this->contentData .= '<div class="index-value-line">';
         $this->contentData .= '<div class="index-price" id = "stock-closing-value"></div>';
         $this->contentData .= '<div class="index-change">';
-        $this->contentData .= '<span class="change-label">' . AmcWm::t('msgsbase.companies', 'Difference') . '</span>';
+        $this->contentData .= '<span class="change-label">' . AmcWm::t('amcwm.modules.exchange.frontend.messages.companies', 'Difference') . '</span>';
         $this->contentData .= '<span class="change-value" id = "stock-difference-value"></span>';
         $this->contentData .= '<span class="change-percentage" id = "stock-difference-percentage"></span>';
         $this->contentData .= '</div>';
         $this->contentData .= '</div>';
         $this->contentData .= '<div class="index-value-line">';
         $this->contentData .= '<div class="index-turnover">';
-        $this->contentData .= '<div class="index-label">' . AmcWm::t('msgsbase.tradings', 'Exchange Trading Value') . '</div>';
+        $this->contentData .= '<div class="index-label">' . AmcWm::t('amcwm.modules.exchange.frontend.messages.tradings', 'Exchange Trading Value') . '</div>';
         $this->contentData .= '<div id = "stock-trading-value"></div>';
         $this->contentData .= '</div>';
         $this->contentData .= '<div class="index-volume">';
-        $this->contentData .= '<div class="index-label">' . AmcWm::t('msgsbase.tradings', 'Exchange Shares of Stock') . '</div>';
+        $this->contentData .= '<div class="index-label">' . AmcWm::t('amcwm.modules.exchange.frontend.messages.tradings', 'Exchange Shares of Stock') . '</div>';
         $this->contentData .= '<div id = "stock-shares"></div>';
         $this->contentData .= '</div>';
         $this->contentData .= '</div>';

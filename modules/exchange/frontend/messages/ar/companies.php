@@ -12,6 +12,7 @@ return array(
     'Difference' => 'التغيير',
     'Last Update' => 'اخر تحديث',
     'New Company' => 'إضافة شركة جديدة',
+    'Capital Market' => 'سوق المال',
     'Select Company' => 'أختر الشركة',
     'Company No.' => 'شركة رقم',
     'No Data Available' => 'لاتوجد بيانات'
