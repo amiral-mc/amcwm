@@ -31,7 +31,6 @@ CREATE TABLE IF NOT EXISTS `exchange` (
   `exchange_name` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `currency` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `published` tinyint(1) NOT NULL DEFAULT '1',
-  `test` int(1) NOT NULL,
   PRIMARY KEY (`exchange_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
@@ -39,13 +38,13 @@ CREATE TABLE IF NOT EXISTS `exchange` (
 -- Dumping data for table `exchange`
 --
 
-INSERT INTO `exchange` (`exchange_id`, `exchange_name`, `currency`, `published`, `test`) VALUES
-(1, 'البورصة المصرية (EGX30)', 'EGP', 1, 0),
-(2, 'سوق الكويت للأوراق المالية', 'KWD', 1, 0),
-(4, 'سوق دبي المالي', 'AED', 1, 0),
-(5, 'السوق المالية السعودية', 'SAR', 1, 0),
-(6, 'سوق أبوظبي للأوراق المالية', 'AED', 1, 0),
-(7, 'بورصة البحرين', 'BHD', 1, 0);
+INSERT INTO `exchange` (`exchange_id`, `exchange_name`, `currency`, `published`) VALUES
+(1, 'البورصة المصرية (EGX30)', 'EGP', 1),
+(2, 'سوق الكويت للأوراق المالية', 'KWD', 1),
+(4, 'سوق دبي المالي', 'AED', 1),
+(5, 'السوق المالية السعودية', 'SAR', 1),
+(6, 'سوق أبوظبي للأوراق المالية', 'AED', 1),
+(7, 'بورصة البحرين', 'BHD', 1);
 
 -- --------------------------------------------------------
 
