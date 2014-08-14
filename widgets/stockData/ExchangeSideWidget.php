@@ -33,6 +33,7 @@ class ExchangeSideWidget extends SideWidget {
         }
         $settings = Data::getInstance()->getSettings('exchange');
         $graphLabelsLimit = $settings->settings['frontend']['options']['graphLabelsLimit'];
+        $graphColor = $settings->settings['frontend']['options']['graphColor'];
         $cs = Yii::app()->getClientScript();
         $cs->registerCoreScript('jquery');
         $jsCode = "
@@ -65,6 +66,9 @@ class ExchangeSideWidget extends SideWidget {
                                 id: 'exchangeRgraph',
                                 data: data['values'],
                                 options: {
+                                    'title.size' : 12,
+                                    'text.font': ['Arial Tahoma Verdana Sans-serif'],
+                                    'text.size': 9,
                                     tooltips: {
                                         self: function (idx) {                                                       
                                             var label = '';
@@ -90,8 +94,12 @@ class ExchangeSideWidget extends SideWidget {
                                     tickmarks: 'endcircle',
                                     numxticks: xsticks,
                                     labels: labels,
+                                    colors : ['{$graphColor}'],
                                 }
-                            }).draw();
+                            })
+                            .set('title.yaxis.size', 2)
+                            .draw();
+                            //myChart.set('title.yaxis.size', 2);
                             setData(data);
                             $('#stockSlider').bxSlider({'autoDelay':0,'captions':false,'controls':false,'mode':'fade','auto':true,'autoHover':true,'autoControls':false});
                         }
