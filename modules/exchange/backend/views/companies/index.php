@@ -54,8 +54,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
             ),
             array(
                 'header' => AmcWm::t('msgsbase.companies', 'Company Name'),
-                'value' => '$data->getCurrent()->company_name',
-            ),
+                'value' => 'isset($data->getCurrent()->company_name) ? $data->getCurrent()->company_name : AmcWm::t("amcBack", "Not Translated")',            ),
             'code',
             'currency',
             array(
