@@ -10,12 +10,11 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-DROP TABLE exchange_trading_companies;
-DROP TABLE exchange_companies_translation;
-DROP TABLE exchange_companies;
-
-DROP TABLE exchange_trading;
-DROP TABLE exchange;
+DROP TABLE IF EXISTS exchange_trading_companies;
+DROP TABLE IF EXISTS exchange_companies_translation;
+DROP TABLE IF EXISTS exchange_companies;
+DROP TABLE IF EXISTS exchange_trading;
+DROP TABLE IF EXISTS exchange;
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
