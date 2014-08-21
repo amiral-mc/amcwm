@@ -16,8 +16,6 @@ if ($eachCols) {
             $output .= CHtml::openTag("span", array("class" => "ms_name"));
             $output .= " " . $value['company_name'] . " ";
             $output .= CHtml::closeTag("span");
-
-//            print_r($value); exit;
             if ($value['difference_percentage'] < 0) {
                 $class = "ms_dwn";
                 $classPercentage = "ms_dwn-without";
@@ -32,7 +30,7 @@ if ($eachCols) {
             $output .= "%" . $value['difference_percentage'] . " ";
             $output .= CHtml::closeTag("span");
             $output .= CHtml::openTag("span", array("class" => $classPercentage));
-            $output .= " " . $value['closing_value'] . " ";
+            $output .= " " . number_format($value['closing_value'], 2, $floatingSeparator, $thousandSeparator) . " ";
             $output .= CHtml::closeTag("span");
             $output .= '</td>' . PHP_EOL;
             next($data);

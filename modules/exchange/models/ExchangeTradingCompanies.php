@@ -115,4 +115,12 @@ class ExchangeTradingCompanies extends ActiveRecord
     {
         return parent::model($className);
     }
+    
+    protected function beforeValidate() {
+        $settings = Settings::getModuleSettings('exchange');
+        $thousandSeparator = $settings['frontend']['options']['thousandSeparator'];
+        $floatingSeparator = $settings['frontend']['options']['floatingSeparator'];
+        $this->attributes = $this->correctNumbers($this->attributes, $thousandSeparator, $floatingSeparator);
+        return parent::beforeValidate();
+    }
 }

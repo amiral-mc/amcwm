@@ -44,6 +44,7 @@ class StockInfoGraph extends Dataset {
         if($wheres != null) {
             $this->query->where($wheres);
         }
+        $this->query->order('exchange_date DESC');
         if ($this->limit !== null) {
             $this->query->limit($this->limit, $this->fromRecord);
         }
@@ -64,7 +65,7 @@ class StockInfoGraph extends Dataset {
                         ->select('exchange_date, closing_value')
                         ->from('exchange_trading')
                         ->where('exchange_id =' . $this->_exchangeId)
-                        ->order('exchange_date ASC')
+                        ->order('exchange_date DESC')
                         ->limit($graphDaysLimit)
                         ->queryAll();
     }

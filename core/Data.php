@@ -101,15 +101,15 @@ class Data {
      * @param string $id
      * @return array
      */
-    public function getSectionSubIds($id, $sections = array() , &$subs = array()) {
+    public function getSectionSubIds($id, $sections = array(), &$subs = array()) {
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
-        if(!$sections && isset($this->_sections[$siteLanguage][$id]['childs']) && $this->_sections[$siteLanguage][$id]['childs']){
+        if (!$sections && isset($this->_sections[$siteLanguage][$id]['childs']) && $this->_sections[$siteLanguage][$id]['childs']) {
             $sections = $this->_sections[$siteLanguage][$id]['childs'];
         }
-        if($sections){
-            foreach ($sections as $section){
+        if ($sections) {
+            foreach ($sections as $section) {
                 $subs[] = $section['data']['section_id'];
-                if($section['childs']){
+                if ($section['childs']) {
                     $this->getSectionSubIds($section['data']['section_id'], $section['childs'], $subs);
                 }
             }
@@ -241,7 +241,7 @@ class Data {
     public function sectionsTopArticles($table = "articles", $module = "articles", $sectionsLimit = 10, $articlesLimit = 4, $parentSectionId = null, $mediapath = null) {
         $data = new ArticlesListData(array($table));
         $data->addColumn('tags');
-        if(isset($mediapath)){
+        if (isset($mediapath)) {
             $path = Yii::app()->baseUrl . "/" . ArticlesListData::getSettings()->mediaPaths[$mediapath]['path'] . "/";
             $data->setMediaPath($path);
         }
@@ -258,7 +258,7 @@ class Data {
         $sections->setParentSectionId($parentSectionId);
         return $sections->generate();
     }
-    
+
     /**
      *
      * Get sections top articles list for each section in the system
@@ -478,11 +478,10 @@ class Data {
             $controller = AmcWm::app()->getController();
             if ($pageRoute) {
                 $currentRoute[0] = $pageRoute;
+            } else {
+                $currentRoute[0] = $controller->getRoute();
             }
-            else{
-                $currentRoute[0] = $controller->getRoute();    
-            }
-            
+
             if (isset($currentRoute)) {
                 $menuId = Menus::getMenuIdFromRoute($currentRoute);
                 if (isset($menuId['id']) && $menuId['id'] != 0) {
@@ -490,7 +489,7 @@ class Data {
                 }
             }
         }
-        
+
         if (isset($menu['pageImg'])) {
             $defaultImg = $menu['pageImg'];
         } else {
@@ -531,6 +530,17 @@ class Data {
             }
             return $label;
         }
+    }
+
+    /**
+     * Function to correct thousands & floating separators according to parameters.
+     * @param type $number  Number to perform the replacement
+     * @param type $thousandSeparator  Thousand separator character
+     * @param type $floatingSeparator  Floating separator character
+     * @return type integer
+     */
+    public function correctNumber($number, $thousandSeparator, $floatingSeparator = null) {
+        return str_replace(array($thousandSeparator, $floatingSeparator), array("", "."), $number);
     }
 
 }

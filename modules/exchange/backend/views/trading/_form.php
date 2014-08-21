@@ -1,5 +1,6 @@
 <div class="form">
     <?php
+    $companiesListUrl = Html::createUrl('/backend/exchange/trading/ajax', array('do' => 'companiesList'));
     $companiesCount = count($model->tradingCompanies);
     $form = $this->beginWidget('CActiveForm', array(
         'id' => $formId,
@@ -79,11 +80,43 @@
                         <th><?php echo AmcWm::t("msgsbase.companies", "Difference %"); ?></th>
 
                     </tr>
-                 
+
                     <?php foreach ($model->tradingCompanies as $key => $tradingsModel): ?>
                         <tr id="companyRow<?php echo $key ?>">
                             <td valign="top"><?php echo $form->labelEx($model, "($key)"); ?> </td>
-                            <td valign="top"><?php echo $form->dropDownList($tradingsModel, "[$key]exchange_companies_exchange_companies_id", ExchangeCompanies::getCompanies($eid), array('style' => 'width:100px', 'prompt' => AmcWm::t("msgsbase.companies", 'Select Company'))); ?></td>
+                            <?php
+                            $companyName = ($tradingsModel->exchangeCompanies->getCurrent()) ? $tradingsModel->exchangeCompanies->getCurrent()->company_name : " ";
+                            $initMovementSelection = ($companyName) ? array('id' => $tradingsModel->exchange_companies_exchange_companies_id, 'text' => $companyName) : array();
+                            $this->widget('amcwm.core.widgets.select2.ESelect2', array(
+                                'model' => $tradingsModel,
+                                'attribute' => "[$key]exchange_companies_exchange_companies_id",
+                                'addingNoMatch' => false,
+                                'initSelection' => $initMovementSelection,
+                                'options' => array(
+                                    "dropdownCssClass" => "bigdrop",
+                                    'ajax' => array(
+                                        'dataType' => "json",
+                                        "quietMillis" => 100,
+                                        'url' => $companiesListUrl,
+                                        'data' => 'js:function (term, page, eid) { // page is the one-based page number tracked by Select2
+                                        return {
+                                               q: term, //search term
+                                               page: page, // page number
+                                               eid: ' . $eid . ',
+                                           };
+                                        }',
+                                        'results' => 'js:function (data, page) {
+                                            var more = (page * ' . ExchangeCompanies::REF_PAGE_SIZE . ') < data.total; // whether or not there are more results available 
+                                            // notice we return the value of more so Select2 knows if more results can be loaded
+                                            return {results: data.records, more: more};
+                                        }',
+                                    ),
+                                ),
+                                'htmlOptions' => array(
+                                    'style' => 'width:250px;',
+                                ),
+                            ));
+                            ?>
                             <td valign="top"><?php echo $form->textField($tradingsModel, "[$key]opening_value", array('style' => 'width:100px')); ?></td>
                             <td valign="top"><?php echo $form->textField($tradingsModel, "[$key]closing_value", array('style' => 'width:100px')); ?></td>
                             <td valign="top"><?php echo $form->textField($tradingsModel, "[$key]difference_percentage", array('style' => 'width:100px')); ?></td>
@@ -111,6 +144,8 @@ Yii::app()->clientScript->registerScript('companiesManager', "
     var count = 0;
     company = {};
     company.options = {};
+    company.options.companiesListUrl = '{$companiesListUrl}';
+    company.options.select2PageSize = " . ExchangeCompanies::REF_PAGE_SIZE . ";
     company.name = " . CJSON::encode(ExchangeCompanies::getCompanies($eid, true)) . ";
     company.check = function(){
         var table = document.getElementById('companyGrid');
@@ -147,12 +182,7 @@ Yii::app()->clientScript->registerScript('companiesManager', "
         var companyRow = '<tr id=\"companyRow'+lastRow+'\">';
         companyRow += '<td valign=\"top\">(' + $('#companyGrid').find('tr').index() + ')</td>';
         companyRow += '<td valign=\"top\">';
-        companyRow += '<select name=\"ExchangeTradingCompanies['+lastRow+'][exchange_companies_exchange_companies_id]\" id=\"ExchangeTradingCompanies_'+lastRow+'_type\">';
-        companyRow += '<option value=\"\">" . AmcWm::t("msgsbase.companies", 'Select Company') . "</option>';
-        for(var typeRef =0 ; typeRef < company.name.length ; typeRef++){
-            companyRow += '<option value=\"'+company.name[typeRef].exchange_companies_id+'\">'+company.name[typeRef].company_name+'</option>';
-        }
-        companyRow += '</select>';
+        companyRow += '<input name=\"ExchangeTradingCompanies['+lastRow+'][exchange_companies_exchange_companies_id]\" style=\"width:250px;\" id=\"ExchangeTradingCompanies_'+lastRow+'_type\" type=\"hidden\">';
         companyRow += '</td>';
         companyRow += '<td><input type=\"text\" name=\"ExchangeTradingCompanies['+lastRow+'][opening_value]\" style=\"width:100px;\"></td>';
         companyRow += '<td><input type=\"text\" name=\"ExchangeTradingCompanies['+lastRow+'][closing_value]\" style=\"width:100px;\"></td>';
@@ -160,6 +190,45 @@ Yii::app()->clientScript->registerScript('companiesManager', "
         companyRow +='<td valign=\"top\"><a id=\"companyRowLink'+lastRow+'\" onclick=\"company.remove(this.id)\" class=\"btn_label\" href=\"javascript:void(0);\"><img border=\"0\" align=\"absmiddle\" src=\"" . Yii::app()->baseUrl . "/images/remove.png\" alt=\"\" /></td>';
         companyRow += '</tr>';
         $('#companyGrid').append(companyRow);
+        $('#ExchangeTradingCompanies_'+lastRow+'_type').select2({
+                formatNoMatches:function(){
+                    return '" . Yii::t('ESelect2.select2', 'No matches found') . "';
+                },
+                formatInputTooShort:function(input,min){
+                    return '" . Yii::t('ESelect2.select2', 'Please enter {chars} more characters', array('{chars}' => '"+(min-input.length)+"')) . "';
+                },
+                formatInputTooLong:function(input,max){
+                    return '" . Yii::t('ESelect2.select2', 'Please enter {chars} less characters', array('{chars}' => '"+(input.length-max)+"')) . "';
+                },
+                formatSelectionTooBig:function(limit){
+                    return '" . Yii::t('ESelect2.select2', 'You can only select {count} items', array('{count}' => '"+limit+"')) . "';
+                },
+                formatLoadMore:function(pageNumber){
+                    return '" . Yii::t('ESelect2.select2', 'Loading more results...') . "';
+                },
+                formatSearching:function(){
+                    return '" . Yii::t('ESelect2.select2', 'Searching...') . "';
+                },                    
+                dropdownCssClass:'bigdrop',
+                ajax:{
+                    dataType:'json',
+                    quietMillis:100,
+                    url:company.options.companiesListUrl,
+                    data:function (term, page, eid) { // page is the one-based page number tracked by Select2
+                        return {
+                            q: term, //search term
+                            page: page, // page number
+                            eid: {$eid},
+                        };
+                    },
+                    results:function (data, page) {
+                            var more = (page * company.options.select2PageSize) < data.total; // whether or not there are more results available 
+                            // notice we return the value of more so Select2 knows if more results can be loaded
+                            return {results: data.records, more: more};
+                    }
+                }
+            }
+        );
         company.check();
     }
     company.remove = function(companyRowId){

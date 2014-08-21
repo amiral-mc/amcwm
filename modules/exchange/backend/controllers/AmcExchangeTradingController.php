@@ -92,7 +92,7 @@ class AmcExchangeTradingController extends BackendController {
             $companies = Yii::app()->db->createCommand(''
                             . 'SELECT * FROM exchange_companies e '
                             . 'INNER JOIN exchange_companies_translation et on e.exchange_companies_id = et.exchange_companies_id '
-                            . 'left JOIN exchange_trading_companies etc on e.exchange_companies_id = etc.exchange_companies_exchange_companies_id '
+                            . 'LEFT JOIN exchange_trading_companies etc on e.exchange_companies_id = etc.exchange_companies_exchange_companies_id '
                             . 'WHERE exchange_id = ' . $model->exchange_id . " AND etc.exchange_companies_exchange_companies_id IS NULL")->queryAll();
             $count = count($model->tradingCompanies);
             foreach ($companies as $key => $company) {
@@ -231,6 +231,12 @@ class AmcExchangeTradingController extends BackendController {
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
+    }
+    
+    public function ajaxCompaniesList(){        
+        $list = ExchangeCompanies::getCompaniesList(AmcWm::app()->request->getParam('q'), AmcWm::app()->request->getParam('page', 1), AmcWm::app()->request->getParam('prompt'), AmcWm::app()->request->getParam('eid'));
+        header('Content-type: application/json');
+        echo CJSON::encode($list);
     }
 
 }

@@ -110,7 +110,7 @@ class ActiveRecord extends CActiveRecord {
      * Make sure you call the parent implementation so that the event is raised properly.
      */
     protected function afterSave() {
-        if ($this->hasEventHandler('onAfterSave')){
+        if ($this->hasEventHandler('onAfterSave')) {
             $params['model'] = $this;
             $this->onAfterSave(new CEvent($this, $params));
         }
@@ -332,6 +332,24 @@ class ActiveRecord extends CActiveRecord {
             return $this->labels[$attribute];
         else
             return $this->generateAttributeLabel($attribute);
-    }  
+    }
+
+    /**
+     * Function to correct thousands & floating separators according to parameters.
+     * @param type $number  Number to perform the replacement
+     * @param type $thousandSeparator  Thousand separator character
+     * @param type $floatingSeparator  Floating separator character
+     */
+    public function correctNumbers($attributes, $thousandSeparator, $floatingSeparator = null) {
+        if (is_array($attributes)) {
+            foreach ($attributes as $attribute => $value) {
+//                print_r($attributes); exit;
+                $this->$attribute = Data::getInstance()->correctNumber($this->$attribute, $thousandSeparator, $floatingSeparator);
+            }
+        } else {
+            $this->$attributes = Data::getInstance()->correctNumber($this->$numbers, $thousandSeparator, $floatingSeparator);
+        }
+//        print_r($this->attributes); exit;
+    }
 
 }

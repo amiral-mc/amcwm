@@ -14,38 +14,37 @@
  * @property Exchange $exchange
  * @property ExchangeTradingCompanies[] $exchangeTradingCompanies
  */
-class ExchangeCompanies extends ParentTranslatedActiveRecord
-{
+class ExchangeCompanies extends ParentTranslatedActiveRecord {
+
+    const REF_PAGE_SIZE = 30;
+
     /**
      * @return string the associated database table name
      */
-    public function tableName()
-    {
+    public function tableName() {
         return 'exchange_companies';
     }
 
     /**
      * @return array validation rules for model attributes.
      */
-    public function rules()
-    {
+    public function rules() {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
             array('exchange_id', 'required'),
-            array('exchange_id, published', 'numerical', 'integerOnly'=>true),
-            array('code, currency', 'length', 'max'=>45),
+            array('exchange_id, published', 'numerical', 'integerOnly' => true),
+            array('code, currency', 'length', 'max' => 45),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('exchange_companies_id, exchange_id, code, currency', 'safe', 'on'=>'search'),
+            array('exchange_companies_id, exchange_id, code, currency', 'safe', 'on' => 'search'),
         );
     }
 
     /**
      * @return array relational rules.
      */
-    public function relations()
-    {
+    public function relations() {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
@@ -58,8 +57,7 @@ class ExchangeCompanies extends ParentTranslatedActiveRecord
     /**
      * @return array customized attribute labels (name=>label)
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return array(
             'exchange_companies_id' => AmcWm::t('msgsbase.companies', 'Company ID'),
             'exchange_id' => AmcWm::t('msgsbase.companies', 'Exchange ID'),
@@ -81,19 +79,18 @@ class ExchangeCompanies extends ParentTranslatedActiveRecord
      * @return CActiveDataProvider the data provider that can return the models
      * based on the search/filter conditions.
      */
-    public function search()
-    {
+    public function search() {
         // @todo Please modify the following code to remove attributes that should not be searched.
 
-        $criteria=new CDbCriteria;
-        $criteria->compare('exchange_companies_id',$this->exchange_companies_id);
-        $criteria->compare('exchange_id',$this->exchange_id);
-        $criteria->compare('code',$this->code,true);
-        $criteria->compare('published',$this->published);
-        $criteria->compare('currency',$this->currency);
-        
+        $criteria = new CDbCriteria;
+        $criteria->compare('exchange_companies_id', $this->exchange_companies_id);
+        $criteria->compare('exchange_id', $this->exchange_id);
+        $criteria->compare('code', $this->code, true);
+        $criteria->compare('published', $this->published);
+        $criteria->compare('currency', $this->currency);
+
         return new CActiveDataProvider($this, array(
-            'criteria'=>$criteria,
+            'criteria' => $criteria,
         ));
     }
 
@@ -103,23 +100,63 @@ class ExchangeCompanies extends ParentTranslatedActiveRecord
      * @param string $className active record class name.
      * @return ExchangeCompanies the static model class
      */
-    public static function model($className=__CLASS__)
-    {
+    public static function model($className = __CLASS__) {
         return parent::model($className);
     }
-    
+
     /**
      * Get companies
      * @return array
      */
-    public static function getCompanies($eid, $asObject = false){
+    public static function getCompanies($eid, $asObject = false) {
         $query = sprintf("SELECT et.exchange_companies_id, company_name FROM exchange_companies e INNER JOIN exchange_companies_translation et on e.exchange_companies_id = et.exchange_companies_id WHERE exchange_id = %d and content_lang = %s", $eid, Yii::app()->db->quoteValue(Controller::getContentLanguage()));
         $rows = AmcWm::app()->db->createCommand($query)->queryAll();
-        if($asObject){
+        if ($asObject) {
             return $rows;
-        }
-        else{
-            return CHtml::listData($rows, 'exchange_companies_id', 'company_name');                   
+        } else {
+            return CHtml::listData($rows, 'exchange_companies_id', 'company_name');
         }
     }
+
+    /**
+     * Get companies list
+     * @return array
+     * @access public
+     */
+    static public function getCompaniesList($keywords = null, $pageNumber = 1, $prompt = null, $eid) {
+        if (!$pageNumber) {
+            $pageNumber = 1;
+        }
+        $queryWhere = null;
+        $pageNumber = (int) $pageNumber;
+        $keywords = trim($keywords);
+        $queryCount = "SELECT count(*) 
+            FROM exchange_companies e
+            INNER JOIN exchange_companies_translation et on e.exchange_companies_id = et.exchange_companies_id
+        ";
+        $command = AmcWm::app()->db->createCommand();
+        $command->select("et.exchange_companies_id, company_name");
+        $command->from = "exchange_companies e";
+        $command->join("exchange_companies_translation et", 'e.exchange_companies_id = et.exchange_companies_id');
+        $where = sprintf("content_lang = %s and exchange_id = %d", AmcWm::app()->db->quoteValue(Controller::getContentLanguage()), $eid);
+        if ($keywords) {
+            $keywords = "%{$keywords}%";
+            $where .= sprintf(" and (company_name like %s)", AmcWm::app()->db->quoteValue($keywords));
+        }
+        $command->where($where);
+        $queryCount.=" where {$where}";
+        $command->limit(self::REF_PAGE_SIZE, self::REF_PAGE_SIZE * ($pageNumber - 1));
+        $data = $command->queryAll();
+        $list = array('records' => array(), 'total' => 0);
+        if ($prompt) {
+            $list['records'][] = array("id" => null, "text" => $prompt);
+        }
+        foreach ($data as $row) {
+            $label = "[{$row['company_name']}]";
+            $list['records'][] = array("id" => $row['exchange_companies_id'], "text" => $label);
+        }
+        $list['total'] = AmcWm::app()->db->createCommand($queryCount)->queryScalar();
+        return $list;
+    }
+
 }
