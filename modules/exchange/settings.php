@@ -165,9 +165,11 @@ return array(
         'options' => array(
             'tickerLimit' => 4,
             'companiesGridLimit' => 5,
-            'graphDaysLimit' => 5,
-            'graphLabelsLimit' => 7,
+            'graphDaysLimit' => 8,
+            'graphLabelsLimit' => 4,
             'graphColor' => "purple",
+            'thousandSeparator' => ',',
+            'floatingSeparator' => '.',
         ),
     ),
 );

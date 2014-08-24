@@ -1,5 +1,6 @@
 <?php
 
+$colorClass = '';
 $output = '<div class="table-grid stock-companies-grid">';
 $output .= '<table class="items">';
 $output .= "<tr>";
@@ -12,9 +13,23 @@ foreach ($data as $key => $value) {
     $class = $key % 2 == 1 ? "odd" : "even";
     $output .= "<tr class =" . $class . ">";
     $output .= "<td>" . $value['company_name'] . "</td>";
-    $output .= "<td>" . $value['opening_value'] . "</td>";
-    $output .= "<td>" . $value['closing_value'] . "</td>";
-    $output .= "<td>" . $value['difference_percentage'] . "</td>";
+    if($value['difference_percentage'] > 0) {
+        $colorClass = 'p-up';
+        $output .= "<td class =" . $colorClass . ">" . number_format($value['opening_value'], 2, $floatingSeparator, $thousandSeparator) . "</td>";
+        $output .= "<td class =" . $colorClass . ">" . number_format($value['closing_value'], 2, $floatingSeparator, $thousandSeparator) . "</td>";
+        $output .= "<td class =" . $colorClass . ">" . $value['difference_percentage'] . "</td>";
+    } elseif ($value['difference_percentage'] < 0) {
+        $colorClass = 'p-down';
+        $output .= "<td class =" . $colorClass . ">" . number_format($value['opening_value'], 2, $floatingSeparator, $thousandSeparator) . "</td>";
+        $output .= "<td class =" . $colorClass . ">" . number_format($value['closing_value'], 2, $floatingSeparator, $thousandSeparator) . "</td>";
+        $output .= "<td class =" . $colorClass . ">" . $value['difference_percentage'] . "</td>";
+    }
+    else{
+        $colorClass = "";
+        $output .= "<td class =" . $colorClass . ">" . number_format($value['opening_value'], 2, $floatingSeparator, $thousandSeparator) . "</td>";
+        $output .= "<td class =" . $colorClass . ">" . number_format($value['closing_value'], 2, $floatingSeparator, $thousandSeparator) . "</td>";
+        $output .= "<td class =" . $colorClass . ">" . $value['difference_percentage'] . "</td>";
+    }
     $output .= "</tr>";
 }
 $output .= "</table>";

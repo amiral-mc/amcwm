@@ -57,11 +57,14 @@ class ExchangeSideWidget extends SideWidget {
                                 xsticks = labels.length - 1;
                             }
                             else{
-                                for(i = 0; i < (xsticks * minimum); i = i + interval){
-                                    labels.push(data['labels'][i]);
+                                for(i = 0; i <= (xsticks * minimum) && i< data['labels'].length; i = i + interval){
+                                    console.log('i:%d, xsticks : %d, minimum: %d, interval: %d', i , xsticks, minimum, interval);
+                                    labels.push(data['labels'][i]);                                    
                                 }
+                                
                                 labels.push(data['labels'][data['labels'].length - 1]);
                             }
+                            console.log(labels);
                             var myChart = new RGraph.Line({
                                 id: 'exchangeRgraph',
                                 data: data['values'],
@@ -88,8 +91,7 @@ class ExchangeSideWidget extends SideWidget {
                                     gutter: {
                                         left: 40,
                                         right: 30,
-                                    },
-                                    hmargin: 10,
+                                    },                                    
                                     linewidth: 2,
                                     tickmarks: 'endcircle',
                                     numxticks: xsticks,

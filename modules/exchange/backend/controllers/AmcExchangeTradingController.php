@@ -5,7 +5,6 @@
  * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.
  * @license http://amc.amiral.com/license/amcwm.txt
  */
-
 /**
  * AmcExchangeTradingController
  * @author Amiral Management Corporation
@@ -90,9 +89,8 @@ class AmcExchangeTradingController extends BackendController {
             }
         } else {
             $companies = Yii::app()->db->createCommand(''
-                            . 'SELECT * FROM exchange_companies e '
-                            . 'INNER JOIN exchange_companies_translation et on e.exchange_companies_id = et.exchange_companies_id '
-                            . 'left JOIN exchange_trading_companies etc on e.exchange_companies_id = etc.exchange_companies_exchange_companies_id '
+                            . 'SELECT distinct exchange_companies_id FROM exchange_companies e '
+                            . 'LEFT JOIN exchange_trading_companies etc on e.exchange_companies_id = etc.exchange_companies_exchange_companies_id '
                             . 'WHERE exchange_id = ' . $model->exchange_id . " AND etc.exchange_companies_exchange_companies_id IS NULL")->queryAll();
             $count = count($model->tradingCompanies);
             foreach ($companies as $key => $company) {
@@ -112,11 +110,11 @@ class AmcExchangeTradingController extends BackendController {
         $eid = (int) $_GET['eid'];
         $model = new ExchangeTrading;
         $model->exchange_id = $eid;
-        $companies = Yii::app()->db->createCommand(''
-                        . 'SELECT * FROM exchange_companies e '
-                        . 'INNER JOIN exchange_companies_translation et on e.exchange_companies_id = et.exchange_companies_id '
-                        . 'INNER JOIN exchange_trading_companies etc on e.exchange_companies_id = etc.exchange_companies_exchange_companies_id '
-                        . 'WHERE exchange_id = ' . $model->exchange_id)->queryAll();
+        $query = ''
+                . 'SELECT distinct exchange_companies_id FROM exchange_companies e '
+                . 'INNER JOIN exchange_trading_companies etc on e.exchange_companies_id = etc.exchange_companies_exchange_companies_id '
+                . 'WHERE exchange_id = ' . $model->exchange_id;
+        $companies = Yii::app()->db->createCommand($query)->queryAll();
         $count = count($model->tradingCompanies);
         foreach ($companies as $key => $company) {
             $tradingsModel = new ExchangeTradingCompanies;
@@ -231,6 +229,12 @@ class AmcExchangeTradingController extends BackendController {
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
+    }
+
+    public function ajaxCompaniesList() {
+        $list = ExchangeCompanies::getCompaniesList(AmcWm::app()->request->getParam('q'), AmcWm::app()->request->getParam('page', 1), AmcWm::app()->request->getParam('prompt'), AmcWm::app()->request->getParam('eid'));
+        header('Content-type: application/json');
+        echo CJSON::encode($list);
     }
 
 }
