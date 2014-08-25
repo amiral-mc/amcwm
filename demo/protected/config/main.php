@@ -7,7 +7,7 @@ return CMap::mergeArray(
 //                'viewsInProject' => true,
             ),
             'language' => 'en',
-            'backendLang' => "ar",
+            'backendLang' => "en",
             'frontend' => array(
                 'bootstrap' => array(
                     'use' => true,
