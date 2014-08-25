@@ -60,6 +60,38 @@ class Menu extends CMenu {
         return $isActive;
     }
 
+    /**
+     * Renders the menu items.
+     * @param array $items menu items. Each menu item will be an array with at least two elements: 'label' and 'active'.
+     * It may have three other optional elements: 'items', 'linkOptions' and 'itemOptions'.
+     */
+    protected function renderMenu($items) {
+        parent::renderMenu($items);
+        $cs = Yii::app()->clientScript;
+        $label = "";
+        $menuMoreWidth = 50;
+        if (isset(Yii::app()->params['menuMoreAsText'][AmcWm::app()->getLanguage()])) {
+            $label = AmcWm::t('app', '_MENU_MORE_');
+            $menuMoreWidth = Yii::app()->params['menuMoreAsText'][AmcWm::app()->getLanguage()];
+        }
+        $js = '
+                var width = 0;
+                var more = null;
+                $(".main_menu_wrapper > ul > li").each(function(){
+                    width += $(this).outerWidth();
+                    if(width > ($(".main_menu_wrapper").width() - ' . $menuMoreWidth . ')){
+                        if(more === null){
+                            more = "<li class =\"more-menu last\" style=\"width:' . $menuMoreWidth . 'px;\"><a href=\"#\">' . $label . '</a><ul class = \"more-sub\"></ul></li>";
+                            $(".main_menu_wrapper > ul").append(more);
+                        }
+                        $(this).removeClass("last").removeAttr("class");
+                        $(".more-menu > ul").append($(this));
+                    }
+                });
+            ';
+        $cs->registerScript('moreMenu', $js, CClientScript::POS_READY);
+    }
+
 }
 
 ?>

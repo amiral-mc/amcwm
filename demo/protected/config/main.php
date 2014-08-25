@@ -7,7 +7,7 @@ return CMap::mergeArray(
 //                'viewsInProject' => true,
             ),
             'language' => 'en',
-            'backendLang' => "en",
+            'backendLang' => "ar",
             'frontend' => array(
                 'bootstrap' => array(
                     'use' => true,
@@ -66,6 +66,10 @@ return CMap::mergeArray(
             CMap::mergeArray(
                     require($path . 'config/contacts.php'), require_once($path . 'config/configProperties.php'), array(
                 'pageSize' => 30,
+                'menuMoreAsText' => array(
+                    'ar' => 40,
+                    'en' => 40,
+                ),
                 'adminForm' => 'adminForm',
                 'watermark' => array(
                     'image' => "resources/images/watermark.png",
