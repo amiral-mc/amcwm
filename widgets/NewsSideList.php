@@ -39,7 +39,7 @@ class NewsSideList extends SideWidget {
                             </li>';
             }
             $this->contentData .='</ul>';
-            $this->contentData .='<div class="readmore">'.CHtml::link(AmcWm::t("amcFront", 'Read more'), array('/articles/default/sections/', 'module'=>$virtualId)).'</div>';
+            $this->contentData .='<div class="readmore">'.Html::link(AmcWm::t("amcFront", 'Read more'), array('/articles/default/sections/', 'module'=>$virtualId)).'</div>';
         }else{
              $this->contentData .= AmcWm::t("amcFront", 'Sorry, no news found');
         }
