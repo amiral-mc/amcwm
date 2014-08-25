@@ -238,11 +238,29 @@ class ManageArticles extends ManageContent {
                     $index++;
                 }
             }
+            if (isset($_POST['Essays']['sticky'])) {
+                $count = Yii::app()->db->createCommand()
+                        ->select('e.article_id')
+                        ->from('essays e')
+                        ->join('articles a', 'e.article_id = a.article_id')
+                        ->where('e.sticky != 0')
+                        ->order('a.update_date desc')
+                        ->queryColumn();
+                $stickyLimit = false;
+                if ($this->_settings['options']['essays']['default']['integer']['sticky'] >= count($count) && !in_array($model->article_id, $count)) {
+                    $stickyLimit = true;
+                }
+                $model->essays->sticky = 1;
+            }
             $transaction = Yii::app()->db->beginTransaction();
             $success = false;
             $saved = false;
             if ($validate) {
                 try {
+                    if (isset($stickyLimit) && $stickyLimit) {
+                        $updateSticky = 'UPDATE essays SET sticky = 0 where article_id = ' . end($count);
+                        Yii::app()->db->createCommand($updateSticky)->execute();
+                    }
                     $isNew = $model->isNewRecord;
                     if (!$isNew) {
                         DbLogManager::logAction($model, DbLogManager::UPDATED);

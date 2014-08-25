@@ -103,7 +103,7 @@ return array(
     '_PUBLISHCONTENT_' => 'موافقة ونشر',
     '_REJECT_PUBLISHCONTENT_' => 'رفض الموافقة والنشر',
     'Hits' => 'المشاهدات',
-    '' => '',
+    'In Top' => 'مثبت',
     '' => '',
     '' => '',
 );

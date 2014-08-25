@@ -11,6 +11,7 @@
  *
  * The followings are the available columns in table 'news':
  * @property string $article_id
+ * @property string $sticky
  *
  * The followings are the available model relations:
  * @property Articles $article
@@ -43,6 +44,7 @@ class Essays extends ActiveRecord {
         // will receive user inputs.
         return array(
             array('article_id', 'length', 'max' => 10),
+            array('sticky', 'numerical', 'integerOnly' => true),
             array('article_id', 'safe', 'on' => 'search'),
         );
     }
@@ -64,6 +66,7 @@ class Essays extends ActiveRecord {
     public function attributeLabels() {
         return array(
             'article_id' => AmcWm::t("msgsbase.core", 'Article ID'),
+            'sticky' => AmcWm::t("msgsbase.core", 'In Top'),
         );
     }
 
@@ -78,6 +81,7 @@ class Essays extends ActiveRecord {
         $criteria = new CDbCriteria;
 
         $criteria->compare('article_id', $this->article_id, true);
+        $criteria->compare('sticky', $this->sticky);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

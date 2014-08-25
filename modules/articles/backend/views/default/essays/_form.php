@@ -61,7 +61,7 @@
             <div style="padding-top:5px;padding-bottom: 5px;">
                 <?php echo $form->checkBox($model, 'in_slider', array('value' => ($model->in_slider) ? $model->in_slider : null)); ?>       
                 <?php echo $form->labelEx($model, 'in_slider', array("style" => 'display:inline;')); ?>            
-            </div>        
+            </div>
             <?php
             $sliderUploadDisplay = ($model->in_slider) ? "block" : "none";
             $drawSliderImage = NULL;
@@ -74,9 +74,15 @@
             <div id="sliderImage" style="display:<?php echo $sliderUploadDisplay ?>;">            
                 <?php echo $form->labelEx($model, 'sliderFile', array("style" => 'display:inline;')); ?>
                 <?php echo $form->fileField($model, 'sliderFile', array("style" => 'display:inline;')); ?>
-                <input id="Articles_sliderFile_watermark" name="Articles[sliderFile_watermark]" type="checkbox" /> <?php echo AmcWm::t("amcBack", 'Use watermark');?>
+                <input id="Articles_sliderFile_watermark" name="Articles[sliderFile_watermark]" type="checkbox" /> <?php echo AmcWm::t("amcBack", 'Use watermark'); ?>
                 <?php echo $form->error($model, 'sliderFile'); ?>
                 <?php echo $drawSliderImage ?>
+            </div>
+        <?php endif; ?>
+        <?php if (isset($options['essays']['default']['integer']['sticky']) && $options['essays']['default']['integer']['sticky']): ?>
+            <div style="padding-top:5px;padding-bottom: 5px;">
+                <?php echo $form->checkBox($model->essays, 'sticky', array('value' => ($model->essays->sticky) ? $model->essays->sticky : null)); ?>
+                <?php echo $form->labelEx($model->essays, 'sticky', array("style" => 'display:inline;')); ?>
             </div>
         <?php endif; ?>
     </fieldset>
