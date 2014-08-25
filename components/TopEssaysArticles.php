@@ -223,11 +223,11 @@ class TopEssaysArticles extends SiteData {
         }
 
         // get sticky items in 1st query
-        $stickyWheres = " {$wheres} and sticky = 1";
+        $stickyWheres = " {$wheres} and essays.sticky = 1";
         $stickyCommand->where($stickyWheres);
 
         // get non-sticky items in 2nd query
-        $noneStickyWheres = " {$wheres} and sticky = 0";
+        $noneStickyWheres = " {$wheres} and essays.sticky = 0";
         $command->where($noneStickyWheres);
 
         $this->count = Yii::app()->db->createCommand("select count(*) from articles t {$command->join} where {$command->where}")->queryScalar();
