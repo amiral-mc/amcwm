@@ -250,7 +250,7 @@ class ManageArticles extends ManageContent {
                 if ($this->_settings['options']['essays']['default']['integer']['sticky'] >= count($count) && !in_array($model->article_id, $count)) {
                     $stickyLimit = true;
                 }
-                $model->essays->sticky = 1;
+                $model->essays->sticky = $_POST['Essays']['sticky'];
             }
             $transaction = Yii::app()->db->beginTransaction();
             $success = false;

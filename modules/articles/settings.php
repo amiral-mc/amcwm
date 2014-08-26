@@ -971,7 +971,7 @@ return array(
                 ),
                 'integer' => array(
                     'mainTopics' => 4,
-                    'sticky' => 2,
+                    'sticky' => 0,
                 ),
                 'post2social' => false,
                 'topArticles' => 3,
