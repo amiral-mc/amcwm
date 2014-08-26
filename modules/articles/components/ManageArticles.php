@@ -257,7 +257,7 @@ class ManageArticles extends ManageContent {
             $saved = false;
             if ($validate) {
                 try {
-                    if (isset($stickyLimit) && $stickyLimit) {
+                    if (isset($stickyLimit) && $stickyLimit && $count) {
                         $updateSticky = 'UPDATE essays SET sticky = 0 where article_id = ' . end($count);
                         Yii::app()->db->createCommand($updateSticky)->execute();
                     }
