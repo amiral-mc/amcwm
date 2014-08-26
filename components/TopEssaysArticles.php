@@ -47,6 +47,18 @@ class TopEssaysArticles extends SiteData {
     protected $generateDataset = true;
 
     /**
+     * Default sorting for sticky articles
+     * @var string
+     */
+    protected $stickyOrder = 't.update_date desc';
+
+    /**
+     * Writer Image
+     * @var boolean
+     */
+    protected $useWriterImage = true;
+
+    /**
      * Counstructor
      * Make sure you call the parent counstructor so that the method is raised properly.
      * @todo fix bug if $limit = 0
@@ -104,6 +116,22 @@ class TopEssaysArticles extends SiteData {
     }
 
     /**
+     * Set sticky order
+     * @param string $order
+     */
+    public function setStickyOrder($order) {
+        $this->stickyOrder = $order;
+    }
+
+    /**
+     * Set Writer Image
+     * @param boolean $img
+     */
+    public function setWriterImage($img = true) {
+        $this->useWriterImage = $img;
+    }
+
+    /**
      *
      * Generate articles lists
      * Make sure you call the parent implementation so that the method is raised properly.
@@ -122,13 +150,7 @@ class TopEssaysArticles extends SiteData {
             $this->addWhere("t.{$this->dateCompareField} <='{$this->toDate}'");
         }
         if (!count($this->orders)) {
-            $virtual = self::getSettings()->getCurrentVirtual();
-            $sorting = self::getSettings()->getTablesSoringOrders();
-            if (isset($sorting[$virtual])) {
-                $this->addOrder("{$sorting[$virtual]['sortField']} {$sorting[$virtual]['order']}");
-            } else {
-                $this->addOrder("hits desc");
-            }
+            $this->addOrder("update_date desc");
         }
         switch ($this->archive) {
             case 1:
@@ -201,6 +223,14 @@ class TopEssaysArticles extends SiteData {
             }
         }
         $orders = $this->generateOrders(NULL);
+        if ($this->useWriterImage) {
+            $writerSettings = new Settings('persons', 'frontend');
+            $this->mediaPath = Yii::app()->request->baseUrl . '/' . $writerSettings->settings['media']['paths']['thumb']['path'] . "/";
+            $this->addColumn('p.thumb', 'thumb');
+            $this->addColumn('t.writer_id', 'writer_id');
+        } else {
+            $this->addColumn('t.thumb', 'thumb');
+        }
         $cols = $this->generateColumns();
         $wheres = sprintf("tt.content_lang = %s
          and t.publish_date <= '{$currentDate}'            
@@ -209,14 +239,18 @@ class TopEssaysArticles extends SiteData {
         $wheres .= $this->generateWheres();
         $command = AmcWm::app()->db->createCommand();
         $command->from("articles t force index (articles_create_date_idx)");
-        $command->join = 'inner join articles_translation tt on t.article_id = tt.article_id';
+        $command->join = ' inner join articles_translation tt on t.article_id = tt.article_id';
+        $command->join .= ' left join writers w on t.writer_id = w.writer_id';
+        $command->join .= ' left join persons p on t.writer_id = p.person_id';
+        $command->join .= sprintf(' left join persons_translation pt on p.person_id = pt.person_id and pt.content_lang = %s', AmcWm::app()->db->quoteValue(AmcWm::app()->getLanguage()));
         $command->join .= $this->joins;
-        $command->select("t.article_id, t.hits, t.thumb, tt.article_header $cols");
-        $command->order = $orders;
+        $command->select("t.article_id, t.hits, tt.article_header $cols");
+
 
         // cloning same command query before setting limit
         $stickyCommand = clone $command;
-
+        $stickyCommand->order = $this->stickyOrder;
+        $command->order = $orders;
         if ($this->limit !== null) {
             $this->limit -= $options['essays']['default']['integer']['sticky'];
             $command->limit($this->limit, $this->fromRecord);
@@ -279,8 +313,13 @@ class TopEssaysArticles extends SiteData {
                 }
             }
             if ($article["thumb"]) {
+                if ($this->useWriterImage) {
+                    $id = $article['writer_id'];
+                } else {
+                    $id = $article['article_id'];
+                }
                 $this->items[$index]['imageExt'] = $article["thumb"];
-                $this->items[$index]['image'] = $this->mediaPath . "{$seoTitle}" . $article["article_id"] . "." . $article["thumb"];
+                $this->items[$index]['image'] = $this->mediaPath . "{$seoTitle}" . $id . "." . $article["thumb"];
             } else {
                 $this->items[$index]['imageExt'] = null;
                 $this->items[$index]['image'] = null;
