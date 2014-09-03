@@ -253,7 +253,6 @@ class TopEssaysArticles extends SiteData {
         $stickyCommand->order = $this->stickyOrder;
         $command->order = $orders;
         if ($this->limit) {
-//            $this->limit .= $options['essays']['default']['integer']['sticky'];
             $command->limit($this->limit, $this->fromRecord);
         }
 
@@ -269,12 +268,12 @@ class TopEssaysArticles extends SiteData {
         if ($this->generateDataset) {
             $stickyArticles = $stickyCommand->queryAll();
             if (count($stickyArticles) && $this->limit) {
-                $this->limit .= count($stickyArticles);
+                $this->limit = $this->limit - count($stickyArticles);
                 $command->limit($this->limit, $this->fromRecord);
             }
             $articles = $command->queryAll();
             $this->setDataset($stickyArticles);
-            $this->setDataset($articles);
+            $this->setDataset($articles);            
         }
         $this->query = $command;
     }
