@@ -104,8 +104,11 @@ class WebApplication extends CWebApplication {
         if (!isset($config['components']['assetManager']['class'])) {
             $config['components']['assetManager']['class'] = "AssetManager";
         }
-        
-         if (!isset($config['components']['imageworkshop']['class'])) {
+        if (!isset($config['components']['session']['class'])) {
+            $config['components']['session']['class'] = "HttpSession";
+        }
+
+        if (!isset($config['components']['imageworkshop']['class'])) {
             $config['components']['imageworkshop']['class'] = "amcwm.vendors.PHPImageWorkshop.YiiImageWorkshop";
         }
 
