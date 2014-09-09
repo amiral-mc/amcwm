@@ -226,8 +226,24 @@ class InFocusItemsData extends SearchData {
             $articles->addWhere("f.infocus_id = " . (int) $this->_infocus->getId());
             $articles->useRecordIdAsKey(false);
             $articles->generate();
+            
+            $essays = new ArticlesListData($this->tables["essays"], 0, $this->_topTextLimit);
+            $essays->addOrder("create_date desc");
+            $essays->addColumn("article_detail", "detail");
+            $essays->addJoin("inner join infocus_has_articles f on t.article_id = f.article_id");
+            $essays->addJoin('inner join writers w on t.writer_id = w.writer_id');
+            $essays->addJoin('inner join persons p on t.writer_id = p.person_id');
+            $essays->addJoin(sprintf('inner join persons_translation pt on p.person_id = pt.person_id and pt.content_lang = %s', AmcWm::app()->db->quoteValue(AmcWm::app()->getLanguage())));
+            
+            $essays->addWhere("f.infocus_id = " . (int) $this->_infocus->getId());
+            $essays->addColumn("name");
+            $essays->addColumn("p.thumb", "personThumb");
+            $essays->addColumn("t.writer_id", "writer_id");
+            $essays->useRecordIdAsKey(false);
+            $essays->generate();
+            
             $this->_topResults["news"] = $articles->getItems();
-            $this->_topResults["essays"] = $articles->getItems();
+            $this->_topResults["essays"] = $essays->getItems();
         }
 
         if ($this->_topVideosLimit) {
