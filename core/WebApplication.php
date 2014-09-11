@@ -108,6 +108,14 @@ class WebApplication extends CWebApplication {
             $config['components']['session']['class'] = "HttpSession";
         }
 
+        if (!isset($config['components']['session']['cookieParams']['httponly'])) {
+            $config['components']['session']['cookieParams']['httponly'] = true;
+        }
+        
+         if (!isset($config['components']['request']['enableCookieValidation'])) {
+            $config['components']['request']['enableCookieValidation'] = true;
+        }
+
         if (!isset($config['components']['imageworkshop']['class'])) {
             $config['components']['imageworkshop']['class'] = "amcwm.vendors.PHPImageWorkshop.YiiImageWorkshop";
         }
