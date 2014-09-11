@@ -250,14 +250,14 @@ class ManageArticles extends ManageContent {
                 if ($this->_settings['options']['essays']['default']['integer']['sticky'] >= count($count) && !in_array($model->article_id, $count)) {
                     $stickyLimit = true;
                 }
-                $model->essays->sticky = 1;
+                $model->essays->sticky = $_POST['Essays']['sticky'];
             }
             $transaction = Yii::app()->db->beginTransaction();
             $success = false;
             $saved = false;
             if ($validate) {
                 try {
-                    if (isset($stickyLimit) && $stickyLimit) {
+                    if (isset($stickyLimit) && $stickyLimit && $count) {
                         $updateSticky = 'UPDATE essays SET sticky = 0 where article_id = ' . end($count);
                         Yii::app()->db->createCommand($updateSticky)->execute();
                     }

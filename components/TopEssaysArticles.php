@@ -231,6 +231,7 @@ class TopEssaysArticles extends SiteData {
         } else {
             $this->addColumn('t.thumb', 'thumb');
         }
+        $this->addColumn('pt.name', 'name');
         $cols = $this->generateColumns();
         $wheres = sprintf("tt.content_lang = %s
          and t.publish_date <= '{$currentDate}'            
@@ -251,8 +252,7 @@ class TopEssaysArticles extends SiteData {
         $stickyCommand = clone $command;
         $stickyCommand->order = $this->stickyOrder;
         $command->order = $orders;
-        if ($this->limit !== null) {
-            $this->limit -= $options['essays']['default']['integer']['sticky'];
+        if ($this->limit) {
             $command->limit($this->limit, $this->fromRecord);
         }
 
@@ -267,9 +267,13 @@ class TopEssaysArticles extends SiteData {
         $this->count = Yii::app()->db->createCommand("select count(*) from articles t {$command->join} where {$command->where}")->queryScalar();
         if ($this->generateDataset) {
             $stickyArticles = $stickyCommand->queryAll();
+            if (count($stickyArticles) && $this->limit) {
+                $this->limit = $this->limit - count($stickyArticles);
+                $command->limit($this->limit, $this->fromRecord);
+            }
             $articles = $command->queryAll();
             $this->setDataset($stickyArticles);
-            $this->setDataset($articles);
+            $this->setDataset($articles);            
         }
         $this->query = $command;
     }
