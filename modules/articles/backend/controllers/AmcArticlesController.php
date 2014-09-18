@@ -10,8 +10,7 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-
-class AmcArticlesController extends BackendController {   
+class AmcArticlesController extends BackendController {
 
     /**
      * Initializes the controller.
@@ -21,12 +20,16 @@ class AmcArticlesController extends BackendController {
     public function init() {
         parent::init();
         $this->manager = new ManageArticles(true);
+        $this->statistics = $this->widget('amcwm.core.widgets.ReportsWidget', array('reporters' => true), true);
     }
 
     /**
      * Lists all models.
      */
     public function actionIndex($wajax = false) {
+        $forwards = AmcWm::app()->acl->getForwardModules();
+//print_r($forwards);
+//die();
         $this->manager->index($wajax);
     }
 
@@ -127,7 +130,7 @@ class AmcArticlesController extends BackendController {
     public function actionDelete() {
         $this->manager->delete();
     }
-    
+
     /**
      * Deletes a particular model.
      * If deletion is successful, the browser will be redirected to the 'admin' page.
@@ -136,9 +139,8 @@ class AmcArticlesController extends BackendController {
     public function actionDeleteApproval($id, $undo = 0) {
         $this->manager->deleteApproval($id, $undo);
     }
-    
-    
-     /**
+
+    /**
      * approve a particular model.
      * If deletion is successful, the browser will be redirected to the 'admin' page.
      * @param integer $id the ID of the model to be deleted
@@ -146,8 +148,8 @@ class AmcArticlesController extends BackendController {
     public function actionContentApproval($id, $undo = 0) {
         $this->manager->contentApproval($id, $undo, ManageArticles::EDIT_APPROVAL);
     }
-    
-      /**
+
+    /**
      * approve a particular model.
      * If deletion is successful, the browser will be redirected to the 'admin' page.
      * @param integer $id the ID of the model to be deleted
@@ -155,10 +157,6 @@ class AmcArticlesController extends BackendController {
     public function actionPublishApproval($id, $undo = 0) {
         $this->manager->contentApproval($id, $undo, ActiveRecord::PUBLISHED);
     }
-    
-    
-
-    
 
     /**
      * Get infocus list
@@ -184,29 +182,27 @@ class AmcArticlesController extends BackendController {
     public function ajaxFindArticle() {
         $this->manager->findArticle(true);
     }
-    
+
     /**
      * required for ajax requests
      */
     public function ajaxFindWriters() {
         $this->manager->findWriters();
-    }    
-    
+    }
+
     /**
      * required for ajax requests
      */
     public function ajaxFindEditors() {
         $this->manager->findEditors();
-    }    
-    
-     /**
+    }
+
+    /**
      * required for ajax requests
      */
     public function ajaxFindSources() {
         $this->manager->findSources();
-    }    
-    
-    
+    }
 
     /**
      * Performs the AJAX validation.
@@ -218,25 +214,23 @@ class AmcArticlesController extends BackendController {
             Yii::app()->end();
         }
     }
-    
+
     /**
      * Manage news sources
      */
-    public function actionSources(){
-        $this->forward('sources/');       
+    public function actionSources() {
+        $this->forward('sources/');
     }
-    
+
     /**
      * Manage news sources
      */
-    public function actionMore(){
+    public function actionMore() {
         $settings = new Settings("articles", true);
         $virtualId = $settings->getVirtualId('news');
-//        $_GET['module'] = $virtualId;                
         $action = AmcWm::app()->request->getParam('action', 'update');
-        $id = AmcWm::app()->request->getParam('id');        
-        //$this->forward("/backend/articles/default/{$action}");
-        $this->redirect(array("/backend/articles/default/{$action}", 'id'=>$id, 'module'=>$virtualId));
+        $id = AmcWm::app()->request->getParam('id');
+        $this->redirect(array("/backend/articles/default/{$action}", 'id' => $id, 'module' => $virtualId));
     }
 
 }

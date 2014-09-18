@@ -543,4 +543,25 @@ class Data {
         return str_replace(array($thousandSeparator, $floatingSeparator), array("", "."), $number);
     }
 
+    /**
+     * Get Action ID
+     * @param type $module  Module Name
+     * @param type $controller  Controller Name
+     * @param type $action  Action Name
+     * @param type $isBackend  Is Backend portal defaults to true
+     * @return type
+     */
+    public function getActionId($module, $controller, $action = 'create', $isBackend = true) {
+        $parentId = $isBackend ? "=1" : "is null";
+        $query = 'SELECT action_id'
+                . ' FROM actions a'
+                . ' INNER JOIN controllers c on a.controller_id = c.controller_id'
+                . ' INNER JOIN modules m on c.module_id = m.module_id'
+                . ' WHERE module = "' . $module . '" '
+                . ' AND controller = "' . $controller . '" '
+                . ' AND action = "' . $action . '"'
+                . ' AND parent_module ' . $parentId;
+        return Yii::app()->db->createCommand($query)->queryScalar();
+    }
+
 }

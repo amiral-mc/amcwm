@@ -33,6 +33,8 @@
  */
 class Users extends ActiveRecord {
 
+    const REF_PAGE_SIZE = 30;
+
     /**
      *
      * @var current person name 
@@ -154,11 +156,10 @@ class Users extends ActiveRecord {
         $criteria->join .=" inner join persons p on t.user_id = p.person_id";
         $criteria->join .= sprintf(" left join persons_translation pt on p.person_id = pt.person_id and pt.content_lang = %s", Yii::app()->db->quoteValue(Controller::getContentLanguage()));
         return new CActiveDataProvider(get_class($this), array(
-                    'criteria' => $criteria,
-                ));
+            'criteria' => $criteria,
+        ));
     }
 
-    
     /**
      * Get users roles
      * @access public 
@@ -168,7 +169,7 @@ class Users extends ActiveRecord {
     public static function getUsersRoles($roleId = null) {
         $rolesNotEncluded = array();
         $rolesNotEncluded[] = (int) AmcWm::app()->acl->getRoleId();
-        if($roleId)
+        if ($roleId)
             $rolesNotEncluded[] = $roleId;
         $query = sprintf('select role_id, role from roles where role_id NOT IN (%s) ', implode(',', $rolesNotEncluded));
         $roles = CHtml::listData(Yii::app()->db->createCommand($query)->queryAll(), 'role_id', 'role');
@@ -238,7 +239,7 @@ class Users extends ActiveRecord {
                             $queries[] = sprintf('(%d, %d, %d, %d)', $this->user_id, $controller['role_id'], $controllerId, $access);
                         }
                     } else {
-                        if($controller['access']){
+                        if ($controller['access']) {
                             $queries[] = sprintf('(%d, %d, %d, %d)', $this->user_id, $controller['role_id'], $controllerId, 0);
                         }
                     }
@@ -250,6 +251,57 @@ class Users extends ActiveRecord {
             $success = Yii::app()->db->createCommand($accessQuery . "\n" . implode(",\n", $queries) . ";")->execute();
         }
         return $success;
+    }
+
+    /**
+     * Get users list
+     * @return array
+     * @access public
+     */
+    static public function getUsersList($keywords = null, $pageNumber = 1, $prompt = null) {
+        if (!$pageNumber) {
+            $pageNumber = 1;
+        }
+        $queryWhere = null;
+        $pageNumber = (int) $pageNumber;
+        $keywords = trim($keywords);
+        $queryCount = "SELECT count(*) FROM users u
+        inner join persons p on u.user_id = p.person_id
+        inner join persons_translation pt on p.person_id = pt.person_id
+        ";
+        $command = AmcWm::app()->db->createCommand();
+        $command->select("u.user_id, p.email, pt.name");
+        $command->from = "users u";
+        $command->join("persons p", 'u.user_id = p.person_id');
+        $command->join("persons_translation pt", 'p.person_id = pt.person_id');
+        $where = sprintf("pt.content_lang = %s", AmcWm::app()->db->quoteValue(Controller::getContentLanguage()));
+        if ($keywords) {
+            $keywords = "%{$keywords}%";
+            $where .= sprintf("
+                    and (name like %s 
+                    or email like %s) 
+                    "
+                    , AmcWm::app()->db->quoteValue($keywords)
+                    , AmcWm::app()->db->quoteValue($keywords)
+            );
+        }
+        $command->where($where);
+        $queryCount.=" where {$where}";
+        $command->limit(self::REF_PAGE_SIZE, self::REF_PAGE_SIZE * ($pageNumber - 1));
+        $data = $command->queryAll();
+        $list = array('records' => array(), 'total' => 0);
+        if ($prompt) {
+            $list['records'][] = array("id" => null, "text" => $prompt);
+        }
+        foreach ($data as $row) {
+            $label = "[{$row['name']}]";
+            if ($row['email']) {
+                $label .= " [{$row['email']}]";
+            }
+            $list['records'][] = array("id" => $row['user_id'], "text" => $label);
+        }
+        $list['total'] = AmcWm::app()->db->createCommand($queryCount)->queryScalar();
+        return $list;
     }
 
 }

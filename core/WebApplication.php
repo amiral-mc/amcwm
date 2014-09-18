@@ -101,6 +101,7 @@ class WebApplication extends CWebApplication {
         $this->setApplicationModules($applicationModules, false);
         $aclClass = "Acl";
         AmcWm::setPathOfAlias("bootstrap", AmcWm::getPathOfAlias("amcwm.vendors.bootstrap"));
+        Yii::import("amcwm.components.reports.*");
         if (!isset($config['components']['assetManager']['class'])) {
             $config['components']['assetManager']['class'] = "AssetManager";
         }
@@ -111,7 +112,7 @@ class WebApplication extends CWebApplication {
         if (!isset($config['components']['session']['cookieParams']['httponly'])) {
             $config['components']['session']['cookieParams']['httponly'] = true;
         }
-        
+
         if (!isset($config['components']['request']['enableCookieValidation'])) {
             $config['components']['request']['enableCookieValidation'] = true;
         }
@@ -252,7 +253,7 @@ class WebApplication extends CWebApplication {
      * @return ApplicationModule 
      */
     public function getApplicationModule($id, $parentModule = null) {
-        $module = null;
+        $module = null;        
         if (isset($this->_applicationModules[$id])) {
             if ($this->_applicationModules[$id]['instance'] === null) {
                 $class = $this->_applicationModules[$id]['class'];

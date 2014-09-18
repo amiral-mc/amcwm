@@ -21,7 +21,7 @@ class AmcUsersController extends BackendController {
             'contentModel' => $this->loadChildModel($id),
         ));
     }
-    
+
     /**
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed
@@ -75,7 +75,7 @@ class AmcUsersController extends BackendController {
                     Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => AmcWm::t("amcTools", "Can't save record")));
                     //$this->refresh();
                 }
-                if ($success) {                    
+                if ($success) {
                     $model->saveImage($deleteImageFile);
                     Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t("msgsbase.core", 'User has been saved')));
                     $this->redirect(array('view', 'id' => $model->person_id));
@@ -199,8 +199,7 @@ class AmcUsersController extends BackendController {
             if (!isset($_GET['ajax'])) {
                 $this->redirect(array('index'));
             }
-        }
-        else
+        } else
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
@@ -347,7 +346,16 @@ class AmcUsersController extends BackendController {
                 $user->person->addTranslationChild($contentModel, self::getContentLanguage());
             }
             return $contentModel;
-        }        
+        }
+    }
+
+    /**
+     * required for ajax requests
+     */
+    public function ajaxUsersList() {
+        header('Content-type: application/json');
+        $list = Users::getUsersList(AmcWm::app()->request->getParam('q'), AmcWm::app()->request->getParam('page', 1), AmcWm::app()->request->getParam('prompt'));
+        echo CJSON::encode($list);
     }
 
 }

@@ -23,7 +23,7 @@ $baseScript = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias(AmcWm::
                                 <ul id="user_access">
                                     <li class="first"><?php echo Html::link(AmcWm::t("amcBack", "profile"), array("/backend/users/default/profile")) ?></li>
                                     <li><?php echo Html::link(AmcWm::t("amcBack", "logout"), array("/backend/default/logout")) ?></li>
-                                    <li class="last"><?php echo Html::link(AmcWm::t("amcBack", "View Website"), array("/site/index"), array('target'=>'_blank')) ?></li>
+                                    <li class="last"><?php echo Html::link(AmcWm::t("amcBack", "View Website"), array("/site/index"), array('target' => '_blank')) ?></li>
                                 </ul>
                             </li>
                             <li><?php echo Html::link(Yii::app()->user->getMessagesCount() . ' ' . AmcWm::t("amcBack", "messages"), array("/user/newMessages"), array("class" => "new_messages")) ?></li>
@@ -74,11 +74,10 @@ $baseScript = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias(AmcWm::
                         'enableAjaxValidation' => false,
                         'enableClientValidation' => true,
                         'action' => array("/backend/default/changeContentLang"),
-                       
                         'clientOptions' => array(
                             'validateOnSubmit' => true,
                         ),
-                            ));
+                    ));
                     ?>
                     <div class="row" style="color:#000000;">  
                         <?php echo CHtml::label(AmcWm::t("amcBack", "Current Content Language"), "clang") ?>
@@ -91,12 +90,12 @@ $baseScript = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias(AmcWm::
                 <div id="content_frm">
                     <div class="title_wrapper">
                         <h2><?php
-                    if (isset($this->breadcrumbs))
-                        $this->widget('Breadcrumbs', array('links' => $this->breadcrumbs));
-                    ?>&nbsp;&nbsp;&nbsp;[<?php
+                            if (isset($this->breadcrumbs))
+                                $this->widget('Breadcrumbs', array('links' => $this->breadcrumbs));
+                            ?>&nbsp;&nbsp;&nbsp;[<?php
                             if (isset($this->sectionName))
                                 echo $this->sectionName
-                        ?>]</h2>
+                                ?>]</h2>
                         <span class="title_wrapper_left"></span>
                         <span class="title_wrapper_right"></span>
                     </div> 
@@ -115,7 +114,7 @@ $baseScript = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias(AmcWm::
                     <div class="sct">
                         <?php
                         if (isset($this->statistics)) {
-                            $vars['statistics_data'] = $this->statistics;
+                            echo $this->statistics;
                         }
                         ?>
                     </div> 		

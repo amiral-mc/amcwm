@@ -61,6 +61,7 @@ class ManageArticles extends ManageContent {
         $model->addTranslationChild(new ArticlesTranslation('search'), Controller::getContentLanguage());
         $contentModel = $model->getTranslated(Controller::getContentLanguage());
         $virtualModule = $this->controller->getModule()->appModule->currentVirtual;
+//        $this->getStatistics($virtualModule);
         $msgsBase = "msgsbase.core";
         if ($virtualModule != "articles") {
             $msgsBase = "msgsbase.{$virtualModule}";
@@ -1031,5 +1032,4 @@ class ManageArticles extends ManageContent {
         }
         return $allow;
     }
-
 }

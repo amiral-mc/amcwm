@@ -1,0 +1,65 @@
+body{
+	font-family: Arial, Tahoma, Verdana, sans-serif;
+}
+
+.report-form{
+  text-align: center;  
+}
+#report-header{
+	text-align:center;
+	margin-bottom:20px;
+}
+
+#report-header .report-name{
+	font-size:22px;
+	font-weight:bold;
+	padding-bottom:15px;
+}
+
+#report-header .report-date,
+#report-header .reporter-name{
+	font-size:16px;
+}
+
+#report-header .report-date span,
+#report-header .reporter-name span{
+	font-weight:bold;
+	padding:0px 5px;
+}
+
+#report-header #reporter-tasks{
+	margin-top:20px;
+	font-size:16px;
+}
+
+#report-header #reporter-tasks span{
+	font-weight:bold;
+}
+
+#tabel-view table{
+	font-size:14px;
+}
+
+#tabel-view .header{
+	background-color:#b40000;
+	color:#fff;
+	font-size:15px;
+	font-weight:bold;
+}
+
+#tabel-view .serial{
+	text-align:center;
+}
+
+
+#tabel-view .header td{
+	padding:4px;
+}
+
+#tabel-view .odd{
+	background-color:#FFFFFF;
+}
+
+#tabel-view .even{
+	background-color:#E8E8E8;
+}

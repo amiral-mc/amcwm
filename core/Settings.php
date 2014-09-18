@@ -199,7 +199,7 @@ class Settings extends CComponent {
         $currentId = 0;
         if (isset($virtual['route'])) {
             $route = $virtual['route'];
-            $forwards = amcwm::app()->acl->getForwardModules();
+            $forwards = AmcWm::app()->acl->getForwardModules();
             foreach ($forwards as $id => $row) {
                 if (isset($row[$route])) {
                     $currentId = $id;
