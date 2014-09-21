@@ -128,6 +128,8 @@ class ArticlesReporter extends ReportsForm {
         $pagination->setPageSize(Deskman::REPORTS_PAGE_COUNT);
         $data['pagination'] = $pagination;
         $data['count'] = $count;
+//        die($select);
+        
         $data['records'] = AmcWm::app()->db->createCommand($select)->queryAll();
         return $data;
     }
@@ -139,7 +141,7 @@ class ArticlesReporter extends ReportsForm {
         $data = array();
         if ($this->viewResult) {
             $data = $this->getData();
-//            print_r($data); exit;
+//            print_r($data['records']); exit;
 //            $data['records'] = $this->getData();
             
             if ($this->writer) {
@@ -157,3 +159,11 @@ class ArticlesReporter extends ReportsForm {
     }
 
 }
+
+//SELECT article_header header, create_date date, hits views, comments comments 
+//    FROM articles 
+//    INNER JOIN articles_translation on articles.article_id = articles_translation.article_id 
+//    AND articles_translation.content_lang = 'ar' 
+//    INNER JOIN news n on articles.article_id = n.article_id 
+//    INNER JOIN news_editors ne on n.article_id = ne.article_id 
+//    WHERE editor_id = 11

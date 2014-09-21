@@ -27,6 +27,7 @@ class ArticlesReporters extends ReportsForm {
         'published' => 'count(case published when 1 then 1 else null end)',
     );
     protected $where = '';
+    private $_virtualModule = '';
 
     /**
      * @var type string Joined Tables.
@@ -35,15 +36,16 @@ class ArticlesReporters extends ReportsForm {
 
     public function __construct() {
         $this->view = "amcwm.modules.articles.backend.views.reports.reporters";
-        $virtualModule = AmcWm::app()->controller->getModule()->appModule->currentVirtual;
-        if ($virtualModule == 'news') {
+        $this->_virtualModule = AmcWm::app()->controller->getModule()->appModule->currentVirtual;
+        if ($this->_virtualModule == 'news') {
             $this->join .=" INNER JOIN news n on {$this->contentTable['table']}.{$this->contentTable['pk']} = n.{$this->contentTable['pk']} ";
             $this->join .=" INNER JOIN news_editors ne on n.{$this->contentTable['pk']} = ne.{$this->contentTable['pk']} ";
+            $this->join .=" INNER JOIN persons_translation pt ON ne.editor_id = pt.person_id";
         }
-        if ($virtualModule == 'essays') {
+        if ($this->_virtualModule == 'essays') {
             $this->join .=" INNER JOIN essays e on {$this->contentTable['table']}.{$this->contentTable['pk']} = e.{$this->contentTable['pk']} ";
         }
-        if ($virtualModule == 'articles') {
+        if ($this->_virtualModule == 'articles') {
             $articlesTables = AmcWm::app()->appModule->getExtendsTables();
             foreach ($articlesTables as $articleTable) {
                 $this->join .=" LEFT JOIN {$articleTable} on {$this->contentTable['table']}.article_id = {$articleTable}.article_id ";
@@ -92,12 +94,14 @@ class ArticlesReporters extends ReportsForm {
             $index = 1;
         }
         $query = " FROM {$this->contentTable['table']}";
-        $query .= " INNER JOIN persons_translation pt ON {$this->contentTable['table']}.writer_id = pt.person_id";
         $query .= $this->join;
         if ($this->joins) {
             foreach ($this->joins as $join) {
                 $query .= " $join";
             }
+        }
+        if ($this->_virtualModule != 'news') {
+            $query .=" INNER JOIN persons_translation pt ON {$this->contentTable['table']}.writer_id = pt.person_id";
         }
         $query .= ' WHERE pt.content_lang = ' . AmcWm::app()->db->quoteValue(Controller::getContentLanguage());
         $query .= $this->where;

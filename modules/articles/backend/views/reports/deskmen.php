@@ -44,7 +44,7 @@ if ($viewResult) {
                 $class = $key % 2 == 0 ? 'even' : 'odd'
                 ?>
                 <tr class="<?php echo $class ?>">
-                    <td class="serial"><?php echo $key ?></td>
+                    <td class="serial"><?php echo $key + 1 ?></td>
                     <td><?php echo $value['deskman'] ?></td>
                     <td><?php echo $value['count'] ?></td>
                     <td><?php echo $value['published'] ?></td>

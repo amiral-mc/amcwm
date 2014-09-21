@@ -88,7 +88,7 @@ return array(
         'db' => array(
             'enableParamLogging' => true,
             'enableProfiling' => true,
-            'connectionString' => 'mysql:host=localhost;dbname=amcwm',
+            'connectionString' => 'mysql:host=localhost;dbname=maydan',
             'emulatePrepare' => true,
             'username' => 'root',
             'password' => '1',

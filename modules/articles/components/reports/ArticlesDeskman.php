@@ -57,7 +57,7 @@ class ArticlesDeskman extends Deskman {
     protected function setJoin() {
         if ($this->_virtualModule == 'news') {
             $this->joins[] = " INNER JOIN news n on {$this->contentTable['table']}.{$this->contentTable['pk']} = n.{$this->contentTable['pk']}";
-            $this->joins[] = " INNER JOIN news_editors ne on n.{$this->contentTable['pk']} = ne.{$this->contentTable['pk']} ";
+//            $this->joins[] = " INNER JOIN news_editors ne on n.{$this->contentTable['pk']} = ne.{$this->contentTable['pk']} ";
 //            $this->joins[] = " INNER JOIN persons_translation pt on ne.editor_id = pt.person_id ";
         }
 //        

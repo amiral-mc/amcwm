@@ -81,6 +81,7 @@ abstract class Deskmen extends ReportsForm {
         $count = " SELECT COUNT(*) " . $query;
         $query .= " GROUP BY pt.person_id";
         $select = $select . $query;
+//        die($select);
         if ($singleRow) {
             $data['records'] = AmcWm::app()->db->createCommand($select)->queryRow();
         } else {
