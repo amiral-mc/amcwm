@@ -42,6 +42,7 @@ class ArticlesReporters extends ReportsForm {
 //        $userId = Yii::app()->request->getParam('user_id');
         if ($this->virtualModule == 'news') {
             $writerIds = "(" . Writers::BOTH_TYPE . ", " . Writers::EDITOR_TYPE . ")";
+            $this->cols['article_id'] = 'ne.article_id';
             $this->join .=" INNER JOIN persons_translation pt ON {$this->contentTable['table']}.{$this->contentTable['pk']} = pt.person_id";
             $this->join .=" LEFT JOIN news_editors ne on pt.person_id = ne.editor_id ";
             $this->join .=" LEFT JOIN articles a on ne.article_id = a.article_id ";
@@ -51,6 +52,7 @@ class ArticlesReporters extends ReportsForm {
         }
         if ($this->virtualModule == 'essays') {
             $writerIds = "(" . Writers::BOTH_TYPE . ", " . Writers::WRITER_TYPE . ")";
+            $this->cols['article_id'] = 'e.article_id';
             $this->join .=" INNER JOIN persons_translation pt ON {$this->contentTable['table']}.{$this->contentTable['pk']} = pt.person_id";
             $this->join .=" LEFT JOIN articles a on pt.person_id = a.writer_id ";
             $this->join .=" LEFT JOIN essays e on a.article_id = e.article_id ";
@@ -98,11 +100,19 @@ class ArticlesReporters extends ReportsForm {
     public function getData($singleRow = false) {
         $fromDate = AmcWm::app()->request->getParam('datepicker-from');
         $toDate = AmcWm::app()->request->getParam('datepicker-to');
-        if ($fromDate) {
-            $this->setWhere("{$this->cols['create_date']} >= '{$fromDate}'", "AND");
-        }
-        if ($toDate) {
-            $this->setWhere("{$this->cols['create_date']} <= '{$toDate} 23:59:59'", "AND");
+        if ($fromDate && $toDate) {
+            $this->cols['count'] = "count(CASE WHEN create_date >= '" . $fromDate . "' AND create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
+            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $fromDate . "' AND create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
+//            $this->setWhere("{$this->cols['create_date']} >= '{$fromDate}'", "AND");
+//            $this->setWhere("{$this->cols['create_date']} <= '{$toDate} 23:59:59'", "AND");
+        } elseif ($fromDate) {
+            $this->cols['count'] = "count(CASE WHEN create_date >= '" . $fromDate . "' THEN 1 ELSE NULL END)";
+            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $fromDate . "' THEN 1 ELSE NULL END)";
+//            $this->setWhere("{$this->cols['create_date']} >= '{$fromDate}'", "AND");
+        } elseif ($toDate) {
+            $this->cols['count'] = "count(CASE WHEN create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
+            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $toDate . "' THEN 1 ELSE NULL END)";
+//            $this->setWhere("{$this->cols['create_date']} <= '{$toDate} 23:59:59'", "AND");
         }
         $select = 'SELECT ';
         $index = 0;
@@ -132,12 +142,14 @@ class ArticlesReporters extends ReportsForm {
         if ($page) {
             $query .= " OFFSET " . Deskman::REPORTS_PAGE_COUNT * ($page - 1);
         }
+//        die($count);
         $select = $select . $query;
         $counts = AmcWm::app()->db->createCommand($count)->queryAll();
         $pagination = new CPagination(count($counts));
         $pagination->setPageSize(Deskman::REPORTS_PAGE_COUNT);
         $data['pagination'] = $pagination;
         $data['count'] = $count;
+//        die($select);
         if ($singleRow) {
             $data['records'] = AmcWm::app()->db->createCommand($select)->queryRow();
         } else {

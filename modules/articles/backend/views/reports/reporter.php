@@ -7,9 +7,25 @@ if ($module == 'news') {
 }
 
 if ($viewResult && isset($records) && $records) {
+    $name = $reporter['records']['reporter'];
+    if (!$name) {
+        $name = Yii::app()->db->createCommand()
+                ->select('name')
+                ->from('persons_translation')
+                ->where('person_id =' . (int) Yii::app()->request->getParam('user_id'))
+                ->queryScalar();
+    }
+    $count = $reporter['records']['count'] ? $reporter['records']['count'] : '0';
+    $published = $reporter['records']['published'] ? $reporter['records']['published'] : '0';
+    $unpublished = $reporter['records']['count'] ? $reporter['records']['count'] - $reporter['records']['published'] : '0';
     $fromDate = AmcWm::app()->request->getParam('datepicker-from');
     $toDate = AmcWm::app()->request->getParam('datepicker-to');
     $printUrl = Yii::app()->controller->createUrl('reports', array('result' => 1, 'rep' => 'reporter', 'module' => AmcWm::app()->request->getParam('module'), 'print' => 1, 'user_id' => Yii::app()->request->getParam('user_id'), 'datepicker-from' => $fromDate, 'datepicker-to' => $toDate));
+    if (!Yii::app()->request->getParam('page')) {
+        Yii::app()->session['count'] = $count;
+        Yii::app()->session['published'] = $published;
+        Yii::app()->session['unpublished'] = $unpublished;
+    }
     ?>
     <div id="report-header">
         <div class="report-name"><?php echo AmcWm::t('amcBack', $label . " Report") ?></div>
@@ -34,10 +50,10 @@ if ($viewResult && isset($records) && $records) {
             ?>
         </div>
         <div id="reporter-tasks">
-            <div><?php echo AmcWm::t('amcBack', 'Name') ?><span><?php echo $reporter['records']['reporter'] ?></span></div>
-            <div><?php echo AmcWm::t('amcBack', 'Total number of Articles') ?><span><?php echo $reporter['records']['count'] ?></span></div>
-            <div><?php echo AmcWm::t('amcBack', 'Total number of published Articles') ?><span><?php echo $reporter['records']['published'] ?></span></div>
-            <div><?php echo AmcWm::t('amcBack', 'Total number of unpublished Articles') ?><span><?php echo $reporter['records']['count'] - $reporter['records']['published'] ?></span></div>
+            <div><?php echo AmcWm::t('amcBack', 'Name') ?><span><?php echo $name ?></span></div>
+            <div><?php echo AmcWm::t('amcBack', 'Total number of Articles') ?><span><?php echo Yii::app()->session['count'] ?></span></div>
+            <div><?php echo AmcWm::t('amcBack', 'Total number of published Articles') ?><span><?php echo Yii::app()->session['published'] ?></span></div>
+            <div><?php echo AmcWm::t('amcBack', 'Total number of unpublished Articles') ?><span><?php echo Yii::app()->session['unpublished'] ?></span></div>
         </div>
     </div>
 
@@ -109,5 +125,6 @@ if ($viewResult && isset($records) && $records) {
         </div>
     </div>
     <?php
+    echo AmcWm::t("amcBack", "There are no results");
 }
 ?>

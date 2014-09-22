@@ -36,7 +36,7 @@ if ($viewResult) {
     </div>
 
     <div id="tabel-view">
-        <?php echo CHtml::link(AmcWm::t("amcTools", 'Print', array('class' => 'doc-print')), $printUrl, array('target' => '_blank', 'class' => 'doc-print')); ?>
+        <?php echo CHtml::link(AmcWm::t("amcTools", 'Print'), $printUrl, array('target' => '_blank', 'class' => 'doc-print')); ?>
         <table style="width: 100%" cellpadding="2">
             <tr class="header">
                 <td class="serial">م</td>
@@ -53,9 +53,9 @@ if ($viewResult) {
                 <tr class="<?php echo $class ?>">
                     <td class="serial"><?php echo $id ?></td>
                     <td><?php echo isset($value['reporter']) ? $value['reporter'] : null ?></td>
-                    <td><?php echo $value['count'] ?></td>
+                    <td><?php echo $value['article_id'] ? $value['count'] : "0" ?></td>
                     <td><?php echo $value['published'] ?></td>
-                    <td><?php echo $value['count'] - $value['published'] ?></td>
+                    <td><?php echo $value['article_id'] ? $value['count'] - $value['published'] : "0" ?></td>
                 </tr>
             <?php } ?>
         </table>

@@ -62,11 +62,3 @@
     echo $form;
     ?>
 </div>
-
-<script>
-    document.getElementById("datepicker-from").onsubmit = function() {
-        if (!document.getElementById("datepicker-from").value) {
-            return false;
-        }
-    }
-</script>

@@ -58,11 +58,19 @@ abstract class Deskmen extends ReportsForm {
     public function getData($singleRow = false) {
         $fromDate = AmcWm::app()->request->getParam('datepicker-from');
         $toDate = AmcWm::app()->request->getParam('datepicker-to');
+        if ($fromDate && $toDate) {
+            $this->cols['count'] = "count(CASE WHEN create_date >= '" . $fromDate . "' AND create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
+            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $fromDate . "' AND create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
+        }
         if ($fromDate) {
-            $this->setWhere("{$this->contentTable['table']}.{$this->cols['create_date']} >= '{$fromDate}'", "AND");
+            $this->cols['count'] = "count(CASE WHEN create_date >= '" . $fromDate . "' THEN 1 ELSE NULL END)";
+            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $fromDate . "' THEN 1 ELSE NULL END)";
+//            $this->setWhere("{$this->contentTable['table']}.{$this->cols['create_date']} >= '{$fromDate}'", "AND");
         }
         if ($toDate) {
-            $this->setWhere("{$this->contentTable['table']}.{$this->cols['create_date']} <= '{$toDate} 23:59:59'", "AND");
+            $this->cols['count'] = "count(CASE WHEN create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
+            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $toDate . "' THEN 1 ELSE NULL END)";
+//            $this->setWhere("{$this->contentTable['table']}.{$this->cols['create_date']} <= '{$toDate} 23:59:59'", "AND");
         }
         $select = 'SELECT ';
         $index = 0;
@@ -101,6 +109,7 @@ abstract class Deskmen extends ReportsForm {
         } else {
             $data['records'] = AmcWm::app()->db->createCommand($select)->queryAll();
         }
+        die($select);
         $counts = AmcWm::app()->db->createCommand($count)->queryAll();
         $pagination = new CPagination(count($counts));
         $pagination->setPageSize(Deskman::REPORTS_PAGE_COUNT);

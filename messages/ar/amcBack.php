@@ -97,4 +97,5 @@ return array(
     'Reporter' => 'المراسل',
     'Editor' => 'المحرر',
     'Deskman' => 'ديسك مان',
+    'There are no results' => 'لاتوجد نتائج',
 );

@@ -57,6 +57,11 @@ body{
     color: #000000;
 }
 
+.report-labels{
+    font-size:14px;
+    font-weight:bold;
+}
+
 #tabel-view table{
     font-size:14px;
     color: #000000;
