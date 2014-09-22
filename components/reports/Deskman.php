@@ -12,8 +12,8 @@
  * @author abdallah
  */
 abstract class Deskman extends ReportsForm {
-    
-    CONST REPORTS_PAGE_COUNT = 2;
+
+    CONST REPORTS_PAGE_COUNT = 10;
 
     protected $logTable = '';
     public $view = '';
@@ -44,10 +44,14 @@ abstract class Deskman extends ReportsForm {
     protected $joins;
 
     public function __construct() {
+        if (Yii::app()->request->getParam('print')) {
+            $this->printMode = true;
+        }
         $this->view = "amcwm.core.backend.views.default.reports.deskman";
         $this->writer = (int) AmcWm::app()->request->getParam('user_id');
         $deskMenClass = $this->deskMenClass;
         $this->deskMen = new $deskMenClass();
+        $this->setWhere('ul.action_id = ' . $this->getActionId());
         if ($this->writer) {
             $this->setWhere("ul.user_id = {$this->writer}");
         }
@@ -62,9 +66,13 @@ abstract class Deskman extends ReportsForm {
 
     abstract protected function setJoin();
 
-    protected function renderResult($data) {
+    protected function renderResult($data, $printMode = false) {
         $data['content'] = $this->getData();
-        AmcWm::app()->getController()->render($this->view, $data);
+        if ($this->printMode) {
+            AmcWm::app()->getController()->render($this->view . "Print", $data);
+        } else {
+            AmcWm::app()->getController()->render($this->view, $data);
+        }
     }
 
     protected function renderSearchForm() {
@@ -72,17 +80,21 @@ abstract class Deskman extends ReportsForm {
     }
 
     public function setWhere($where, $operator = "and") {
-        $this->where .= " {$operator} $where";
+        if (!strlen($this->where)) {
+            $this->where .= " WHERE {$where}";
+        } else {
+            $this->where .= " {$operator} $where";
+        }
     }
 
     protected function getData() {
         $fromDate = AmcWm::app()->request->getParam('datepicker-from');
         $toDate = AmcWm::app()->request->getParam('datepicker-to');
         if ($fromDate) {
-            $this->setWhere("{$this->contentTable['table']}.{$this->cols['create_date']} >= '{$fromDate}'", "AND");
+            $this->setWhere("{$this->contentTable['table']}.{$this->cols['date']} >= '{$fromDate}'", "AND");
         }
         if ($toDate) {
-            $this->setWhere("{$this->contentTable['table']}.{$this->cols['create_date']} <= '{$toDate} 23:59:59'", "AND");
+            $this->setWhere("{$this->contentTable['table']}.{$this->cols['date']} <= '{$toDate} 23:59:59'", "AND");
         }
         $select = 'SELECT ';
         $index = 0;
@@ -104,15 +116,21 @@ abstract class Deskman extends ReportsForm {
                 $query .= " $join";
             }
         }
-        $query .= ' WHERE ul.action_id = ' . $this->getActionId();
+//        $query .= ' WHERE ul.action_id = ' . $this->getActionId();
         $query .= $this->where;
-        $count = "SELECT COUNT(*) " . $query;
         $query .= " GROUP BY {$this->contentTable['table']}.{$this->contentTable['pk']}";
+        $count = "SELECT COUNT(*) " . $query;
+        if (!$this->printMode) {
+            $query .= " LIMIT " . self::REPORTS_PAGE_COUNT;
+        }
+        $page = (int) Yii::app()->request->getParam('page');
+        if ($page) {
+            $query .= " OFFSET " . Deskman::REPORTS_PAGE_COUNT * ($page - 1);
+        }
         $select = $select . $query;
-        
-        $pagination = new CPagination($count);
+        $counts = AmcWm::app()->db->createCommand($count)->queryAll();
+        $pagination = new CPagination(count($counts));
         $pagination->setPageSize(self::REPORTS_PAGE_COUNT);
-//        die($select);
         $data['records'] = AmcWm::app()->db->createCommand($select)->queryAll();
         $data['pagination'] = $pagination;
         $data['count'] = $count;
@@ -126,7 +144,7 @@ abstract class Deskman extends ReportsForm {
         $data = array();
         if ($this->viewResult) {
             $data = $this->getData();
-            if($this->writer){
+            if ($this->writer) {
                 $this->deskMen->setWhere("user_id = " . (int) AmcWm::app()->request->getParam('user_id'));
             }
             $deskmen = $this->deskMen->getData(true);
@@ -134,7 +152,11 @@ abstract class Deskman extends ReportsForm {
         }
         $data['viewResult'] = $this->viewResult;
         $data['formOutput'] = $formOutput;
-        $this->renderResult($data);
+        if ($this->printMode) {
+            $this->renderResult($data, true);
+        } else {
+            $this->renderResult($data);
+        }
     }
 
 }

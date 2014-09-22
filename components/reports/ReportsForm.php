@@ -16,7 +16,9 @@ abstract class ReportsForm extends Reports {
     abstract protected function renderSearchForm();
 
     public function run() {
-
+        if(Yii::app()->request->getParam('print')){
+            $this->printMode = true;
+        }
         $this->viewResult = AmcWm::app()->request->getParam('result');
         $formOutput = $this->renderSearchForm();
         $data = array();
@@ -26,7 +28,7 @@ abstract class ReportsForm extends Reports {
         }
         $data['viewResult'] = $this->viewResult;
         $data['formOutput'] = $formOutput;
-        $this->renderResult($data);
+        $this->renderResult($data, $this->printMode);
     }
     
     protected function getActionId() {

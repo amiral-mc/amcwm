@@ -110,7 +110,7 @@ class Writers extends ActiveRecord {
     }
      
     /**
-     * Get vessels list 
+     * Get editors list 
      * @return array
      * @access public 
      */
@@ -119,7 +119,7 @@ class Writers extends ActiveRecord {
     }
     
     /**
-     * Get vessels list 
+     * Get writers list 
      * @return array
      * @access public 
      */
@@ -128,11 +128,20 @@ class Writers extends ActiveRecord {
     }
     
     /**
-     * Get vessels list 
+     * Get writers/editors list
      * @return array
-     * @access public 
+     * @access public
      */
-    static protected function getWritersEditorsList($type = Writers::BOTH_TYPE, $keywords = null, $pageNumber = 1, $prompt = null) {
+    static public function getEditorsWritersList($keywords = null, $pageNumber = 1, $prompt = null) {
+        return self::getWritersEditorsList(self::BOTH_TYPE, $keywords, $pageNumber, $prompt);
+    }
+    
+    /**
+     * Fetch writers/editors data
+     * @return array
+     * @access public
+     */
+    static protected function getWritersEditorsList($type = Writers::BOTH_TYPE, $keywords = null, $pageNumber = 1, $prompt = null, $includeEmails = false) {
         if (!$pageNumber) {
             $pageNumber = 1;
         }
@@ -170,7 +179,7 @@ class Writers extends ActiveRecord {
         }
         foreach ($data as $row) {
             $label = "[{$row['name']}]";
-            if ($row['email']) {
+            if ($row['email'] && $includeEmails) {
                 $label .= " [{$row['email']}]";
             }
             $list['records'][] = array("id" => $row['writer_id'], "text" => $label);

@@ -29,16 +29,24 @@ abstract class Deskmen extends ReportsForm {
     protected $joins;
 
     public function __construct() {
+        if (Yii::app()->request->getParam('print')) {
+            $this->printMode = true;
+        }
         $this->view = "amcwm.core.backend.views.default.reports.deskmen";
         parent::__construct();
         AmcWm::app()->getController()->layout = $this->layout;
+        $this->setWhere('ul.action_id = ' . $this->getActionId());
         $this->setContentTable();
         $this->setCols();
         $this->setJoin();
     }
 
     public function setWhere($where, $operator = "and") {
-        $this->where .= " {$operator} $where";
+        if (!strlen($this->where)) {
+            $this->where .= " WHERE {$where}";
+        } else {
+            $this->where .= " {$operator} $where";
+        }
     }
 
     abstract protected function setContentTable();
@@ -75,27 +83,38 @@ abstract class Deskmen extends ReportsForm {
                 $query .= " $join";
             }
         }
-        $query .= ' WHERE ul.action_id = ' . $this->getActionId();
+//        $query .= ' WHERE ul.action_id = ' . $this->getActionId();
         $query .= ' AND pt.content_lang = ' . AmcWm::app()->db->quoteValue(Controller::getContentLanguage());
         $query .= $this->where;
-        $count = " SELECT COUNT(*) " . $query;
         $query .= " GROUP BY pt.person_id";
+        $count = " SELECT COUNT(*) " . $query;
+        if (!$this->printMode) {
+            $query .= " LIMIT " . Deskman::REPORTS_PAGE_COUNT;
+        }
+        $page = (int) Yii::app()->request->getParam('page');
+        if ($page) {
+            $query .= " OFFSET " . Deskman::REPORTS_PAGE_COUNT * ($page - 1);
+        }
         $select = $select . $query;
-//        die($select);
         if ($singleRow) {
             $data['records'] = AmcWm::app()->db->createCommand($select)->queryRow();
         } else {
             $data['records'] = AmcWm::app()->db->createCommand($select)->queryAll();
         }
-        $pagination = new CPagination($count);
+        $counts = AmcWm::app()->db->createCommand($count)->queryAll();
+        $pagination = new CPagination(count($counts));
         $pagination->setPageSize(Deskman::REPORTS_PAGE_COUNT);
         $data['pagination'] = $pagination;
         $data['count'] = $count;
         return $data;
     }
 
-    protected function renderResult($data) {
-        AmcWm::app()->getController()->render($this->view, $data);
+    protected function renderResult($data, $printMode = false) {
+        if ($this->printMode) {
+            AmcWm::app()->getController()->render($this->view . "Print", $data);
+        } else {
+            AmcWm::app()->getController()->render($this->view, $data);
+        }
     }
 
     protected function renderSearchForm() {
