@@ -46,10 +46,6 @@
             imageCropper.data.currentCoords.x2 = c.x2
             imageCropper.data.currentCoords.y = c.y
             imageCropper.data.currentCoords.y2 = c.y2
-            imageCropper.data.currentCoords.x *= imageCropper.data.ratio;
-            imageCropper.data.currentCoords.x2 *= imageCropper.data.ratio;
-            imageCropper.data.currentCoords.y *= imageCropper.data.ratio;
-            imageCropper.data.currentCoords.y2 *= imageCropper.data.ratio;
             var cropWidth = imageCropper.data.currentCoords.x2 - imageCropper.data.currentCoords.x;
             var cropHeight = imageCropper.data.currentCoords.y2 - imageCropper.data.currentCoords.y;
             var checkSize = function(key, value) {
@@ -66,12 +62,14 @@
             $.each(imageCropper.sizes, checkSize);
             $("body").off("click", '#dialog-' + id + '-crop');
             $("body").on("click", '#dialog-' + id + '-crop', function(e) {
+//                console.log(imageCropper.data.ratio);
+//                console.log("cropWidth = %d , maxSize[0] = %d", cropWidth, options.cropOptions.maxSize[0]);
+//                console.log("cropHeight = %d , maxSize[1] = %d", cropHeight, options.cropOptions.maxSize[1]);                
                 var cropClose = (options.cropAllSizes) ? false : true;
                 if(cropWidth == options.cropOptions.maxSize[0] && cropHeight == options.cropOptions.maxSize[1]){
                     cropClose = true;
                 }
                 if(cropClose){
-                //console.log("cropWidth:%f cropHeight:%f maxWidth:%f maxHeight:%f", cropWidth , cropHeight, options.cropOptions.maxSize[0], options.cropOptions.maxSize[1]);
                     $this.crop();
                 }
                 else{
@@ -112,6 +110,11 @@
 
         });
         $this.crop = function() {
+            imageCropper.data.currentCoords.x *= imageCropper.data.ratio;
+            imageCropper.data.currentCoords.x2 *= imageCropper.data.ratio;
+            imageCropper.data.currentCoords.y *= imageCropper.data.ratio;
+            imageCropper.data.currentCoords.y2 *= imageCropper.data.ratio;
+
             $("#" + id + "_coords").val(JSON.stringify(imageCropper.data.currentCoords));
             var cropWidth = parseInt(imageCropper.data.currentCoords.x2 - imageCropper.data.currentCoords.x);
             var cropHeight = parseInt(imageCropper.data.currentCoords.y2 - imageCropper.data.currentCoords.y);
