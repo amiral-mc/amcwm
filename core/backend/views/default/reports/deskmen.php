@@ -31,7 +31,7 @@ if ($viewResult) {
         </div>
     </div>
 
-    <div id="tabel-view">
+    <div class="tabel-view">
         <?php echo CHtml::link(AmcWm::t("amcTools", 'Print'), $printUrl, array('target' => '_blank', 'class' => 'doc-print')); ?>
         <table style="width: 100%" cellpadding="2">
             <tr class="header">

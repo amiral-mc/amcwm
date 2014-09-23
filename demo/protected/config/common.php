@@ -13,7 +13,7 @@ return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
     'name' => 'AMC Web Mananger ver 1',
     'language' => 'en',
-    'contentLang' => 'en',
+    'contentLang' => 'ar',
     'timeZone' => 'Africa/Cairo',
     // preloading 'log' component
     'preload' => array('log'),
@@ -88,7 +88,7 @@ return array(
         'db' => array(
             'enableParamLogging' => true,
             'enableProfiling' => true,
-            'connectionString' => 'mysql:host=localhost;dbname=maydan',
+            'connectionString' => 'mysql:host=localhost;dbname=amcwm',
             'emulatePrepare' => true,
             'username' => 'root',
             'password' => '1',

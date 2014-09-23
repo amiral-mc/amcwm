@@ -8,7 +8,7 @@ $baseScript = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias(AmcWm::
         <title><?php echo AmcWm::t('amcBack', 'Reports') ?></title>
         <link rel="stylesheet" type="text/css" href="<?php echo $baseScript ?>/css/<?php echo $currentAppLang ?>/style.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo $baseScript ?>/css/<?php echo $currentAppLang ?>/reports.css" />
-        <<script>
+        <script>
             $(document).ready(function() {
                 $(".report-form").submit(function(event) {
                     if (($("#datepicker-from").val().trim() <= 0)) {

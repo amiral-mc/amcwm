@@ -57,7 +57,7 @@
         ),
             ), true);
     $form .= CHtml::submitButton(AmcWm::t('amcBack', "Search"), array('id' => 'reports-link'));
-    $form .= '</div">';
+    $form .= '</div>';
     $form .= CHtml::endForm();
     echo $form;
     ?>
