@@ -18,7 +18,7 @@ class ArticlesReporters extends ReportsForm {
     /**
      * @var type string Primary table selected.
      */
-    protected $contentTable = array('table' => 'articles', 'pk' => 'article_id');
+    protected $contentTable = array('table' => 'writers', 'pk' => 'writer_id');
     protected $logTable = 'articles_log';
     protected $cols = array(
         'create_date' => 'create_date',
@@ -26,8 +26,7 @@ class ArticlesReporters extends ReportsForm {
         'count' => 'count(*)',
         'published' => 'count(case published when 1 then 1 else null end)',
     );
-    protected $where = '';
-    private $_virtualModule = '';
+    protected $where;
 
     /**
      * @var type string Joined Tables.
@@ -35,20 +34,39 @@ class ArticlesReporters extends ReportsForm {
     protected $joins = '';
 
     public function __construct() {
+        if (Yii::app()->request->getParam('print')) {
+            $this->printMode = true;
+        }
         $this->view = "amcwm.modules.articles.backend.views.reports.reporters";
-        $this->_virtualModule = AmcWm::app()->controller->getModule()->appModule->currentVirtual;
-        if ($this->_virtualModule == 'news') {
-            $this->join .=" INNER JOIN news n on {$this->contentTable['table']}.{$this->contentTable['pk']} = n.{$this->contentTable['pk']} ";
-            $this->join .=" INNER JOIN news_editors ne on n.{$this->contentTable['pk']} = ne.{$this->contentTable['pk']} ";
-            $this->join .=" INNER JOIN persons_translation pt ON ne.editor_id = pt.person_id";
+        $this->virtualModule = AmcWm::app()->controller->getModule()->appModule->currentVirtual;
+//        $userId = Yii::app()->request->getParam('user_id');
+        if ($this->virtualModule == 'news') {
+            $writerIds = "(" . Writers::BOTH_TYPE . ", " . Writers::EDITOR_TYPE . ")";
+            $this->cols['article_id'] = 'ne.article_id';
+            $this->join .=" INNER JOIN persons_translation pt ON {$this->contentTable['table']}.{$this->contentTable['pk']} = pt.person_id";
+            $this->join .=" LEFT JOIN news_editors ne on pt.person_id = ne.editor_id ";
+            $this->join .=" LEFT JOIN articles a on ne.article_id = a.article_id ";
+            $this->setWhere("{$this->contentTable['table']}.writer_type IN {$writerIds}");
+            $this->setWhere(' pt.content_lang = ' . AmcWm::app()->db->quoteValue(Controller::getContentLanguage()));
+//            $this->setWhere(" person_id = {$userId}");
         }
-        if ($this->_virtualModule == 'essays') {
-            $this->join .=" INNER JOIN essays e on {$this->contentTable['table']}.{$this->contentTable['pk']} = e.{$this->contentTable['pk']} ";
+        if ($this->virtualModule == 'essays') {
+            $writerIds = "(" . Writers::BOTH_TYPE . ", " . Writers::WRITER_TYPE . ")";
+            $this->cols['article_id'] = 'e.article_id';
+            $this->join .=" INNER JOIN persons_translation pt ON {$this->contentTable['table']}.{$this->contentTable['pk']} = pt.person_id";
+            $this->join .=" LEFT JOIN articles a on pt.person_id = a.writer_id ";
+            $this->join .=" LEFT JOIN essays e on a.article_id = e.article_id ";
+            $this->setWhere("{$this->contentTable['table']}.writer_type IN {$writerIds}");
+            $this->setWhere(' pt.content_lang = ' . AmcWm::app()->db->quoteValue(Controller::getContentLanguage()));
+//            $this->setWhere(" person_id = {$userId}");
         }
-        if ($this->_virtualModule == 'articles') {
+        if ($this->virtualModule == 'articles') {
+            $this->contentTable['table'] = 'articles';
+            $this->contentTable['pk'] = 'article_id';
             $articlesTables = AmcWm::app()->appModule->getExtendsTables();
+            unset($this->cols['reporter']);
             foreach ($articlesTables as $articleTable) {
-                $this->join .=" LEFT JOIN {$articleTable} on {$this->contentTable['table']}.article_id = {$articleTable}.article_id ";
+                $this->join .=" LEFT JOIN {$articleTable} on articles.article_id = {$articleTable}.article_id ";
                 $this->setWhere("{$articleTable}.article_id IS NULL");
             }
         }
@@ -60,7 +78,11 @@ class ArticlesReporters extends ReportsForm {
     }
 
     public function setWhere($where, $operator = "and") {
-        $this->where .= " {$operator} $where";
+        if (!strlen($this->where)) {
+            $this->where .= " WHERE {$where}";
+        } else {
+            $this->where .= " {$operator} $where";
+        }
     }
 
     protected function setContentTable() {
@@ -78,11 +100,19 @@ class ArticlesReporters extends ReportsForm {
     public function getData($singleRow = false) {
         $fromDate = AmcWm::app()->request->getParam('datepicker-from');
         $toDate = AmcWm::app()->request->getParam('datepicker-to');
-        if ($fromDate) {
-            $this->setWhere("{$this->contentTable['table']}.{$this->cols['create_date']} >= '{$fromDate}'", "AND");
-        }
-        if ($toDate) {
-            $this->setWhere("{$this->contentTable['table']}.{$this->cols['create_date']} <= '{$toDate} 23:59:59'", "AND");
+        if ($fromDate && $toDate) {
+            $this->cols['count'] = "count(CASE WHEN create_date >= '" . $fromDate . "' AND create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
+            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $fromDate . "' AND create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
+//            $this->setWhere("{$this->cols['create_date']} >= '{$fromDate}'", "AND");
+//            $this->setWhere("{$this->cols['create_date']} <= '{$toDate} 23:59:59'", "AND");
+        } elseif ($fromDate) {
+            $this->cols['count'] = "count(CASE WHEN create_date >= '" . $fromDate . "' THEN 1 ELSE NULL END)";
+            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $fromDate . "' THEN 1 ELSE NULL END)";
+//            $this->setWhere("{$this->cols['create_date']} >= '{$fromDate}'", "AND");
+        } elseif ($toDate) {
+            $this->cols['count'] = "count(CASE WHEN create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
+            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $toDate . "' THEN 1 ELSE NULL END)";
+//            $this->setWhere("{$this->cols['create_date']} <= '{$toDate} 23:59:59'", "AND");
         }
         $select = 'SELECT ';
         $index = 0;
@@ -100,18 +130,26 @@ class ArticlesReporters extends ReportsForm {
                 $query .= " $join";
             }
         }
-        if ($this->_virtualModule != 'news') {
-            $query .=" INNER JOIN persons_translation pt ON {$this->contentTable['table']}.writer_id = pt.person_id";
-        }
-        $query .= ' WHERE pt.content_lang = ' . AmcWm::app()->db->quoteValue(Controller::getContentLanguage());
         $query .= $this->where;
+        if ($this->virtualModule != 'articles') {
+            $query .= " GROUP BY pt.person_id";
+        }
         $count = "SELECT COUNT(*) " . $query;
-        $query .= " GROUP BY pt.person_id";
+        if (!$this->printMode) {
+            $query .= " LIMIT " . Deskman::REPORTS_PAGE_COUNT;
+        }
+        $page = (int) Yii::app()->request->getParam('page');
+        if ($page) {
+            $query .= " OFFSET " . Deskman::REPORTS_PAGE_COUNT * ($page - 1);
+        }
+//        die($count);
         $select = $select . $query;
-        $pagination = new CPagination($count);
+        $counts = AmcWm::app()->db->createCommand($count)->queryAll();
+        $pagination = new CPagination(count($counts));
         $pagination->setPageSize(Deskman::REPORTS_PAGE_COUNT);
         $data['pagination'] = $pagination;
         $data['count'] = $count;
+//        die($select);
         if ($singleRow) {
             $data['records'] = AmcWm::app()->db->createCommand($select)->queryRow();
         } else {
@@ -120,8 +158,13 @@ class ArticlesReporters extends ReportsForm {
         return $data;
     }
 
-    protected function renderResult($data) {
-        AmcWm::app()->getController()->render($this->view, $data);
+    protected function renderResult($data, $printMode = false) {
+        $data['module'] = $this->virtualModule;
+        if ($this->printMode) {
+            AmcWm::app()->getController()->render($this->view . "Print", $data);
+        } else {
+            AmcWm::app()->getController()->render($this->view, $data);
+        }
     }
 
     protected function renderSearchForm() {

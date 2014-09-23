@@ -90,6 +90,12 @@ return array(
     'Comments' => 'عدد التعليقات',
     'Reporter' => 'المراسل',
     'Reporters Report' => 'تقرير أداء مراسلين',
+    'Editors Report' => 'تقرير أداء محررين',
+    'Editor Report' => 'تقرير أداء محرر',
     'Reporter Report' => 'تقرير أداء مراسل',
     'Enter Editor Name' => 'أدخل أسم المراسل',
+    'Reporter' => 'المراسل',
+    'Editor' => 'المحرر',
+    'Deskman' => 'ديسك مان',
+    'There are no results' => 'لاتوجد نتائج',
 );

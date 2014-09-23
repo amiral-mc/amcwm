@@ -20,13 +20,23 @@ class ReportsWidget extends Widget {
 
     public function renderLinks() {
         $moduleId = AmcWm::app()->request->getParam('module');
-        if ($this->reporters) {
-            echo "<div class='row'>";
-            echo CHtml::link(AmcWm::t("amcBack", "Search Reporters Reports"), Yii::app()->controller->createUrl('reports', array('rep' => 'reporters', 'module' => $moduleId)), array('class' => 'render-reports-form', "target" => 'reports_dialog_iframe'));
-            echo "</div>";
-            echo "<div class='row'>";
-            echo CHtml::link(AmcWm::t("amcBack", "Search Reporter Reports"), Yii::app()->controller->createUrl('reports', array('rep' => 'reporter', 'module' => $moduleId)), array('class' => 'render-reports-form', "target" => 'reports_dialog_iframe'));
-            echo "</div>";
+        $virtualModule = AmcWm::app()->controller->getModule()->appModule->currentVirtual;
+        if ($this->reporters && $virtualModule != 'articles') {
+            if($this->reporters && $virtualModule == 'news') {
+                echo "<div class='row'>";
+                echo CHtml::link(AmcWm::t("amcBack", "Search Reporters Reports"), Yii::app()->controller->createUrl('reports', array('rep' => 'reporters', 'module' => $moduleId)), array('class' => 'render-reports-form', "target" => 'reports_dialog_iframe'));
+                echo "</div>";
+                echo "<div class='row'>";
+                echo CHtml::link(AmcWm::t("amcBack", "Search Reporter Reports"), Yii::app()->controller->createUrl('reports', array('rep' => 'reporter', 'module' => $moduleId)), array('class' => 'render-reports-form', "target" => 'reports_dialog_iframe'));
+                echo "</div>";
+            } else {
+                echo "<div class='row'>";
+                echo CHtml::link(AmcWm::t("amcBack", "Search Writers Reports"), Yii::app()->controller->createUrl('reports', array('rep' => 'reporters', 'module' => $moduleId)), array('class' => 'render-reports-form', "target" => 'reports_dialog_iframe'));
+                echo "</div>";
+                echo "<div class='row'>";
+                echo CHtml::link(AmcWm::t("amcBack", "Search Writer Reports"), Yii::app()->controller->createUrl('reports', array('rep' => 'reporter', 'module' => $moduleId)), array('class' => 'render-reports-form', "target" => 'reports_dialog_iframe'));
+                echo "</div>";
+            }
         }
         echo "<div class='row'>";
         echo CHtml::link(AmcWm::t("amcBack", "Search Deskman Reports"), Yii::app()->controller->createUrl('reports', array('rep' => 'deskman', 'module' => $moduleId)), array('class' => 'render-reports-form', "target" => 'reports_dialog_iframe'));

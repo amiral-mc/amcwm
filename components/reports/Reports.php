@@ -16,6 +16,9 @@ abstract class Reports {
     protected $viewResult = true;
     protected $view = '';
     protected $layout = '';
+    protected $printMode = false;
+    protected $virtualModule = '';
+    
 
     public function __construct() {
         $this->layout = "amcwm.core.backend.views.default.reports.layout";
@@ -23,7 +26,7 @@ abstract class Reports {
 
     abstract protected function getData();
 
-    abstract protected function renderResult($data);
+    abstract protected function renderResult($data, $printMode = false);
 
     public function run() {
         $data = array();
@@ -31,7 +34,7 @@ abstract class Reports {
             $data['records'] = $this->getData();
         }
         $data['viewResult'] = $this->viewResult;
-        $this->renderResult($data);
+        $this->renderResult($data, $printMode);
     }
 
 }

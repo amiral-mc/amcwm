@@ -967,6 +967,15 @@ class ManageArticles extends ManageContent {
         header('Content-type: application/json');
         echo CJSON::encode($editors);
     }
+    
+    /**
+     * required for ajax requests
+     */
+    public function findEditorsWriters() {
+        $editors = Writers::getEditorsWritersList(Yii::app()->request->getParam('q'), Yii::app()->request->getParam('page'), AmcWm::app()->request->getParam('prompt'));
+        header('Content-type: application/json');
+        echo CJSON::encode($editors);
+    }
 
     /**
      * required for ajax requests

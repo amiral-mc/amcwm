@@ -2,6 +2,9 @@
 echo $formOutput;
 
 if ($viewResult) {
+    $fromDate = AmcWm::app()->request->getParam('datepicker-from');
+    $toDate = AmcWm::app()->request->getParam('datepicker-to');
+    $printUrl = Yii::app()->controller->createUrl('reports', array('result' => 1, 'rep' => 'deskmen', 'module' => AmcWm::app()->request->getParam('module'), 'print' => 1, 'datepicker-from' => $fromDate, 'datepicker-to' => $toDate));
     ?>
     <div id="report-header">
         <div class="report-name"><?php echo AmcWm::t('amcBack', "Deskmen Report") ?></div>
@@ -29,7 +32,7 @@ if ($viewResult) {
     </div>
 
     <div id="tabel-view">
-
+        <?php echo CHtml::link(AmcWm::t("amcTools", 'Print'), $printUrl, array('target' => '_blank', 'class' => 'doc-print')); ?>
         <table style="width: 100%" cellpadding="2">
             <tr class="header">
                 <td class="serial">م</td>
@@ -40,10 +43,11 @@ if ($viewResult) {
             </tr>
             <?php
             foreach ($records as $key => $value) {
-                $class = $key % 2 == 0 ? 'even' : 'odd'
+                $class = $key % 2 == 0 ? 'even' : 'odd';
+                $id = Yii::app()->request->getParam('page') ? ((Yii::app()->request->getParam('page') - 1) * Deskman::REPORTS_PAGE_COUNT) + $key + 1 : $key + 1;
                 ?>
                 <tr class="<?php echo $class ?>">
-                    <td class="serial"><?php echo $key + 1 ?></td>
+                    <td class="serial"><?php echo $id ?></td>
                     <td><?php echo $value['deskman'] ?></td>
                     <td><?php echo $value['count'] ?></td>
                     <td><?php echo $value['published'] ?></td>
@@ -51,7 +55,11 @@ if ($viewResult) {
                 </tr>
             <?php } ?>
         </table>
-
+        <?php
+        $this->widget('CLinkPager', array(
+            'pages' => $pagination,
+        ));
+        ?>
     </div>
     <?php
 }

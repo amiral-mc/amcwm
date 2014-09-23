@@ -1,7 +1,25 @@
 <?php
 echo $formOutput;
-
 if ($viewResult) {
+    $name = $deskman['deskman'];
+    if (!$name) {
+        $name = Yii::app()->db->createCommand()
+                ->select('name')
+                ->from('persons_translation')
+                ->where('person_id =' . (int) Yii::app()->request->getParam('user_id'))
+                ->queryScalar();
+    }
+    $count = $deskman['count'] ? $deskman['count'] : '0';
+    $published = $deskman['published'] ? $deskman['published'] : '0';
+    $unpublished = $deskman['count'] ? $deskman['count'] - $deskman['published'] : '0';
+    $fromDate = AmcWm::app()->request->getParam('datepicker-from');
+    $toDate = AmcWm::app()->request->getParam('datepicker-to');
+    $printUrl = Yii::app()->controller->createUrl('reports', array('result' => 1, 'rep' => 'deskman', 'module' => AmcWm::app()->request->getParam('module'), 'print' => 1, 'user_id' => Yii::app()->request->getParam('user_id'), 'datepicker-from' => $fromDate, 'datepicker-to' => $toDate));
+    if (!Yii::app()->request->getParam('page')) {
+        Yii::app()->session['count'] = $count;
+        Yii::app()->session['published'] = $published;
+        Yii::app()->session['unpublished'] = $unpublished;
+    }
     ?>
     <div id="report-header">
         <div class="report-name"><?php echo AmcWm::t('amcBack', "Deskmen Report") ?></div>
@@ -26,15 +44,15 @@ if ($viewResult) {
             ?>
         </div>
         <div id="reporter-tasks">
-            <div><?php echo AmcWm::t('amcBack', 'Name') ?><span><?php echo $deskman['deskman'] ?></span></div>
-            <div><?php echo AmcWm::t('amcBack', 'Total number of Articles') ?><span><?php echo $deskman['count'] ?></span></div>
-            <div><?php echo AmcWm::t('amcBack', 'Total number of published Articles') ?><span><?php echo $deskman['published'] ?></span></div>
-            <div><?php echo AmcWm::t('amcBack', 'Total number of unpublished Articles') ?><span><?php echo $deskman['count'] - $deskman['published'] ?></span></div>
+            <div><?php echo AmcWm::t('amcBack', 'Name') ?>: <span class="report-labels"><?php echo $name ?></span></div>
+            <div><?php echo AmcWm::t('amcBack', 'Total number of Articles') ?>: <span class="report-labels"><?php echo Yii::app()->session['count'] ?></span></div>
+            <div><?php echo AmcWm::t('amcBack', 'Total number of published Articles') ?>: <span class="report-labels"><?php Yii::app()->session['published'] ?></span></div>
+            <div><?php echo AmcWm::t('amcBack', 'Total number of unpublished Articles') ?>: <span class="report-labels"><?php echo Yii::app()->session['unpublished'] ?></span></div>
         </div>
     </div>
 
     <div id="tabel-view">
-
+        <?php echo CHtml::link(AmcWm::t("amcTools", 'Print'), $printUrl, array('target' => '_blank', 'class' => 'doc-print')); ?>
         <table style="width: 100%" cellpadding="2">
             <tr class="header">
                 <td class="serial">م</td>
@@ -45,10 +63,11 @@ if ($viewResult) {
             </tr>
             <?php
             foreach ($records as $key => $value) {
-                $class = $key % 2 == 0 ? 'even' : 'odd'
+                $class = $key % 2 == 0 ? 'even' : 'odd';
+                $id = Yii::app()->request->getParam('page') ? ((Yii::app()->request->getParam('page') - 1) * Deskman::REPORTS_PAGE_COUNT) + $key + 1 : $key + 1;
                 ?>
                 <tr class="<?php echo $class ?>">
-                    <td class="serial"><?php echo $key + 1 ?></td>
+                    <td class="serial"><?php echo $id ?></td>
                     <td><?php echo $value['header'] ?></td>
                     <td><?php echo $value['date'] ?></td>
                     <td><?php echo $value['views'] ?></td>
@@ -57,27 +76,14 @@ if ($viewResult) {
             <?php } ?>
         </table>
         <?php
-        
-//        echo $pagination->getCurrentPage();
-//            'itemCount' => $count,
-//            'pageSize' => Deskman::REPORTS_PAGE_COUNT,
-//            'maxButtonCount' => 5,
-//            'nextPageLabel' => 'My text >',
-//            'header' => '',
-//            'htmlOptions' => array('class' => 'pages'),
-        
+        $this->widget('CLinkPager', array(
+            'pages' => $pagination,
+        ));
         ?>
     </div>
     <?php
-    $this->widget('CLinkPager', array(
-        'pages' => $pagination,
-//        'currentPage' => $pagination->getCurrentPage(),
-//        'itemCount' => $count,
-//        'pageSize' => Deskman::REPORTS_PAGE_COUNT,
-//        'maxButtonCount' => 5,
-//        'nextPageLabel' => 'My text >',
-//        'header' => '',
-//        'htmlOptions' => array('class' => 'pages'),
-    ));
+    if (!$records) {
+        echo AmcWm::t("amcBack", "There are no results");
+    }
 }
 ?>

@@ -258,7 +258,7 @@ class Users extends ActiveRecord {
      * @return array
      * @access public
      */
-    static public function getUsersList($keywords = null, $pageNumber = 1, $prompt = null) {
+    static public function getUsersList($keywords = null, $pageNumber = 1, $prompt = null, $includeEmails = false) {
         if (!$pageNumber) {
             $pageNumber = 1;
         }
@@ -295,7 +295,7 @@ class Users extends ActiveRecord {
         }
         foreach ($data as $row) {
             $label = "[{$row['name']}]";
-            if ($row['email']) {
+            if ($row['email'] && $includeEmails) {
                 $label .= " [{$row['email']}]";
             }
             $list['records'][] = array("id" => $row['user_id'], "text" => $label);

@@ -46,26 +46,29 @@ class ArticlesReporter extends ReportsForm {
     protected $joins;
 
     public function __construct() {
-        $virtualModule = AmcWm::app()->controller->getModule()->appModule->currentVirtual;
+        if (Yii::app()->request->getParam('print')) {
+            $this->printMode = true;
+        }
+        $this->virtualModule = AmcWm::app()->controller->getModule()->appModule->currentVirtual;
         $this->view = "amcwm.modules.articles.backend.views.reports.reporter";
         $this->writer = (int) AmcWm::app()->request->getParam('user_id');
         $reportersClass = $this->reportersClass;
         $this->reporters = new $reportersClass();
         if ($this->writer) {
-            if ($virtualModule == 'news') {
+            if ($this->virtualModule == 'news') {
                 $this->setWhere("editor_id = {$this->writer}");
             } else {
-                $this->setWhere("writer_id = {$this->writer}");
+                $this->setWhere("articles.writer_id = {$this->writer}");
             }
         }
-        if ($virtualModule == 'news') {
+        if ($this->virtualModule == 'news') {
             $this->join .=" INNER JOIN news n on {$this->contentTable['table']}.{$this->contentTable['pk']} = n.{$this->contentTable['pk']} ";
             $this->join .=" INNER JOIN news_editors ne on n.{$this->contentTable['pk']} = ne.{$this->contentTable['pk']} ";
         }
-        if ($virtualModule == 'essays') {
+        if ($this->virtualModule == 'essays') {
             $this->join .=" INNER JOIN essays e on {$this->contentTable['table']}.{$this->contentTable['pk']} = e.{$this->contentTable['pk']} ";
         }
-        if ($virtualModule == 'articles') {
+        if ($this->virtualModule == 'articles') {
             $articlesTables = AmcWm::app()->appModule->getExtendsTables();
             foreach ($articlesTables as $articleTable) {
                 $this->join .=" LEFT JOIN {$articleTable} on {$this->contentTable['table']}.article_id = {$articleTable}.article_id ";
@@ -74,13 +77,18 @@ class ArticlesReporter extends ReportsForm {
         }
     }
 
-    protected function renderResult($data) {
+    protected function renderResult($data, $printMode = false) {
+        $data['module'] = $this->virtualModule;
         $data['content'] = $this->getData();
-        AmcWm::app()->getController()->render($this->view, $data);
+        if ($this->printMode) {
+            AmcWm::app()->getController()->render($this->view . "Print", $data);
+        } else {
+            AmcWm::app()->getController()->render($this->view, $data);
+        }
     }
 
-    protected function renderSearchForm() {
-        return AmcWm::app()->getController()->renderPartial($this->view . "Form", array(), true);
+    protected function renderSearchForm($module = null) {
+        return AmcWm::app()->getController()->renderPartial($this->view . "Form", array('module' => $module), true);
     }
 
     public function setWhere($where, $operator = "and") {
@@ -118,52 +126,54 @@ class ArticlesReporter extends ReportsForm {
                 $query .= " $join";
             }
         }
-        if (!$this->writer) {
-            $this->setWhere("writer_id IS NOT NULL");
-        }
+//        if (!$this->writer) {
+//            $this->setWhere("writers.writer_id IS NOT NULL");
+//        }
         $query .= $this->where;
+
         $count = "SELECT COUNT(*) " . $query;
+        if (!$this->printMode) {
+            $query .= " LIMIT " . Deskman::REPORTS_PAGE_COUNT;
+        }
+        $page = (int) Yii::app()->request->getParam('page');
+        if ($page) {
+            $query .= " OFFSET " . Deskman::REPORTS_PAGE_COUNT * ($page - 1);
+        }
         $select = $select . $query;
-        $pagination = new CPagination($count);
+//        echo $count;
+//        echo "<br />";
+//        echo "<br />";
+//        die($select);
+        $pagination = new CPagination(AmcWm::app()->db->createCommand($count)->queryScalar());
         $pagination->setPageSize(Deskman::REPORTS_PAGE_COUNT);
         $data['pagination'] = $pagination;
         $data['count'] = $count;
-//        die($select);
-        
         $data['records'] = AmcWm::app()->db->createCommand($select)->queryAll();
         return $data;
     }
 
     public function run() {
-        $virtualModule = AmcWm::app()->controller->getModule()->appModule->currentVirtual;
         $this->viewResult = AmcWm::app()->request->getParam('result');
-        $formOutput = $this->renderSearchForm();
+        $formOutput = $this->renderSearchForm($this->virtualModule);
         $data = array();
         if ($this->viewResult) {
             $data = $this->getData();
-//            print_r($data['records']); exit;
-//            $data['records'] = $this->getData();
-            
             if ($this->writer) {
-                if ($virtualModule == 'news') {
+                if ($this->virtualModule == 'news') {
                     $this->reporters->setWhere("editor_id = " . $this->writer);
                 } else {
-                    $this->reporters->setWhere("writer_id = " . $this->writer);
+                    $this->reporters->setWhere("writers.writer_id = " . $this->writer);
                 }
             }
             $data['reporter'] = $this->reporters->getData(true);
         }
         $data['viewResult'] = $this->viewResult;
         $data['formOutput'] = $formOutput;
-        $this->renderResult($data);
+        if ($this->printMode) {
+            $this->renderResult($data, true);
+        } else {
+            $this->renderResult($data);
+        }
     }
 
 }
-
-//SELECT article_header header, create_date date, hits views, comments comments 
-//    FROM articles 
-//    INNER JOIN articles_translation on articles.article_id = articles_translation.article_id 
-//    AND articles_translation.content_lang = 'ar' 
-//    INNER JOIN news n on articles.article_id = n.article_id 
-//    INNER JOIN news_editors ne on n.article_id = ne.article_id 
-//    WHERE editor_id = 11
