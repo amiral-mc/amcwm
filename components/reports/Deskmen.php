@@ -109,7 +109,6 @@ abstract class Deskmen extends ReportsForm {
         } else {
             $data['records'] = AmcWm::app()->db->createCommand($select)->queryAll();
         }
-        die($select);
         $counts = AmcWm::app()->db->createCommand($count)->queryAll();
         $pagination = new CPagination(count($counts));
         $pagination->setPageSize(Deskman::REPORTS_PAGE_COUNT);
