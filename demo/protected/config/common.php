@@ -13,7 +13,7 @@ return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
     'name' => 'AMC Web Mananger ver 1',
     'language' => 'en',
-    'contentLang' => 'ar',
+    'contentLang' => 'en',
     'timeZone' => 'Africa/Cairo',
     // preloading 'log' component
     'preload' => array('log'),
