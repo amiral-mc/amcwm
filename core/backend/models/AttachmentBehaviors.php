@@ -182,15 +182,16 @@ class AttachmentBehaviors extends CBehavior {
                 if (!$attachment->ref_id) {
                     $attachment->ref_id = $id;
                 }
+                $attachmentTranslation->content_lang = $this->_model->content_lang;
                 $attachment->attach_url = $attachmentTranslation->attach_url;
                 $attachment->attach_sort = $attachmentTranslation->attach_sort;
-                $attachment->content_type = $attachmentTranslation->content_type;
+                $attachment->content_type = $attachmentTranslation->content_type;                
                 $saved &= $attachment->save();
                 $attachmentTranslation->attach_id = $attachment->attach_id;
                 $saved &= $attachmentTranslation->save();
-            }
+            }            
             foreach ($this->oldAttachment as $oldAttachment) {
-                if (!isset($this->attachment[$oldAttachment->attach_id])) {
+                if (!isset($this->attachment[$oldAttachment->attach_id])) {                    
                     $oldAttachment->getParentContent()->delete();
                 }
             }
