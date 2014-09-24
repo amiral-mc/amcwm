@@ -98,4 +98,12 @@ return array(
     'Editor' => 'المحرر',
     'Deskman' => 'ديسك مان',
     'There are no results' => 'لاتوجد نتائج',
+    'Search Reporters Reports' => 'بحث تقارير مراسليين/ محررين',
+    'Search Reporter Reports' => 'بحث تقارير مراسل/ محرر',
+    'Search Writers Reports' => 'بحث تقارير كتاب',
+    'Search Writer Reports' => 'بحث تقارير كاتب',
+    'Search Deskman Reports' => 'بحث تقارير معد المحتوى',
+    'Search Deskmen Reports' => 'بحث تقارير مُعْدّين المحتوى',
+    'From date field cannot be empty' => 'إدخل تاريح بداية الفترة',
+    'From date & Name fields cannot be empty' => 'إدخل تاريح بداية الفترة والأسم',
 );

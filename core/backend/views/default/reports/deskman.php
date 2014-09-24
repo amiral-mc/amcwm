@@ -46,7 +46,7 @@ if ($viewResult) {
         <div id="reporter-tasks">
             <div><?php echo AmcWm::t('amcBack', 'Name') ?>: <span class="report-labels"><?php echo $name ?></span></div>
             <div><?php echo AmcWm::t('amcBack', 'Total number of Articles') ?>: <span class="report-labels"><?php echo Yii::app()->session['count'] ?></span></div>
-            <div><?php echo AmcWm::t('amcBack', 'Total number of published Articles') ?>: <span class="report-labels"><?php Yii::app()->session['published'] ?></span></div>
+            <div><?php echo AmcWm::t('amcBack', 'Total number of published Articles') ?>: <span class="report-labels"><?php echo Yii::app()->session['published'] ?></span></div>
             <div><?php echo AmcWm::t('amcBack', 'Total number of unpublished Articles') ?>: <span class="report-labels"><?php echo Yii::app()->session['unpublished'] ?></span></div>
         </div>
     </div>

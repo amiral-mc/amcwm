@@ -9,18 +9,18 @@ $baseScript = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias(AmcWm::
         <link rel="stylesheet" type="text/css" href="<?php echo $baseScript ?>/css/<?php echo $currentAppLang ?>/style.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo $baseScript ?>/css/<?php echo $currentAppLang ?>/reports.css" />
         <script>
-            $(document).ready(function() {
-                $(".report-form").submit(function(event) {
-                    if (($("#datepicker-from").val().trim() <= 0)) {
-                        alert("From date cannot be empty");
-                        event.preventDefault();
-                    }
-                    if (($("#user_id").val().trim()) <= 0) {
-                        alert("Name cannot be empty");
-                        event.preventDefault();
-                    }
-                });
-            })
+//            $(document).ready(function() {
+//                $(".report-form").submit(function(event) {
+//                    if (($("#datepicker-from").val().trim() <= 0)) {
+//                        alert("From date cannot be empty");
+//                        event.preventDefault();
+//                    }
+//                    if (($("#user_id").val().trim()) <= 0) {
+//                        alert("Name cannot be empty");
+//                        event.preventDefault();
+//                    }
+//                });
+//            })
         </script>
     </head>
     <body>

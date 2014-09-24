@@ -21,10 +21,10 @@
         ?>
     </div>
     <div id="reporter-tasks">
-        <div><?php echo AmcWm::t('amcBack', 'Name') ?><span><?php echo $deskman['deskman'] ?></span></div>
-        <div><?php echo AmcWm::t('amcBack', 'Total number of Articles') ?><span><?php echo $deskman['count'] ?></span></div>
-        <div><?php echo AmcWm::t('amcBack', 'Total number of published Articles') ?><span><?php echo $deskman['published'] ?></span></div>
-        <div><?php echo AmcWm::t('amcBack', 'Total number of unpublished Articles') ?><span><?php echo $deskman['count'] - $deskman['published'] ?></span></div>
+        <div><?php echo AmcWm::t('amcBack', 'Name') ?>: <span class="report-labels"><?php echo $deskman['deskman'] ?></span></div>
+        <div><?php echo AmcWm::t('amcBack', 'Total number of Articles') ?>: <span class="report-labels"><?php echo $deskman['count'] ?></span></div>
+        <div><?php echo AmcWm::t('amcBack', 'Total number of published Articles') ?>: <span class="report-labels"><?php echo $deskman['published'] ?></span></div>
+        <div><?php echo AmcWm::t('amcBack', 'Total number of unpublished Articles') ?>: <span class="report-labels"><?php echo $deskman['count'] - $deskman['published'] ?></span></div>
     </div>
 </div>
 
