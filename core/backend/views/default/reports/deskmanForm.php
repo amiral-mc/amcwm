@@ -1,5 +1,14 @@
 <div class="report-form">
     <?php
+    $alertLabel = AmcWm::t('amcBack', 'From date & Name fields cannot be empty');
+    Yii::app()->clientScript->registerScript('reports', '
+        $(".report-form").submit(function(event) {
+            if (($("#datepicker-from").val().trim() <= 0) || ($("#user_id").val().trim()) <= 0) {
+                alert("' . $alertLabel . '");
+                event.preventDefault();
+            }
+        });
+            ', CClientScript::POS_READY);
     $usersListUrl = Html::createUrl('/backend/users/default/ajax', array('do' => 'usersList',));
     $form = CHtml::beginForm(Yii::app()->controller->createUrl('reports', array('result' => 1, 'rep' => 'deskman', 'module' => AmcWm::app()->request->getParam('module'))), "GET", array('id' => 'articles-reports-form', "target" => 'reports_dialog_iframe'));
     $label = AmcWm::t('amcBack', "Deskman");

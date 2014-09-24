@@ -28,10 +28,10 @@ if ($module == 'news') {
         ?>
     </div>
     <div id="reporter-tasks">
-        <div><?php echo AmcWm::t('amcBack', 'Name') ?><span><?php echo $reporter['records']['reporter'] ?></span></div>
-        <div><?php echo AmcWm::t('amcBack', 'Total number of Articles') ?><span><?php echo $reporter['records']['count'] ?></span></div>
-        <div><?php echo AmcWm::t('amcBack', 'Total number of published Articles') ?><span><?php echo $reporter['records']['published'] ?></span></div>
-        <div><?php echo AmcWm::t('amcBack', 'Total number of unpublished Articles') ?><span><?php echo $reporter['records']['count'] - $reporter['records']['published'] ?></span></div>
+        <div><?php echo AmcWm::t('amcBack', 'Name') ?>: <span class="report-labels"><?php echo $reporter['records']['reporter'] ?></span></div>
+        <div><?php echo AmcWm::t('amcBack', 'Total number of Articles') ?>: <span class="report-labels"><?php echo $reporter['records']['count'] ?></span></div>
+        <div><?php echo AmcWm::t('amcBack', 'Total number of published Articles') ?>: <span class="report-labels"><?php echo $reporter['records']['published'] ?></span></div>
+        <div><?php echo AmcWm::t('amcBack', 'Total number of unpublished Articles') ?>: <span class="report-labels"><?php echo $reporter['records']['count'] - $reporter['records']['published'] ?></span></div>
     </div>
 </div>
 
