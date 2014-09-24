@@ -101,8 +101,8 @@ class ArticlesReporters extends ReportsForm {
         $fromDate = AmcWm::app()->request->getParam('datepicker-from');
         $toDate = AmcWm::app()->request->getParam('datepicker-to');
         if ($fromDate && $toDate) {
-            $this->cols['count'] = "count(CASE WHEN create_date >= '" . $fromDate . "' AND create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
-            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $fromDate . "' AND create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
+            $this->cols['count'] = "count(CASE WHEN create_date >= '" . $fromDate . "' AND create_date <= '" . $toDate . " 23:59:59' THEN 1 ELSE NULL END)";
+            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $fromDate . "' AND create_date <= '" . $toDate . " 23:59:59' THEN 1 ELSE NULL END)";
 //            $this->setWhere("{$this->cols['create_date']} >= '{$fromDate}'", "AND");
 //            $this->setWhere("{$this->cols['create_date']} <= '{$toDate} 23:59:59'", "AND");
         } elseif ($fromDate) {
@@ -110,8 +110,8 @@ class ArticlesReporters extends ReportsForm {
             $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $fromDate . "' THEN 1 ELSE NULL END)";
 //            $this->setWhere("{$this->cols['create_date']} >= '{$fromDate}'", "AND");
         } elseif ($toDate) {
-            $this->cols['count'] = "count(CASE WHEN create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
-            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $toDate . "' THEN 1 ELSE NULL END)";
+            $this->cols['count'] = "count(CASE WHEN create_date <= '" . $toDate . " 23:59:59' THEN 1 ELSE NULL END)";
+            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $toDate . " 23:59:59' THEN 1 ELSE NULL END)";
 //            $this->setWhere("{$this->cols['create_date']} <= '{$toDate} 23:59:59'", "AND");
         }
         $select = 'SELECT ';

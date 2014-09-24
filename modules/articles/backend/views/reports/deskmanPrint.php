@@ -28,7 +28,7 @@
     </div>
 </div>
 
-<div id="tabel-view">
+<div class="tabel-view">
 
     <table style="width: 100%" cellpadding="2">
         <tr class="header">

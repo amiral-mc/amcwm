@@ -68,7 +68,7 @@ class ReportsWidget extends Widget {
                 'modal' => true,
             ),
         ));
-        echo '<iframe class="filemanager-iframe" name="reports_dialog_iframe" style="width:765px; height:535px;" id="reports_dialog_iframe" scrolling="auto"></iframe>';
+        echo '<iframe class="filemanager-iframe" name="reports_dialog_iframe" style="width:765px; height:535px; border:0px;" id="reports_dialog_iframe" scrolling="auto"></iframe>';
         $this->endWidget('zii.widgets.jui.CJuiDialog');
     }
 

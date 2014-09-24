@@ -59,17 +59,17 @@ abstract class Deskmen extends ReportsForm {
         $fromDate = AmcWm::app()->request->getParam('datepicker-from');
         $toDate = AmcWm::app()->request->getParam('datepicker-to');
         if ($fromDate && $toDate) {
-            $this->cols['count'] = "count(CASE WHEN create_date >= '" . $fromDate . "' AND create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
-            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $fromDate . "' AND create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
+            $this->cols['count'] = "count(CASE WHEN create_date >= '" . $fromDate . "' AND create_date <= '" . $toDate . " 23:59:59' THEN 1 ELSE NULL END)";
+            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $fromDate . "' AND create_date <= '" . $toDate . " 23:59:59' THEN 1 ELSE NULL END)";
         }
-        if ($fromDate) {
+        elseif ($fromDate) {
             $this->cols['count'] = "count(CASE WHEN create_date >= '" . $fromDate . "' THEN 1 ELSE NULL END)";
             $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $fromDate . "' THEN 1 ELSE NULL END)";
 //            $this->setWhere("{$this->contentTable['table']}.{$this->cols['create_date']} >= '{$fromDate}'", "AND");
         }
-        if ($toDate) {
-            $this->cols['count'] = "count(CASE WHEN create_date <= '" . $toDate . "' THEN 1 ELSE NULL END)";
-            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date >=  '" . $toDate . "' THEN 1 ELSE NULL END)";
+        elseif ($toDate) {
+            $this->cols['count'] = "count(CASE WHEN create_date <= '" . $toDate . " 23:59:59' THEN 1 ELSE NULL END)";
+            $this->cols['published'] = "count(CASE WHEN published = 1 AND create_date <=  '" . $toDate . " 23:59:59' THEN 1 ELSE NULL END)";
 //            $this->setWhere("{$this->contentTable['table']}.{$this->cols['create_date']} <= '{$toDate} 23:59:59'", "AND");
         }
         $select = 'SELECT ';
@@ -104,6 +104,7 @@ abstract class Deskmen extends ReportsForm {
             $query .= " OFFSET " . Deskman::REPORTS_PAGE_COUNT * ($page - 1);
         }
         $select = $select . $query;
+//        die($select);
         if ($singleRow) {
             $data['records'] = AmcWm::app()->db->createCommand($select)->queryRow();
         } else {

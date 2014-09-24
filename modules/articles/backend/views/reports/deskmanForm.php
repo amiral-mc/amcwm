@@ -28,7 +28,7 @@
             ),
         ),
         'htmlOptions' => array(
-            'style' => 'width:200px;',
+            'style' => 'width:378px;',
 //            'class' => 'row',
         ),
             ), true);

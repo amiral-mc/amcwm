@@ -3,11 +3,18 @@ body{
     color: #000000;
 }
 
-.report-form{
+.report-form {
     padding-top: 5px;
-    text-align: center;  
+    text-align: center;
     color: #000000;
+    border-bottom: 1px solid #cdcdcd;
+    margin-bottom: 12px;
 }
+
+.report-form > .row{
+    margin-bottom: 4px;
+}
+
 .report-form label{
     display: inline-block;
     text-align: left;
@@ -16,10 +23,11 @@ body{
 }
 
 .report-form label.user-label{
-    padding-left:12px;
-    margin-left:-7px;
-    margin-right:-40px;
+    padding-left: 0px;
+    margin-left: 12px;
+    margin-right: 0px;
 }
+
 #report-header{
     text-align:center;
     margin-bottom:20px;
@@ -62,34 +70,52 @@ body{
     font-weight:bold;
 }
 
-#tabel-view table{
+.tabel-view{
+    text-align: center;
+}
+
+.tabel-view table{
     font-size:14px;
     color: #000000;
 }
 
-#tabel-view .header{
+.tabel-view .header{
     background-color:#b40000;
     color:#fff;
     font-size:15px;
     font-weight:bold;
 }
 
-#tabel-view .serial{
+.tabel-view .serial{
     text-align:center;    
 }
 
 
-#tabel-view .header td{
+.tabel-view .header td{
     padding:4px;
 }
 
-#tabel-view .odd{
+.tabel-view .odd{
     background-color:#FFFFFF;
     color: #000000;
 }
 
-#tabel-view .even{
+.tabel-view .even{
     background-color:#E8E8E8;
     color: #000000;
 }
+
+
+
+
+
+
+
+
+
+margin-bottom: 4px; (for row in report form)
+
+
+
+border: 0; (iframe)
 
