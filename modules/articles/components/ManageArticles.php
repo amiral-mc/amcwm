@@ -149,6 +149,8 @@ class ManageArticles extends ManageContent {
      * @access protected
      */
     protected function save(ArticlesTranslation $contentModel) {
+        $virtualModule = AmcWm::app()->appModule->getCurrentVirtual();
+        $contentModel->attachBehavior("attachmentBehaviors", new AttachmentBehaviors($virtualModule, $contentModel, 1, $contentModel->article_id));            
         if (isset($_POST['Articles']) && isset($_POST["ArticlesTranslation"])) {
             $model = $contentModel->getParentContent();
             if (isset($_POST["ArticlesTranslation"]["tags"]) && is_array($_POST["ArticlesTranslation"]["tags"])) {
@@ -371,6 +373,7 @@ class ManageArticles extends ManageContent {
         if ($contentModel) {
             $model = $contentModel->getParentContent();
             $translatedModel = $this->loadTranslatedModel($model, $id);
+            $translatedModel->attachBehavior("attachmentBehaviors", new AttachmentBehaviors($virtualModule, $translatedModel, 1, $translatedModel->article_id));            
             if (isset($_POST["ArticlesTranslation"])) {
                 if (isset($_POST["ArticlesTranslation"]["tags"]) && is_array($_POST["ArticlesTranslation"]["tags"])) {
                     $tags = implode(PHP_EOL, $_POST["ArticlesTranslation"]["tags"]);
