@@ -71,7 +71,6 @@ class Menu extends CMenu {
         $label = "";
         $menuMoreWidth = 50;
         $menuWrapper = ".main_menu_wrapper";
-        if (isset(Yii::app()->params['useMoreMenu']) && Yii::app()->params['useMoreMenu']) {
             if (isset(Yii::app()->params['menuWrapper'])) {
                 $menuWrapper = Yii::app()->params['menuWrapper'];
             }
@@ -95,7 +94,6 @@ class Menu extends CMenu {
                 });
             ';
             $cs->registerScript('moreMenu', $js, CClientScript::POS_READY);
-        }
     }
 
 }
