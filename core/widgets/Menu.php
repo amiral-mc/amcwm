@@ -71,14 +71,15 @@ class Menu extends CMenu {
         $label = "";
         $menuMoreWidth = 50;
         $menuWrapper = ".main_menu_wrapper";
-        if (isset(Yii::app()->params['menuWrapper'])) {
-            $menuWrapper = Yii::app()->params['menuWrapper'] ;
-        }
-        if (isset(Yii::app()->params['menuMoreAsText'][AmcWm::app()->getLanguage()])) {
-            $label = AmcWm::t('app', '_MENU_MORE_');
-            $menuMoreWidth = Yii::app()->params['menuMoreAsText'][AmcWm::app()->getLanguage()];
-        }
-        $js = '
+        if (isset(Yii::app()->params['useMoreMenu']) && Yii::app()->params['useMoreMenu']) {
+            if (isset(Yii::app()->params['menuWrapper'])) {
+                $menuWrapper = Yii::app()->params['menuWrapper'];
+            }
+            if (isset(Yii::app()->params['menuMoreAsText'][AmcWm::app()->getLanguage()])) {
+                $label = AmcWm::t('app', '_MENU_MORE_');
+                $menuMoreWidth = Yii::app()->params['menuMoreAsText'][AmcWm::app()->getLanguage()];
+            }
+            $js = '
                 var width = 0;
                 var more = null;
                 $("' . $menuWrapper . ' > ul > li").each(function(){
@@ -93,8 +94,10 @@ class Menu extends CMenu {
                     }
                 });
             ';
-        $cs->registerScript('moreMenu', $js, CClientScript::POS_READY);
+            $cs->registerScript('moreMenu', $js, CClientScript::POS_READY);
+        }
     }
 
 }
+
 ?>
