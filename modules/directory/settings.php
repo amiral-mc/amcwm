@@ -9,17 +9,25 @@ return array(
             ),
             'dir_companies' => array(
             ),
+            'dir_companies_branches_translation' => array(
+                'address' => 'branch_address',
+            ),
+            'dir_companies_branches' => array(
+            ),
         ),
         'required' => array(
         ),
-        'table' => 'dir_companies_attributes',
-        'enable' => true),
+        'tables' => array(
+            'dir_companies'=>'dir_companies_attributes',
+            'dir_companies_branches'=>'dir_companies_branches_attributes',
+        ),
+        'enable' => true
+    ),
     'tables' => array(
         array(
             'id' => 1,
             'name' => 'dir_companies',
             'sorting' => array('sortField' => "create_date", 'order' => 'asc'),
-            'extraAttributes' => array()
         ),
         array(
             'id' => 2,
@@ -67,8 +75,8 @@ return array(
         'default' => array(
             'text' => array(
                 'subscriptoinRedirectUrl' => '/site/index',
-                'homeDirectoryRoute' => '/directory/default/index',                
-            ),            
+                'homeDirectoryRoute' => '/directory/default/index',
+            ),
             'check' => array(
                 'attachEnable' => true,
                 'imageEnable' => true,

@@ -15,3 +15,25 @@ CREATE TABLE IF NOT EXISTS `essays` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+
+INSERT INTO `modules_components` (`component_id`, `module_id`, `route`) VALUES ('16', '54', 'articles/default/view');
+INSERT INTO `modules_components` (`component_id`, `module_id`, `route`) VALUES ('17', '54', 'articles/default/sections');
+INSERT INTO `modules_components_translation` (`component_id`, `content_lang`, `component_name`) VALUES ('16', 'en', 'View Article');
+INSERT INTO `modules_components_translation` (`component_id`, `content_lang`, `component_name`) VALUES ('16', 'ar', 'عرض المقال');
+INSERT INTO `modules_components_translation` (`component_id`, `content_lang`, `component_name`) VALUES ('17', 'en', 'Articles Sections');
+INSERT INTO `modules_components_translation` (`component_id`, `content_lang`, `component_name`) VALUES ('17', 'ar', 'أقسام المقالات');
+INSERT INTO `modules_components_params` (`component_id`, `param_id`) VALUES ('16', '1');
+INSERT INTO `modules_components_params` (`component_id`, `param_id`) VALUES ('17', '1');
+INSERT INTO `modules_components_params` (`component_id`, `param_id`) VALUES ('17', '2');
+INSERT INTO `modules_components_params` (`component_id`, `param_id`) VALUES ('17', '6');
+
+INSERT INTO `moduls_components_params_translation` (`content_lang`, `component_id`, `param_id`, `label`, `description`) VALUES
+('ar', 16, 1, 'عنوان المقال', NULL),
+('ar', 17, 1, 'عنوان القسم', NULL),
+('ar', 17, 2, 'اضافة الاقسام الفرعيه للقائمة', NULL),
+('ar', 17, 6, 'module', NULL),
+('en', 16, 1, 'Article title', NULL),
+('en', 17, 1, 'Section title', NULL),
+('en', 17, 2, 'Append sub-sections to the menu list', NULL),
+('en', 17, 6, 'module', NULL);

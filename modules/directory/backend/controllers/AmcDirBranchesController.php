@@ -69,8 +69,10 @@ class AmcDirBranchesController extends BackendController {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
+        $contentModel = $this->loadChildModel($id);
+        $contentModel->attachBehavior("extendableBehaviors", new ExtendableAttributesBehaviors());
         $this->render('view', array(
-            'contentModel' => $this->loadChildModel($id),
+            'contentModel' => $contentModel,
         ));
     }
 
@@ -80,11 +82,12 @@ class AmcDirBranchesController extends BackendController {
      * @access protected
      */
     protected function save(DirCompaniesBranchesTranslation $contentModel) {
+        $model = $contentModel->getParentContent();
+        $contentModel->attachBehavior("extendableBehaviors", new ExtendableAttributesBehaviors());
         if (isset($_POST['DirCompaniesBranches']) && isset($_POST["DirCompaniesBranchesTranslation"])) {
-            $transaction = Yii::app()->db->beginTransaction();
-            $model = $contentModel->getParentContent();
+            $transaction = Yii::app()->db->beginTransaction();            
             $model->attributes = $_POST['DirCompaniesBranches'];
-            $contentModel->attributes = $_POST['DirCompaniesBranchesTranslation'];
+            $contentModel->attributes = $_POST['DirCompaniesBranchesTranslation'];            
             $validate = $model->validate();
             $validate &= $contentModel->validate();
             if ($validate) {
@@ -96,7 +99,8 @@ class AmcDirBranchesController extends BackendController {
                             $this->redirect(array('view', 'id' => $model->branch_id, 'cid'=>  $this->getCompanyId()));
                         }
                     }
-                } catch (CDbException $e) {
+                } catch (Exception $e) {                    
+                    echo $e->getMessage();
                     $transaction->rollback();
                     Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => AmcWm::t("amcTools", "Can't save record")));
                     //$this->refresh();
@@ -129,6 +133,7 @@ class AmcDirBranchesController extends BackendController {
         $contentModel = $this->loadChildModel($id);
         if ($contentModel) {
             $translatedModel = $this->loadTranslatedModel($contentModel->getParentContent(), $id);
+            $translatedModel->attachBehavior("extendableBehaviors", new ExtendableAttributesBehaviors());
             if (isset($_POST["DirCompaniesBranchesTranslation"])) {
                 $translatedModel->attributes = $_POST['DirCompaniesBranchesTranslation'];
                 $validate = $translatedModel->validate();
@@ -189,6 +194,7 @@ class AmcDirBranchesController extends BackendController {
             $messages['success'] = array();
             foreach ($ids as $id) {
                 $contentModel = $this->loadChildModel($id);
+                $contentModel->attachBehavior("extendableBehaviors", new ExtendableAttributesBehaviors());
                 $model = $contentModel->getParentContent();
                 $model->delete();
                 $messages['success'][] = AmcWm::t("msgsbase.core", 'Branch "{Branch}" has been deleted', array("{Branch}" => $contentModel->branch_name));
