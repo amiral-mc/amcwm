@@ -226,18 +226,7 @@
             );
             ?>            
         </div>     
-    </fieldset>
-
-    <div class="row">
-        <fieldset>
-            <legend><?php echo AmcWm::t("amcBack", "Publish to the social media sites"); ?>:</legend>
-            <?php //echo $form->labelEx($model, 'socialIds');     ?>
-            <span>
-                <?php echo $form->checkBoxList($model, 'socialIds', $this->getSocials(), array("separator" => "<br />", 'labelOptions' => array('class' => 'checkbox_label'))); ?>
-            </span>
-            <?php echo $form->error($model, 'socialIds'); ?>
-        </fieldset>
-    </div>
+    </fieldset>   
     <?php $this->endWidget(); ?>
 </div><!-- form -->    
 <?php
