@@ -179,7 +179,7 @@ class DirectoryItemData extends Dataset {
      */
     protected function getBranches() {
         $command = AmcWm::app()->db->createCommand()->from("dir_companies_branches t")
-                ->select('t.branch_id, t.country, t.email, t.phone, t.mobile, t.fax, tt.branch_name, tt.branch_address address, tt.city')
+                ->select('t.branch_id, t.country, t.email, t.phone, t.mobile, t.fax, tt.branch_name, tt.branch_address, tt.city')
                 ->join("dir_companies_branches_translation tt", "t.branch_id = tt.branch_id")
                 ->where("t.company_id = :companyId")
                 ->bindParam(":companyId", $this->_id, PDO::PARAM_INT);
@@ -191,7 +191,6 @@ class DirectoryItemData extends Dataset {
                 $attributes = new UsedAttributesList('dir_companies_branches_attributes', $branch['branch_id']);
                 $attributes->generate();
                 $attributesItems = $attributes->getItems();
-                //Html::printR($fields);
                 foreach ($fields as $fieldName) {                                                           
                     if (isset($attributesItems[$fieldName])) {
                         $branch['extended'][$fieldName] = array('belong' => array(), 'new' => array());
