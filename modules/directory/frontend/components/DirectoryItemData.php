@@ -140,7 +140,7 @@ class DirectoryItemData extends Dataset {
                 Yii::app()->request->cookies[$cookieName] = $cookie;
             }
         }
-        if ($this->_cache !== null && $cacheMe) {
+        if ($this->_cache !== null && $cacheMe && isset(Yii::app()->params["cacheDuration"]["company"])) {
             $this->_cache->set('company_' . $this->_id, $this->items, Yii::app()->params["cacheDuration"]["company"]);
         }
     }
@@ -174,6 +174,47 @@ class DirectoryItemData extends Dataset {
     }
 
     /**
+     * Get branches list
+     * @return array
+     */
+    protected function getBranches() {
+        $command = AmcWm::app()->db->createCommand()->from("dir_companies_branches t")
+                ->select('t.branch_id, t.country, t.email, t.phone, t.mobile, t.fax, tt.branch_name, tt.branch_address address, tt.city')
+                ->join("dir_companies_branches_translation tt", "t.branch_id = tt.branch_id")
+                ->where("t.company_id = :companyId")
+                ->bindParam(":companyId", $this->_id, PDO::PARAM_INT);
+        $branchesRows = $command->queryAll();
+        $branches = array();
+        if ($branchesRows) {
+            $fields = array_keys($branchesRows[0]);
+            foreach ($branchesRows as $branch) {
+                $attributes = new UsedAttributesList('dir_companies_branches_attributes', $branch['branch_id']);
+                $attributes->generate();
+                $attributesItems = $attributes->getItems();
+                Html::printR($fields);
+                foreach ($fields as $fieldName) {                                                           
+                    if (isset($attributesItems[$fieldName])) {
+                        $branch['extended'][$fieldName] = array('belong' => array(), 'new' => array());
+                        if (isset($attributesItems[$fieldName]['data'])) {
+                            $branch['extended'][$fieldName]['belong'] = $attributesItems[$fieldName]['data'];
+                        }
+                        if (isset($attributesItems[$fieldName]['inheritedAttributes'])) {
+                            foreach ($attributesItems[$fieldName]['inheritedAttributes'] as $inheritedName) {
+                                if (isset($attributesItems[$inheritedName]['data'])) {
+                                    $branch['extended'][$fieldName]['new'][$inheritedName]['label'] = $attributesItems[$inheritedName]['label'];
+                                    $branch['extended'][$fieldName]['new'][$inheritedName]['data'] = $attributesItems[$inheritedName]['data'];
+                                }
+                            }
+                        }
+                    }
+                }
+                $branches[] = $branch;
+            }
+        }
+        return $branches;
+    }
+
+    /**
      * sets the article record associated array
      * @access private
      * @return void
@@ -194,7 +235,9 @@ class DirectoryItemData extends Dataset {
                 $wheres
              ", $this->_id, Yii::app()->db->quoteValue($siteLanguage));
             $this->items['record'] = Yii::app()->db->createCommand($this->query)->queryRow();
+            $this->items['branches'] = array();
             if (is_array($this->items['record'])) {
+                $this->items['record']['branches'] = $this->getBranches();
                 $attributes = new UsedAttributesList('dir_companies_attributes', $this->items['record']['company_id']);
                 $attributes->generate();
                 $attributesItems = $attributes->getItems();
@@ -205,16 +248,15 @@ class DirectoryItemData extends Dataset {
                             $this->items['record']['extended'][$fieldName]['belong'] = $attributesItems[$fieldName]['data'];
                         }
                         if (isset($attributesItems[$fieldName]['inheritedAttributes'])) {
-                            foreach ($attributesItems[$fieldName]['inheritedAttributes'] as $inheritedName){
-                                if(isset($attributesItems[$inheritedName]['data'])){
+                            foreach ($attributesItems[$fieldName]['inheritedAttributes'] as $inheritedName) {
+                                if (isset($attributesItems[$inheritedName]['data'])) {
                                     $this->items['record']['extended'][$fieldName]['new'][$inheritedName]['label'] = $attributesItems[$inheritedName]['label'];
                                     $this->items['record']['extended'][$fieldName]['new'][$inheritedName]['data'] = $attributesItems[$inheritedName]['data'];
                                 }
                             }
                         }
-                        
                     }
-                }               
+                }
                 if (isset($this->items['record']["create_date"])) {
                     $this->items['record']["create_date"] = Yii::app()->dateFormatter->format("dd/MM/y hh:mm a", $this->items['record']["create_date"]);
                 }
