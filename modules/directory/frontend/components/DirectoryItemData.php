@@ -191,7 +191,7 @@ class DirectoryItemData extends Dataset {
                 $attributes = new UsedAttributesList('dir_companies_branches_attributes', $branch['branch_id']);
                 $attributes->generate();
                 $attributesItems = $attributes->getItems();
-                Html::printR($fields);
+                //Html::printR($fields);
                 foreach ($fields as $fieldName) {                                                           
                     if (isset($attributesItems[$fieldName])) {
                         $branch['extended'][$fieldName] = array('belong' => array(), 'new' => array());
