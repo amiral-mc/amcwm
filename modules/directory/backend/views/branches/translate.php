@@ -18,7 +18,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
 <div class="form">
     <?php
     $model = $contentModel->getParentContent();
-    $form = $this->beginWidget('CActiveForm', array(
+    $form = $this->beginWidget('Form', array(
         'id' => $formId,
         'enableAjaxValidation' => false,
         'enableClientValidation' => false,
@@ -60,7 +60,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
         <div class="row">
             <?php echo $form->labelEx($translatedModel, 'branch_address'); ?>
             <?php echo $contentModel->branch_address;?><br />
-            <?php echo $form->textField($translatedModel, 'branch_address', array('size' => 65, 'maxlength' => 150)); ?>
+            <?php echo $form->extendableField($translatedModel, 'branch_address' , 'textField', array('translateOnly'=>true, 'htmlOptions'=>array('size' => 65, 'maxlength' => 150))); ?>
             <?php echo $form->error($translatedModel, 'branch_address'); ?>
         </div>
         <div class="row">

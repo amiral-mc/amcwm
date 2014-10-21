@@ -12,7 +12,6 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-
 class BackendController extends Controller {
 
     /**
@@ -49,12 +48,11 @@ class BackendController extends Controller {
         if (AmcWm::app()->backend['bootstrap']['use']) {
             if (isset(AmcWm::app()->backend['bootstrap']['useResponsive']) && AmcWm::app()->backend['bootstrap']['useResponsive']) {
                 Yii::app()->bootstrap->useResponsive = true;
-            }
-            else{
+            } else {
                 Yii::app()->bootstrap->useResponsive = false;
             }
             Yii::app()->bootstrap->register();
-        }        
+        }
         $this->manager = new ManageContent(true);
         $this->backendBaseUrl = Yii::app()->getAssetManager()->getPublishedUrl(Yii::getPathOfAlias(AmcWm::app()->getModule(AmcWm::app()->backendName)->viewsBaseAlias . ".layouts.publish"));
     }
@@ -124,9 +122,13 @@ class BackendController extends Controller {
     public function getManager() {
         return $this->manager;
     }
-    
+
     public function getCountries($addEmpty = false, $code = NULL, $contentLang = null) {
         return parent::getCountries($addEmpty, $code, AmcWm::app()->getLanguage());
+    }
+
+    public function actionReports($rep) {
+        $this->manager->reports($rep);
     }
 
 }

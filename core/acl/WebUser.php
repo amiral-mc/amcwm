@@ -207,7 +207,7 @@ class WebUser extends CWebUser {
                 where u.user_id = %d and published = %d
             ", $this->getId(), ActiveRecord::PUBLISHED);
             $info = Yii::app()->db->createCommand($statement)->queryRow();
-            if(!$info){
+            if (!$info) {
                 $this->logout();
             }
         }
@@ -241,6 +241,26 @@ class WebUser extends CWebUser {
     public function getCurrentLanguage() {
         return Controller::getCurrentLanguage();
         //return Yii::app()->getLanguage();
+    }
+
+    /**
+     * This method is invoked right after a user is logged out.
+     * You may override this method to do some extra cleanup work for the user.
+     * @since 1.1.3
+     */
+    protected function afterLogout() {
+        AmcWm::app()->session->regenerateID(true);
+    }
+
+    /**
+     * This method is called after the user is successfully logged in.
+     * You may override this method to do some postprocessing (e.g. log the user
+     * login IP and time; load the user permission information).
+     * @param boolean $fromCookie whether the login is based on cookie.
+     * @since 1.1.3
+     */
+    protected function afterLogin($fromCookie) {
+        AmcWm::app()->session->regenerateID();
     }
 
 }

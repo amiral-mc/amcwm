@@ -28,7 +28,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
     /**
      * @todo fix the client side validation in the tinyMCE editor.
      */
-    $form = $this->beginWidget('CActiveForm', array(
+    $form = $this->beginWidget('Form', array(
         'id' => $formId,
         'enableAjaxValidation' => false,
         'enableClientValidation' => false,
@@ -36,13 +36,22 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
             'validateOnSubmit' => true,
         ),
         'htmlOptions' => array('enctype' => 'multipart/form-data')
-            ));
+    ));
     ?>
 
     <p class="note"><?php echo AmcWm::t("amcBack", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage()); ?>
     <?php echo CHtml::hiddenField('module', Data::getForwardModParam()); ?>
-    <?php echo $form->errorSummary(array_merge(array($model, $translatedModel), $translatedModel->titles)); ?>
+    <?php
+    $models[] = $translatedModel;
+    foreach ($translatedModel->attachment as $attachmentModel) {
+        $models[] = $attachmentModel;
+    }
+    foreach ($translatedModel->titles as $title) {
+        $models[] = $title;
+    }
+    echo $form->errorSummary($models);
+    ?>
     <fieldset>
         <legend><?php echo AmcWm::t("msgsbase.core", "General Option"); ?>:</legend>
         <div class="row">                       
@@ -99,7 +108,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 ?>
             </span>
             <!--            --->
-            <span class="translated_label"><?php //echo AmcWm::t("msgsbase.core", 'In Spot');          ?></span>
+            <span class="translated_label"><?php //echo AmcWm::t("msgsbase.core", 'In Spot');           ?></span>
             <span class="translated_org_item">
                 <?php
                 if ($model->in_spot) {
@@ -111,36 +120,36 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
             </span>
         </div>
         <?php if ($options['default']['check']['addToSlider']): ?>
-        <div class="row" style="padding-top:5px;padding-bottom: 5px;">            
-            <?php
-            $drawSliderImage = NULL;
-            if ($model->article_id && $model->in_slider) {
-                if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" .$imagesInfo['slider']['path'] . "/" . $model->article_id . "." . $model->in_slider))) {
-                    $drawSliderImage = '<div>' . CHtml::image(Yii::app()->baseUrl . "/" .$imagesInfo['slider']['path'] . "/" . $model->article_id . "." . $model->in_slider . "?" . time(), "", array("class" => "image", "width" => "200")) . '</div>';
-                }
-            }
-            ?>
-            <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", 'In Slider'); ?></span>:
-            <span class="translated_org_item">
+            <div class="row" style="padding-top:5px;padding-bottom: 5px;">            
                 <?php
-                if ($model->in_slider) {
-                    echo AmcWm::t("amcFront", "Yes");
-                    echo $drawSliderImage;
-                } else {
-                    echo AmcWm::t("amcFront", "No");
+                $drawSliderImage = NULL;
+                if ($model->article_id && $model->in_slider) {
+                    if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['slider']['path'] . "/" . $model->article_id . "." . $model->in_slider))) {
+                        $drawSliderImage = '<div>' . CHtml::image(Yii::app()->baseUrl . "/" . $imagesInfo['slider']['path'] . "/" . $model->article_id . "." . $model->in_slider . "?" . time(), "", array("class" => "image", "width" => "200")) . '</div>';
+                    }
                 }
                 ?>
-            </span>                     
-        </div>
-        <?php endif;?>
+                <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", 'In Slider'); ?></span>:
+                <span class="translated_org_item">
+                    <?php
+                    if ($model->in_slider) {
+                        echo AmcWm::t("amcFront", "Yes");
+                        echo $drawSliderImage;
+                    } else {
+                        echo AmcWm::t("amcFront", "No");
+                    }
+                    ?>
+                </span>                     
+            </div>
+        <?php endif; ?>
     </fieldset>
 
     <fieldset>
         <?php
         $drawImage = NULL;
         if ($model->article_id && $model->thumb) {
-            if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" .$imagesInfo['list']['path'] . "/" . $model->article_id . "." . $model->thumb))) {
-                $drawImage = '<div>' . CHtml::image(Yii::app()->baseUrl . "/" .$imagesInfo['list']['path'] . "/" . $model->article_id . "." . $model->thumb . "?" . time(), "", array("class" => "image",)) . '</div>';
+            if (is_file(str_replace("/", DIRECTORY_SEPARATOR, Yii::app()->basePath . "/../" . $imagesInfo['list']['path'] . "/" . $model->article_id . "." . $model->thumb))) {
+                $drawImage = '<div>' . CHtml::image(Yii::app()->baseUrl . "/" . $imagesInfo['list']['path'] . "/" . $model->article_id . "." . $model->thumb . "?" . time(), "", array("class" => "image",)) . '</div>';
             }
         }
         ?>
@@ -179,7 +188,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
                 'id' => 'ArticlesTitles',
                 'modelName' => 'ArticlesTitles',
                 'data' => $translatedModel->titles,
-                'title'=>  AmcWm::t("msgsbase.core", "Add new title"),
+                'title' => AmcWm::t("msgsbase.core", "Add new title"),
                 'elements' => array(
                     'title' => array(
                         'type' => 'text',
@@ -196,17 +205,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
         <div class="row">
             <?php echo $form->labelEx($translatedModel, 'article_detail'); ?>
             <?php echo $form->error($translatedModel, 'article_detail'); ?>
-            <?php
-            $this->widget('amcwm.core.widgets.tinymce.MTinyMce', array(
-                'model' => $translatedModel,
-                'attribute' => 'article_detail',
-                'editorTemplate' => 'full',
-                'htmlOptions' => array(
-                    'style' => 'height:300px; width:630px;'
-                ),
-                    )
-            );
-            ?>            
+            <?php echo $form->richTextField($translatedModel, 'article_detail', array('editorTemplate' => 'full', 'height' => '300px', "width" => "630px")); ?>           
         </div>       
         <div class="row">
             <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", 'Section'); ?></span>:
@@ -225,7 +224,13 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
         <div class="row">
             <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", 'Country'); ?></span>:
             <span class="translated_org_item">
-                <?php echo $model->countryCode->getCountryName() ?>
+                <?php
+                if ($model->country_code) {
+                    echo $model->countryCode->getCountryName();
+                } else {
+                    echo Yii::t('zii', 'Not set');
+                }
+                ?>
             </span>
         </div>     
 
@@ -239,19 +244,19 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
             </span>
         </div>
         <?php if ($options['default']['check']['addToInfocus']): ?>
-        <div class="row">
-            <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", 'In Focus File'); ?></span>:
-            <span class="translated_org_item">
-                <?php
-                $infocusName = $this->getInfocucName($model->infocusId);
-                if ($infocusName) {
-                    echo $infocusName;
-                } else {
-                    echo Yii::t('zii', 'Not set');
-                }
-                ?>
-            </span>
-        </div>   
+            <div class="row">
+                <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", 'In Focus File'); ?></span>:
+                <span class="translated_org_item">
+                    <?php
+                    $infocusName = $this->getInfocucName($model->infocusId);
+                    if ($infocusName) {
+                        echo $infocusName;
+                    } else {
+                        echo Yii::t('zii', 'Not set');
+                    }
+                    ?>
+                </span>
+            </div>   
         <?php endif; ?>
         <div class="row">
             <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", 'Publish Date'); ?></span>:
@@ -289,6 +294,11 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
             ?>            
         </div>     
     </fieldset>
-
+    <fieldset>
+        <legend><?php echo AmcWm::t("msgsbase.core", "Files"); ?>:</legend>
+        <div class="row">
+            <?php echo $form->attachmentField($translatedModel, 'attachment', array("id" => "attachment_area", 'attachOptions' => array('translateOnly' => true))); ?>
+        </div>     
+    </fieldset>
     <?php $this->endWidget(); ?>
 </div><!-- form -->    

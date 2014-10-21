@@ -42,14 +42,13 @@ class ModelsAttributesList extends Dataset {
      * Counstructor
      * Make sure you call the parent counstructor so that the method is raised properly.
      * @param ActiveRecord $model
+     * @param string $table
      * @param integer $id
      * @param integer $attributeType
      * @param integer $systemAttribute -1 get both , otherwise get the attribute where its value equal the given $systemAttribute
      */
-    public function __construct($model, $id, $attributeType = 0, $systemAttribute = AttributesList::NORMAL_SYSTEM_ATTRIBUTE) {
+    public function __construct($model, $table, $id, $attributeType = 0, $systemAttribute = AttributesList::NORMAL_SYSTEM_ATTRIBUTE) {
         $usedModules = AttributesList::getSettings()->settings['usedModules'];
-        $settings = $model->getModuleSettings()->settings;
-        $table = Html::escapeString($settings['extraAttributes']['table']);
         $moduleData = null;
         foreach ($usedModules as $usedModule) {
             foreach ($usedModule['tables'] as $usedTable) {
@@ -173,7 +172,7 @@ class ModelsAttributesList extends Dataset {
                 $index = $attributeName;
                 //$attributeType['required'] = true;
             } 
-            if (isset($required[$attributeName])) {
+            if (isset($required[$this->_model->tableName()][$attributeName])) {
                 $attributeType['required'] = true;
             }             
             else {

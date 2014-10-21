@@ -1,4 +1,5 @@
 <?php
+
 $model = $contentModel->getParentContent();
 $this->breadcrumbs = array(
     AmcWm::t("msgsbase.core", "Directory") => array('/backend/directory/default/index'),
@@ -15,35 +16,27 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
         array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array('/backend/directory/branches/index', 'cid' => $this->getCompanyId()), 'id' => 'persons_list', 'image_id' => 'back'),
     ),
 ));
-
+$attributes[] = 'branch_id';
+$attributes[] = array(
+    'label' => AmcWm::t("msgsbase.core", 'Company'),
+    'value' => ($model->company_id) ? $model->company->getCurrent()->company_name : "",
+);
+$attributes[] = 'branch_name';
+$attributes = array_merge($attributes, $contentModel->getExtendedAttributeViewValues("branch_address"));
+$attributes[] = 'city';
+$attributes[] = array(
+    'name' => AmcWm::t("msgsbase.core", "Country"),
+    'value' => ($model->country) ? Yii::app()->getController()->getCountries(0, $model->country) : "",
+);
+$attributes = array_merge($attributes, $model->getExtendedAttributeViewValues("email"));
+$attributes = array_merge($attributes, $model->getExtendedAttributeViewValues("phone"));
+$attributes[] = array(
+    'label' => AmcWm::t("msgsbase.core", 'Mobile'),
+    'value' => $model->mobile,
+);
+$attributes = array_merge($attributes, $model->getExtendedAttributeViewValues("fax"));
 $this->widget('zii.widgets.CDetailView', array(
     'data' => $contentModel,
-    'attributes' => array(
-        'branch_id',
-        array(
-            'name' => AmcWm::t("msgsbase.core", "Company"),
-            'value' => ($model->company_id) ?$model->company->getCurrent()->company_name:"",
-        ),
-        
-        'branch_name',
-        'branch_address',
-        'city',
-        array(
-            'name' => AmcWm::t("msgsbase.core", "Country"),
-            'value' => ($model->country)?Yii::app()->getController()->getCountries(0, $model->country):"",
-        ),
-        array(
-            'name' => AmcWm::t("msgsbase.core", "Email"),
-            'value' => $model->email,
-        ),
-        array(
-            'name' => AmcWm::t("msgsbase.core", "Phone"),
-            'value' => $model->phone,
-        ),
-        array(
-            'name' => AmcWm::t("msgsbase.core", "Fax"),
-            'value' => $model->fax,
-        ),
-    ),
+    'attributes' => $attributes
 ));
 ?>

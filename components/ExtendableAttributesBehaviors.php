@@ -53,32 +53,30 @@ class ExtendableAttributesBehaviors extends CBehavior {
             $primaryKeys = array_keys($owner->primaryKey);
             $this->_ownerId = $owner->primaryKey[$primaryKeys[0]];
             $ownerParent = $owner->getParentContent();
+            $modelTable = $ownerParent->tableName();
         } else if ($owner instanceof ActiveRecord) {
             $this->_ownerId = $owner->primaryKey;
+            $modelTable = $owner->tableName();
         }
         $settings = $owner->getModuleSettings()->settings;
-        if (isset($settings['extraAttributes']['table']) && isset($settings['extraAttributes']['enable']) && $settings['extraAttributes']['enable']) {
-            parent::attach($owner);
-            $settings = $this->owner->getModuleSettings()->settings;
+        parent::attach($owner);
+        if (isset($settings['extraAttributes']['tables'][$modelTable]) && isset($settings['extraAttributes']['enable']) && $settings['extraAttributes']['enable']) {            
+            $settings = $this->owner->getModuleSettings()->settings;            
             $usedModules = AttributesList::getSettings()->settings['usedModules'];
             foreach ($usedModules as $usedModule) {
                 foreach ($usedModule['tables'] as $usedTable) {
-                    if ($usedTable['name'] == $settings['extraAttributes']['table']) {
+                    if ($usedTable['name'] == $settings['extraAttributes']['tables'][$modelTable]) {
                         $this->_table = $usedTable;
                         break;
                     }
                 }
             }
-            $list = new ModelsAttributesList($owner, $this->_ownerId, 0, AttributesList::ALL_ATTRIBUTE);
+            $list = new ModelsAttributesList($owner, $settings['extraAttributes']['tables'][$modelTable], $this->_ownerId, 0, AttributesList::ALL_ATTRIBUTE);
             $list->generate();
             $itemAttributes = $list->getItems();
             $list = new AttributesList($settings['name'], AttributesList::ALL_ATTRIBUTE);
             $list->generate();
             $attributesConfig = $list->getItems();
-//            print_r($attributesConfig);
-//            die();
-//            print_r($itemAttributes);
-//            die();
             foreach ($attributesConfig as $attibuteConfigName => $attibute) {
                 $attributeName = $attibuteConfigName;
                 if (isset($settings['extraAttributes']['attributesMaps'][$owner->tableName()][$attibuteConfigName])) {
@@ -104,7 +102,7 @@ class ExtendableAttributesBehaviors extends CBehavior {
                 }
                 if ($this->_extendAttributes['attributes'][$attributeName]['isExtendable']) {
                     $this->_extendAttributes['attributes'][$attributeName]['struct']['required'] = true;
-                } else if (isset($settings['extraAttributes']['required'][$attributeName])) {
+                } else if (isset($settings['extraAttributes']['required'][$modelTable][$attributeName])) {
                     $this->_extendAttributes['attributes'][$attributeName]['struct']['required'] = true;
                 } else {
                     $this->_extendAttributes['attributes'][$attributeName]['struct']['required'] = false;
@@ -351,7 +349,7 @@ class ExtendableAttributesBehaviors extends CBehavior {
                                 }
                                 if (isset($this->_extendAttributes['attributes'][$attributeName]['data'][$attribute['id']])) {
                                     $attributeModel = $this->_extendAttributes['attributes'][$attributeName]['data'][$attribute['id']];
-                                    $id = (int)$attributeModel->id;
+                                    $id = (int) $attributeModel->id;
                                     if (!$attributeModel->isNew) {
                                         if (isset($attribute['systemAttrbuiteId'])) {
                                             $updateQuery = sprintf($updateQueryTemplate, $sort, ", attribute_id=" . (int) $attribute['systemAttrbuiteId'], $id);

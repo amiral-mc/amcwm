@@ -61,6 +61,7 @@ class ManageArticles extends ManageContent {
         $model->addTranslationChild(new ArticlesTranslation('search'), Controller::getContentLanguage());
         $contentModel = $model->getTranslated(Controller::getContentLanguage());
         $virtualModule = $this->controller->getModule()->appModule->currentVirtual;
+//        $this->getStatistics($virtualModule);
         $msgsBase = "msgsbase.core";
         if ($virtualModule != "articles") {
             $msgsBase = "msgsbase.{$virtualModule}";
@@ -148,6 +149,8 @@ class ManageArticles extends ManageContent {
      * @access protected
      */
     protected function save(ArticlesTranslation $contentModel) {
+        $virtualModule = AmcWm::app()->appModule->getCurrentVirtual();
+        $contentModel->attachBehavior("attachmentBehaviors", new AttachmentBehaviors($virtualModule, $contentModel, 1, $contentModel->article_id));            
         if (isset($_POST['Articles']) && isset($_POST["ArticlesTranslation"])) {
             $model = $contentModel->getParentContent();
             if (isset($_POST["ArticlesTranslation"]["tags"]) && is_array($_POST["ArticlesTranslation"]["tags"])) {
@@ -370,6 +373,7 @@ class ManageArticles extends ManageContent {
         if ($contentModel) {
             $model = $contentModel->getParentContent();
             $translatedModel = $this->loadTranslatedModel($model, $id);
+            $translatedModel->attachBehavior("attachmentBehaviors", new AttachmentBehaviors($virtualModule, $translatedModel, 1, $translatedModel->article_id));            
             if (isset($_POST["ArticlesTranslation"])) {
                 if (isset($_POST["ArticlesTranslation"]["tags"]) && is_array($_POST["ArticlesTranslation"]["tags"])) {
                     $tags = implode(PHP_EOL, $_POST["ArticlesTranslation"]["tags"]);
@@ -966,6 +970,15 @@ class ManageArticles extends ManageContent {
         header('Content-type: application/json');
         echo CJSON::encode($editors);
     }
+    
+    /**
+     * required for ajax requests
+     */
+    public function findEditorsWriters() {
+        $editors = Writers::getEditorsWritersList(Yii::app()->request->getParam('q'), Yii::app()->request->getParam('page'), AmcWm::app()->request->getParam('prompt'));
+        header('Content-type: application/json');
+        echo CJSON::encode($editors);
+    }
 
     /**
      * required for ajax requests
@@ -1031,5 +1044,4 @@ class ManageArticles extends ManageContent {
         }
         return $allow;
     }
-
 }

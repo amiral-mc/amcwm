@@ -7,8 +7,7 @@
  */
 
 /**
- * CActiveForm provides a set of methods that can help to simplify the creation
- * of complex and interactive HTML forms that are associated with data models.
+ * HttpSession provides session-level data management and the related configurations.
  *
  * @package AmcWm.web
  * @copyright 2012, Amiral Management Corporation. All Rights Reserved..

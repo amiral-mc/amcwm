@@ -70,26 +70,30 @@ class Menu extends CMenu {
         $cs = Yii::app()->clientScript;
         $label = "";
         $menuMoreWidth = 50;
-        if (isset(Yii::app()->params['menuMoreAsText'][AmcWm::app()->getLanguage()])) {
-            $label = AmcWm::t('app', '_MENU_MORE_');
-            $menuMoreWidth = Yii::app()->params['menuMoreAsText'][AmcWm::app()->getLanguage()];
-        }
-        $js = '
+        $menuWrapper = ".main_menu_wrapper";
+            if (isset(Yii::app()->params['menuWrapper'])) {
+                $menuWrapper = Yii::app()->params['menuWrapper'];
+            }
+            if (isset(Yii::app()->params['menuMoreAsText'][AmcWm::app()->getLanguage()])) {
+                $label = AmcWm::t('app', '_MENU_MORE_');
+                $menuMoreWidth = Yii::app()->params['menuMoreAsText'][AmcWm::app()->getLanguage()];
+            }
+            $js = '
                 var width = 0;
                 var more = null;
-                $(".main_menu_wrapper > ul > li").each(function(){
+                $("' . $menuWrapper . ' > ul > li").each(function(){
                     width += $(this).outerWidth();
-                    if(width > ($(".main_menu_wrapper").width() - ' . $menuMoreWidth . ')){
+                    if(width > ($("' . $menuWrapper . '").width() - ' . $menuMoreWidth . ')){
                         if(more === null){
                             more = "<li class =\"more-menu last\" style=\"width:' . $menuMoreWidth . 'px;\"><a href=\"#\">' . $label . '</a><ul class = \"more-sub\"></ul></li>";
-                            $(".main_menu_wrapper > ul").append(more);
+                            $("' . $menuWrapper . ' > ul").append(more);
                         }
                         $(this).removeClass("last").removeAttr("class");
                         $(".more-menu > ul").append($(this));
                     }
                 });
             ';
-        $cs->registerScript('moreMenu', $js, CClientScript::POS_READY);
+            $cs->registerScript('moreMenu', $js, CClientScript::POS_READY);
     }
 
 }

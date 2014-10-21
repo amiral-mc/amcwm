@@ -293,7 +293,10 @@ class Controller extends CController {
     }
 
     public static function getContentLanguage() {
-        $contentLang = Yii::app()->user->getState('contentLang');
+        $contentLang = null;
+        if(Yii::app()->hasComponent('user')){
+            $contentLang = Yii::app()->user->getState('contentLang');
+        }
         if (!$contentLang) {
             $contentLang = (AmcWm::app()->contentLang) ? AmcWm::app()->contentLang : self::$currentLang;
         }

@@ -2,7 +2,7 @@
     <?php
     $model = $contentModel->getParentContent();
     $model->company_id = $this->company->company_id;
-    $form = $this->beginWidget('CActiveForm', array(
+    $form = $this->beginWidget('Form', array(
                 'id' => $formId,
                 'enableAjaxValidation' => false,
                 'enableClientValidation' => true,
@@ -29,32 +29,32 @@
         </div>
         <div class="row">
             <?php echo $form->labelEx($contentModel, 'branch_address'); ?>
-            <?php echo $form->textField($contentModel, 'branch_address', array('size' => 60, 'maxlength' => 1024)); ?>
+            <?php echo $form->extendableField($contentModel, 'branch_address', 'textField', array('htmlOptions'=>array('size' => 60, 'maxlength' => 150))); ?>
             <?php echo $form->error($contentModel, 'branch_address'); ?>
         </div>
         <div class="row">
             <?php echo $form->labelEx($contentModel, 'city'); ?>
-            <?php echo $form->textField($contentModel, 'city', array('size' => 60, 'maxlength' => 1024)); ?>
+            <?php echo $form->textField($contentModel, 'city', array('size' => 60, 'maxlength' => 100)); ?>
             <?php echo $form->error($contentModel, 'city'); ?>
         </div>
         <div>
             <?php echo $form->labelEx($model, 'email'); ?>
-            <?php echo $form->textField($model, 'email'); ?>
+            <?php echo $form->extendableField($model, 'email', 'textField', array('htmlOptions'=>array('size' => 65, 'maxlength' => 65))); ?>
             <?php echo $form->error($model, 'email'); ?>
         </div>
         <div>
             <?php echo $form->labelEx($model, 'phone'); ?>
-            <?php echo $form->textField($model, 'phone'); ?>
+            <?php echo $form->extendableField($model, 'phone', 'textField', array('htmlOptions'=>array('size' => 20, 'maxlength' => 20))); ?>
             <?php echo $form->error($model, 'phone'); ?>
         </div>
         <div>
             <?php echo $form->labelEx($model, 'mobile'); ?>
-            <?php echo $form->textField($model, 'mobile'); ?>
+            <?php echo $form->textField($model, 'mobile', array('size' => 20, 'maxlength' => 20)); ?>
             <?php echo $form->error($model, 'mobile'); ?>
         </div>
         <div>
             <?php echo $form->labelEx($model, 'fax'); ?>
-            <?php echo $form->textField($model, 'fax'); ?>
+            <?php echo $form->extendableField($model, 'fax', 'textField', array('htmlOptions'=>array('size' => 20, 'maxlength' => 20))); ?>
             <?php echo $form->error($model, 'fax'); ?>
         </div>
     </fieldset>        

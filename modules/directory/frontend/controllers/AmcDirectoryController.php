@@ -10,7 +10,6 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-
 class AmcDirectoryController extends FrontendController {
 
     /**
@@ -164,7 +163,7 @@ class AmcDirectoryController extends FrontendController {
                     if ($model->save()) {
                         if ($contentModel->save()) {
                             $userInfo = $model->getUserInfo();
-                            if(isset($userInfo['user_id'])){
+                            if (isset($userInfo['user_id'])) {
                                 $model->user_id = $userInfo['user_id'];
                             }
                             $transaction->commit();
@@ -199,8 +198,7 @@ class AmcDirectoryController extends FrontendController {
                     //$this->refresh();
                 }
             }
-        }
-        else{       
+        } else {
             $userInfo = $model->getUserInfo();
             $model->email = (isset($userInfo['email'])) ? $userInfo['email'] : "";
         }
@@ -215,7 +213,7 @@ class AmcDirectoryController extends FrontendController {
         if (!Yii::app()->user->isGuest) {
             $id = (int) Yii::app()->user->getId();
             $dir = DirCompanies::model()->findByAttributes(array('user_id' => $id));
-            if($dir !== null){
+            if ($dir !== null) {
                 $this->redirect(array('/users/default/index'));
             }
         }
@@ -413,12 +411,12 @@ class AmcDirectoryController extends FrontendController {
      * Draw extended output values
      * @param array $data
      * @param string $field
-     * @param boolean $inBlock
+     * @param integer $inBlock
      * @param string $label
      * @param string $extraData      
      * @return string
      */
-    public function drawExtended($data, $filed, $inBlock = true, $label = null, $extraData = null) {
+    public function drawExtended($data, $filed, $inBlock = 1, $label = null, $extraData = null) {
         $output = null;
 
 
@@ -428,56 +426,76 @@ class AmcDirectoryController extends FrontendController {
                 if ($label) {
                     $label = "{$label}:&nbsp;";
                 }
-                if (!$inBlock) {
-                    $output .= "<div>{$label}{$data[$filed]}{$extraData}</div>";
-                    if (isset($data['extended'][$filed]['belong'])) {
-                        foreach ($data['extended'][$filed]['belong'] as $belongData) {
-                            $output .= "<div>{$belongData['value']}</div>";
-                        }
-                    }
-                    if (isset($data['extended'][$filed]['new']) && count($data['extended'][$filed]['new'])) {
-                        foreach ($data['extended'][$filed]['new'] as $newMetaData) {
-                            foreach ($newMetaData['data'] as $newData) {
-                                $output .= "<div>{$newData['value']}</div>";
-                            }
-                        }
-                    }
-                } else {
-                    $output .= "<table cellspacing='1' style='border-collapse: collapse;'>";
-                    $output .= "<tr>";
-                    $output .= "<td>{$label}</td>";
-                    $output .= "<td>{$data[$filed]}{$extraData}</td>";
-                    $output .= "</tr>";
-                    if (isset($data['extended'][$filed]['belong'])) {
-                        foreach ($data['extended'][$filed]['belong'] as $belongData) {
-                            $output .= "<tr>";
-                            $output .= "<td>&nbsp;</td>";
-                            $output .= "<td>{$belongData['value']}</td>";
-                            $output .= "</tr>";
-                        }
-                    }
-                    $output .= "</table>";
-                    if (isset($data['extended'][$filed]['new']) && count($data['extended'][$filed]['new'])) {
-                        foreach ($data['extended'][$filed]['new'] as $newMetaData) {
-                            $output .= "<table cellspacing='1' style='border-collapse: collapse;'>";
-                            $output .= "<tr>";
-                            $output .= "<td>" . $newMetaData['label'] . ":&nbsp;</td>";
-                            $first = array_shift($newMetaData['data']);
-                            if (isset($first['value'])) {
-                                $output .= "<td>" . $first['value'] . "</td>";
-                            } else {
-                                $output .= "<td>&nbsp;</td>";
-                            }
-                            $output .= "</tr>";
-                            foreach ($newMetaData['data'] as $newData) {
+                switch ($inBlock) {
+                    case 1:
+                        $output .= "<table cellspacing='1' style='border-collapse: collapse;'>";
+                        $output .= "<tr>";
+                        $output .= "<td>{$label}</td>";
+                        $output .= "<td>{$data[$filed]}{$extraData}</td>";
+                        $output .= "</tr>";
+                        if (isset($data['extended'][$filed]['belong'])) {
+                            foreach ($data['extended'][$filed]['belong'] as $belongData) {
                                 $output .= "<tr>";
                                 $output .= "<td>&nbsp;</td>";
-                                $output .= "<td>" . $newData['value'] . "</td>";
+                                $output .= "<td>{$belongData['value']}</td>";
                                 $output .= "</tr>";
                             }
-                            $output .= "</table>";
                         }
-                    }
+                        $output .= "</table>";
+                        if (isset($data['extended'][$filed]['new']) && count($data['extended'][$filed]['new'])) {
+                            foreach ($data['extended'][$filed]['new'] as $newMetaData) {
+                                $output .= "<table cellspacing='1' style='border-collapse: collapse;'>";
+                                $output .= "<tr>";
+                                $output .= "<td>" . $newMetaData['label'] . ":&nbsp;</td>";
+                                $first = array_shift($newMetaData['data']);
+                                if (isset($first['value'])) {
+                                    $output .= "<td>" . $first['value'] . "</td>";
+                                } else {
+                                    $output .= "<td>&nbsp;</td>";
+                                }
+                                $output .= "</tr>";
+                                foreach ($newMetaData['data'] as $newData) {
+                                    $output .= "<tr>";
+                                    $output .= "<td>&nbsp;</td>";
+                                    $output .= "<td>" . $newData['value'] . "</td>";
+                                    $output .= "</tr>";
+                                }
+                                $output .= "</table>";
+                            }
+                        }
+                        break;
+                    case 0:
+                        $output .= "<div>{$label}{$data[$filed]}{$extraData}</div>";
+                        if (isset($data['extended'][$filed]['belong'])) {
+                            foreach ($data['extended'][$filed]['belong'] as $belongData) {
+                                $output .= "<div>{$belongData['value']}</div>";
+                            }
+                        }
+                        if (isset($data['extended'][$filed]['new']) && count($data['extended'][$filed]['new'])) {
+                            foreach ($data['extended'][$filed]['new'] as $newMetaData) {
+                                foreach ($newMetaData['data'] as $newData) {
+                                    $output .= "<div>{$newData['value']}</div>";
+                                }
+                            }
+                        }
+                        break;
+                    case 2:
+                        $list = array();
+                        $list[] = "{$label}{$data[$filed]}{$extraData}";
+                        if (isset($data['extended'][$filed]['belong'])) {
+                            foreach ($data['extended'][$filed]['belong'] as $belongData) {
+                                $list[] =  "{$belongData['value']}";
+                            }
+                        }
+                        if (isset($data['extended'][$filed]['new']) && count($data['extended'][$filed]['new'])) {
+                            foreach ($data['extended'][$filed]['new'] as $newMetaData) {
+                                foreach ($newMetaData['data'] as $newData) {
+                                    $list[] = "{$newData['value']}";
+                                }
+                            }
+                        }
+                        $output .= implode(' - ', $list);
+                        break;
                 }
             }
         }

@@ -86,12 +86,12 @@
                             <td valign="top"><?php echo $form->labelEx($model, "($key)"); ?> </td>
                             <?php
                             $companyName = ($tradingsModel->exchangeCompanies->getCurrent()) ? $tradingsModel->exchangeCompanies->getCurrent()->company_name : " ";
-                            $initMovementSelection = ($companyName) ? array('id' => $tradingsModel->exchange_companies_exchange_companies_id, 'text' => $companyName) : array();
+                            $initCompanySelection = ($companyName) ? array('id' => $tradingsModel->exchange_companies_exchange_companies_id, 'text' => $companyName) : array();
                             $this->widget('amcwm.core.widgets.select2.ESelect2', array(
                                 'model' => $tradingsModel,
                                 'attribute' => "[$key]exchange_companies_exchange_companies_id",
                                 'addingNoMatch' => false,
-                                'initSelection' => $initMovementSelection,
+                                'initSelection' => $initCompanySelection,
                                 'options' => array(
                                     "dropdownCssClass" => "bigdrop",
                                     'ajax' => array(

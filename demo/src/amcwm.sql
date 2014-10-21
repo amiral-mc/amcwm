@@ -2890,6 +2890,7 @@ CREATE TABLE IF NOT EXISTS `dope_sheet_translation` (
 
 CREATE TABLE IF NOT EXISTS `essays` (
   `article_id` int(10) unsigned NOT NULL,
+  `sticky` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0',
   PRIMARY KEY (`article_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -7496,5 +7497,48 @@ ALTER TABLE `exchange_trading_companies`
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
+CREATE TABLE IF NOT EXISTS `dir_companies_branches_attributes` (
+  `branch_attribute_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `branch_id` INT UNSIGNED NOT NULL,
+  `attribute_id` SMALLINT UNSIGNED NOT NULL,
+  `attribute_sort` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+  INDEX `fk_dir_companies_attributes_system_attributes1_idx` (`attribute_id` ASC),
+  PRIMARY KEY (`branch_attribute_id`),
+  INDEX `fk_dir_companies_branches_attributes_dir_companies_branches_idx` (`branch_id` ASC),
+  CONSTRAINT `fk_dir_companies_branches_attributes_system`
+    FOREIGN KEY (`attribute_id`)
+    REFERENCES `system_attributes` (`attribute_id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_dir_companies_branches_attributes_dir_companies_branches1`
+    FOREIGN KEY (`branch_id`)
+    REFERENCES `dir_companies_branches` (`branch_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
-ALTER TABLE  `essays` ADD  `sticky` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0'
+CREATE TABLE IF NOT EXISTS `dir_companies_branches_attributes_value` (
+  `branch_attribute_id` INT UNSIGNED NOT NULL,
+  `value` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`branch_attribute_id`),
+  CONSTRAINT `fk_dir_companies_branches_attributes_value_dir_companies_bran1`
+    FOREIGN KEY (`branch_attribute_id`)
+    REFERENCES `dir_companies_branches_attributes` (`branch_attribute_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `dir_companies_branches_attributes_value_translation` (
+  `branch_attribute_id` INT UNSIGNED NOT NULL,
+  `content_lang` CHAR(2) NOT NULL,
+  `value` TEXT NOT NULL,
+  PRIMARY KEY (`branch_attribute_id`, `content_lang`),
+  CONSTRAINT `fk_dir_companies_branches_attributes_value_translation_dir_co1`
+    FOREIGN KEY (`branch_attribute_id`)
+    REFERENCES `dir_companies_branches_attributes` (`branch_attribute_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;

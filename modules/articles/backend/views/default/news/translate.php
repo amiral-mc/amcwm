@@ -34,7 +34,7 @@ if (count($model->news->editors)) {
     /**
      * @todo fix the client side validation in the tinyMCE editor.
      */
-    $form = $this->beginWidget('CActiveForm', array(
+    $form = $this->beginWidget('Form', array(
         'id' => $formId,
         'enableAjaxValidation' => false,
         'enableClientValidation' => false,
@@ -48,7 +48,16 @@ if (count($model->news->editors)) {
     <p class="note"><?php echo AmcWm::t("amcBack", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage()); ?>
     <?php echo CHtml::hiddenField('module', Data::getForwardModParam()); ?>
-    <?php echo $form->errorSummary(array_merge(array($model, $translatedModel), $translatedModel->titles)); ?>
+    <?php
+    $models[] = $translatedModel;
+    foreach ($translatedModel->attachment as $attachmentModel) {
+        $models[] = $attachmentModel;
+    }
+    foreach ($translatedModel->titles as $title) {
+        $models[] = $title;
+    }
+    echo $form->errorSummary($models);
+    ?>
     <fieldset>
         <legend><?php echo AmcWm::t("msgsbase.core", "General Option"); ?>:</legend>
         <div class="row">                       
@@ -105,7 +114,7 @@ if (count($model->news->editors)) {
                 ?>
             </span>
             <!--            --->
-            <span class="translated_label"><?php //echo AmcWm::t("msgsbase.core", 'In Spot');            ?></span>
+            <span class="translated_label"><?php //echo AmcWm::t("msgsbase.core", 'In Spot');              ?></span>
             <span class="translated_org_item">
                 <?php
                 if ($model->in_spot) {
@@ -222,17 +231,7 @@ if (count($model->news->editors)) {
         <div class="row">
             <?php echo $form->labelEx($translatedModel, 'article_detail'); ?>
             <?php echo $form->error($translatedModel, 'article_detail'); ?>
-            <?php
-            $this->widget('amcwm.core.widgets.tinymce.MTinyMce', array(
-                'model' => $translatedModel,
-                'attribute' => 'article_detail',
-                'editorTemplate' => 'full',
-                'htmlOptions' => array(
-                    'style' => 'height:300px; width:630px;'
-                ),
-                    )
-            );
-            ?>            
+            <?php echo $form->richTextField($translatedModel, 'article_detail', array('editorTemplate' => 'full', 'height' => '300px', "width" => "630px")); ?>           
         </div>       
         <div class="row">
             <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", 'Section'); ?></span>:
@@ -250,7 +249,13 @@ if (count($model->news->editors)) {
         <div class="row">
             <span class="translated_label"><?php echo AmcWm::t("msgsbase.core", 'Country'); ?></span>:
             <span class="translated_org_item">
-                <?php echo $model->countryCode->getCountryName() ?>
+                <?php
+                if ($model->country_code) {
+                    echo $model->countryCode->getCountryName();
+                } else {
+                    echo Yii::t('zii', 'Not set');
+                }
+                ?>
             </span>
         </div>     
 
@@ -322,6 +327,11 @@ if (count($model->news->editors)) {
             ?>            
         </div>     
     </fieldset>
-
+    <fieldset>
+        <legend><?php echo AmcWm::t("msgsbase.core", "Files"); ?>:</legend>
+        <div class="row">
+            <?php echo $form->attachmentField($translatedModel, 'attachment', array("id" => "attachment_area", 'attachOptions' => array('translateOnly' => true))); ?>
+        </div>     
+    </fieldset>
     <?php $this->endWidget(); ?>
 </div><!-- form -->    

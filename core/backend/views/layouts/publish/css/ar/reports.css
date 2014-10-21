@@ -1,0 +1,121 @@
+body{
+    font-family: Arial, Tahoma, Verdana, sans-serif;
+    color: #000000;
+}
+
+.report-form {
+    padding-top: 5px;
+    text-align: center;
+    color: #000000;
+    border-bottom: 1px solid #cdcdcd;
+    margin-bottom: 12px;
+}
+
+.report-form > .row{
+    margin-bottom: 4px;
+}
+
+.report-form label{
+    display: inline-block;
+    text-align: left;
+    padding-left:5px; 
+    padding-right:5px; 
+}
+
+.report-form label.user-label{
+    padding-left: 0px;
+    margin-left: 12px;
+    margin-right: 0px;
+}
+
+#report-header{
+    text-align:center;
+    margin-bottom:20px;
+    color: #000000;
+}
+
+#report-header .report-name{
+    font-size:22px;
+    font-weight:bold;
+    padding-bottom:15px;
+    color: #000000;
+}
+
+#report-header .report-date,
+#report-header .reporter-name{
+    font-size:16px;
+    color: #000000;
+}
+
+#report-header .report-date span,
+#report-header .reporter-name span{
+    font-weight:bold;
+    padding:0px 5px;
+    color: #000000;
+}
+
+#report-header #reporter-tasks{
+    margin-top:20px;
+    font-size:16px;
+    color: #000000;
+}
+
+#report-header #reporter-tasks span{
+    font-weight:bold;
+    color: #000000;
+}
+
+.report-labels{
+    font-size:14px;
+    font-weight:bold;
+}
+
+.tabel-view{
+    text-align: center;
+}
+
+.tabel-view table{
+    font-size:14px;
+    color: #000000;
+}
+
+.tabel-view .header{
+    background-color:#b40000;
+    color:#fff;
+    font-size:15px;
+    font-weight:bold;
+}
+
+.tabel-view .serial{
+    text-align:center;    
+}
+
+
+.tabel-view .header td{
+    padding:4px;
+}
+
+.tabel-view .odd{
+    background-color:#FFFFFF;
+    color: #000000;
+}
+
+.tabel-view .even{
+    background-color:#E8E8E8;
+    color: #000000;
+}
+
+
+
+
+
+
+
+
+
+margin-bottom: 4px; (for row in report form)
+
+
+
+border: 0; (iframe)
+

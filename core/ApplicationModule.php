@@ -121,6 +121,7 @@ abstract class ApplicationModule extends CComponent {
         $this->_appModulePath = "{$mainAlias}.{$folder}";
         Yii::import("{$mainAlias}.models.*");
         Yii::import("{$mainAlias}.components.*");
+        Yii::import("{$mainAlias}.components.reports.*");
         $this->_settings = new Settings($this->_id, $this->_isBackend, $this->_custom);
         $structure = $this->_settings->getStructure();
         if (isset($this->_settings->settings['attributes']) && is_array($this->_settings->settings['attributes'])) {

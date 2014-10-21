@@ -16,7 +16,7 @@ class StockInfoGraph extends Dataset {
     private $_exchangeId;
 
     public function __construct($exchangeId, $limit = null) {
-        $this->_exchangeId = $exchangeId;
+        $this->_exchangeId =(int) $exchangeId;
         if ($limit !== NULL) {
             $this->limit = (int) $limit;
         } else {
@@ -29,12 +29,8 @@ class StockInfoGraph extends Dataset {
     }
 
     protected function setItems() {
-        $currentDate = date("Y-m-d");
         $cols = $this->generateColumns();
-        $wheres = "";
-//        $wheres = sprintf("exchange_date = '{$currentDate}' AND e.exchange_id = {$this->_exchangeId}");
         $wheres = sprintf("e.exchange_id = {$this->_exchangeId} AND e.published = 1");
-//        $wheres = sprintf('exchange_date = "' . date("Y-m-d", strtotime(date("Y-m-d") . "-7 days")) . '" AND e.exchange_id = ' . $this->_exchangeId);
         $wheres .= $this->generateWheres();
         $this->query = AmcWm::app()->db->createCommand();
         $this->query->from("exchange e");

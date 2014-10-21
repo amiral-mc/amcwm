@@ -38,7 +38,7 @@ Yii::app()->getClientScript()->registerScript('directoryGetCompanies', $js_code,
         <?php
             $glossaryForm = $this->beginWidget('CActiveForm', array(
                 'id' => 'glossary_search_form',
-                'action' => array('/glossary/default/index'),
+                'action' => array('/glossary/default/index', 'lang'=>  AmcWm::app()->getLanguage()),
                 'enableClientValidation' => true,
                 'clientOptions' => array(
                     'validateOnSubmit' => true,

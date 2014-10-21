@@ -21,17 +21,24 @@ return array(
     ),
     'attributesTables' => array(
         'dir_companies_attributes',
+        'dir_companies_branches_attributes',
     ),
     'usedModules' => array(
         'directory' => array(
             'name' => 'directory',
             'tables' => array(
-                'dir_companies_attributes' => 
-                array('name' => 'dir_companies_attributes'
-                    , 'primaryKey' => 'company_attribute_id'
-                    , 'foreignKey' => 'company_id'),
+                'dir_companies_attributes' => array(
+                    'name' => 'dir_companies_attributes',
+                    'primaryKey' => 'company_attribute_id',
+                    'foreignKey' => 'company_id'
+                ),
+                'dir_companies_branches_attributes' => array(
+                    'name' => 'dir_companies_branches_attributes',
+                    'primaryKey' => 'branch_attribute_id',
+                    'foreignKey' => 'branch_id'
+                ),
             ),
-        ),
+        ),        
     ),
     'attributesTypes' => array(
         '1' => array('name' => "phone", 'dataType' => 'text', 'length' => 15, 'translate' => false, 'systemOnly' => false),
@@ -65,9 +72,9 @@ return array(
             'dataType' => 'text',
             'length' => 255,
             'translate' => true,
-            'systemOnly' => true,            
+            'systemOnly' => true,
         ),
-        '10' => array('name' => "textArea", 'dataType' => 'text',  'length' => 0, 'translate' => true, 'systemOnly' => true),
+        '10' => array('name' => "textArea", 'dataType' => 'text', 'length' => 0, 'translate' => true, 'systemOnly' => true),
         '11' => array('name' => "file", 'dataType' => 'file', 'length' => 0, 'translate' => false, 'systemOnly' => true),
         '12' => array('name' => "multiFiles", 'dataType' => 'files', 'length' => 0, 'translate' => false, 'systemOnly' => true, 'length' => 4),
     ),

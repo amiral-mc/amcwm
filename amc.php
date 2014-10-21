@@ -159,7 +159,11 @@ class AmcWm extends Yii {
      * @access public
      * @return CConsoleApplication
      */
-    public static function createConsoleApplication($config = null) {
+    public static function createConsoleApplication($config = null) {        
+        $config = require $config;
+        if(isset($config['components']['user'])){
+            unset($config['components']['user']);
+        }        
         self::$classMap['ConsoleApplication'] = dirname(__FILE__) . '/core/ConsoleApplication.php';
         $config = self::setAmcCorePaths($config, true);
         $config['import'][] = "amcwm.commands.*";

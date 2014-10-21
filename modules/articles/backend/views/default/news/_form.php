@@ -8,7 +8,7 @@
     /**
      * @todo fix the client side validation in the tinyMCE editor.
      */
-    $form = $this->beginWidget('CActiveForm', array(
+    $form = $this->beginWidget('Form', array(
         'id' => $formId,
         'enableAjaxValidation' => false,
         'enableClientValidation' => false,
@@ -22,7 +22,18 @@
     <p class="note"><?php echo AmcWm::t("amcBack", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage()); ?>
     <?php echo CHtml::hiddenField('module', Data::getForwardModParam()); ?>
-    <?php echo $form->errorSummary(array_merge(array($model, $contentModel, $model->news), $contentModel->titles)); ?>
+    <?php
+    $models[] = $model;
+    $models[] = $contentModel;
+    $models[] = $model->news;
+    foreach ($contentModel->attachment as $attachmentModel) {
+        $models[] = $attachmentModel;
+    }
+    foreach ($contentModel->titles as $title) {
+        $models[] = $title;
+    }
+    echo $form->errorSummary($models);
+    ?>
     <fieldset>
         <legend><?php echo AmcWm::t("msgsbase.core", "General Option"); ?>:</legend>
         <div class="row">                       
@@ -77,7 +88,7 @@
             <div id="sliderImage" style="display:<?php echo $sliderUploadDisplay ?>;">            
                 <?php echo $form->labelEx($model, 'sliderFile', array("style" => 'display:inline;')); ?>
                 <?php echo $form->fileField($model, 'sliderFile', array("style" => 'display:inline;')); ?>
-                <input id="Articles_sliderFile_watermark" name="Articles[sliderFile_watermark]" type="checkbox" /> <?php echo AmcWm::t("amcBack", 'Use watermark');?>
+                <input id="Articles_sliderFile_watermark" name="Articles[sliderFile_watermark]" type="checkbox" /> <?php echo AmcWm::t("amcBack", 'Use watermark'); ?>
                 <?php echo $form->error($model, 'sliderFile'); ?>
                 <?php echo $drawSliderImage ?>
             </div>
@@ -187,17 +198,7 @@
         <div class="row">
             <?php echo $form->labelEx($contentModel, 'article_detail'); ?>
             <?php echo $form->error($contentModel, 'article_detail'); ?>
-            <?php
-            $this->widget('amcwm.core.widgets.tinymce.MTinyMce', array(
-                'model' => $contentModel,
-                'attribute' => 'article_detail',
-                'editorTemplate' => 'full',
-                'htmlOptions' => array(
-                    'style' => 'height:300px; width:630px;'
-                ),
-                    )
-            );
-            ?>            
+            <?php echo $form->richTextField($contentModel, 'article_detail', array('editorTemplate' => 'full', 'height' => '300px', "width" => "630px")); ?>           
         </div>       
         <div class="row">                       
             <?php echo $form->labelEx($model, 'section_id'); ?>
@@ -287,54 +288,16 @@
         <?php endif; ?>
         <div class="row">
             <?php echo $form->labelEx($model, 'publish_date'); ?>
-            <?php
-            $this->widget('amcwm.core.widgets.timepicker.EJuiDateTimePicker', array(
-                'model' => $model,
-                'attribute' => 'publish_date',
-                'options' => array(
-                    'showAnim' => 'fold',
-                    'dateFormat' => 'yy-mm-dd',
-                    'timeFormat' => 'hh:mm',
-                    'changeMonth' => true,
-                    'changeYear' => false,
-                ),
-                'htmlOptions' => array(
-                    'class' => 'datebox',
-                    'style' => 'direction:ltr',
-                    'readonly' => 'readonly',
-                    //'value' => ($model->publish_date) ? date("Y-m-d H:i", strtotime($model->publish_date)) : date("Y-m-d 00:01", strtotime("+1 day")),
-                    'value' => ($model->publish_date) ? date("Y-m-d H:i", strtotime($model->publish_date)) : date("Y-m-d H:i"),
-                )
-            ));
-            ?>
+            <?php echo $form->calendarField($model, 'publish_date', array('class' => 'datebox', 'dateOptions' => array("dateOnly" => 0))); ?>           
             <?php echo $form->error($model, 'publish_date'); ?>
         </div>
 
-        <div class="row">            
+        <div class="row">                        
             <?php echo $form->labelEx($model, 'expire_date'); ?>                        
-            <?php
-            $this->widget('amcwm.core.widgets.timepicker.EJuiDateTimePicker', array(
-                'model' => $model,
-                'attribute' => 'expire_date',
-                'options' => array(
-                    'showAnim' => 'fold',
-                    'dateFormat' => 'yy-mm-dd',
-                    'timeFormat' => 'hh:mm',
-                    'changeMonth' => true,
-                    'changeYear' => false,
-                ),
-                'htmlOptions' => array(
-                    'class' => 'datebox',
-                    'style' => 'direction:ltr',
-                    'readonly' => 'readonly',
-                    'value' => ($model->expire_date) ? date("Y-m-d H:i", strtotime($model->expire_date)) : NULL,
-                )
-            ));
-            ?>            
+            <?php echo $form->calendarField($model, 'expire_date', array('class' => 'datebox', 'dateOptions' => array("dateOnly" => 0), 'value' => ($model->expire_date) ? date("Y-m-d H:i", strtotime($model->expire_date)) : '',)); ?>
             <?php echo Chtml::checkBox('no_expiry', ($model->expire_date) ? 0 : 1, array('onclick' => '$("#Articles_expire_date").val("")')) ?>
             <?php echo Chtml::label(AmcWm::t("msgsbase.core", "No expiry date"), "remove_expiry", array("style" => 'display:inline;color:#3E4D57;font-weight:normal')) ?>
             <?php echo $form->error($model, 'expire_date'); ?>
-
         </div>
     </fieldset>
 
@@ -370,6 +333,15 @@
             </fieldset>
         </div>
     <?php endif; ?>
+    <fieldset>
+        <legend><?php echo AmcWm::t("msgsbase.core", "Files"); ?>:</legend>
+        <div class="row">
+            <?php
+            echo $form->attachmentField($contentModel, 'attachment', array("id" => "attachment_area"));
+            ?>
+        </div>     
+    </fieldset>
+
     <?php $this->endWidget(); ?>
 </div><!-- form -->    
 <?php

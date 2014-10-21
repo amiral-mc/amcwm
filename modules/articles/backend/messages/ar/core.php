@@ -104,6 +104,6 @@ return array(
     '_REJECT_PUBLISHCONTENT_' => 'رفض الموافقة والنشر',
     'Hits' => 'المشاهدات',
     'In Top' => 'مثبت',
-    '' => '',
+    'Files' => 'الملفات',
     '' => '',
 );

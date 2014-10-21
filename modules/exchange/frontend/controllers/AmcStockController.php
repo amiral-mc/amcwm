@@ -21,7 +21,7 @@ class AmcStockController extends FrontendController {
         $dates = array();
         $closingValues = array();
         $exchangeId = (int) Yii::app()->request->getParam('exchange_id');
-        $stock = new StockInfoGraph($exchangeId);
+        $stock = new StockInfoGraph($exchangeId, 1);
         $stock->generate();
         $stockData = $stock->getRow(0);
         if($stockData){
@@ -55,7 +55,6 @@ class AmcStockController extends FrontendController {
         $stock = new StockInfoTicker($exchangeId);
         $stock->generate();
         $data = $stock->getData();
-        $output = "";
         if ($isJson && $data) {
             $data = array_slice($data, 0, $companiesLimit);
             echo $this->renderPartial('companyGrid', array('data' => $data, 'floatingSeparator' => $floatingSeparator, 'thousandSeparator' => $thousandSeparator), true);

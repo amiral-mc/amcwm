@@ -37,9 +37,11 @@ class SocialInfo extends CComponent {
      */
     public function __construct($module, $tableId, $refId) {
         $moduleData = amcwm::app()->acl->getModule($module, true);
-        $this->_moduleId = (int) $moduleData['id'];
-        $this->_refId = (int) $refId;
-        $this->_tableId = (int) $tableId;
+        if ($moduleData) {
+            $this->_moduleId = (int) $moduleData['id'];
+            $this->_refId = (int) $refId;
+            $this->_tableId = (int) $tableId;
+        }
     }
 
     /**
@@ -70,8 +72,8 @@ class SocialInfo extends CComponent {
         $ok = false;
         if (!$posted) {
             $query = sprintf("delete from module_social_config "
-                    . "where module_id=%d and table_id=%d and ref_id=%d", $this->_moduleId, $this->_tableId, $this->_refId);            
-            AmcWm::app()->db->createCommand($query)->execute();            
+                    . "where module_id=%d and table_id=%d and ref_id=%d", $this->_moduleId, $this->_tableId, $this->_refId);
+            AmcWm::app()->db->createCommand($query)->execute();
             if (is_array($socialIds)) {
                 foreach ($socialIds as $socialId) {
                     $query = sprintf("insert into module_social_config(module_id, social_id, ref_id, table_id) "

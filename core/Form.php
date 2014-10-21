@@ -223,6 +223,9 @@ class Form extends CComponent {
         if (!isset($htmlOptions['value'])) {
             $htmlOptions['value'] = ($model->$attribute) ? date("Y-m-d H:i", strtotime($model->$attribute)) : $defaultDate;
         }
+        else{
+            echo $htmlOptions['value'];
+        }
         $widgetOptions = array(
             'model' => $model,
             'attribute' => $attribute,

@@ -33,6 +33,19 @@ class Html {
         }
         return $string;
     }
+    
+      /**
+     * print array in format mode
+     * @param array $array
+     */
+    public static function printR($array, $stop = false) {
+       echo '<pre>';
+       print_r($array);
+       echo '</pre>';
+       if($stop){
+           AmcWm::app()->end();
+       }
+    }
 
     /**
      *

@@ -291,6 +291,10 @@ class ArticleData extends Dataset {
      * @return void
      */
     public function generate($start = 0) {
+//        $mostCommentReadWidget = false; // ($cache) ? Yii::app()->cache->get("mostReadComments{$currentAppLang}") : false;
+//        if($cache){
+//            Yii::app()->cache->set("mostReadComments{$currentAppLang}", $mostCommentReadWidget, Yii::app()->params["cacheDuration"]["comments"]);
+//        }
         $dependencyComments = null;
         $cacheMe = false;
         //$this->_facebookComments = new FacebookComments(Yii::app()->request->getHostInfo() . Yii::app()->request->getUrl());
@@ -305,11 +309,14 @@ class ArticleData extends Dataset {
             and ac.article_id = %d", ActiveRecord::PUBLISHED, $this->_id);
             $dependencyComments = Yii::app()->db->createCommand($dependencyQuery)->queryScalar();
             $this->items = $this->_cache->get('article_' . $this->_id);
-            if ($this->items == null) {
+            if (!$this->items || !isset($this->items['record']) || !$this->items['record']) {
                 $this->_initItem();
+            } else {
+                isset($this->items['record']['comments']) ? $this->items['record']['comments'] = $this->getCommentsCount() : 0;
+                isset($this->items['record']['hits']) ? $this->items['record']['hits'] = $this->getHits() : 0;
             }
-        }
-        if (!count($this->items['record'])) {
+        }       
+        if (!$this->items['record']) {
             $this->setItems();
             $cacheMe = true;
         }

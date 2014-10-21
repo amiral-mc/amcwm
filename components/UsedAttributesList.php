@@ -117,10 +117,8 @@ class UsedAttributesList extends Dataset {
             ", Yii::app()->db->quoteValue($siteLanguage), Yii::app()->db->quoteValue($siteLanguage), $this->_moduleId, $this->_id);
         $dataset = Yii::app()->db->createCommand($this->query)->queryAll();
         $settings = DirectoryListData::getSettings()->settings;
-//        print_r($dataset);
-
-
         $index = 0;
+        $orgTable = str_replace('_attributes', '', $this->_table['name']);
         foreach ($dataset as $row) {
             $attributeType = AttributesList::getAttributeType($row["attribute_type"]);
             $attributeType['systemOnly'] = $attributeType['systemOnly'] || $row['is_system'] > AttributesList::SYSTEM_ATTRIBUTE;
@@ -134,8 +132,8 @@ class UsedAttributesList extends Dataset {
             }
 
             $attributeName = null;
-            foreach ($settings['extraAttributes']['attributesMaps'] as $map) {
-                if (isset($map[$attributeType['name']])) {
+            foreach ($settings['extraAttributes']['attributesMaps'] as $mapTable=>$map) {
+                if (isset($map[$attributeType['name']]) && ($mapTable == $orgTable || $mapTable == "{$orgTable}_translation")) {
                     $attributeName = $map[$attributeType['name']];
                     break;
                 }

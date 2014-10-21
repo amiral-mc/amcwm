@@ -17,7 +17,7 @@
     /**
      * @todo fix the client side validation in the tinyMCE editor.
      */
-    $form = $this->beginWidget('CActiveForm', array(
+    $form = $this->beginWidget('Form', array(
         'id' => $formId,
         'enableAjaxValidation' => false,
         'enableClientValidation' => false,
@@ -31,7 +31,17 @@
     <p class="note"><?php echo AmcWm::t("amcBack", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage()); ?>
     <?php echo CHtml::hiddenField('module', Data::getForwardModParam()); ?>
-    <?php echo $form->errorSummary(array_merge(array($model, $contentModel), $contentModel->titles)); ?>
+    <?php
+    $models[] = $model;
+    $models[] = $contentModel;
+    foreach ($contentModel->attachment as $attachmentModel) {
+        $models[] = $attachmentModel;
+    }
+    foreach ($contentModel->titles as $title) {
+        $models[] = $title;
+    }
+    echo $form->errorSummary($models);
+    ?>
     <fieldset>
         <legend><?php echo AmcWm::t("msgsbase.core", "General Option"); ?>:</legend>
         <div class="row">                       
@@ -122,17 +132,7 @@
         <div class="row">
             <?php echo $form->labelEx($contentModel, 'article_detail'); ?>
             <?php echo $form->error($contentModel, 'article_detail'); ?>
-            <?php
-            $this->widget('amcwm.core.widgets.tinymce.MTinyMce', array(
-                'model' => $contentModel,
-                'attribute' => 'article_detail',
-                'editorTemplate' => 'full',
-                'htmlOptions' => array(
-                    'style' => 'height:300px; width:630px;'
-                ),
-                    )
-            );
-            ?>            
+            <?php echo $form->richTextField($contentModel, 'article_detail', array('editorTemplate' => 'full', 'height' => '300px', "width" => "630px")); ?>
         </div>       
         <div class="row">                       
             <?php echo $form->labelEx($model, 'section_id'); ?>
@@ -155,26 +155,7 @@
         </div>                 
         <div class="row">
             <?php echo $form->labelEx($model, 'publish_date'); ?>
-            <?php
-            $this->widget('amcwm.core.widgets.timepicker.EJuiDateTimePicker', array(
-                'model' => $model,
-                'attribute' => 'publish_date',
-                'options' => array(
-                    'showAnim' => 'fold',
-                    'dateFormat' => 'yy-mm-dd',
-                    'timeFormat' => 'hh:mm',
-                    'changeMonth' => true,
-                    'changeYear' => false,
-                ),
-                'htmlOptions' => array(
-                    'class' => 'datebox',
-                    'style' => 'direction:ltr',
-                    'readonly' => 'readonly',
-                    //'value' => ($model->publish_date) ? date("Y-m-d H:i", strtotime($model->publish_date)) : date("Y-m-d 00:01", strtotime("+1 day")),
-                    'value' => ($model->publish_date) ? date("Y-m-d H:i", strtotime($model->publish_date)) : date("Y-m-d H:i"),
-                )
-            ));
-            ?>
+            <?php echo $form->calendarField($model, 'publish_date', array('class' => 'datebox', 'dateOptions' => array("dateOnly" => 0))); ?>           
             <?php echo $form->error($model, 'publish_date'); ?>
         </div>
 
@@ -334,6 +315,14 @@
             <?php echo $form->error($model, 'socialIds'); ?>
         </fieldset>
     </div>
+    <fieldset>
+        <legend><?php echo AmcWm::t("msgsbase.core", "Files"); ?>:</legend>
+        <div class="row">
+            <?php
+            echo $form->attachmentField($contentModel, 'attachment', array("id" => "attachment_area"));
+            ?>
+        </div>     
+    </fieldset>
     <?php $this->endWidget(); ?>
 </div><!-- form -->    
 <?php
