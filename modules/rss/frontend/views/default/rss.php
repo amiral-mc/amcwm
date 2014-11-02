@@ -3,8 +3,11 @@
 Yii::import('application.modules.rss.components.feed.*');
 $feed = new EFeed();
 
-$feed->title = AmcWm::t("amcFront", "Arab News Agency");
-$feed->description = AmcWm::t("app", "_website_name_");
+$feed->title = $this->pageTitle;
+
+if(isset(Yii::app()->params['custom']['front']['site']['description'])){
+    $feed->description =  Yii::app()->params['custom']['front']['site']['description'];
+}
 
 //$feed->setImage('Testing RSS 2.0 EFeed class', 'http://www.ramirezcobos.com/rss', 'http://www.yiiframework.com/forum/uploads/profile/photo-7106.jpg');
 

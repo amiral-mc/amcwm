@@ -1,5 +1,5 @@
 <?php
-
+AmcWm::import("amcwm.modules.rss.frontend.components.feed.*");
 /**
  * @author Amiral Management Corporation amc.amiral.com
  * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.
@@ -86,7 +86,8 @@ class AmcRssController extends FrontendController {
     public function actionIndex($limit = 100, $start = 0, $list = TRUE, $sectionId = null) {
         if (!$list) {
             $storyType = Yii::app()->request->getParam("st", RssSiteData::SHORT_STORY);
-            $rssData = new ArticlesRssData(array("news"), 0, $limit, $sectionId);
+            $table = Yii::app()->request->getParam("tb", 'news');
+            $rssData = new ArticlesRssData(array($table), 0, $limit, $sectionId);
             $rssData->setStoryType($storyType);
             $rssData->generate();
             $this->_draw($rssData->getItems(), $limit, $start, $sectionId);
