@@ -30,7 +30,6 @@ foreach ($sections AS $section){
     $c++;
 }
 $content .= '</div>' . PHP_EOL;
-$content .= '<p><a href="http://feeds.feedburner.com/anaonline/BWCu" rel="alternate" type="application/rss+xml" target="_blank"><img src="http://www.feedburner.com/fb/images/pub/feed-icon16x16.png" alt="" style="vertical-align:middle;border:0"/> &nbsp; '.AmcWm::t("amcFront", "Subscribe in a reader").'</a></p>';
 $breadcrumbs[] = AmcWm::t("amcFront", "RSS Service");
 $this->widget('PageContentWidget', array(
     'id' => 'rss_list',
