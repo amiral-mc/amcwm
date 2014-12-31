@@ -14,15 +14,18 @@
  * @version 1.0
  */
 abstract class SiteData extends Dataset {
+
     /**
      * Content text type
      */
     const TEXT_TYPE = 1;
+
     /**
      * Content image type
      * @todo rename the mame
      */
     const IAMGE_TYPE = 2;
+
     /**
      * Content video type
      */
@@ -33,53 +36,63 @@ abstract class SiteData extends Dataset {
      * @var string 
      */
     protected $moduleName;
+
     /**
      * Title length , if greater than 0 then we get the first titleLength characters from content tite
      * @var integer 
      */
     protected $titleLength = 0;
+
     /**
      * Type of content item line, this could be one of the following, text, image or video
      * @var integer 
      */
     protected $type = 1;
+
     /**
      * Period time in seconds, 
      * If atrribute value is greater than 0 then articles generated from this class must be between "current date" and "current date" subtracted from the value of this attribute 
      * @var int 
      */
     protected $period = 0;
+
     /**
      * The section id to get contents from, if equal null then we gets contents from all sections
      * @var int 
      */
     protected $sectionId;
+
     /**
      * If equal true and SiteData.sectionId attribute is not equal 0 then we gets contents belong tho the section and sub sections
      * @var boolean
      */
     protected $useSubSections = true;
+
     /**
      * The numbers of items to fetch from table 
      * @var int 
      */
     protected $limit = 5;
+
     /**
      * Array contain's tables names to get data from, 
      * @var array 
      */
     protected $tables;
+
     /**
      * get archived articles or not, if equal 1 then get none-archived articles ,  2 get archived articles 0 get both.
      * @var integer
      */
     protected $archive = 1;
+
     /**
      *
      * path to content images
      * @var string
      */
     protected $mediaPath;
+
     /**
      * If not equal null then articles generated from this class must be greater than or equal the value of this attribue
      * if period atrribute value is greater than 0 then 
@@ -87,6 +100,7 @@ abstract class SiteData extends Dataset {
      * @var string
      */
     protected $fromDate = NULL;
+
     /**
      * If not equal null then articles generated from this class must be less than or equal the value of this attribue
      * if period atrribute value is greater than 0 then
@@ -94,6 +108,7 @@ abstract class SiteData extends Dataset {
      * @var string
      */
     protected $toDate = NULL;
+
     /**
      * date field to compare  SiteData.toDate or SiteData.fromDate with
      * @var string 
@@ -111,7 +126,7 @@ abstract class SiteData extends Dataset {
         $this->useSubSections = $useSubSections;
     }
 
-     /**
+    /**
      * set date compare field path      
      * @param string $field 
      * @access public 
@@ -120,8 +135,8 @@ abstract class SiteData extends Dataset {
     public function setDateCompareField($field) {
         $this->dateCompareField = $field;
     }
-    
-     /**
+
+    /**
      * set media path      
      * @param string $path 
      * @access public 
@@ -130,7 +145,7 @@ abstract class SiteData extends Dataset {
     public function setMediaPath($path) {
         $this->mediaPath = $path;
     }
-    
+
     /**
      * set the section id to get data from
      * @param integer sectionId 
@@ -138,7 +153,7 @@ abstract class SiteData extends Dataset {
      * @return void
      */
     public function setSectionId($sectionId) {
-        if(!is_array($sectionId)){
+        if (!is_array($sectionId)) {
             $sectionId = (int) $sectionId;
         }
         $this->sectionId = $sectionId;
@@ -185,6 +200,50 @@ abstract class SiteData extends Dataset {
      */
     public function setTitleLength($length) {
         $this->titleLength = $length;
-    }   
+    }
+
+    /**
+     * Update article / video / breaking news rating
+     * @param integer $rating
+     * @param string $table
+     * @param string $tableKey
+     * @param int $recordId
+     * @access public
+     * @return void
+     */
+    public function setRatingForTable($rating, $table, $tableKey, $recordId) {
+        $cookieName = "{$tableKey}.{$recordId}.vote";
+        if (!isset(Yii::app()->request->cookies[$cookieName])) {
+            $cookie = new CHttpCookie($cookieName, $recordId);
+            $cookie->expire = time() + 3600;
+            Yii::app()->request->cookies[$cookieName] = $cookie;
+            if ($rating > 5) {
+                $rating = 5;
+            }
+            $query = sprintf("update $table set votes_rate = (votes_rate * votes + %d) / (votes + 1), votes = votes + 1 where {$tableKey} = %d", $rating, $recordId);
+            Yii::app()->db->createCommand($query)->execute();
+        }
+    }
+
+    /**
+     * Get rating
+     * @param float $rating
+     * @access public
+     * @return array
+     */
+    public function getRatingStarts($rating) {
+        $myRating = floor($rating);
+        $fractions = $rating - $myRating;
+        $half = false;
+        if ($fractions >= 0.25 && $fractions < 0.75) {
+            $half = true;
+        } elseif ($fractions >= 0.75) {
+            $myRating = ceil($rating);
+            $half = false;
+        }
+        $starts['rating'] = $myRating;
+        $starts['half'] = $half;
+        return $starts;
+    }
 
 }
