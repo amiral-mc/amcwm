@@ -52,6 +52,7 @@ class Products extends ParentTranslatedActiveRecord {
             array('price', 'length', 'max' => 8),
             array('product_code', 'length', 'max' => 50),
             array('expire_date, update_date', 'safe'),
+            array('expire_date', 'compare', 'compareAttribute' => 'publish_date', 'operator' => '>', 'allowEmpty' => true),
             array('create_date', 'default',
                 'value' => $date,
                 'setOnEmpty' => false, 'on' => 'insert'),

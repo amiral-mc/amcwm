@@ -25,6 +25,20 @@
                 <?php echo Yii::app()->params['languages'][$contentModel->content_lang]; ?>
             </span>
         </div>
+        <?php
+        echo $form->checkBox($model, 'published');
+        echo $form->labelEx($model, 'published', array("style" => 'display:inline;'));
+        ?>
+        <div class="row">
+            <?php echo $form->labelEx($model, 'product_code'); ?>
+            <?php echo $form->textField($model, 'product_code', array('size' => 60, 'maxlength' => 500)); ?>
+            <?php echo $form->error($model, 'product_code'); ?>
+        </div>
+        <div class="row">
+            <?php echo $form->labelEx($model, 'price'); ?>
+            <?php echo $form->textField($model, 'price', array('size' => 60, 'maxlength' => 500)); ?>
+            <?php echo $form->error($model, 'price'); ?>
+        </div>
     </fieldset>
 
     <fieldset>
@@ -78,6 +92,11 @@
             <?php echo $form->error($model, 'publish_date'); ?>
         </div>
 
+        <div class="row">
+            <?php echo $form->labelEx($model, 'expire_date'); ?>
+            <?php echo $form->calendarField($model, 'expire_date', array('class' => 'datebox', 'dateOptions' => array("dateOnly" => 0))); ?>
+            <?php echo $form->error($model, 'expire_date'); ?>
+        </div>
     </fieldset>
 
     <fieldset>
