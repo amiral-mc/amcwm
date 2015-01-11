@@ -140,10 +140,17 @@ return array(
             ),
         ),
     ),
+    'options' => array(
+        'default' => array(
+            'integer' => array(
+                'mainSection' => 1,
+            ),
+        ),
+    ),
     'frontend' => array(
         'structure' => array(
             'controllers' => array(
-                'default' => 'AmcProductsController',
+                'default' => 'AmcProductsCategoriesController',
                 'comments' => 'AmcCommentsController',
                 'replies' => 'AmcRepliesController',
             ),
@@ -156,7 +163,7 @@ return array(
                             "perm" => 1,
                             'roles' => array('guest'),
                         ),
-                        "sections" => array(
+                        "category" => array(
                             "perm" => 1,
                             'roles' => array('guest'),
                         ),
