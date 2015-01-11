@@ -94,12 +94,12 @@ class ManageProducts extends ManageContent {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function create() {
-        $model = new Products;        
+        $model = new Products;
         $contentModel = new ProductsTranslation();
         $galleryContentModel = new GalleriesTranslation;
-        $model->addTranslationChild($contentModel, Controller::getContentLanguage());        
-        $model->gallery = new Galleries;                
-        $model->gallery->addTranslationChild($galleryContentModel, Controller::getContentLanguage());                        
+        $model->addTranslationChild($contentModel, Controller::getContentLanguage());
+        $model->gallery = new Galleries;
+        $model->gallery->addTranslationChild($galleryContentModel, Controller::getContentLanguage());
         $this->save($contentModel);
         $this->controller->render('create', array(
             'contentModel' => $contentModel,
@@ -121,9 +121,10 @@ class ManageProducts extends ManageContent {
                 $tags = null;
             }
             $_POST["ProductsTranslation"]["tags"] = $tags;
-            $model->attributes = $_POST['Products'];            
+            $model->attributes = $_POST['Products'];
             $contentModel->attributes = $_POST['ProductsTranslation'];
-            $galleryContentModel  = $model->gallery->getCurrent();            
+            $model->gallery->published = $model->published;
+            $galleryContentModel = $model->gallery->getCurrent();
             $galleryContentModel->gallery_header = $contentModel->product_name;
             $validate = $model->validate();
             $validate &= $contentModel->validate();
@@ -133,7 +134,7 @@ class ManageProducts extends ManageContent {
             if ($validate) {
                 try {
                     $saved = $model->gallery->save();
-                    $model->gallery_id = $model->gallery->gallery_id;                    
+                    $model->gallery_id = $model->gallery->gallery_id;
                     $saved &= $galleryContentModel->save();
                     $saved &= $model->save();
                     $saved &= $contentModel->save();

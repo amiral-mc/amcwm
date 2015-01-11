@@ -18,10 +18,10 @@
   `is_system` TINYINT(1) NOT NULL DEFAULT 0,
   `price` DECIMAL(8,2) NULL DEFAULT 0,
   `product_code` VARCHAR(50) NULL,
-  INDEX `articles_create_date_idx` (`create_date` DESC),
-  INDEX `articles_hits_idx` (`hits` DESC),
+  INDEX `products_create_date_idx` (`create_date` DESC),
+  INDEX `products_hits_idx` (`hits` DESC),
   PRIMARY KEY (`product_id`),
-  INDEX `fk_articles_sections1_idx` (`section_id` ASC),
+  INDEX `fk_products_sections1_idx` (`section_id` ASC),
   INDEX `fk_products_galleries1_idx` (`gallery_id` ASC),
   UNIQUE INDEX `product_code_UNIQUE` (`product_code` ASC),
   CONSTRAINT `fk_products_sections`

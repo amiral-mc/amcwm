@@ -1,5 +1,6 @@
 <?php
 
+AmcWm::import('amcwm.modules.multimedia.components.MediaListData');
 /**
  * @author Amiral Management Corporation amc.amiral.com
  * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.
@@ -116,7 +117,7 @@ class ProductsListData extends SiteData {
         if (!count($this->orders)) {
             $sorting = self::getSettings()->getTablesSoringOrders();
             if (isset($sorting)) {
-                $this->addOrder("{$sorting['sortField']} {$sorting['order']}");
+                $this->addOrder("{$sorting['products']['sortField']} {$sorting['products']['order']}");
             } else {
                 $this->addOrder("hits desc");
             }
@@ -173,7 +174,7 @@ class ProductsListData extends SiteData {
         $command->from("products t force index (products_create_date_idx)");
         $command->join = 'JOIN products_translation tt on t.product_id = tt.product_id';
         $command->join .= $this->joins;
-        $command->select("t.product_id, t.hits, t.thumb, tt.product_brief, tt.product_description, tt.product_specifications $cols");
+        $command->select("t.product_id, t.gallery_id, t.hits, tt.product_name $cols");
         $command->where($wheres);
         $command->order = $orders;
         $this->count = Yii::app()->db->createCommand("SELECT COUNT(*) FROM products t {$command->join} WHERE {$command->where}")->queryScalar();
@@ -214,18 +215,21 @@ class ProductsListData extends SiteData {
                 $urlParams[$paramIndex] = $paramValue;
             }
             $this->items[$index]['link'] = Html::createUrl($this->getRoute(), $urlParams);
-            if ($product["thumb"]) {
-                $this->items[$index]['imageExt'] = $product["thumb"];
-                $this->items[$index]['image'] = $this->mediaPath . $product["product_id"] . "." . $product["thumb"];
-            } else {
-                $this->items[$index]['imageExt'] = null;
-                $this->items[$index]['image'] = null;
-            }
             $this->items[$index]['type'] = $this->type;
 
             if ($this->checkIsActive) {
                 $this->items[$index]['isActive'] = Data::getInstance()->isCurrentRoute($this->route, array("id" => $product['product_id']));
             }
+            $product['gallery_id'];
+            $media = new MediaListData($product['gallery_id'], SiteData::IAMGE_TYPE, 0, 1);
+            $media->generate();
+            $image = $media->getData();
+            $this->items[$index]['image'] = array();
+            if($image){
+                $this->items[$index]['image'] = current($media->getData());    
+            }
+            
+            
             foreach ($this->cols as $colIndex => $col) {
                 $this->items[$index][$colIndex] = $product[$colIndex];
             }
