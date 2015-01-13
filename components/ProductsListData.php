@@ -220,16 +220,15 @@ class ProductsListData extends SiteData {
             if ($this->checkIsActive) {
                 $this->items[$index]['isActive'] = Data::getInstance()->isCurrentRoute($this->route, array("id" => $product['product_id']));
             }
-            $product['gallery_id'];
             $media = new MediaListData($product['gallery_id'], SiteData::IAMGE_TYPE, 0, 1);
             $media->generate();
             $image = $media->getData();
             $this->items[$index]['image'] = array();
-            if($image){
-                $this->items[$index]['image'] = current($media->getData());    
+            if ($image) {
+                $this->items[$index]['image'] = current($media->getData());
             }
-            
-            
+
+
             foreach ($this->cols as $colIndex => $col) {
                 $this->items[$index][$colIndex] = $product[$colIndex];
             }
