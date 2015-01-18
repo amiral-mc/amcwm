@@ -37,7 +37,7 @@ class AmcProductsCategoriesController extends FrontendController {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        
+        $this->render('view');
     }
 
     /**
