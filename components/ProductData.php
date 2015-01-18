@@ -7,26 +7,20 @@
  */
 
 /**
- * ArticleData class, Gets the article record for a given article id
+ * ProductData class, gets the product record for a given product id
  * @package AmcWebManager
  * @subpackage Data
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class ArticleData extends Dataset {
+class ProductData extends Dataset {
 
     /**
-     * Module name , news or articles .. etc
-     * @var string 
-     */
-    private $_moduleName;
-
-    /**
-     * Article id, to get record based on it
+     * Product id, to get record based on it
      * @var integer
      */
     private $_id;
-    //private $articleData = array();
+
     /**
      * Cache implemented in application, used for caching this record  
      * @var CCache 
@@ -41,78 +35,36 @@ class ArticleData extends Dataset {
 
     /**
      * Counstructor, the content type
-     * @param integer $articleId 
+     * @param integer $productId 
      * @param boolean $autoGenerate if true then call the generate method from counstructor
      * @access public
      * 
      */
-    public function __construct($articleId, $autoGenerate = true) {
+    public function __construct($productId, $autoGenerate = true) {
         $this->_cache = Yii::app()->getComponent('cache');
-        $this->_id = (int) $articleId;
+        $this->_id = (int) $productId;
         if ($autoGenerate) {
             $this->generate();
         }
     }
 
     /**
-     * Gets the module name that handle the output
-     * @access public
-     * @return string 
-     */
-    public function getModuleName() {
-        if (!$this->_moduleName) {
-            $articlesTables = ArticlesListData::getArticlesTables();
-            $this->_moduleName = "articles";
-            foreach ($articlesTables as $module => $table) {
-                $inTable = Yii::app()->db->createCommand("select article_id from $table where article_id ={$this->_id}")->queryScalar();
-                if ($inTable) {
-                    $this->_moduleName = $module;
-                    break;
-                }
-            }
-        }
-        return $this->_moduleName;
-    }
-
-    /**
-     * Gets the article record associated array
+     * Gets the product record associated array
      * @return array 
      * @access public
      */
-    public function getArticle() {
+    public function getProduct() {
         $record = $this->items['record'];
         return $record;
     }
 
     /**
-     * Gets the article record associated array
-     * @return array 
-     * @access public
-     */
-    public function getSubs() {
-        return $this->items['subs'];
-    }
-
-    public function getParentSubs() {
-        return $this->items['parentSubs'];
-    }
-
-    public function getArticleSubs() {
-        if (count($this->getSubs())) {
-            $subs = $this->getSubs();
-        } else {
-            $subs = $this->getParentSubs();
-        }
-        return $subs;
-    }
-
-    /**
-     * Gets the the comments associated array inside article dataset array that contain's following items:
+     * Gets the the comments associated array inside product dataset array that contain's following items:
      * <ul>
      * <li>content: array list thst include the following:
      * <ul>
-     * <li>id: integer, article id</li>
-     * <li>content: string , article header</li>
+     * <li>id: integer, product id</li>
+     * <li>content: string , product header</li>
      * </ul>
      * <li>records: array, specifies the comments record</li>    
      * <li>pager: array list thst include the following:
@@ -139,25 +91,25 @@ class ArticleData extends Dataset {
     }
 
     /**
-     * Get article comments count, if cache is not implemented then get the comments from article dataset otherwise get the comments using query 
+     * Get product comments count, if cache is not implemented then get the comments from product dataset otherwise get the comments using query 
      * @return integer 
      */
     public function getCommentsCount() {
         $comments = $this->items['record']['comments'];
         if ($this->_cache !== null) {
-            $comments = Yii::app()->db->createCommand("select comments from articles where article_id = {$this->_id} ")->queryScalar();
+            $comments = Yii::app()->db->createCommand("SELECT comments FROM products WHERE product_id = {$this->_id} ")->queryScalar();
         }
         return $comments;
     }
 
     /**
-     * Get article hits count, if cache is not implemented then get the hits from article dataset otherwise get the hits using query 
+     * Get product hits count, if cache is not implemented then get the hits from product dataset otherwise get the hits using query 
      * @return integer 
      * @access public
      */
     public function getHits() {
         if ($this->_cache !== null) {
-            $hits = Yii::app()->db->createCommand("select hits from articles where article_id = {$this->_id} ")->queryScalar();
+            $hits = Yii::app()->db->createCommand("SELECT hits FROM products WHERE product_id = {$this->_id} ")->queryScalar();
         } else {
             $hits = isset($this->items['record']['hits']) ? $this->items['record']['hits'] : 0;
         }
@@ -165,7 +117,7 @@ class ArticleData extends Dataset {
     }
 
     /**
-     * Check if the article record found in the database table or not
+     * Check if the product record found in the database table or not
      * @return boolean
      * @access public
      */
@@ -174,12 +126,12 @@ class ArticleData extends Dataset {
     }
 
     /**
-     * sets the the comments associated array inside article dataset array that contain's following items:
+     * sets the the comments associated array inside product dataset array that contain's following items:
      * <ul>     
      * <li>content: array list thst include the following:
      * <ul>
-     * <li>id: integer, article id</li>
-     * <li>content: string , article header</li>
+     * <li>id: integer, product id</li>
+     * <li>content: string , product header</li>
      * </ul>     
      * <li>records: array, specifies the comments record</li>    
      * <li>pager: array list thst include the following:
@@ -196,15 +148,15 @@ class ArticleData extends Dataset {
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
         $pageSize = Yii::app()->params['pages']['comments'];
         $query = sprintf("
-            select c.*, co.name cName, p.name pName 
-            from comments c
-            inner join articles_comments ac on ac.article_comment_id = c.comment_id
-            left join comments_owners co on co.comment_id = c.comment_id
-            left join persons_translation p on p.person_id = c.user_id and p.content_lang = %s
-            where c.published = %d
-            and (c.hide = 0 OR c.force_display=1)
-            and ac.article_id = %d
-            order by c.comment_date DESC", Yii::app()->db->quoteValue($siteLanguage)
+            SELECT c.*, co.name cName, pt.name pName 
+            FROM comments c
+            JOIN products_comments pc ON c.comment_id = pc.product_comment_id
+            LEFT JOIN comments_owners co ON c.comment_id = co.comment_id
+            LEFT JOIN persons_translation pt ON c.user_id = pt.person_id AND pt.content_lang = %s
+            WHERE c.published = %d
+            AND (c.hide = 0 OR c.force_display=1)
+            AND pc.product_id = %d
+            ORDER BY c.comment_date DESC", Yii::app()->db->quoteValue($siteLanguage)
                 , ActiveRecord::PUBLISHED
                 , $this->_id
         );
@@ -223,7 +175,7 @@ class ArticleData extends Dataset {
             $this->_setReplies($comment["comment_id"], $index);
         }
         $this->items['comments']['content']['id'] = $this->_id;
-        $this->items['comments']['content']['title'] = $this->items['record']['article_header'];
+        $this->items['comments']['content']['title'] = $this->items['record']['product_name'];
         if (count($this->items['comments']['records'])) {
             $commentsRecords = $this->items['comments']['records'];
             $pageSize = Yii::app()->params['pages']['comments'];
@@ -231,7 +183,6 @@ class ArticleData extends Dataset {
             if (!$pageNo) {
                 $pageNo = 1;
             }
-
             $this->items['comments']['records'] = array_slice($commentsRecords, ($pageNo - 1 ) * $pageSize, $pageSize);
         }
         $this->items['comments']['pager'] = array('pageSize' => $pageSize, 'count' => $count,);
@@ -246,13 +197,14 @@ class ArticleData extends Dataset {
     private function _setReplies($commentId, $index) {
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
         $query = sprintf(" 
-            select c.*, co.name cName, p.name pName from comments c 
-            left join comments_owners co on co.comment_id = c.comment_id
-            left join persons_translation p on p.person_id = c.user_id and p.content_lang = %s
-            where c.published = %d
-            and (c.hide = 0 OR c.force_display=1)
-            and c.comment_review = %d
-            order by c.comment_date DESC
+            SELECT c.*, co.name cName, pt.name pName
+            FROM comments c
+            LEFT JOIN comments_owners co on c.comment_id = co.comment_id
+            LEFT JOIN persons_translation pt on c.user_id = pt.person_id AND pt.content_lang = %s
+            WHERE c.published = %d
+            AND (c.hide = 0 OR c.force_display=1)
+            AND c.comment_review = %d
+            ORDER BY c.comment_date DESC
         ", Yii::app()->db->quoteValue($siteLanguage)
                 , ActiveRecord::PUBLISHED
                 , $commentId);
@@ -278,14 +230,12 @@ class ArticleData extends Dataset {
     private function _initItem() {
         $this->items = array(
             'record' => array(),
-            'subs' => array(),
-            'parentSubs' => array(),
             'comments' => array('content' => array('id' => NULL, 'title' => NULL,), 'records' => array(), 'pager' => array('pageSize' => 10, 'count' => 0)),
         );
     }
 
     /**
-     * Generate the article dataset array,
+     * Generate the product dataset array,
      * @todo change facebook commment to cron job     
      * @access public
      * @return void
@@ -302,13 +252,13 @@ class ArticleData extends Dataset {
         $commentsCount = 0;
         $this->_initItem();
         if ($this->_cache !== null) {
-            $dependencyQuery = sprintf("select count(*) from comments c 
-            inner join articles_comments ac on ac.article_comment_id = c.comment_id
-            where c.published = %d 
-            and (c.hide = 0 OR c.force_display=1) 
-            and ac.article_id = %d", ActiveRecord::PUBLISHED, $this->_id);
+            $dependencyQuery = sprintf("SELECT COUNT(*) FROM comments c
+            JOIN products_comments pc ON c.comment_id = pc.product_comment_id
+            WHERE c.published = %d
+            AND (c.hide = 0 OR c.force_display=1)
+            AND pc.product_id = %d", ActiveRecord::PUBLISHED, $this->_id);
             $dependencyComments = Yii::app()->db->createCommand($dependencyQuery)->queryScalar();
-            $this->items = $this->_cache->get('article_' . $this->_id);
+            $this->items = $this->_cache->get('product_' . $this->_id);
             if (!$this->items || !isset($this->items['record']) || !$this->items['record']) {
                 $this->_initItem();
             } else {
@@ -327,36 +277,36 @@ class ArticleData extends Dataset {
         if ($this->items['record']) {
             if (!$this->items['comments']['content']['id']) {
                 $this->items['comments']['content']['id'] = $this->_id;
-                $this->items['comments']['content']['title'] = $this->items['record']['article_header'];
+                $this->items['comments']['content']['title'] = $this->items['record']['product_name'];
             }
             $commentsCount = $this->items['comments']['pager']['count'] + $facebookCommentsCount;
             $this->items['comments']['pager']['count'] = $commentsCount;
             $this->items['record']['comments'] = $commentsCount;
-            $correctedCommentsQuery = sprintf('update articles set comments = %d where comments <> %d and article_id = %d', $commentsCount, $commentsCount, $this->_id);
+            $correctedCommentsQuery = sprintf('UPDATE products set comments = %d WHERE comments <> %d AND product_id = %d', $commentsCount, $commentsCount, $this->_id);
             Yii::app()->db->createCommand($correctedCommentsQuery)->execute();
             $cookieName = "hits_{$this->_id}";
             if (!isset(Yii::app()->request->cookies[$cookieName]->value)) {
-                Yii::app()->db->createCommand("update articles set hits=hits+1 where article_id = {$this->_id} ")->execute();
+                Yii::app()->db->createCommand("UPDATE products SET hits=hits+1 WHERE product_id = {$this->_id} ")->execute();
                 $cookie = new CHttpCookie($cookieName, $cookieName);
                 $cookie->expire = time() + 3600;
                 Yii::app()->request->cookies[$cookieName] = $cookie;
             }
         }
         if ($this->_cache !== null && $cacheMe) {
-            $this->_cache->set('article_' . $this->_id, $this->items, Yii::app()->params["cacheDuration"]["article"]);
+            $this->_cache->set('product_' . $this->_id, $this->items, Yii::app()->params["cacheDuration"]["product"]);
         }
     }
 
     /**
-     * Set the article dataset array   the associated array contain's the following items:
+     * Set the product dataset array   the associated array contain's the following items:
      * <ul>
-     * <li>record: array, specifies the article record</li>    
+     * <li>record: array, specifies the product record</li>    
      * <li>comments: array, comments associated that contain's following items:
      * <ul>
      * <li>content: array list thst include the following:
      * <ul>
-     * <li>id: integer, article id</li>
-     * <li>content: string , article header</li>
+     * <li>id: integer, product id</li>
+     * <li>content: string , product header</li>
      * </ul>
      * <li>records: array, specifies the comments record</li>    
      * <li>pager: array list thst include the following:
@@ -376,8 +326,8 @@ class ArticleData extends Dataset {
     }
 
     /**
-     * sets the article keywords inside record associated array, 
-     * merge tags and sections and article source if exist
+     * sets the product keywords inside record associated array, 
+     * merge tags and sections and product source if exist
      * @access private
      * @return void
      */
@@ -387,17 +337,17 @@ class ArticleData extends Dataset {
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
         $sections = array();
         $sectionQuery = sprintf(
-                "select 
-                    t.section_id, 
-                    t.parent_section, 
+                "SELECT
+                    t.section_id,
+                    t.parent_section,
                     t.image_ext,
-                    tt.section_name, 
+                    tt.section_name,
                     tt.description as section_description
-                    from sections t 
-                    inner join sections_translation tt on t.section_id = tt.section_id
-                    where t.section_id = %d                    
-             and published= %d
-             and content_lang = %s"
+                FROM sections t 
+                JOIN sections_translation tt on t.section_id = tt.section_id
+                WHERE t.section_id = %d                    
+                AND published= %d
+                AND content_lang = %s"
                 , $this->items['record']['section_id']
                 , ActiveRecord::PUBLISHED
                 , Yii::app()->db->quoteValue($siteLanguage)
@@ -415,15 +365,15 @@ class ArticleData extends Dataset {
             $sections[] = $firstSection['section_description'];
             if ($firstSection['parent_section']) {
                 $sectionParentQuery = sprintf(
-                        "select 
-                    t.section_id, 
-                    tt.section_name,
-                    tt.description as section_description
-                    from sections t 
-                    inner join sections_translation tt on t.section_id = tt.section_id
-                    where t.section_id = %d                    
-                    and published = %d
-                    and content_lang = %s"
+                        "SELECT
+                        t.section_id,
+                        tt.section_name,
+                        tt.description as section_description
+                    FROM sections t
+                    JOIN sections_translation tt ON t.section_id = tt.section_id
+                    WHERE t.section_id = %d
+                    AND published = %d
+                    AND content_lang = %s"
                         , $firstSection['parent_section']
                         , ActiveRecord::PUBLISHED
                         , Yii::app()->db->quoteValue($siteLanguage)
@@ -456,109 +406,36 @@ class ArticleData extends Dataset {
     }
 
     /**
-     * sets the article record associated array
+     * sets the product record associated array
      * @access private
      * @return void
      */
     private function _setRecord() {
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
         if ($this->_id) {
-            $moduleName = $this->getModuleName();
-            if ($moduleName == 'news') {
-                $this->addJoin("inner join news n on n.article_id = t.article_id");
-                $this->addJoin("left join news_sources_translation ns on ns.source_id = n.source_id and ns.content_lang = tt.content_lang");
-                $this->addColumn("source");
-            } else {
-                $this->addColumn("' '", 'source');
-            }
             $cols = $this->generateColumns();
             $wheres = $this->generateWheres();
             $currentDate = date("Y-m-d H:i:s");
-
-            $this->query = sprintf("select t.* , 
-                    tt.article_detail , tt.article_header, 
-                    tt.article_pri_header, tt.image_description, tt.tags  
+            $this->query = sprintf("SELECT t.*,
+                    tt.product_brief, tt.product_name,
+                    tt.product_specifications, tt.product_description, tt.tags
                     , pa.page_img as parent_img
                     $cols 
-                from articles t
-                inner join articles_translation tt on t.article_id = tt.article_id
-                left join articles pa on pa.article_id = t.parent_article
-                {$this->joins}       
-                where t.published = %d
-                and t.article_id = %d             
-                and t.publish_date <= '{$currentDate}'            
-                and (t.expire_date >'{$currentDate}' or t.expire_date is null)
-                and tt.content_lang = %s
+                FROM products t
+                JOIN products_translation tt ON t.product_id = tt.product_id
+                {$this->joins}
+                WHERE t.published = %d
+                AND t.product_id = %d
+                AND t.publish_date <= '{$currentDate}'
+                AND (t.expire_date >'{$currentDate}' or t.expire_date is null)
+                AND tt.content_lang = %s
                 $wheres
              ", ActiveRecord::PUBLISHED, $this->_id, Yii::app()->db->quoteValue($siteLanguage));
             //die($this->query);
             $this->items['record'] = Yii::app()->db->createCommand($this->query)->queryRow();
-
             if (is_array($this->items['record'])) {
-                if ($moduleName == 'news') {
-                    $query = 'select editor_id, name , content_lang from news_editors n '
-                            . ' inner join persons_translation p on p.person_id = n.editor_id'
-                            . ' where n.article_id = ' . (int) $this->_id;
-                    $editors = Yii::app()->db->createCommand($query)->queryAll();
-                    $this->items['record']['editors'] = array();
-
-                    foreach ($editors as $editor) {
-                        if (!isset($this->items['record']['writers'][$editor['editor_id']]) || $editor['content_lang'] == $siteLanguage) {
-                            $this->items['record']['editors'][$editor['editor_id']] = $editor['name'];
-                        }
-                    }
-                    if ($this->items['record']['source']) {
-                        $this->items['record']['editors']['orgSource'] = $this->items['record']['source'];
-                        $this->items['record']['source'] = implode(' - ', $this->items['record']['editors']);
-                    }
-                }
-
                 if (isset($this->items['record']["create_date"])) {
                     $this->items['record']["create_date"] = Yii::app()->dateFormatter->format("dd/MM/y hh:mm a", $this->items['record']["create_date"]);
-                }
-                $this->items['record']['titles'] = Yii::app()->db->createCommand(sprintf("SELECT title FROM `articles_titles` where `article_id`= %d and content_lang=%s", $this->_id, Yii::app()->db->quoteValue($siteLanguage)))->queryAll();
-//                if ($moduleName == "news") {
-//                    $this->items['record']["article_detail"] = strip_tags($this->items['record']["article_detail"], "<br /><br><p><b><img><a><li><ul><ol><iframe>");
-//                }
-
-                if (isset($this->items['record']["page_img"])) {
-                    $this->items['record']['page_img'] = Yii::app()->baseUrl . "/" . Data::getSettings('articles')->mediaPaths['pageImage']['path'] . "/" . $this->items['record']['article_id'] . "." . $this->items['record']['page_img'];
-                } else {
-                    $this->items['record']['page_img'] = null;
-                }
-
-                if (isset($this->items['record']["parent_img"])) {
-                    $this->items['record']['parent_img'] = Yii::app()->baseUrl . "/" . Data::getSettings('articles')->mediaPaths['pageImage']['path'] . "/" . $this->items['record']['parent_article'] . "." . $this->items['record']['parent_img'];
-                } else {
-                    $this->items['record']['parent_img'] = null;
-                }
-
-                /**
-                 * get all sub articles
-                 */
-                $subsWhere = sprintf(' and t.published = %d
-                                and t.publish_date <= %s
-                                and (t.expire_date > %s or t.expire_date is null)
-                                and tt.content_lang = %s', ActiveRecord::PUBLISHED, Yii::app()->db->quoteValue($currentDate), Yii::app()->db->quoteValue($currentDate), Yii::app()->db->quoteValue($siteLanguage)
-                );
-
-                $qSubs = 'select t.article_id, t.thumb, t.section_id, tt.article_header, tt.article_pri_header, tt.article_detail from articles t
-                    inner join articles_translation tt on t.article_id = tt.article_id
-                    where t.parent_article = ' . $this->items['record']["article_id"] . $subsWhere;
-                $this->items['subs'] = Yii::app()->db->createCommand($qSubs)->queryAll();
-                $this->items['record']['parentData'] = null;
-                if ($this->items['record']["parent_article"]) {
-
-                    $qParentTitle = 'select t.article_id, tt.article_header, tt.article_pri_header from articles t
-                        inner join articles_translation tt on t.article_id = tt.article_id
-                        where t.article_id = ' . $this->items['record']["parent_article"] . $subsWhere;
-                    ;
-                    $this->items['record']['parentData'] = Yii::app()->db->createCommand($qParentTitle)->queryRow();
-
-                    $qParentSubs = 'select t.article_id, tt.article_header from articles t
-                        inner join articles_translation tt on t.article_id = tt.article_id
-                        where t.parent_article = ' . $this->items['record']["parent_article"] . $subsWhere;
-                    $this->items['parentSubs'] = Yii::app()->db->createCommand($qParentSubs)->queryAll();
                 }
                 $this->_setKeywords();
             }

@@ -93,12 +93,6 @@ class ArticlesListData extends SiteData {
         }
 
         $this->addWhere("(t.in_list = 1)");
-        if ($this->parentArticle) {
-            $this->addWhere("t.parent_article = " . (int) $this->parentArticle);
-        } else {
-            $this->addWhere("t.parent_article is null");
-        }
-
         if (isset(Yii::app()->useIssue) && Yii::app()->useIssue) {
             $currentIssue = Issue::getInstance()->getCurrentIssueId();
             $this->joins .= " inner JOIN issues_articles isa ON t.article_id = isa.article_id ";
@@ -156,6 +150,18 @@ class ArticlesListData extends SiteData {
         }
         if ($this->toDate) {
             $this->addWhere("t.{$this->dateCompareField} <='{$this->toDate}'");
+        }
+        if($this->parentArticle === NULL){
+            $this->addWhere("t.parent_article is null");
+        }
+        else{            
+            $this->parentArticle = (int) $this->parentArticle;           
+            if($this->parentArticle == 0){
+                $this->addWhere("t.parent_article is not null");
+            }
+            else{
+                $this->addWhere("t.parent_article = {$this->parentArticle}");
+            }
         }
         if (!count($this->orders)) {
             $virtual = self::getSettings()->getCurrentVirtual();
