@@ -564,4 +564,48 @@ class Data {
         return Yii::app()->db->createCommand($query)->queryScalar();
     }
 
+    /**
+     * Update article / video / breaking news rating
+     * @param integer $rating
+     * @param string $table
+     * @param string $tableKey
+     * @param int $recordId
+     * @access public
+     * @return void
+     */
+    public function setRatingForTable($score, $table, $tableKey, $recordId) {
+        $cookieName = "{$table}_{$recordId}_rate";
+        if (!isset(Yii::app()->request->cookies[$cookieName])) {
+            $cookie = new CHttpCookie($cookieName, $recordId);
+            $cookie->expire = time() + 3600;
+            Yii::app()->request->cookies[$cookieName] = $cookie;
+            if ($score > 5) {
+                $score = 5;
+            }
+            $query = sprintf("update $table set votes_rate = (votes_rate * votes + %f) / (votes + 1), votes = votes + 1 where {$tableKey} = %d", $score, $recordId);
+            Yii::app()->db->createCommand($query)->execute();
+        }
+    }
+
+    /**
+     * Get rating
+     * @param float $rating
+     * @access public
+     * @return array
+     */
+    public function getRatingStarts($rating) {
+        $myRating = floor($rating);
+        $fractions = $rating - $myRating;
+        $half = false;
+        if ($fractions >= 0.25 && $fractions < 0.75) {
+            $half = true;
+        } elseif ($fractions >= 0.75) {
+            $myRating = ceil($rating);
+            $half = false;
+        }
+        $starts['rating'] = $myRating;
+        $starts['half'] = $half;
+        return $starts;
+    }
+
 }
