@@ -1,5 +1,5 @@
 <?php
-
+AmcWm::import('amcwm.modules.multimedia.components.MediaListData');
 /**
  * @author Amiral Management Corporation amc.amiral.com
  * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.
@@ -383,9 +383,6 @@ class ProductData extends Dataset {
                 $sections[] = $second['section_description'];
             }
         }
-        if ($this->items['record']["source"]) {
-            $this->items['record']['keywords'][md5($this->items['record']["source"])] = $this->items['record']["source"];
-        }
         if (count($sections)) {
             foreach ($sections as $keyword) {
                 $keyword = trim($keyword);
@@ -419,7 +416,6 @@ class ProductData extends Dataset {
             $this->query = sprintf("SELECT t.*,
                     tt.product_brief, tt.product_name,
                     tt.product_specifications, tt.product_description, tt.tags
-                    , pa.page_img as parent_img
                     $cols 
                 FROM products t
                 JOIN products_translation tt ON t.product_id = tt.product_id
@@ -434,6 +430,13 @@ class ProductData extends Dataset {
             //die($this->query);
             $this->items['record'] = Yii::app()->db->createCommand($this->query)->queryRow();
             if (is_array($this->items['record'])) {
+                $media = new MediaListData($this->items['record']['gallery_id'], SiteData::IAMGE_TYPE, 0, null);
+                $media->generate();
+                $image = $media->getData();
+                $this->items['record']['images'] = $media->getData();
+                $media = new MediaListData($this->items['record']['gallery_id'], SiteData::VIDEO_TYPE, 0, null);
+                $media->generate();
+                $this->items['record']['videos'] = $media->getData();
                 if (isset($this->items['record']["create_date"])) {
                     $this->items['record']["create_date"] = Yii::app()->dateFormatter->format("dd/MM/y hh:mm a", $this->items['record']["create_date"]);
                 }
