@@ -91,10 +91,11 @@
             <?php echo $form->calendarField($model, 'publish_date', array('class' => 'datebox', 'dateOptions' => array("dateOnly" => 0))); ?>           
             <?php echo $form->error($model, 'publish_date'); ?>
         </div>
-
         <div class="row">
             <?php echo $form->labelEx($model, 'expire_date'); ?>
             <?php echo $form->calendarField($model, 'expire_date', array('class' => 'datebox', 'dateOptions' => array("dateOnly" => 0))); ?>
+            <?php echo Chtml::checkBox('no_expiry', ($model->expire_date) ? 0 : 1, array('onclick' => '$("#Products_expire_date").val("")')) ?>
+            <?php echo Chtml::label(AmcWm::t("msgsbase.core", "No expiry date"), "remove_expiry", array("style" => 'display:inline;color:#3E4D57;font-weight:normal')) ?>
             <?php echo $form->error($model, 'expire_date'); ?>
         </div>
     </fieldset>
