@@ -20,7 +20,7 @@ return array(
     'logout' => 'Logout',
     'copyright' => "&copy; {year} AMIRAL Management Corporation,AMC  All rights reserved.",
     '_website_name_' => 'Website',
-    'Fields with are required' => 'Fields with {star} are required',    
+    'Fields with {star} are required' => 'Fields with {star} are required',    
     'Hijri'=>'',
     'Follow us on'=>'Follow Us ',
     'copyright' => "Copyright © {year} Arab News Agency! All rights reserved.",

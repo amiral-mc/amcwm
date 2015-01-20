@@ -18,7 +18,7 @@
 //        }
 //    }
     ?>
-    <p class="note"><?php echo AmcWm::t("amcBack", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
+    <p class="note"><?php echo AmcWm::t("amcBack", "Fields with {star} are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
     <?php
     echo $form->errorSummary($model);
 //    $fileInfo = $model->uploadedFileInfo;

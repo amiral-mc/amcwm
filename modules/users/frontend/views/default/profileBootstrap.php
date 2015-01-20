@@ -19,7 +19,7 @@
         'htmlOptions' => array('enctype' => 'multipart/form-data')
     ));
     ?>
-    <p class="note"><?php echo AmcWm::t("amcFront", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
+    <p class="note"><?php echo AmcWm::t("amcFront", "Fields with {star} are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
     <?php echo $form->errorSummary(array($model, $contentModel, $model->users)); ?>
     <fieldset>
         <legend><?php echo AmcWm::t("msgsbase.core", "Personal data"); ?></legend>

@@ -13,7 +13,7 @@
     else
         $currency = Yii::app()->db->createCommand('SELECT currency FROM exchange WHERE exchange_id = ' . $eid)->queryScalar();
     ?>
-    <p class="note"><?php echo AmcWm::t("amcBack", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
+    <p class="note"><?php echo AmcWm::t("amcBack", "Fields with {star} are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
     <?php echo $form->errorSummary(array($contentModel)); ?>
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage()); ?>
     <fieldset>
