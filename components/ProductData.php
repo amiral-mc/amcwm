@@ -181,7 +181,7 @@ class ProductData extends Dataset {
             $this->items['comments']['records'][$index]["owner"] = ($comment["cName"] != null) ? $comment["cName"] : $comment["pName"];
             $this->items['comments']['records'][$index]["title"] = $comment["comment_header"];
             $this->items['comments']['records'][$index]["details"] = $comment["comment"];
-            $this->items['comments']['records'][$index]["date"] = Yii::app()->dateFormatter->format("dd/MM/y hh:mm a", $comment["comment_date"]);
+            $this->items['comments']['records'][$index]["date"] = $comment["comment_date"];
             $this->items['comments']['records'][$index]["replies"] = array();
             $this->_setReplies($comment["comment_id"], $index);
         }
