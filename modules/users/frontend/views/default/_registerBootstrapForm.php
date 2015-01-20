@@ -15,7 +15,7 @@
     ));
     ?>
     <fieldset>
-        <p class="note"><?php echo AmcWm::t("amcFront", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
+        <p class="note"><?php echo AmcWm::t("amcFront", "Fields with {star} are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
         <?php echo $form->errorSummary(array($model, $contentModel, $model->users)); ?>
         <?php echo $form->textFieldRow($contentModel, 'name', array('size' => 35, 'maxlength' => 100)); ?>
         <?php

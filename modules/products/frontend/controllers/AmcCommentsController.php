@@ -10,7 +10,6 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-
 class AmcCommentsController extends FrontCommentsController {
 
     public function actionIndex($id) {
@@ -35,31 +34,37 @@ class AmcCommentsController extends FrontCommentsController {
      * @param integer $id the ID of the model to be updated
      */
     public function actionCreate($id) {
-        $article = new ArticleData($id, false);
+        $product = new ProductData($id, false);
         if (Yii::app()->request->isPostRequest) {
             $model = new Comments;
             $model->commentsOwners = new CommentsOwners;
             if ($this->createComment($model)) {
-                $ok = Yii::app()->db->createCommand(sprintf("insert into articles_comments (article_comment_id, article_id) values (%d, %d)", $model->comment_id, $id))->execute();
+                $ok = Yii::app()->db->createCommand(sprintf("insert into products_comments (product_comment_id, article_id) values (%d, %d)", $model->comment_id, $id))->execute();
                 if ($ok) {
-                    $queryArticle = sprintf("update articles set comments = comments + 1 where article_id = %d", $id);
-                    Yii::app()->db->createCommand($queryArticle)->execute();
+                    $updateQuery = sprintf("update products set comments = comments + 1 where product_id = %d", $id);
+                    Yii::app()->db->createCommand($updateQuery)->execute();
                 }
                 $params = array('default/view', 'id' => $id, 'lang' => Controller::getCurrentLanguage(), '#' => "comments");
                 Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => Yii::t("comments", 'Comment has been added')));
+                $this->redirect($params);
             } else {
-                Yii::app()->user->setFlash('error', array('class' => 'flash-error', 'content' => Yii::t("comments", 'Comment cannot be added, please check the required values')));
+                if (AmcWm::app()->frontend['bootstrap']['use']) {
+                    $error = Yii::t("comments", 'Comment cannot be added, please check the required values');
+                } else {
+                    $error = array('class' => 'flash-error', 'content' => Yii::t("comments", 'Comment cannot be added, please check the required values'));
+                }
+                Yii::app()->user->setFlash('error', $error);
+                $this->forward('default/view');
             }
-            $this->redirect($params);
-        }else
+        } else
             throw new CHttpException(400, 'Invalid request on create. Please do not repeat this request again.');
     }
 
     public function actionLike() {
         $articleId = (int) Yii::app()->request->getParam('aid');
-        $article = new ArticleData($articleId, false);        
+        $article = new ArticleData($articleId, false);
         $like = (intval(Yii::app()->request->getParam('like')) ? "good_imp" : "bad_imp");
-        $id = (int) Yii::app()->request->getParam('id');        
+        $id = (int) Yii::app()->request->getParam('id');
         if (Yii::app()->request->isPostRequest) {
             $cookieName = "liks_comments_{$id}";
             if (!isset(Yii::app()->request->cookies[$cookieName]->value)) {

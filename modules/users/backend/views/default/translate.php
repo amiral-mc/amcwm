@@ -31,7 +31,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
     ?>
     <fieldset>        
         <legend><?php echo AmcWm::t("msgsbase.core", "User data"); ?>:</legend>
-        <p class="note"><?php echo AmcWm::t("amcBack", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
+        <p class="note"><?php echo AmcWm::t("amcBack", "Fields with {star} are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
         <?php echo $form->errorSummary(array($model, $translatedModel)); ?>
         <div class="row">
             <span class="translated_label">

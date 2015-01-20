@@ -14,7 +14,7 @@
                 )
             ));
     ?>
-    <p class="note"><?php echo AmcWm::t("amcFront", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
+    <p class="note"><?php echo AmcWm::t("amcFront", "Fields with {star} are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
     <?php echo $form->errorSummary(array($model->commentsOwners, $model)); ?>
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage(), array('id'=>"{$formId}_comment_form_lang"))?>
     <?php if(Yii::app()->request->getParam("page")):?>

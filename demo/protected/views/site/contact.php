@@ -22,7 +22,7 @@ echo Yii::app()->db->createCommand($query)->queryScalar();
     ));
     ?>
 
-    <p class="note"><?php echo AmcWm::t("amcFront", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
+    <p class="note"><?php echo AmcWm::t("amcFront", "Fields with {star} are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
 
     <?php echo $form->errorSummary($model); ?>
     <?php echo CHtml::hiddenField('lang', Controller::getCurrentLanguage()) ?>

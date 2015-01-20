@@ -28,7 +28,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
             ));
     ?>
 
-    <p class="note"><?php echo AmcWm::t("amcFront", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
+    <p class="note"><?php echo AmcWm::t("amcFront", "Fields with {star} are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
     <?php echo $form->errorSummary(array($model, $translatedModel)); ?>
     <div>
         <fieldset>
