@@ -1,4 +1,5 @@
 <?php
+
 AmcWm::import('amcwm.modules.multimedia.components.MediaListData');
 /**
  * @author Amiral Management Corporation amc.amiral.com
@@ -20,12 +21,13 @@ class ProductData extends Dataset {
      * @var integer comments in every page
      */
     public $commentsPageSize = 10;
-    
+
     /**
      *
      * @var string page parameter name in $_GET
      */
     public $pageName = 'page';
+
     /**
      * Product id, to get record based on it
      * @var integer
@@ -43,6 +45,7 @@ class ProductData extends Dataset {
      * @var FacebookComments
      */
     private $_facebookComments;
+    private $_personMediaPath = '';
 
     /**
      * Counstructor, the content type
@@ -54,6 +57,11 @@ class ProductData extends Dataset {
     public function __construct($productId, $autoGenerate = true) {
         $this->_cache = Yii::app()->getComponent('cache');
         $this->_id = (int) $productId;
+        $personSetiings = new Settings("persons", false);
+        $mediaPath = $personSetiings->getMediaPaths();
+        if (isset($mediaPath['thumb']['path'])) {
+            $this->_personMediaPath = Yii::app()->baseUrl . "/" . $mediaPath['thumb']['path'];
+        }
         if ($autoGenerate) {
             $this->generate();
         }
@@ -157,31 +165,36 @@ class ProductData extends Dataset {
      */
     private function _setComments() {
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
-        $page = (int)Yii::app()->request->getParam($this->pageName, 1) - 1; 
-        $this->commentsPageSize = (int)$this->commentsPageSize;
-        $commentsCMD = Yii::app()->db->createCommand();        
+        $page = (int) Yii::app()->request->getParam($this->pageName, 1) - 1;
+        $this->commentsPageSize = (int) $this->commentsPageSize;
+        $commentsCMD = Yii::app()->db->createCommand();
         $commentsCMD->from("comments AS c");
-        $commentsCMD->select("c.*, co.name cName, pt.name pName");
+        $commentsCMD->select("c.*, co.name owner, p.thumb, p.person_id, pt.name owner_user");
         $commentsCMD->join("products_comments pc", "c.comment_id = pc.product_comment_id");
         $commentsCMD->leftJoin("comments_owners co", "c.comment_id = co.comment_id");
-        $commentsCMD->leftJoin("persons_translation pt", sprintf("pt.person_id AND pt.content_lang = %s", Yii::app()->db->quoteValue($siteLanguage)));
+        $commentsCMD->leftJoin("persons p", "c.user_id = p.person_id");
+        $commentsCMD->leftJoin("persons_translation pt", sprintf("pt.person_id = p.person_id AND pt.content_lang = %s", Yii::app()->db->quoteValue($siteLanguage)));
         $commentsCMD->where(sprintf("c.published = %d AND (c.hide = 0 OR c.force_display=1) AND pc.product_id = %d AND comment_review is null", ActiveRecord::PUBLISHED, $this->_id));
         $commentsCMD->limit($this->commentsPageSize, $page * $this->commentsPageSize);
         $commentsCountCMD = Yii::app()->db->createCommand();
         $commentsCountCMD->from("comments AS c");
         $commentsCountCMD->select("count(*)");
         $commentsCountCMD->join = $commentsCMD->join;
-        $commentsCountCMD->where = $commentsCMD->where;                
+        $commentsCountCMD->where = $commentsCMD->where;
         $comments = $commentsCMD->queryAll();
         $this->items['comments']['records'] = array();
         foreach ($comments AS $index => $comment) {
             $this->items['comments']['records'][$index]["id"] = $comment["comment_id"];
             $this->items['comments']['records'][$index]["bad_imp"] = $comment["bad_imp"];
             $this->items['comments']['records'][$index]["good_imp"] = $comment["good_imp"];
-            $this->items['comments']['records'][$index]["owner"] = ($comment["cName"] != null) ? $comment["cName"] : $comment["pName"];
+            $this->items['comments']['records'][$index]["owner"] = ($comment["owner_user"]) ? $comment["owner_user"] : $comment["owner"];
             $this->items['comments']['records'][$index]["title"] = $comment["comment_header"];
             $this->items['comments']['records'][$index]["details"] = $comment["comment"];
             $this->items['comments']['records'][$index]["date"] = $comment["comment_date"];
+            $this->items['comments']['records'][$index]["avatar"] = null;
+            if ($this->_personMediaPath && $comment['thumb']) {
+                $this->items['comments']['records'][$index]["avatar"] = "{$this->_personMediaPath}/{$comment['person_id']}.{$comment['thumb']}";
+            }
             $this->items['comments']['records'][$index]["replies"] = array();
             $this->_setReplies($comment["comment_id"], $index);
         }
@@ -196,28 +209,27 @@ class ProductData extends Dataset {
      */
     private function _setReplies($commentId, $index) {
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
-        $query = sprintf(" 
-            SELECT c.*, co.name cName, pt.name pName
-            FROM comments c
-            LEFT JOIN comments_owners co on c.comment_id = co.comment_id
-            LEFT JOIN persons_translation pt on c.user_id = pt.person_id AND pt.content_lang = %s
-            WHERE c.published = %d
-            AND (c.hide = 0 OR c.force_display=1)
-            AND c.comment_review = %d
-            ORDER BY c.comment_date DESC
-        ", Yii::app()->db->quoteValue($siteLanguage)
-                , ActiveRecord::PUBLISHED
-                , $commentId);
-        $replies = Yii::app()->db->createCommand($query)->queryAll();
+        $commentsCMD = Yii::app()->db->createCommand();
+        $commentsCMD->from("comments AS c");
+        $commentsCMD->select("c.*, co.name owner, p.thumb, p.person_id, pt.name owner_user");
+        $commentsCMD->leftJoin("comments_owners co", "c.comment_id = co.comment_id");
+        $commentsCMD->leftJoin("persons p", "c.user_id = p.person_id");
+        $commentsCMD->leftJoin("persons_translation pt", sprintf("pt.person_id = p.person_id AND pt.content_lang = %s", Yii::app()->db->quoteValue($siteLanguage)));
+        $commentsCMD->where(sprintf("c.published = %d AND (c.hide = 0 OR c.force_display=1) AND comment_review=%d", ActiveRecord::PUBLISHED, $commentId));
+        $replies = $commentsCMD->queryAll();
         $this->items['comments']['records'][$index]["replies"] = array();
         foreach ($replies AS $replay) {
             $this->items['comments']['records'][$index]["replies"][$replay["comment_id"]]["id"] = $replay["comment_id"];
             $this->items['comments']['records'][$index]["replies"][$replay["comment_id"]]["bad_imp"] = $replay["bad_imp"];
             $this->items['comments']['records'][$index]["replies"][$replay["comment_id"]]["good_imp"] = $replay["good_imp"];
-            $this->items['comments']['records'][$index]["replies"][$replay["comment_id"]]["owner"] = ($replay["cName"] != null) ? $replay["cName"] : $replay["pName"];
+            $this->items['comments']['records'][$index]["replies"][$replay["comment_id"]]["owner"] = ($replay["owner_user"]) ? $replay["owner_user"] : $replay["owner"];
             $this->items['comments']['records'][$index]["replies"][$replay["comment_id"]]["title"] = $replay["comment_header"];
             $this->items['comments']['records'][$index]["replies"][$replay["comment_id"]]["details"] = $replay["comment"];
-            $this->items['comments']['records'][$index]["replies"][$replay["comment_id"]]["date"] = Yii::app()->dateFormatter->format("dd/MM/y hh:mm a", $replay["comment_date"]);
+            $this->items['comments']['records'][$index]["replies"][$replay["comment_id"]]["date"] = $replay["comment_date"];
+            $this->items['comments']['records'][$index]["replies"][$replay["comment_id"]]["avatar"] = null;
+            if ($this->_personMediaPath && $replay['thumb']) {
+                $this->items['comments']['records'][$index]["replies"][$replay["comment_id"]]["avatar"] = "{$this->_personMediaPath}/{$replay['person_id']}.{$replay['thumb']}";
+            }
         }
     }
 

@@ -52,8 +52,6 @@ class AmcCommentsController extends FrontCommentsController {
                 Yii::app()->user->setFlash('success', $success);
                 $this->redirect($params);
             } else {
-                Html::printR($model->getErrors());
-                die();
                 if (AmcWm::app()->frontend['bootstrap']['use']) {
                     $error = Yii::t("comments", 'Comment cannot be added, please check the required values');
                 } else {
@@ -67,28 +65,10 @@ class AmcCommentsController extends FrontCommentsController {
     }
 
     public function actionLike() {
-        $articleId = (int) Yii::app()->request->getParam('aid');
-        $article = new ArticleData($articleId, false);
-        $like = (intval(Yii::app()->request->getParam('like')) ? "good_imp" : "bad_imp");
-        $id = (int) Yii::app()->request->getParam('id');
-        if (Yii::app()->request->isPostRequest) {
-            $cookieName = "liks_comments_{$id}";
-            if (!isset(Yii::app()->request->cookies[$cookieName]->value)) {
-                $cache = Yii::app()->getComponent('cache');
-                if ($cache !== null) {
-                    $cache->delete('article_' . $articleId);
-                }
-                $query = "update comments set $like=$like+1 where comment_id = {$id}";
-                Yii::app()->db->createCommand($query)->execute();
-                $cookie = new CHttpCookie($cookieName, $cookieName);
-                $cookie->expire = time() + 900;
-                Yii::app()->request->cookies[$cookieName] = $cookie;
-            }
-        }
-        $query = sprintf("select %s from comments where comment_id=%d", $like, $id);
-        $ret = Yii::app()->db->createCommand($query)->queryScalar();
-        echo $ret;
-        Yii::app()->end();
+        $table = "products_comments";
+        $key = "product_id";
+        $commentKey = "product_comment_id";
+        $this->like($table, 'product_' , $key, $commentKey);
     }
 
 }
