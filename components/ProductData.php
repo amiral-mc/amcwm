@@ -16,6 +16,17 @@ AmcWm::import('amcwm.modules.multimedia.components.MediaListData');
 class ProductData extends Dataset {
 
     /**
+     *
+     * @var integer comments in every page
+     */
+    public $commentsPageSize = 10;
+    
+    /**
+     *
+     * @var string page parameter name in $_GET
+     */
+    public $pageName = 'page';
+    /**
      * Product id, to get record based on it
      * @var integer
      */
@@ -146,22 +157,22 @@ class ProductData extends Dataset {
      */
     private function _setComments() {
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
-        $pageSize = Yii::app()->params['pages']['comments'];
-        $query = sprintf("
-            SELECT c.*, co.name cName, pt.name pName 
-            FROM comments c
-            JOIN products_comments pc ON c.comment_id = pc.product_comment_id
-            LEFT JOIN comments_owners co ON c.comment_id = co.comment_id
-            LEFT JOIN persons_translation pt ON c.user_id = pt.person_id AND pt.content_lang = %s
-            WHERE c.published = %d
-            AND (c.hide = 0 OR c.force_display=1)
-            AND pc.product_id = %d
-            ORDER BY c.comment_date DESC", Yii::app()->db->quoteValue($siteLanguage)
-                , ActiveRecord::PUBLISHED
-                , $this->_id
-        );
-        $comments = Yii::app()->db->createCommand($query)->queryAll();
-        $count = count($comments);
+        $page = (int)Yii::app()->request->getParam($this->pageName, 1) - 1; 
+        $this->commentsPageSize = (int)$this->commentsPageSize;
+        $commentsCMD = Yii::app()->db->createCommand();        
+        $commentsCMD->from("comments AS c");
+        $commentsCMD->select("c.*, co.name cName, pt.name pName");
+        $commentsCMD->join("products_comments pc", "c.comment_id = pc.product_comment_id");
+        $commentsCMD->leftJoin("comments_owners co", "c.comment_id = co.comment_id");
+        $commentsCMD->leftJoin("persons_translation pt", sprintf("pt.person_id AND pt.content_lang = %s", Yii::app()->db->quoteValue($siteLanguage)));
+        $commentsCMD->where(sprintf("c.published = %d AND (c.hide = 0 OR c.force_display=1) AND pc.product_id = %d AND comment_review is null", ActiveRecord::PUBLISHED, $this->_id));
+        $commentsCMD->limit($this->commentsPageSize, $page * $this->commentsPageSize);
+        $commentsCountCMD = Yii::app()->db->createCommand();
+        $commentsCountCMD->from("comments AS c");
+        $commentsCountCMD->select("count(*)");
+        $commentsCountCMD->join = $commentsCMD->join;
+        $commentsCountCMD->where = $commentsCMD->where;                
+        $comments = $commentsCMD->queryAll();
         $this->items['comments']['records'] = array();
         foreach ($comments AS $index => $comment) {
             $this->items['comments']['records'][$index]["id"] = $comment["comment_id"];
@@ -170,22 +181,11 @@ class ProductData extends Dataset {
             $this->items['comments']['records'][$index]["owner"] = ($comment["cName"] != null) ? $comment["cName"] : $comment["pName"];
             $this->items['comments']['records'][$index]["title"] = $comment["comment_header"];
             $this->items['comments']['records'][$index]["details"] = $comment["comment"];
-            $this->items['comments']['records'][$index]["date"] = Yii::app()->dateFormatter->format("dd/MM/y hh:mm a", $comment["comment_date"]);
+            $this->items['comments']['records'][$index]["date"] = $comment["comment_date"];
             $this->items['comments']['records'][$index]["replies"] = array();
             $this->_setReplies($comment["comment_id"], $index);
         }
-        $this->items['comments']['content']['id'] = $this->_id;
-        $this->items['comments']['content']['title'] = $this->items['record']['product_name'];
-        if (count($this->items['comments']['records'])) {
-            $commentsRecords = $this->items['comments']['records'];
-            $pageSize = Yii::app()->params['pages']['comments'];
-            $pageNo = (int) Yii::app()->request->getParam("page");
-            if (!$pageNo) {
-                $pageNo = 1;
-            }
-            $this->items['comments']['records'] = array_slice($commentsRecords, ($pageNo - 1 ) * $pageSize, $pageSize);
-        }
-        $this->items['comments']['pager'] = array('pageSize' => $pageSize, 'count' => $count,);
+        $this->items['comments']['pager'] = array('pageSize' => $this->commentsPageSize, 'count' => $commentsCountCMD->queryScalar());
     }
 
     /**
