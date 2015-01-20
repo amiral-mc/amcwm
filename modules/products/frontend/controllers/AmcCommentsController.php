@@ -34,20 +34,26 @@ class AmcCommentsController extends FrontCommentsController {
      * @param integer $id the ID of the model to be updated
      */
     public function actionCreate($id) {
-        $product = new ProductData($id, false);
         if (Yii::app()->request->isPostRequest) {
             $model = new Comments;
             $model->commentsOwners = new CommentsOwners;
             if ($this->createComment($model)) {
-                $ok = Yii::app()->db->createCommand(sprintf("insert into products_comments (product_comment_id, article_id) values (%d, %d)", $model->comment_id, $id))->execute();
+                $ok = Yii::app()->db->createCommand(sprintf("insert into products_comments (product_comment_id, product_id) values (%d, %d)", $model->comment_id, $id))->execute();
                 if ($ok) {
+                    if (AmcWm::app()->frontend['bootstrap']['use']) {
+                        $success = Yii::t("comments", 'Comment has been added');
+                    } else {
+                        $success = array('class' => 'flash-error', 'content' => Yii::t("comments", 'Comment has been added'));
+                    }
                     $updateQuery = sprintf("update products set comments = comments + 1 where product_id = %d", $id);
                     Yii::app()->db->createCommand($updateQuery)->execute();
                 }
                 $params = array('default/view', 'id' => $id, 'lang' => Controller::getCurrentLanguage(), '#' => "comments");
-                Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => Yii::t("comments", 'Comment has been added')));
+                Yii::app()->user->setFlash('success', $success);
                 $this->redirect($params);
             } else {
+                Html::printR($model->getErrors());
+                die();
                 if (AmcWm::app()->frontend['bootstrap']['use']) {
                     $error = Yii::t("comments", 'Comment cannot be added, please check the required values');
                 } else {
