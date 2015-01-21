@@ -72,7 +72,7 @@ class Comments extends ActiveRecord {
             array('published', 'default', 'value' => 1, 'setOnEmpty' => false, 'on' => 'insert'),
             array('bad_imp', 'default', 'value' => 0, 'setOnEmpty' => 0, 'on' => 'insert'),
             array('good_imp', 'default', 'value' => 0, 'setOnEmpty' => 0, 'on' => 'insert'),
-            //array('verifyCode', 'captcha', 'allowEmpty' => !CCaptcha::checkRequirements()),
+            array('verifyCode', 'captcha', 'allowEmpty' => !CCaptcha::checkRequirements()),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('comment_id, comment_review, comment_header, comment, published, comment_date, ip, hide, user_id, bad_imp, good_imp, force_display', 'safe', 'on' => 'search'),
