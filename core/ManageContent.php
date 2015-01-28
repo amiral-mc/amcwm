@@ -109,13 +109,14 @@ class ManageContent extends CComponent {
      */
     public function getSocials() {
         $socialData = AmcWm::app()->db->createCommand('select * from social_networks where enabled = 1')->queryAll();
-        $langs = Yii::app()->params['languages'];
+        $params = Yii::app()->params;
+        $langs = $params['languages'];
         $socialList = array();
         foreach ($socialData as $socialRow) {
             $socialRow['active'] = 0;
             foreach ($langs as $lang => $langName) {
-                if (isset(Yii::app()->params[strtolower($socialRow['class_name'])][$lang])) {
-                    $socialRow['active'] += count(Yii::app()->params[strtolower($socialRow['class_name'])][$lang]);
+                if (isset($params[strtolower($socialRow['class_name'])][$lang])) {
+                    $socialRow['active'] += count($params[strtolower($socialRow['class_name'])][$lang]);
                 }
             }
             if ($socialRow['active']) {
