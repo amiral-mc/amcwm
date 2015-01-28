@@ -23,6 +23,7 @@ return array(
     '_ISSUES_MODULE_' => 'الاعداد',
     '_GLOSSARY_MODULE_' => 'دليل المصطلحات',
     '_INFOCUS_MODULE_' => 'تغطيات خاصة',
+    '_PRODUCTS_MODULE_' => 'المنتجات',
     '_LOGIN_ACTION_' => 'تسجيل الدخول',
     '_LOGOUT_ACTION_' => 'تسجيل الخروج',
     '_UPDATE_ACTION_' => 'تعديل',
@@ -138,5 +139,4 @@ return array(
     '_ADS_CONTROLLER_' => "الاعلانات",
     '_SERVERS_CONTROLLER_' => 'مصادر الاعلانات',
     '_EXCHANGE_MODULE_' => 'البورصة'
-    
 );
