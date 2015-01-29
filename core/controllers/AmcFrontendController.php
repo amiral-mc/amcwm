@@ -121,11 +121,10 @@ class AmcFrontendController extends Controller {
      * 
      */
     protected function checkContentLang(){
-        $defaultLanguage = AmcWm::app()->params['defaultLanguage'];
         $languagesInUse = AmcWm::app()->params['languagesInUse'];
         $currentLang = AmcWm::app()->getLanguage();
-        if($this->contentNotAvailable === null && $defaultLanguage && is_array($languagesInUse) && !in_array($currentLang, $languagesInUse)){
-            self::setCurrentLanguage($defaultLanguage);
+        if($this->contentNotAvailable === null && is_array($languagesInUse) && !in_array($currentLang, $languagesInUse)){
+            self::setCurrentLanguage(AmcWm::app()->sourceLanguage);
             $this->contentNotAvailable = $currentLang;                    
         }
     }
