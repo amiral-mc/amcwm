@@ -37,6 +37,12 @@ class AmcFrontendController extends Controller {
      * @var array
      */
     protected $sisterOptions = array();
+    
+    /**
+     *
+     * @var string content language  is not avaliable
+     */
+    protected $contentNotAvailable = null;
 
     /**
      * @var mixed the views layout alias path used in error that is shared by the controllers inside this module.
@@ -57,8 +63,6 @@ class AmcFrontendController extends Controller {
      * @return $void
      */
     public function init() {
-
-
         //require_once 'MobileDetect.php';
 //        $module = $this->getModule();
 //        $moduleId = null;
@@ -97,7 +101,9 @@ class AmcFrontendController extends Controller {
         if (isset(AmcWm::app()->frontend['positions'])) {
             $this->positions = AmcWm::app()->frontend['positions'];
         }
-        parent::init();
+        
+        parent::init();        
+        $this->checkContentLang();
         if (AmcWm::app()->frontend['bootstrap']['use']) {
             if (isset(AmcWm::app()->frontend['bootstrap']['useResponsive']) && AmcWm::app()->frontend['bootstrap']['useResponsive']) {
                 Yii::app()->bootstrap->useResponsive = true;
@@ -107,8 +113,23 @@ class AmcFrontendController extends Controller {
             Yii::app()->bootstrap->register();
         }
         $this->pageTitle = (!empty(Yii::app()->params['custom']['front']['site']['title']) ? Yii::app()->params['custom']['front']['site']['title'] : Yii::t('pageTitles', '_website_name_'));
+        
     }
 
+    /**
+     * check if language content is not available
+     * 
+     */
+    protected function checkContentLang(){
+        $defaultLanguage = AmcWm::app()->params['defaultLanguage'];
+        $languagesInUse = AmcWm::app()->params['languagesInUse'];
+        $currentLang = AmcWm::app()->getLanguage();
+        if($this->contentNotAvailable === null && $defaultLanguage && is_array($languagesInUse) && !in_array($currentLang, $languagesInUse)){
+            self::setCurrentLanguage($defaultLanguage);
+            $this->contentNotAvailable = $currentLang;                    
+        }
+    }
+    
     /**
      * Generate all postitions for the given category
      * @access public

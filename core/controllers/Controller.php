@@ -243,7 +243,7 @@ class Controller extends CController {
     }
 
     protected static function setCurrentLanguage($currentLang = null) {
-        $langParam = Yii::app()->request->getParam('lang', $currentLang);
+        $langParam = ($currentLang) ? $currentLang : Yii::app()->request->getParam('lang', $currentLang);
         if ($langParam) {
             self::$currentLang = $langParam;
             if (!isset(Yii::app()->request->cookies['lang']->value)) {
