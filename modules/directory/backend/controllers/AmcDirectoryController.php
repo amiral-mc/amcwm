@@ -576,5 +576,23 @@ class AmcDirectoryController extends BackendController {
         }
         return $password;
     }
+    
+    public function ajaxCompanies(){
+        $term = trim(AmcWm::app()->request->getParam('term')) . "%";
+        $companiesRows = AmcWm::app()->db->createCommand()
+                ->select("company_name")
+                ->from("dir_companies AS t")
+                ->join("dir_companies_translation AS tt", "t.company_id = tt.company_id")
+                ->where("company_name like :name and content_lang = :lang")
+                ->bindValue(":name", $term,  PDO::PARAM_STR)
+                ->bindValue(":lang", Controller::getContentLanguage(),  PDO::PARAM_STR)
+                ->queryAll();
+        
+        $companies = array();
+        foreach ($companiesRows as $row){
+            $companies[$row['company_name']] = $row['company_name'];
+        }
+        echo CJSON::encode($companies);
+    }
 
 }

@@ -35,7 +35,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
             ));
     ?>
 
-    <p class="note"><?php echo AmcWm::t("amcBack", "Fields with are required", array("{star}" => '<span class="required">*</span>')) ?>.</p>
+    <p class="note"><?php echo AmcWm::t("amcBack", "Fields with {star} are required", array("{star}" => '<span class="required">*</span>')) ?>.</p>
     <?php echo $form->errorSummary(array($model, $translatedModel)); ?>
     <?php echo CHtml::hiddenField("gid", $galleryId); ?>
     <div>

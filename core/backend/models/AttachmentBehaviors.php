@@ -61,22 +61,23 @@ class AttachmentBehaviors extends CBehavior {
      */
     public function __construct($module, &$model, $tableId, $refId) {
         $moduleData = amcwm::app()->acl->getModule($module);
-        $this->_moduleId = (int) $moduleData['id'];
-        $this->_model = $model;
-        $this->_tableId = (int) $tableId;
-        $this->_refId = (int) $refId;
-        //$this->_model->attachEventHandler("onBeforeValidate", array($this, 'validateAttachment'));
-        $this->_model->onBeforeValidate = array($this, 'validateAttachment');
-        $this->_model->onAfterSave = array($this, 'saveAttachment');
-        $countQuery = "select 
+        if ($moduleData) {
+            $this->_moduleId = (int) $moduleData['id'];
+            $this->_model = $model;
+            $this->_tableId = (int) $tableId;
+            $this->_refId = (int) $refId;
+            //$this->_model->attachEventHandler("onBeforeValidate", array($this, 'validateAttachment'));
+            $this->_model->onBeforeValidate = array($this, 'validateAttachment');
+            $this->_model->onAfterSave = array($this, 'saveAttachment');
+            $countQuery = "select 
             content_lang 
             , count(t.attach_id) max_attachs 
             from attachment t
             inner join attachment_translation  tt on t.attach_id = tt.attach_id
             where module_id = {$this->_moduleId} and ref_id = {$this->_refId} and table_id = {$this->_tableId}
                 group by content_lang order by max_attachs desc limit 1";
-        $maxLang = AmcWm::app()->db->createCommand($countQuery)->queryRow();
-        $query = "select 
+            $maxLang = AmcWm::app()->db->createCommand($countQuery)->queryRow();
+            $query = "select 
             t.attach_id
             ,content_type
             ,attach_url
@@ -86,30 +87,31 @@ class AttachmentBehaviors extends CBehavior {
             inner join attachment_translation  tt on t.attach_id = tt.attach_id
             where module_id = {$this->_moduleId} and ref_id = {$this->_refId} and table_id = {$this->_tableId}
             and content_lang='{$maxLang['content_lang']}'  order by attach_sort asc";
-        $rows = AmcWm::app()->db->createCommand($query)->queryAll();
-        foreach ($rows as &$row) {
-            if ($maxLang['content_lang'] != $model->content_lang) {
-                $row['title'] = "";
-                $row['description'] = "";
-                $query = "select 
+            $rows = AmcWm::app()->db->createCommand($query)->queryAll();
+            foreach ($rows as &$row) {
+                if ($maxLang['content_lang'] != $model->content_lang) {
+                    $row['title'] = "";
+                    $row['description'] = "";
+                    $query = "select 
                 attach_id
                 ,title
                 ,description
                 from attachment_translation
                 where attach_id = {$row['attach_id']}
                 and   content_lang='{$model->content_lang}'  ";
-                $translated = AmcWm::app()->db->createCommand($query)->queryRow();
-                if ($translated) {
-                    $row['title'] = $translated['title'];
-                    $row['description'] = $translated['description'];
+                    $translated = AmcWm::app()->db->createCommand($query)->queryRow();
+                    if ($translated) {
+                        $row['title'] = $translated['title'];
+                        $row['description'] = $translated['description'];
+                    }
+                }
+                $record = AttachmentTranslation::model()->populateRecord($row);
+                if ($record !== null) {
+                    $this->attachment[$record->attach_id] = $record;
                 }
             }
-            $record = AttachmentTranslation::model()->populateRecord($row);
-            if ($record !== null) {
-                $this->attachment[$record->attach_id] = $record;
-            }
+            $this->oldAttachment = $this->attachment;
         }
-        $this->oldAttachment = $this->attachment;
     }
 
     /**
@@ -167,6 +169,20 @@ class AttachmentBehaviors extends CBehavior {
     /**
      * save attachment list
      */
+    public function deleteAttachment() {
+        $primaryKey = $this->_model->primaryKey;
+        if (is_array($primaryKey)) {
+            $primaryKeys = array_keys($primaryKey);
+            $id = $primaryKey[$primaryKeys[0]];
+        } else {
+            $id = $this->_model->primaryKey;
+        }
+        $query = "delete attachment, attachment_translation from attachment, attachment_translation  where attachment.attach_id =attachment_translation.attach_id and module_id = {$this->_moduleId} and ref_id = {$id} and table_id = {$this->_tableId}";
+        AmcWm::app()->db->createCommand($query)->execute();        
+    }
+    /**
+     * save attachment list
+     */
     public function saveAttachment() {
         $saved = true;
         $primaryKey = $this->_model->primaryKey;
@@ -185,13 +201,13 @@ class AttachmentBehaviors extends CBehavior {
                 $attachmentTranslation->content_lang = $this->_model->content_lang;
                 $attachment->attach_url = $attachmentTranslation->attach_url;
                 $attachment->attach_sort = $attachmentTranslation->attach_sort;
-                $attachment->content_type = $attachmentTranslation->content_type;                
+                $attachment->content_type = $attachmentTranslation->content_type;
                 $saved &= $attachment->save();
                 $attachmentTranslation->attach_id = $attachment->attach_id;
                 $saved &= $attachmentTranslation->save();
-            }            
+            }
             foreach ($this->oldAttachment as $oldAttachment) {
-                if (!isset($this->attachment[$oldAttachment->attach_id])) {                    
+                if (!isset($this->attachment[$oldAttachment->attach_id])) {
                     $oldAttachment->getParentContent()->delete();
                 }
             }
@@ -221,4 +237,3 @@ class AttachmentBehaviors extends CBehavior {
     }
 
 }
-

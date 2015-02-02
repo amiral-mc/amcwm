@@ -379,7 +379,7 @@ class Articles extends ParentTranslatedActiveRecord {
             $conditionGenerationClass = AmcWm::import($virtuals[$virtual]['customCriteria']['conditionGeneration']['class']);
             $conditionGeneration = new $conditionGenerationClass(AmcWm::app()->getIsBackend());
             $conditionGeneration->saveRelated($this);
-        }
+        }        
         $cache = Yii::app()->getComponent('cache');
         if ($cache !== null) {
             if (isset($this->oldAttributes['parent_article']) && $this->oldAttributes['parent_article'] != $this->parent_article) {

@@ -10,8 +10,9 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-
 class AmcMaillistController extends FrontendController {
+
+    protected $msgCategory = 'amcFront';
 
     /**
      * Controller constrctors
@@ -136,26 +137,23 @@ class AmcMaillistController extends FrontendController {
                             $model->sendActivationLink();
                             $transaction->commit();
                             if (AmcWm::app()->frontend['bootstrap']['use']) {
-                                Yii::app()->user->setFlash('success', AmcWm::t("amcFront", 'Thank you for subscribing with us, please check your email for the activation URL'));
+                                Yii::app()->user->setFlash('success', AmcWm::t($this->msgCategory, 'Thank you for subscribing with us, please check your email for the activation URL'));
                             } else {
-                                Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t("amcFront", 'Thank you for subscribing with us, please check your email for the activation URL')));
+                                Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t($this->msgCategory, 'Thank you for subscribing with us, please check your email for the activation URL')));
                             }
-                            $this->redirect(array($redirect, '#' => "message", 'msg' => AmcWm::t("amcFront", 'Thank you for subscribing with us, please check your email for the activation URL')));
+                            $this->redirect(array($redirect, '#' => "message", 'msg' => AmcWm::t($this->msgCategory, 'Thank you for subscribing with us, please check your email for the activation URL')));
                         } else {
                             if (AmcWm::app()->frontend['bootstrap']['use']) {
-                                Yii::app()->user->setFlash('errors', AmcWm::t("msgsbase.core", 'Cant initialize the email service, email didnot sent'));    
+                                Yii::app()->user->setFlash('errors', AmcWm::t("msgsbase.core", 'Cant initialize the email service, email didnot sent'));
+                            } else {
+                                Yii::app()->user->setFlash('errors', array('class' => 'flash-error', 'content' => AmcWm::t("msgsbase.core", 'Cant initialize the email service, email didnot sent')));
                             }
-                            else{
-                                Yii::app()->user->setFlash('errors', array('class' => 'flash-error', 'content' => AmcWm::t("msgsbase.core", 'Cant initialize the email service, email didnot sent')));    
-                            }
-                            
                         }
                     }
                 } catch (CException $e) {
                     if (AmcWm::app()->frontend['bootstrap']['use']) {
                         Yii::app()->user->setFlash('errors', AmcWm::t("msgsbase.core", 'Cant initialize the email service, email didnot sent'));
-                    }
-                    else{
+                    } else {
                         Yii::app()->user->setFlash('errors', array('class' => 'flash-error', 'content' => AmcWm::t("msgsbase.core", 'Cant initialize the email service, email didnot sent')));
                     }
                     $transaction->rollback();
@@ -189,13 +187,12 @@ class AmcMaillistController extends FrontendController {
             $query = sprintf("update maillist set status = 1 where id=%d", $emailData['user_id']);
             Yii::app()->db->createCommand($query)->execute();
             if (AmcWm::app()->frontend['bootstrap']['use']) {
-                Yii::app()->user->setFlash('success', AmcWm::t("amcFront", 'This email has been activated, Thank you for subscribing'));
+                Yii::app()->user->setFlash('success', AmcWm::t($this->msgCategory, 'This email has been activated, Thank you for subscribing'));
             } else {
-                Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t("amcFront", 'This email has been activated, Thank you for subscribing')));
+                Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t($this->msgCategory, 'This email has been activated, Thank you for subscribing')));
             }
             $this->redirect(Yii::app()->homeUrl);
         } else {
-            //Yii::app()->user->setFlash('success', array('class' => 'flash-error', 'content' => AmcWm::t("amcFront", 'This email already exist, Thank you for subscribing')));
             $this->redirect(Yii::app()->homeUrl);
         }
     }
@@ -212,15 +209,14 @@ class AmcMaillistController extends FrontendController {
         $showChannels = $this->module->appModule->options['default']['check']['showChannels'];
         if (Yii::app()->request->isPostRequest) {
             $model->attributes = Yii::app()->request->getParam('Maillist');
-            $model->maillistUsers->attributes = Yii::app()->request->getParam('MaillistUsers');            
+            $model->maillistUsers->attributes = Yii::app()->request->getParam('MaillistUsers');
             if ($model->maillistUsers->validate()) {
                 $findModel = MaillistUsers::model()->findByAttributes(array("email" => $model->maillistUsers->email));
                 if ($findModel === NULL) {
                     if (AmcWm::app()->frontend['bootstrap']['use']) {
-                        Yii::app()->user->setFlash('errors', AmcWm::t("amcFront", 'This email is not exist, Please check your email'));
-                    }
-                    else{
-                        Yii::app()->user->setFlash('errors', array('class' => 'flash-error', 'content' => AmcWm::t("amcFront", 'This email is not exist, Please check your email')));
+                        Yii::app()->user->setFlash('errors', AmcWm::t($this->msgCategory, 'This email does not exist, Please check your email'));
+                    } else {
+                        Yii::app()->user->setFlash('errors', array('class' => 'flash-error', 'content' => AmcWm::t($this->msgCategory, 'This email does not exist, Please check your email')));
                     }
                 } else {
                     $queryUsersData = sprintf("delete from maillist_users where user_id=%d;", $findModel->user_id);
@@ -234,10 +230,9 @@ class AmcMaillistController extends FrontendController {
                     Yii::app()->db->createCommand($queryLogs)->execute();
                     Yii::app()->db->createCommand($queryArticlesLog)->execute();
                     if (AmcWm::app()->frontend['bootstrap']['use']) {
-                        Yii::app()->user->setFlash('success', AmcWm::t("amcFront", 'You has been unsubscribed successfully'));
-                    }
-                    else{
-                        Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t("amcFront", 'You has been unsubscribed successfully')));                        
+                        Yii::app()->user->setFlash('success', AmcWm::t($this->msgCategory, 'You have successfully unsubscribed our newsletter'));
+                    } else {
+                        Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t($this->msgCategory, 'You have successfully unsubscribed our newsletter')));
                     }
                     $this->redirect(Yii::app()->homeUrl);
                 }

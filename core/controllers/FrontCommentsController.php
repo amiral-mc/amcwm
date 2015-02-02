@@ -10,7 +10,6 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-
 class FrontCommentsController extends FrontendController {
 
     /**
@@ -33,23 +32,20 @@ class FrontCommentsController extends FrontendController {
         if (Yii::app()->request->isPostRequest) {
             $ok = $this->validateComment($comment);
             if ($ok) {
-
                 if (!Yii::app()->user->isGuest) {
                     $userData = Yii::app()->user->getInfo();
                     $comment->setAttribute('user_id', $userData['user_id']);
                 }
-
-                $comment->save();
-                $ownerParams = Yii::app()->request->getParam('CommentsOwners');
-                $ownerParams["name"] = CHtml::encode($ownerParams["name"]);
-                $comment->commentsOwners->attributes = $ownerParams;
-                $comment->commentsOwners->setAttribute('comment_id', $comment->comment_id);
-
-                if ($comment->commentsOwners->validate()) {
-                    $comment->commentsOwners->save();
-                    $ok = true;
-                } else {
-                    $ok = false;
+                $ok = $comment->save();
+                if ($ok && Yii::app()->user->isGuest) {
+                    $ownerParams = Yii::app()->request->getParam('CommentsOwners');
+                    $ownerParams["name"] = CHtml::encode($ownerParams["name"]);
+                    $comment->commentsOwners->attributes = $ownerParams;
+                    $comment->commentsOwners->setAttribute('comment_id', $comment->comment_id);
+                    $validate = $comment->commentsOwners->validate();
+                    if ($validate) {
+                        $ok = $comment->commentsOwners->save();
+                    }
                 }
             }
         }
@@ -176,6 +172,30 @@ class FrontCommentsController extends FrontendController {
 
     public function getVideo() {
         return $this->video;
+    }
+
+    protected function like($table, $cachePreFix, $key, $commentKey) {
+        $item = (int) Yii::app()->request->getParam('item');
+        $id = (int) Yii::app()->request->getParam('id');
+        $like = (bool) Yii::app()->request->getParam('like');
+        $field = "bad_imp";
+        if ($like) {
+            $field = "good_imp";
+        }
+        $cookieName = "like_comments_{$id}";
+        if (!isset(Yii::app()->request->cookies[$cookieName]->value)) {
+            $cache = Yii::app()->getComponent('cache');
+            if ($cache !== null) {
+                $cache->delete("{$cachePreFix}{$item}");
+            }
+            $query = "update comments set {$field}={$field}+1 where comment_id = {$id}";
+            Yii::app()->db->createCommand($query)->execute();
+            $cookie = new CHttpCookie($cookieName, $cookieName);
+            $cookie->expire = time() + 900;
+            Yii::app()->request->cookies[$cookieName] = $cookie;
+        }
+        echo Yii::app()->db->createCommand("select {$field} from comments where comment_id= {$id}")->queryScalar();
+        Yii::app()->end();
     }
 
 }

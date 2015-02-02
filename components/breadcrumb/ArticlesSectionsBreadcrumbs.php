@@ -13,7 +13,7 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class ArticlesSectionsBreadcrumbs extends BreadcrumbsData {       
+class ArticlesSectionsBreadcrumbs extends BreadcrumbsData {
 
     /**
      * set Breadcrumbs path for the given $id 
@@ -38,7 +38,11 @@ class ArticlesSectionsBreadcrumbs extends BreadcrumbsData {
             if (!$appended) {
                 $this->setPath($section['parent_section']);
             }
-            $this->path[] = array("label" => $section["section_name"], "url" => array(0 => $this->route['0'], "id" => $section["section_id"]));
+            $routeParams = $this->route;
+            array_shift($routeParams);
+            $routeParams['id'] = $section["section_id"];
+            array_unshift($routeParams, $this->route[0]);
+            $this->path[] = array("label" => $section["section_name"], "url" => $routeParams);
         }
     }
 

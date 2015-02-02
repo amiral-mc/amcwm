@@ -19,7 +19,7 @@ return array(
     'No event added yet' => 'لايوجد احداث تم اضافتها ليوم : ',
     'logout' => 'Logout',
     'copyright' => "&copy; {year} AMIRAL Management Corporation,AMC  All rights reserved.",
-    'Fields with are required' => 'الحقول التي أمامها علامة {star} هي حقول لابد من ملأها بالبيانات المطلوبة',
+    'Fields with {star} are required' => 'الحقول التي أمامها علامة {star} هي حقول لابد من ملأها بالبيانات المطلوبة',
     'Hijri' => 'الموافق',
     'Follow us on' => 'تابعنا علي',
     'Advanced Search' => 'بحث متقدم',

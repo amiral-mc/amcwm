@@ -24,7 +24,7 @@
     ?>
     <fieldset>
         <legend><?php echo AmcWm::t("msgsbase.core", "Company data"); ?>:</legend>
-        <p class="note"><?php echo AmcWm::t("amcFront", "Fields with are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
+        <p class="note"><?php echo AmcWm::t("amcFront", "Fields with {star} are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
         <?php echo $form->errorSummary(array($model, $contentModel)); ?>
 
         <div class="row">
@@ -52,7 +52,20 @@
 
         <div class="row">
             <?php echo $form->labelEx($contentModel, 'company_name'); ?>
-            <?php echo $form->textField($contentModel, 'company_name', array('size' => 60, 'maxlength' => 100)); ?>
+            <?php
+            $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+                'attribute' => 'company_name',
+                'model' => $contentModel,
+                'sourceUrl' => array('ajax', 'do'=>'companies'),
+                'options' => array(
+                    'minLength' => '3',
+                ),
+                'htmlOptions' => array(
+                    'size' => 60,
+                    'maxlength' => 100,
+                ),
+            ));
+            ?>
             <?php echo $form->error($contentModel, 'company_name'); ?>
         </div>
            <div class="row">

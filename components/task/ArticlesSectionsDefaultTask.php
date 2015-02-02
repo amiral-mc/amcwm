@@ -51,6 +51,12 @@ class ArticlesSectionsDefaultTask extends ArticlesControllerTask {
                 $articleList->addColumn("publish_date");
                 $articleList->addColumn("article_detail");
                 $articleList->addColumn("section_name");
+                if(isset($this->extraParams['routeParams'])){
+                    foreach ($this->extraParams['routeParams'] as $key => $value){
+                        $articleList->addParam($key, $value);        
+                    }                    
+                }
+                
                 $articleList->addJoin("left join sections_translation sectionst on sectionst.section_id = t.section_id and tt.content_lang = sectionst.content_lang");
                 if ($this->table == "news") {                    
                     $articleList->addJoin("left join news_sources_translation ns on ns.source_id = news.source_id and ns.content_lang = tt.content_lang");

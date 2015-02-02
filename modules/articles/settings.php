@@ -484,7 +484,7 @@ return array(
                     'translate' => "translate",
                 ),
                 'customCriteria' => array(
-                    'useRelaedModel' => true,
+                    'useRelatedModel' => true,
                     'conditionGeneration' => array('class' => 'amcwm.modules.articles.components.ManageBreakingCondition'),
                 ),
             ),
@@ -813,9 +813,8 @@ return array(
                 'table' => 'news',
                 'tableModel' => 'news',
                 'module' => 'news',
-                'customCriteria' => array(
-                    'join' => 'inner join users_articles on p.article_id = users_articles.article_id',
-                    'useRelaedModel' => true,
+                'customCriteria' => array(                    
+                    'useRelatedModel' => true,
                     'conditionGeneration' => array(),
                 ),
                 'views' => array(
@@ -833,7 +832,8 @@ return array(
                 'tableModel' => 'usersArticles',
                 'module' => 'usersArticles',
                 'customCriteria' => array(
-                    'useRelaedModel' => true,
+                    'useRelatedModel' => true,
+                    'join' => 'inner join users_articles on p.article_id = users_articles.article_id',
                     'conditionGeneration' => array('class' => 'amcwm.modules.articles.components.ManageUsersArticlesCondition'),
                 ),
                 'views' => array(
@@ -851,7 +851,7 @@ return array(
                 'tableModel' => 'essays',
                 'module' => 'essays',
                 'customCriteria' => array(
-                    'useRelaedModel' => true,
+                    'useRelatedModel' => true,
                     'conditionGeneration' => array(),
                 ),
                 'views' => array(
@@ -871,7 +871,7 @@ return array(
                 'system' => 0,
                 'enabled' => 0,
                 'customCriteria' => array(
-                    'useRelaedModel' => false,
+                    'useRelatedModel' => false,
                     'conditionGeneration' => array('class' => 'amcwm.modules.directory.components.ManageCompaniesArticlesCondition'),
                 ),
                 'views' => array(
@@ -891,7 +891,7 @@ return array(
                 'system' => 0,
                 'enabled' => 0,
                 'customCriteria' => array(
-                    'useRelaedModel' => false,
+                    'useRelatedModel' => false,
                     'conditionGeneration' => array('class' => 'amcwm.modules.directory.components.ManageIssueArticlesCondition'),
                 ),
                 'views' => array(

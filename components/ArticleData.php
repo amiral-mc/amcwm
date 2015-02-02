@@ -315,7 +315,7 @@ class ArticleData extends Dataset {
                 isset($this->items['record']['comments']) ? $this->items['record']['comments'] = $this->getCommentsCount() : 0;
                 isset($this->items['record']['hits']) ? $this->items['record']['hits'] = $this->getHits() : 0;
             }
-        }       
+        }
         if (!$this->items['record']) {
             $this->setItems();
             $cacheMe = true;
@@ -542,7 +542,7 @@ class ArticleData extends Dataset {
                                 and tt.content_lang = %s', ActiveRecord::PUBLISHED, Yii::app()->db->quoteValue($currentDate), Yii::app()->db->quoteValue($currentDate), Yii::app()->db->quoteValue($siteLanguage)
                 );
 
-                $qSubs = 'select t.article_id, tt.article_header from articles t
+                $qSubs = 'select t.article_id, t.thumb, t.section_id, tt.article_header, tt.article_pri_header, tt.article_detail from articles t
                     inner join articles_translation tt on t.article_id = tt.article_id
                     where t.parent_article = ' . $this->items['record']["article_id"] . $subsWhere;
                 $this->items['subs'] = Yii::app()->db->createCommand($qSubs)->queryAll();
