@@ -210,11 +210,11 @@ class ManageArticles extends ManageContent {
             $validate = $model->validate();
             $validate &= $contentModel->validate();
             $virtualModule = $this->controller->getModule()->appModule->currentVirtual;
-            $useRelaedModel = true;
-            if (isset($this->_settings[$this->_settingsIndex]['virtual'][$virtualModule]['customCriteria']['useRelaedModel']) && !$this->_settings[$this->_settingsIndex]['virtual'][$virtualModule]['customCriteria']['useRelaedModel']) {
-                $useRelaedModel = false;
+            $useRelatedModel = true;
+            if (isset($this->_settings[$this->_settingsIndex]['virtual'][$virtualModule]['customCriteria']['useRelatedModel']) && !$this->_settings[$this->_settingsIndex]['virtual'][$virtualModule]['customCriteria']['useRelatedModel']) {
+                $useRelatedModel = false;
             }
-            if ($virtualModule != "articles" && $useRelaedModel) {
+            if ($virtualModule != "articles" && $useRelatedModel) {
                 $extraModel = $this->_settings[$this->_settingsIndex]['virtual'][$virtualModule]['tableModel'];
                 $tableClass = ucfirst($extraModel);
                 if (isset($_POST[$tableClass])) {
