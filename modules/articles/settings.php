@@ -813,8 +813,7 @@ return array(
                 'table' => 'news',
                 'tableModel' => 'news',
                 'module' => 'news',
-                'customCriteria' => array(
-                    'join' => 'inner join users_articles on p.article_id = users_articles.article_id',
+                'customCriteria' => array(                    
                     'useRelatedModel' => true,
                     'conditionGeneration' => array(),
                 ),
@@ -834,6 +833,7 @@ return array(
                 'module' => 'usersArticles',
                 'customCriteria' => array(
                     'useRelatedModel' => true,
+                    'join' => 'inner join users_articles on p.article_id = users_articles.article_id',
                     'conditionGeneration' => array('class' => 'amcwm.modules.articles.components.ManageUsersArticlesCondition'),
                 ),
                 'views' => array(

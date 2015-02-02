@@ -169,6 +169,20 @@ class AttachmentBehaviors extends CBehavior {
     /**
      * save attachment list
      */
+    public function deleteAttachment() {
+        $primaryKey = $this->_model->primaryKey;
+        if (is_array($primaryKey)) {
+            $primaryKeys = array_keys($primaryKey);
+            $id = $primaryKey[$primaryKeys[0]];
+        } else {
+            $id = $this->_model->primaryKey;
+        }
+        $query = "delete attachment, attachment_translation from attachment, attachment_translation  where attachment.attach_id =attachment_translation.attach_id and module_id = {$this->_moduleId} and ref_id = {$id} and table_id = {$this->_tableId}";
+        AmcWm::app()->db->createCommand($query)->execute();        
+    }
+    /**
+     * save attachment list
+     */
     public function saveAttachment() {
         $saved = true;
         $primaryKey = $this->_model->primaryKey;

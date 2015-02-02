@@ -150,7 +150,7 @@ class ManageArticles extends ManageContent {
      */
     protected function save(ArticlesTranslation $contentModel) {
         $virtualModule = AmcWm::app()->appModule->getCurrentVirtual();
-        $contentModel->attachBehavior("attachmentBehaviors", new AttachmentBehaviors($virtualModule, $contentModel, 1, $contentModel->article_id));            
+        $contentModel->attachBehavior("attachmentBehaviors", new AttachmentBehaviors($virtualModule, $contentModel, 1, $contentModel->article_id));
         if (isset($_POST['Articles']) && isset($_POST["ArticlesTranslation"])) {
             $model = $contentModel->getParentContent();
             if (isset($_POST["ArticlesTranslation"]["tags"]) && is_array($_POST["ArticlesTranslation"]["tags"])) {
@@ -225,6 +225,22 @@ class ManageArticles extends ManageContent {
                     $model->$extraModel->getCurrent()->attributes = $_POST["{$tableClass}Translation"];
                     $validate &= $model->$extraModel->getCurrent()->validate();
                 }
+                if ($virtualModule == 'essays') {
+                    if (isset($_POST['Essays']['sticky'])) {
+                        $count = Yii::app()->db->createCommand()
+                                ->select('e.article_id')
+                                ->from('essays e')
+                                ->join('articles a', 'e.article_id = a.article_id')
+                                ->where('e.sticky != 0')
+                                ->order('a.update_date desc')
+                                ->queryColumn();
+                        $stickyLimit = false;
+                        if ($this->_settings['options']['essays']['default']['integer']['sticky'] >= count($count) && !in_array($model->article_id, $count)) {
+                            $stickyLimit = true;
+                        }
+                        $model->essays->sticky = $_POST['Essays']['sticky'];
+                    }
+                }
             }
             $titlesModels = array();
             if (isset($_POST['ArticlesTitles'])) {
@@ -241,23 +257,10 @@ class ManageArticles extends ManageContent {
                     $index++;
                 }
             }
-            if (isset($_POST['Essays']['sticky'])) {
-                $count = Yii::app()->db->createCommand()
-                        ->select('e.article_id')
-                        ->from('essays e')
-                        ->join('articles a', 'e.article_id = a.article_id')
-                        ->where('e.sticky != 0')
-                        ->order('a.update_date desc')
-                        ->queryColumn();
-                $stickyLimit = false;
-                if ($this->_settings['options']['essays']['default']['integer']['sticky'] >= count($count) && !in_array($model->article_id, $count)) {
-                    $stickyLimit = true;
-                }
-                $model->essays->sticky = $_POST['Essays']['sticky'];
-            }
             $transaction = Yii::app()->db->beginTransaction();
             $success = false;
             $saved = false;
+            //die("-----------------");
             if ($validate) {
                 try {
                     if (isset($stickyLimit) && $stickyLimit && $count) {
@@ -373,7 +376,7 @@ class ManageArticles extends ManageContent {
         if ($contentModel) {
             $model = $contentModel->getParentContent();
             $translatedModel = $this->loadTranslatedModel($model, $id);
-            $translatedModel->attachBehavior("attachmentBehaviors", new AttachmentBehaviors($virtualModule, $translatedModel, 1, $translatedModel->article_id));            
+            $translatedModel->attachBehavior("attachmentBehaviors", new AttachmentBehaviors($virtualModule, $translatedModel, 1, $translatedModel->article_id));
             if (isset($_POST["ArticlesTranslation"])) {
                 if (isset($_POST["ArticlesTranslation"]["tags"]) && is_array($_POST["ArticlesTranslation"]["tags"])) {
                     $tags = implode(PHP_EOL, $_POST["ArticlesTranslation"]["tags"]);
@@ -830,6 +833,7 @@ class ManageArticles extends ManageContent {
             $messages['success'] = array();
             foreach ($ids as $id) {
                 $contentModel = $this->loadChildModel($id);
+                $contentModel->attachBehavior("attachmentBehaviors", new AttachmentBehaviors($virtualModule, $contentModel, 1, $contentModel->article_id));                
                 $model = $contentModel->getParentContent();
                 $checkRelated = false;
                 if ($checkRelated) {
@@ -846,6 +850,7 @@ class ManageArticles extends ManageContent {
                     }
                     if ($deleted) {
                         $this->deleteImages($model);
+                        $contentModel->deleteAttachment();
                         $messages['success'][] = AmcWm::t($msgsBase, 'Article "{article}" has been deleted', array("{article}" => $contentModel->displayTitle));
                     } else {
                         $messages['error'][] = AmcWm::t($msgsBase, 'Can not delete article "{article}"', array("{article}" => $contentModel->displayTitle));
@@ -970,7 +975,7 @@ class ManageArticles extends ManageContent {
         header('Content-type: application/json');
         echo CJSON::encode($editors);
     }
-    
+
     /**
      * required for ajax requests
      */
@@ -1044,4 +1049,5 @@ class ManageArticles extends ManageContent {
         }
         return $allow;
     }
+
 }
