@@ -109,8 +109,10 @@ class AmcEventsController extends BackendController {
             $messages['success'] = array();
             foreach ($ids as $id) {
                 $contentModel = $this->loadChildModel($id);
+                $contentModel->attachBehavior("attachmentBehaviors", new AttachmentBehaviors("events", $contentModel, 1, $contentModel->event_id));                
                 $model = $contentModel->getParentContent();
                 if ($model->delete()) {
+                    $contentModel->deleteAttachment();
                     $messages['success'][] = AmcWm::t("msgsbase.core", 'Event "{event}" has been deleted', array("{event}" => $contentModel->displayTitle));
                 } else {
                     $messages['error'][] = AmcWm::t("msgsbase.core", 'Can not delete event "{event}"', array("{event}" => $contentModel->displayTitle));

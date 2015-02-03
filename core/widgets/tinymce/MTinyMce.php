@@ -687,7 +687,7 @@ class MTinyMce extends CInputWidget {
         $options['theme_advanced_resize_horizontal'] = true;
         $options['theme_advanced_resizing'] = true;
         $options['spellchecker_languages'] = '+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv';
-        $options['extended_valid_elements'] = '@[href|id|style|class],a[data-*],div[*],iframe[src|title|width|height|allowfullscreen|frameborder|class|id],object[classid|width|height|codebase|*],param[name|value|_value|*],embed[type|width|height|src|*]';
+        $options['extended_valid_elements'] = '@[href|id|style|class],a[data-*],i[*],div[*],iframe[src|title|width|height|allowfullscreen|frameborder|class|id],object[classid|width|height|codebase|*],param[name|value|_value|*],embed[type|width|height|src|*]';
         if ($url !== '') {
             $options['spellchecker_rpc_url'] = $url . '/tiny_mce/plugins/spellchecker/rpc.php';
         }
