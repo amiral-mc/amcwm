@@ -62,6 +62,16 @@ class BxSlider4 extends Widget {
      */
     public $drawThumbs = true;
     
+    /**
+     *
+     * @var string item class  
+     */
+    public $itemClass = null;
+    
+    /**
+     *
+     * @var string tag container 
+     */
     public $tagContainer = "ul";
 
     /**
@@ -146,9 +156,10 @@ class BxSlider4 extends Widget {
 
             $index = 0;
             $imageTagContainer = $this->tagContainer == 'ul' ? "li" : $this->tagContainer;
+            $itemClass = $this->itemClass ? ' class="' . $this->itemClass . '"' : "";
             foreach ($this->items as $image) {
                 $title = ($image['title']) ? ' title="' . $image['title'] . '"' : '';
-                $images .= '<' . $imageTagContainer . '><img src="' . $image['url'] . '" ' . $title . '  /></' . $imageTagContainer . '>';
+                $images .= '<' . $imageTagContainer . $itemClass . '><img src="' . $image['url'] . '" ' . $title . '  /></' . $imageTagContainer . '>';
                 if ($this->drawThumbs) {
                     $thumbs .= '<a data-slide-index="' . $index . '" href=""><img src="' . $image['thumb'] . '" ' . $title . ' /></a>';
                 }
