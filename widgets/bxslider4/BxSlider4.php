@@ -61,6 +61,8 @@ class BxSlider4 extends Widget {
      * @var boolean draw thumbs;
      */
     public $drawThumbs = true;
+    
+    public $tagContainer = "ul";
 
     /**
      * @var array the initial JavaScript options that should be passed to the plugin.
@@ -136,17 +138,19 @@ class BxSlider4 extends Widget {
                 }
             }
 
-            $images = CHtml::openTag('ul', $this->htmlOptions);
+            $images = CHtml::openTag($this->tagContainer, $this->htmlOptions);
             $thumbs = '';
             if ($this->drawThumbs) {
                 $thumbs = '<div id="' . $this->id . '-pager" class="bx-pager">';
             }
 
             $index = 0;
+            $imageTagContainer = $this->tagContainer == 'ul' ? "li" : $this->tagContainer;
             foreach ($this->items as $image) {
-                $images .= '<li><img src="' . $image['url'] . '" title="' . $image['title'] . '" /></li>';
+                $title = ($image['title']) ? ' title="' . $image['title'] . '"' : '';
+                $images .= '<' . $imageTagContainer . '><img src="' . $image['url'] . '" ' . $title . '  /></' . $imageTagContainer . '>';
                 if ($this->drawThumbs) {
-                    $thumbs .= '<a data-slide-index="' . $index . '" href=""><img src="' . $image['thumb'] . '" title="' . $image['title'] . '" /></a>';
+                    $thumbs .= '<a data-slide-index="' . $index . '" href=""><img src="' . $image['thumb'] . '" ' . $title . ' /></a>';
                 }
                 $index ++;
             }
@@ -154,11 +158,10 @@ class BxSlider4 extends Widget {
                 $thumbs .= '</div>';    
                 $this->options['pagerCustom'] = "#{$this->id}-pager";
             }            
-            $images .= CHtml::closeTag('ul');
+            $images .= CHtml::closeTag($this->tagContainer);
             echo "{$images} {$thumbs}";            
             $jsCode = "$('#{$this->id}').bxSlider(" . CJavaScript::encode($this->options) . ");";
             $cs->registerScript(__CLASS__ . $this->getId(), $jsCode, CClientScript::POS_READY);
         }
     }
-
 }
