@@ -128,10 +128,10 @@ class DocumentsCategoriesData extends Dataset {
     }
     
     
-    public static function getTitle($catId){
+    public static function getTitle($catId){        
         $query = sprintf("select category_name from docs_categories_translation 
                  where category_id = %d and content_lang = %s
-                ", $catId, Yii::app()->db->quoteValue($this->language));
+                ", $catId, Yii::app()->db->quoteValue(Controller::getContentLanguage()));
         return Yii::app()->db->createCommand($query)->queryScalar();
     }
 }
