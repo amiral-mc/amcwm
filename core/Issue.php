@@ -37,6 +37,7 @@ class Issue {
         $issue = Yii::app()->request->getParam('issue');
         if ($issue) {
             $cookie = new CHttpCookie('issue', $issue);
+            $cookie->httpOnly = true;
             Yii::app()->request->cookies['issue'] = $cookie;
         }
     }

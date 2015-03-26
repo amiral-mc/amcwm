@@ -130,6 +130,7 @@ class Votes {
                     if (!isset($voterOptions['user_id'])) {
                         $cookie = new CHttpCookie("votes_{$voter->options->ques_id}", $voter->options->ques_id);
                         $cookie->expire = time() + 60 * 60 * 24 * 360 * 100;
+                        $cookie->httpOnly = true;
                         Yii::app()->request->cookies["votes_{$voter->options->ques_id}"] = $cookie;
                     }
                     $this->data['results']['total'] = $this->data['results']['total'] + 1;

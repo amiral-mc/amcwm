@@ -260,6 +260,7 @@ class TendersData extends Dataset {
                 Yii::app()->db->createCommand("update tenders set hits=hits+1 where tender_id = {$this->_id} ")->execute();
                 $cookie = new CHttpCookie($cookieName, $cookieName);
                 $cookie->expire = time() + 3600;
+                $cookie->httpOnly = true;
                 Yii::app()->request->cookies[$cookieName] = $cookie;
             }
         }

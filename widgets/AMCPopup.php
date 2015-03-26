@@ -29,6 +29,7 @@ class AMCPopup extends CJuiDialog {
             if (!isset(Yii::app()->request->cookies[$this->cookieName]->value)) {
                 $cookie = new CHttpCookie($this->cookieName, $this->cookieName);
                 $cookie->expire = time() + 2592000; // expire after one month
+                $cookie->httpOnly = true;
                 Yii::app()->request->cookies[$this->cookieName] = $cookie;
             } else {
                 $this->cookieExists = true;

@@ -137,6 +137,7 @@ class DirectoryItemData extends Dataset {
                 Yii::app()->db->createCommand("update dir_companies set hits=hits+1 where company_id = {$this->_id} ")->execute();
                 $cookie = new CHttpCookie($cookieName, $cookieName);
                 $cookie->expire = time() + 3600;
+                $cookie->httpOnly = true;
                 Yii::app()->request->cookies[$cookieName] = $cookie;
             }
         }

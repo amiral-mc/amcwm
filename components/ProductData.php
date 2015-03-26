@@ -301,6 +301,7 @@ class ProductData extends Dataset {
                 Yii::app()->db->createCommand("UPDATE products SET hits=hits+1 WHERE product_id = {$this->_id} ")->execute();
                 $cookie = new CHttpCookie($cookieName, $cookieName);
                 $cookie->expire = time() + 3600;
+                $cookie->httpOnly = true;
                 Yii::app()->request->cookies[$cookieName] = $cookie;
             }
         }

@@ -192,6 +192,7 @@ class FrontCommentsController extends FrontendController {
             Yii::app()->db->createCommand($query)->execute();
             $cookie = new CHttpCookie($cookieName, $cookieName);
             $cookie->expire = time() + 900;
+            $cookie->httpOnly = true;
             Yii::app()->request->cookies[$cookieName] = $cookie;
         }
         echo Yii::app()->db->createCommand("select {$field} from comments where comment_id= {$id}")->queryScalar();
