@@ -13,19 +13,14 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class AmcArticlesXmlSitemapData extends AmcXmlSitemapData {
+class AmcProductsXmlSitemapData extends AmcXmlSitemapData {
 
     /**
      *
      * @var string current route 
      */
-    protected $route = 'articles/default/view';
-
-    /**
-     *
-     * @var string table to get data from 
-     */
-    protected $table = "articles";
+    protected $route = 'products/default/view';
+   
 
     /**
      *
@@ -33,7 +28,7 @@ class AmcArticlesXmlSitemapData extends AmcXmlSitemapData {
      * @return boolean
      */
     public function createXmlLinks() {
-        $list = new ArticlesListData(array($this->table), 0, $this->limit);
+        $list = new ProductsListData(array(), 0, $this->limit);
         $dateTime = time();
         $list->setFromDate(date("Y-m-d H:00:00", $dateTime - $this->period));
         $list->setToDate(date("Y-m-d H:59:59", $dateTime - $this->period));
@@ -43,18 +38,11 @@ class AmcArticlesXmlSitemapData extends AmcXmlSitemapData {
         $list->setAutoGenerate(false);
         $list->addColumn("create_date");
         $list->addColumn("publish_date");        
-        if ($this->table == 'articles') {
-            $articlesTables = ArticlesListData::getArticlesTables();
-            foreach ($articlesTables as $articleTable) {
-                $list->addJoin("LEFT JOIN {$articleTable} ON t.article_id = {$articleTable}.article_id");
-                $list->addWhere("{$articleTable}.article_id IS NULL");
-            }
-        }
         $list->generate();
-        $articles = $list->getQuery()->queryAll();
+        $products = $list->getQuery()->queryAll();
         $fileName = $this->generateXmlFileName($dateTime);
-        if (count($articles)) {
-            $ok = $this->generateMap($fileName, $articles, 'article_id', 'article_header');
+        if (count($products)) {
+            $ok = $this->generateMap($fileName, $products, 'product_id', 'product_name');
             return $ok;
         }
     }
