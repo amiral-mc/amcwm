@@ -3392,6 +3392,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `job_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `category_id` smallint(5) unsigned NOT NULL,
   `published` tinyint(1) DEFAULT '1',
+  `allow_request` tinyint(1) DEFAULT '1',
   `expire_date` datetime DEFAULT NULL,
   `publish_date` datetime NOT NULL,
   PRIMARY KEY (`job_id`),

@@ -1,1 +1,0 @@
-alter table articles add `shared` int(10) unsigned DEFAULT '0';

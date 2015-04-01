@@ -46,6 +46,11 @@
             <?php echo $form->checkBox($model, 'published'); ?>
             <?php echo $form->labelEx($model, 'published', array("style" => 'display:inline;')); ?>
         </div>
+        
+        <div>
+            <?php echo $form->checkBox($model, 'allow_request'); ?>
+            <?php echo $form->labelEx($model, 'allow_request', array("style" => 'display:inline;')); ?>
+        </div>
 
         <div class="row">
             <?php echo $form->labelEx($model, 'publish_date'); ?>           
