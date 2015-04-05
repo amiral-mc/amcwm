@@ -22,7 +22,7 @@ return array(
         'paths' => array(
             'files' => array(
                 'path' => 'multimedia/upload',
-                'info' => array('extensions' => 'wmv, flv, jpg, jpeg, png, gif, pdf, doc, docx, xls, xlsx, rtf, swf', 'maxSize' => 15 * 1024 * 1024,),
+                'info' => array('extensions' => 'wmv, flv, jpg, jpeg, png, gif, pdf, doc, docx, xls, xlsx, rtf, swf', 'maxSize' => 50 * 1024 * 1024,),
             ),
         ),
     ),
