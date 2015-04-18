@@ -71,6 +71,7 @@ class AmcCommentsController extends FrontCommentsController {
                 Yii::app()->db->createCommand($query)->execute();
                 $cookie = new CHttpCookie($cookieName, $cookieName);
                 $cookie->expire = time() + 900;
+                $cookie->httpOnly = true;
                 Yii::app()->request->cookies[$cookieName] = $cookie;
             }
         }

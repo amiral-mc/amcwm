@@ -58,6 +58,7 @@ class Articles extends ParentTranslatedActiveRecord {
      * Paging limit when displaying articles in dropdown
      */
     const REF_PAGE_SIZE = 10;
+
     /**
      * Sort field name
      * @var string 
@@ -131,7 +132,7 @@ class Articles extends ParentTranslatedActiveRecord {
             array('publish_date', 'required'),
             array('is_system, infocusId, section_id, in_spot , article_sort , comments,  published, archive, published_mobile, in_ticker', 'numerical', 'integerOnly' => true),
             array('in_ticker, in_spot, in_list', 'length', 'max' => 1),
-            array('votes_rate', 'numerical'),            
+            array('votes_rate', 'numerical'),
             array('socialIds', 'isArray', 'allowEmpty' => true),
             array('article_id, votes, hits, writer_id, comments, article_sort, parent_article', 'length', 'max' => 10),
             array('thumb, page_img, in_slider', 'length', 'max' => 3),
@@ -208,7 +209,7 @@ class Articles extends ParentTranslatedActiveRecord {
             'dirCompaniesArticles' => array(self::HAS_ONE, 'DirCompaniesArticles', 'article_id'),
             'issuesArticles' => array(self::HAS_ONE, 'IssuesArticles', 'article_id'),
             'essays' => array(self::HAS_ONE, 'Essays', 'article_id'),
-            'parentArticle' => array(self::BELONGS_TO, 'Articles', 'parent_article'),            
+            'parentArticle' => array(self::BELONGS_TO, 'Articles', 'parent_article'),
         );
     }
 
@@ -282,9 +283,9 @@ class Articles extends ParentTranslatedActiveRecord {
 //        $sort->defaultOrder = 'create_date desc';
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
+            'criteria' => $criteria,
 //                    'sort' => $sort,
-                ));
+        ));
     }
 
     /**
@@ -292,9 +293,9 @@ class Articles extends ParentTranslatedActiveRecord {
      * @access public
      * @return void
      */
-    protected function afterFind() {        
+    protected function afterFind() {
         $virtual = AmcWm::app()->appModule->getCurrentVirtual();
-        $info = new SocialInfo($virtual, 1 , $this->article_id);     
+        $info = new SocialInfo($virtual, 1, $this->article_id);
         $this->socialIds = $info->getSocialIds();
         $virtuals = AmcWm::app()->appModule->getVirtuals();
         if (isset($virtuals[$virtual]['customCriteria'])) {
@@ -309,8 +310,8 @@ class Articles extends ParentTranslatedActiveRecord {
             $this->publish_date = NULL;
         }
         if (count($this->infocuses)) {
-            foreach ($this->infocuses as $infocus){
-                if(isset($infocus->infocus_id)){
+            foreach ($this->infocuses as $infocus) {
+                if (isset($infocus->infocus_id)) {
                     $this->infocusId = $infocus->infocus_id;
                     break;
                 }
@@ -379,7 +380,7 @@ class Articles extends ParentTranslatedActiveRecord {
             $conditionGenerationClass = AmcWm::import($virtuals[$virtual]['customCriteria']['conditionGeneration']['class']);
             $conditionGeneration = new $conditionGenerationClass(AmcWm::app()->getIsBackend());
             $conditionGeneration->saveRelated($this);
-        }        
+        }
         $cache = Yii::app()->getComponent('cache');
         if ($cache !== null) {
             if (isset($this->oldAttributes['parent_article']) && $this->oldAttributes['parent_article'] != $this->parent_article) {
@@ -387,25 +388,34 @@ class Articles extends ParentTranslatedActiveRecord {
                 $subArticles = Yii::app()->db->createCommand($query)->queryAll();
                 $cache->delete('article_' . $this->oldAttributes['parent_article']);
                 foreach ($subArticles as $subArticle) {
-                    $cache->delete('article_' . $subArticle['article_id']);
+                    foreach (AmcWm::app()->params['languages'] as $langCode => $language) {
+                        $cache->delete('article_' . $langCode . $subArticle['article_id']);    
+                    }
+                    
                 }
             }
             if ($this->parent_article) {
                 $query = "select article_id from articles where parent_article = " . (int) $this->parent_article;
                 $subArticles = Yii::app()->db->createCommand($query)->queryAll();
                 $cache->delete('article_' . $this->parent_article);
+
                 foreach ($subArticles as $subArticle) {
-                    $cache->delete('article_' . $subArticle['article_id']);
+                    foreach (AmcWm::app()->params['languages'] as $langCode => $language) {
+                        $cache->delete('article_' . $langCode . $subArticle['article_id']);    
+                    }
+                    
                 }
             } else {
-                $cache->delete('article_' . $this->article_id);
+                foreach (AmcWm::app()->params['languages'] as $langCode => $language) {
+                    $cache->delete('article_' . $langCode . $this->article_id);
+                }
             }
         }
         if ($this->infocusId) {
             Yii::app()->db->createCommand('delete from infocus_has_articles where article_id = ' . (int) $this->article_id)->execute();
             Yii::app()->db->createCommand('insert into infocus_has_articles (infocus_id, article_id) values(' . (int) $this->infocusId . ', ' . (int) $this->article_id . ')')->execute();
         }
-        $info = new SocialInfo($virtual, 1 , $this->article_id);     
+        $info = new SocialInfo($virtual, 1, $this->article_id);
         $info->saveSocial($this->socialIds);
         $this->saveRelatedVirtual();
         parent::afterSave();
@@ -477,17 +487,17 @@ class Articles extends ParentTranslatedActiveRecord {
         $where = "WHERE " . implode(" AND ", $wheres);
         $join = implode(" ", $joins);
 
-       $queryCount = "SELECT count(*)
+        $queryCount = "SELECT count(*)
                     FROM articles t
                     {$join}
                     {$where}
                     ";
-       $query = "SELECT t.article_id id, tt.article_header text
+        $query = "SELECT t.article_id id, tt.article_header text
                     FROM articles t
                     {$join}
                     {$where}
                     limit " . self::REF_PAGE_SIZE . " offset " . (self::REF_PAGE_SIZE * ($pageNumber - 1));
-        return array('records'=>Yii::app()->db->createCommand($query)->queryAll(), 'total'=>Yii::app()->db->createCommand($queryCount)->queryScalar());            
+        return array('records' => Yii::app()->db->createCommand($query)->queryAll(), 'total' => Yii::app()->db->createCommand($queryCount)->queryScalar());
     }
 
     /**

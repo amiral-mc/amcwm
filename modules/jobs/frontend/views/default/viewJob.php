@@ -7,9 +7,11 @@ $pageContent .= "  <div class='date'>" . AmcWm::t('msgsbase.core', 'Publish Date
 if ($jobDetails['expire_date']) {
     $pageContent .= "  <div class='date'>" . AmcWm::t('msgsbase.core', 'Expire Date') . ": {$jobDetails['expire_date']}</div>";
 }
-$pageContent .= "  <div class='applybtn'>" . CHtml::button(AmcWm::t('msgsbase.core', 'Apply Now'), array('onclick' => "document.location.href= '" . Html::createUrl('/jobs/default/request', array('id' => $jobDetails['job_id'], 'title' => CHtml::encode($jobDetails['name']))) . "'")) . "</div>";
+if($jobDetails['allow_request']){
+    $pageContent .= "  <div class='applybtn'>" . CHtml::button(AmcWm::t('msgsbase.core', 'Apply Now'), array('onclick' => "document.location.href= '" . Html::createUrl('/jobs/default/request', array('id' => $jobDetails['job_id'], 'title' => CHtml::encode($jobDetails['name']))) . "'")) . "</div>";
+}
 $pageContent .= "  <div>{$jobDetails['description']}</div>";
-if(trim($jobDetails['description'])){
+if(trim($jobDetails['description']) && $jobDetails['allow_request']){
     $pageContent .= "<div class='applybtn'>" . CHtml::button(AmcWm::t('msgsbase.core', 'Apply Now'), array('onclick' => "document.location.href= '" . Html::createUrl('/jobs/default/request', array('id' => $jobDetails['job_id'], 'title' => CHtml::encode($jobDetails['name']))) . "'")) . "</div>";
 }
 

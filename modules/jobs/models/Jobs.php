@@ -13,6 +13,7 @@
  * @property integer $job_id
  * @property integer $category_id
  * @property integer $published
+ * @property integer $allow_request
  * @property string $expire_date
  * @property string $publish_date
  *
@@ -51,7 +52,7 @@ class Jobs extends ParentTranslatedActiveRecord {
         // will receive user inputs.
         return array(
             array('category_id, publish_date', 'required'),
-            array('category_id, published', 'numerical', 'integerOnly' => true),
+            array('category_id, published, allow_request', 'numerical', 'integerOnly' => true),
             
             array('expire_date, update_date', 'safe'),
             array('expire_date', 'compare', 'compareAttribute' => 'publish_date', 'operator' => '>', 'allowEmpty' => true),
@@ -85,6 +86,7 @@ class Jobs extends ParentTranslatedActiveRecord {
             'job_id' => AmcWm::t("msgsbase.core", 'Job'),
             'category_id' => AmcWm::t("msgsbase.core", 'Category'),
             'published' => AmcWm::t("msgsbase.core", 'Published'),
+            'allow_request' => AmcWm::t("msgsbase.core", 'Allow Request'),           
             'expire_date' => AmcWm::t("msgsbase.core", 'Expire Date'),
             'publish_date' => AmcWm::t("msgsbase.core", 'Publish Date'),
         );

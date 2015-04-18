@@ -10,7 +10,6 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-
 class AmcJobsController extends FrontendController {
 
     public function actionIndex() {
@@ -39,17 +38,23 @@ class AmcJobsController extends FrontendController {
     public function actionRequest() {
         $job_id = (int) AmcWm::app()->request->getParam('id');
         $options = $this->module->appModule->options;
-        if ($options['default']['integer']['allowUsersApply']) {
-            if (Yii::app()->user->isGuest) {
-                $this->forward('/site/login');
+        $jobModel = Jobs::model()->findByPk($job_id);
+        if ($jobModel->allow_request) {
+            if ($options['default']['integer']['allowUsersApply']) {
+                if (Yii::app()->user->isGuest) {
+                    $this->forward('/site/login');
+                } else {
+                    $this->forward('apply');
+                }
             } else {
-                $this->forward('apply');
+                $model = new JobsRequests;
+                $model->setAttribute('job_id', $job_id);
+                $this->save($model);
+                $this->render('jobRequest', array('model' => $model));
             }
-        } else {
-            $model = new JobsRequests;
-            $model->setAttribute('job_id', $job_id);
-            $this->save($model);
-            $this->render('jobRequest', array('model' => $model));
+        }
+        else{
+            throw new CHttpException(404, AmcWm::t('amcCore', 'The requested page does not exist.'));
         }
     }
 
@@ -59,7 +64,7 @@ class AmcJobsController extends FrontendController {
         if (isset($this->module->appModule->options['default']['text']['sendJobRequstRedirectUrl'])) {
             $redirect = array($this->module->appModule->options['default']['text']['sendJobRequstRedirectUrl'], '#' => "message");
         } else {
-            $redirect = array("/jobs/default/view", 'id'=>$model->job_id, '#' => "message");
+            $redirect = array("/jobs/default/view", 'id' => $model->job_id, '#' => "message");
         }
 
         if (isset($_POST['JobsRequests'])) {
@@ -83,7 +88,7 @@ class AmcJobsController extends FrontendController {
                     Yii::app()->user->setFlash('success', AmcWm::t('msgsbase.request', 'Thank you, your request has been sent, and we will respond if you has been accepted'));
                 } else {
                     Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t('msgsbase.request', 'Thank you, your request has been sent, and we will respond if you has been accepted')));
-                }                
+                }
                 $this->redirect($redirect);
             }
         }

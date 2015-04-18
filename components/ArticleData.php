@@ -308,7 +308,7 @@ class ArticleData extends Dataset {
             and (c.hide = 0 OR c.force_display=1) 
             and ac.article_id = %d", ActiveRecord::PUBLISHED, $this->_id);
             $dependencyComments = Yii::app()->db->createCommand($dependencyQuery)->queryScalar();
-            $this->items = $this->_cache->get('article_' . $this->_id);
+            $this->items = $this->_cache->get('article_'  . AmcWm::app()->getLanguage() . $this->_id);
             if (!$this->items || !isset($this->items['record']) || !$this->items['record']) {
                 $this->_initItem();
             } else {
@@ -339,11 +339,12 @@ class ArticleData extends Dataset {
                 Yii::app()->db->createCommand("update articles set hits=hits+1 where article_id = {$this->_id} ")->execute();
                 $cookie = new CHttpCookie($cookieName, $cookieName);
                 $cookie->expire = time() + 3600;
+                $cookie->httpOnly = true;
                 Yii::app()->request->cookies[$cookieName] = $cookie;
             }
         }
         if ($this->_cache !== null && $cacheMe) {
-            $this->_cache->set('article_' . $this->_id, $this->items, Yii::app()->params["cacheDuration"]["article"]);
+            $this->_cache->set('article_' . AmcWm::app()->getLanguage() . $this->_id, $this->items, Yii::app()->params["cacheDuration"]["article"]);
         }
     }
 
@@ -542,6 +543,7 @@ class ArticleData extends Dataset {
                                 and tt.content_lang = %s', ActiveRecord::PUBLISHED, Yii::app()->db->quoteValue($currentDate), Yii::app()->db->quoteValue($currentDate), Yii::app()->db->quoteValue($siteLanguage)
                 );
 
+                $subsWhere .=" order by article_sort "; 
                 $qSubs = 'select t.article_id, t.thumb, t.section_id, tt.article_header, tt.article_pri_header, tt.article_detail from articles t
                     inner join articles_translation tt on t.article_id = tt.article_id
                     where t.parent_article = ' . $this->items['record']["article_id"] . $subsWhere;

@@ -249,10 +249,12 @@ class Controller extends CController {
             if (!isset(Yii::app()->request->cookies['lang']->value)) {
                 $cookie = new CHttpCookie("lang", self::$currentLang);
                 $cookie->expire = 0;
+                $cookie->httpOnly = true;
                 Yii::app()->request->cookies['lang'] = $cookie;
             } else if (Yii::app()->request->cookies['lang']->value != $langParam) {
                 $cookie = new CHttpCookie("lang", self::$currentLang);
                 $cookie->expire = 0;
+                $cookie->httpOnly = true;
                 Yii::app()->request->cookies['lang'] = $cookie;
             }
         } else {

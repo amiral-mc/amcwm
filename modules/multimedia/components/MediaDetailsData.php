@@ -158,6 +158,7 @@ class MediaDetailsData extends Dataset {
                 Yii::app()->db->createCommand("update videos set hits=hits+1 where video_id = {$this->_id} ")->execute();
                 $cookie = new CHttpCookie($cookieName, $cookieName);
                 $cookie->expire = time() + 3600;
+                $cookie->httpOnly = true;
                 Yii::app()->request->cookies[$cookieName] = $cookie;
             }
             $this->setDataset($row);
@@ -199,6 +200,7 @@ class MediaDetailsData extends Dataset {
                 Yii::app()->db->createCommand("update images set hits=hits+1 where image_id = {$this->_id} ")->execute();
                 $cookie = new CHttpCookie($cookieName, $cookieName);
                 $cookie->expire = time() + 3600;
+                $cookie->httpOnly = true;
                 Yii::app()->request->cookies[$cookieName] = $cookie;
             }
             $this->setDataset($row);

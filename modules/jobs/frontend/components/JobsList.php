@@ -115,7 +115,7 @@ class JobsList extends Dataset {
         $currentDate = date("Y-m-d H:i:s");
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
         $query = sprintf("SELECT t.job_id, tc.job as name, tc.job_description as description,
-            t.expire_date, t.publish_date
+            t.expire_date, t.publish_date, allow_request
             FROM jobs t
             INNER JOIN jobs_translation tc ON tc.job_id = t.job_id
             WHERE t.published = 1 

@@ -216,6 +216,7 @@ abstract class SiteData extends Dataset {
         if (!isset(Yii::app()->request->cookies[$cookieName])) {
             $cookie = new CHttpCookie($cookieName, $recordId);
             $cookie->expire = time() + 3600;
+            $cookie->httpOnly = true;
             Yii::app()->request->cookies[$cookieName] = $cookie;
             if ($rating > 5) {
                 $rating = 5;

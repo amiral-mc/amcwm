@@ -57,6 +57,24 @@ class BxSlider4 extends Widget {
     public $fitvidsScript = null;
 
     /**
+     *
+     * @var boolean draw thumbs;
+     */
+    public $drawThumbs = true;
+    
+    /**
+     *
+     * @var string item class  
+     */
+    public $itemClass = null;
+    
+    /**
+     *
+     * @var string tag container 
+     */
+    public $tagContainer = "ul";
+
+    /**
      * @var array the initial JavaScript options that should be passed to the plugin.
      */
     protected $options = array(
@@ -93,13 +111,14 @@ class BxSlider4 extends Widget {
     public function init() {
         $this->htmlOptions['id'] = $this->getId();
         $this->htmlOptions['class'] = $this->className;
+        $this->options['pager'] = $this->drawThumbs;
     }
 
     /**
      * Calls {@link renderItem} to render the menu.
      */
     public function run() {
-        if (count($this->items)) {
+        if (count($this->items)) {            
             $cs = Yii::app()->getClientScript();
             $cs->registerCoreScript('jquery');
             if (YII_DEBUG) {
@@ -111,9 +130,9 @@ class BxSlider4 extends Widget {
                 $this->baseScriptUrl = Yii::app()->getAssetManager()->publish($this->basePath . DIRECTORY_SEPARATOR . "assets") . "/bxslider4";
             }
             $cs->registerScriptFile($this->baseScriptUrl . "/jquery.bxslider{$min}.js");
-            if(!$this->useSiteCss){
-                $cs->registerCssFile($this->baseScriptUrl . '/jquery.bxslider.css');    
-            }            
+            if (!$this->useSiteCss) {
+                $cs->registerCssFile($this->baseScriptUrl . '/jquery.bxslider.css');
+            }
             if (isset($this->options['easing'])) {
                 if ($this->easingScript) {
                     $cs->registerScriptFile($this->easingScript, CClientScript::POS_HEAD);
@@ -129,21 +148,31 @@ class BxSlider4 extends Widget {
                 }
             }
 
-            $images = CHtml::openTag('ul', $this->htmlOptions);
-            $thumbs = '<div id="' . $this->id . '-pager" class="bx-pager">';
+            $images = CHtml::openTag($this->tagContainer, $this->htmlOptions);
+            $thumbs = '';
+            if ($this->drawThumbs) {
+                $thumbs = '<div id="' . $this->id . '-pager" class="bx-pager">';
+            }
+
             $index = 0;
+            $imageTagContainer = $this->tagContainer == 'ul' ? "li" : $this->tagContainer;
+            $itemClass = $this->itemClass ? ' class="' . $this->itemClass . '"' : "";
             foreach ($this->items as $image) {
-                $images .= '<li><img src="' . $image['url'] . '" title="' . $image['title'] . '" /></li>';
-                $thumbs .= '<a data-slide-index="' . $index . '" href=""><img src="' . $image['thumb'] . '" title="' . $image['title'] . '" /></a>';
+                $title = ($image['title']) ? ' title="' . $image['title'] . '"' : '';
+                $images .= '<' . $imageTagContainer . $itemClass . '><img src="' . $image['url'] . '" ' . $title . '  /></' . $imageTagContainer . '>';
+                if ($this->drawThumbs) {
+                    $thumbs .= '<a data-slide-index="' . $index . '" href=""><img src="' . $image['thumb'] . '" ' . $title . ' /></a>';
+                }
                 $index ++;
             }
-            $thumbs .= '</div>';
-            $images .= CHtml::closeTag('ul');
-            echo "{$images} {$thumbs}";
-            $this->options['pagerCustom'] = "#{$this->id}-pager";
+            if ($this->drawThumbs) {
+                $thumbs .= '</div>';    
+                $this->options['pagerCustom'] = "#{$this->id}-pager";
+            }            
+            $images .= CHtml::closeTag($this->tagContainer);
+            echo "{$images} {$thumbs}";            
             $jsCode = "$('#{$this->id}').bxSlider(" . CJavaScript::encode($this->options) . ");";
             $cs->registerScript(__CLASS__ . $this->getId(), $jsCode, CClientScript::POS_READY);
         }
     }
-
 }

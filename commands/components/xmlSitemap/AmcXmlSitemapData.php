@@ -123,6 +123,51 @@ abstract class AmcXmlSitemapData extends CComponent {
     public function generateXmlFileName($dateTime){
         return "/xmlsitemap/{$this->id}/{$this->language}/" . date("Ymd", $dateTime - $this->period) . "_" . date("H", $dateTime - $this->period) . ".xml";
     }
+    
+        /**
+     *      
+     * @param string $fileName;
+     * @param array $records
+     * @param integer $idIndex
+     * @param string $titleIndex
+     */
+    protected function generateMap($fileName, $records, $idIndex, $titleIndex) {
+        $xmlPath = Yii::app()->basePath . "/..";
+        $xmlDir = dirname("{$xmlPath}{$fileName}");
+        if (!is_dir($xmlDir)) {
+            mkdir($xmlDir, 0777, true);
+        }
+        if (function_exists("gzencode")) {
+            $fileName = "{$fileName}.gz";
+        }
+        $saved = false;
+        if (!is_file("{$xmlPath}{$fileName}")) {
+            $mapView = Yii::getPathOfAlias('amcwm.commands.components.xmlSitemap.views.sitemap') . ".php";
+            $xml = $this->console->renderFile($mapView, array('records' => $records, 'model' => $this, 'titleIndex' => $titleIndex, 'idIndex' => $idIndex), true);
+            if (function_exists("gzencode")) {
+                $xml = gzencode($xml);
+            }
+            $saved = file_put_contents("{$xmlPath}{$fileName}", $xml);
+            if ($saved) {
+                if (!is_file(Yii::app()->basePath . "/../sitemap_index.xml")) {
+                    $xmlIndexData = '<?xml version="1.0" encoding="utf-8" ?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
+                } else {
+                    $xmlIndexData = file_get_contents(Yii::app()->basePath . "/../sitemap_index.xml");
+                }
+                $doc = new DOMDocument();
+                $doc->loadXML($xmlIndexData);
+                $sitemap = $doc->createElement('sitemap');
+                $loc = $doc->createElement('loc', Yii::app()->params['siteUrl'] . "{$fileName}");
+                $lastmod = $doc->createElement('lastmod', date('c', time()));
+                $sitemap->appendChild($loc);
+                $sitemap->appendChild($lastmod);
+                $doc->documentElement->appendChild($sitemap);
+                file_put_contents(Yii::app()->basePath . "/../sitemap_index.xml", $doc->saveXML());
+            }
+        }
+        return $saved;
+    }
+
     /**
      *
      * Post content to social network

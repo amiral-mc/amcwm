@@ -51,7 +51,7 @@ return array(
     'Short List' => 'تصفية',
     'Users CVs' => 'السير الذاتية',
     'Request has been saved' => 'تم حفظ الطلب',
-    '' => '',
+    'Allow Request' => 'السماح بالتقدم للوظيفة',
     '' => '',
     '' => '',
     '' => '',

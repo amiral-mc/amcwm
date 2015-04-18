@@ -578,7 +578,8 @@ class Data {
         if (!isset(Yii::app()->request->cookies[$cookieName])) {
             $cookie = new CHttpCookie($cookieName, $recordId);
             $cookie->expire = time() + 3600;
-            Yii::app()->request->cookies[$cookieName] = $cookie;
+            $cookie->httpOnly = true;
+            Yii::app()->request->cookies[$cookieName] = $cookie;            
             if ($score > 5) {
                 $score = 5;
             }
