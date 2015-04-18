@@ -2,7 +2,7 @@
 
 return array(
     'tables' => array(
-        array(
+        't1'=>array(
             'id' => 1,
             'name' => 'events',
         ),

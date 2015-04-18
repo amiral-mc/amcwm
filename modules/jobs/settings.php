@@ -2,19 +2,19 @@
 
 return array(
     'tables' => array(
-        array(
+        't1'=>array(
             'id' => 1,
             'name' => 'jobs',
         ),
-        array(
+        't2'=>array(
             'id' => 2,
             'name' => 'jobs_categories',
         ),
-        array(
+        't3'=>array(
             'id' => 3,
             'name' => 'jobs_requests',
         ),
-        array(
+        't4'=>array(
             'id' => 4,
             'name' => 'users_cv',
         ),

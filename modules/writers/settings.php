@@ -2,11 +2,11 @@
 
 return array(
      'tables' => array(
-        array(
+        't1'=>array(
             'id' => 1,
             'name' => 'persons',
         ), 
-        array(
+        't2'=>array(
             'id' => 2,
             'name' => 'writers',
         ), 

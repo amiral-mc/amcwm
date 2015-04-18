@@ -2,15 +2,15 @@
 
 return array(
    'tables' => array(
-        array(
+        't1'=>array(
             'id' => 1,
             'name' => 'issues',
         ), 
-        array(
+        't2'=>array(
             'id' => 2,
             'name' => 'issues_articles',
         ), 
-        array(
+        't3'=>array(
             'id' => 3,
             'name' => 'sections_issues',
         ), 

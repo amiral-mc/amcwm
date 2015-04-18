@@ -2,39 +2,39 @@
 
 return array(
     'tables' => array(
-        array(
+        't1' => array(
             'id' => 1,
             'name' => 'maillist',
         ),
-        array(
+        't2' => array(
             'id' => 2,
             'name' => 'maillist_users',
         ),
-        array(
+        't3' => array(
             'id' => 3,
             'name' => 'maillist_channels',
         ),
-        array(
+        't4' => array(
             'id' => 4,
             'name' => 'maillist_channels_templates',
         ),
-        array(
+        't5' => array(
             'id' => 5,
             'name' => 'maillist_message',
         ),
-        array(
+        't6' => array(
             'id' => 6,
             'name' => 'maillist_messages_setions',
         ),
-        array(
+        't7' => array(
             'id' => 7,
             'name' => 'maillist_channels_subscribe',
         ),
-        array(
+        't8' => array(
             'id' => 8,
             'name' => 'maillist_log',
         ),
-        array(
+        't9' => array(
             'id' => 9,
             'name' => 'maillist_articles_log',
         ),

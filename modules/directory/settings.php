@@ -18,22 +18,22 @@ return array(
         'required' => array(
         ),
         'tables' => array(
-            'dir_companies'=>'dir_companies_attributes',
-            'dir_companies_branches'=>'dir_companies_branches_attributes',
+            'dir_companies' => 'dir_companies_attributes',
+            'dir_companies_branches' => 'dir_companies_branches_attributes',
         ),
         'enable' => true
     ),
     'tables' => array(
-        array(
+        't1' => array(
             'id' => 1,
             'name' => 'dir_companies',
             'sorting' => array('sortField' => "create_date", 'order' => 'asc'),
         ),
-        array(
+        't2' => array(
             'id' => 2,
             'name' => 'dir_categories',
         ),
-        array(
+        't3' => array(
             'id' => 3,
             'name' => 'dir_companies_branches',
         ),

@@ -2,12 +2,12 @@
 
 return array(
     'tables' => array(
-        array(
+        't1'=>array(
             'id' => 1,
             'name' => 'docs',
             'sorting' => array('sortField' => "create_date", 'order' => 'desc'),
         ),
-        array(
+        't2'=>array(
             'id' => 2,
             'name' => 'docs_categories',
             'sorting' => array('sortField' => "create_date", 'order' => 'desc'),

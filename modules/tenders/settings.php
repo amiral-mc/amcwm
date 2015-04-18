@@ -2,17 +2,17 @@
 
 return array(
     'tables' => array(
-        array(
+        't1'=>array(
             'id' => 1,
             'name' => 'tenders',
             'sorting' => array('sortField' => "create_date", 'order' => 'desc'),
         ),
-        array(
+        't2'=>array(
             'id' => 2,
             'name' => 'tenders_department',
             'sorting' => array('sortField' => "department_id", 'order' => 'desc'),
         ),
-        array(
+        't3'=>array(
             'id' => 3,
             'name' => 'tenders_activities',
             'sorting' => array('sortField' => "activity_id", 'order' => 'desc'),

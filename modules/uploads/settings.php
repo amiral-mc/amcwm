@@ -5,7 +5,7 @@ return array(
 //        'useDopeSheet'=>0
     ),
     'tables' => array(
-        array(
+        't1'=>array(
             'id' => 1,
             'name' => 'files',
             'sorting' => array('sortField' => "create_date", 'order' => 'asc'),

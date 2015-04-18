@@ -7,7 +7,7 @@ if ($videoMaxSize > $iniSize) {
 }
 return array(
     'tables' => array(
-        array(
+        't1'=>array(
             'id' => 1,
             'name' => 'sms_videos',
         ),

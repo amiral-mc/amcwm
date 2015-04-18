@@ -10,17 +10,17 @@ return array(
 //        'useDopeSheet'=>0
     ),
     'tables' => array(
-        array(
+        't1'=>array(
             'id' => 1,
             'name' => 'galleries',
             'sorting' => array('sortField' => "gallery_id", 'order' => 'asc'),
         ),
-        array(
+        't2'=>array(
             'id' => 2,
             'name' => 'images',
             'sorting' => array('sortField' => "image_sort", 'order' => 'desc'),
         ),
-        array(
+        't3'=>array(
             'id' => 3,
             'name' => 'videos',
             'sorting' => array('sortField' => "video_sort", 'order' => 'desc'),

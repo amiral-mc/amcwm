@@ -2,7 +2,7 @@
 
 return array(
     'tables' => array(
-        array(
+        't1'=>array(
             'id' => 1,
             'name' => 'infocus',
             'sorting' => array('sortField' => "publish_date", 'order' => 'asc'),
