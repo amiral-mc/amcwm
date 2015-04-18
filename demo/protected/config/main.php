@@ -31,9 +31,6 @@ return CMap::mergeArray(
             'applicationModules' => array(
                 'multimedia' => array(
                     'useDopeSheet' => false,
-//            'useInfocus' => false,
-//            'useKeywords' => false,
-//            'useSocials' => false,
                 ),
                 'sections' => array(
                     'useSupervisor' => false,
@@ -41,11 +38,6 @@ return CMap::mergeArray(
                 'events' => array(
                     'sendEmailAfterInsert' => false
                 ),
-                'transits' => array(),
-                'toll' => array(),
-                'maritimeData' => array(),
-                'crewsMovements' => array(),
-                'parcels' => array(),
             ),
 //            'theme' => 'mobile',
             //'onBeginRequest'=> array('DeviceDetection', 'BeginRequest'),
@@ -85,20 +77,6 @@ return CMap::mergeArray(
                     'comments' => 10,
                 ),
                 'userApps' => array(
-                    'manage_parcels' => array(
-                        'id' => 'users_parcels_list',
-                        'label' => "_manage_parcels_",
-                        'url' => array('/parcels/default/index'),
-                        'image_id' => 'parcels',
-                        'visible' => '1',
-                    ),
-                    'manage_directory_company' => array(
-                        'id' => 'users_crew_movements_list',
-                        'label' => "_manage_crew_movements_",
-                        'url' => array('/crewsMovements/default/index'),
-                        'image_id' => 'crewsMovements',
-                        'visible' => '1',
-                    ),
                 ),
                 'facebookLink' => array(
                     'ar' => '#',
