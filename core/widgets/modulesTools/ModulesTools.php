@@ -5,7 +5,6 @@
  * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.
  * @license http://amc.amiral.com/license/amcwm.txt
  */
-
 /**
  * @author Amiral Management Corporation
  * @version 1.0
@@ -91,7 +90,12 @@ class ModulesTools extends CWidget {
      * @param array $item the tool item to be rendered	 
      */
     protected function renderItem($item) {
-        $image = CHtml::image($this->baseScriptUrl . "/images/{$item['image_id']}.png", '', array('border' => 0));
+        $customImage = AmcWm::app()->basePath . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . "{$item['image_id']}.png";
+        if (file_exists($customImage)) {
+            $image = CHtml::image(AmcWm::app()->baseUrl . "/images/modules/{$item['image_id']}.png", "", array('border' => 0));
+        } else {
+            $image = CHtml::image($this->baseScriptUrl . "/images/{$item['image_id']}.png", '', array('border' => 0));
+        }
         $itemHtml = '<div class="module_item" id="' . $item['id'] . '">';
         $itemHtml.='<div class="module_icon">' . Html::link($image, $item['url']) . '</div>';
         $itemHtml.='<div class="module_text">' . Html::link($item['label'], $item['url']) . '</div>';
