@@ -49,55 +49,63 @@
         <div class="row">
             <?php echo $form->labelEx($model->news, 'source_id'); ?>
             <?php
-                $initSourceSelection = ($model->news->source) ? array('id' => $model->news->source_id, 'text' => $model->news->source->getCurrent()->source) : array();
-                $this->widget('amcwm.core.widgets.select2.ESelect2', array(
-                    'model' => $model->news,
-                    'attribute' => "source_id",
-                    'initSelection' => $initSourceSelection,
-                    'options' => array(
-                        "dropdownCssClass" => "bigdrop",
-                        "placeholder" => AmcWm::t('amcTools', 'Enter Search Keywords'),
-                        'ajax' => array(
-                            'dataType' => "json",
-                            "quietMillis" => 100,
-                            'url' => Html::createUrl('/backend/articles/default/ajax', array('do' => 'findSources')),
-                            'data' => 'js:function (term, page) { // page is the one-based page number tracked by Select2
+            $initSourceSelection = array();
+            if (($model->news->source_id)) {
+                $currentSource = $model->news->source->getCurrent();
+                if ($currentSource) {
+                    $initSourceSelection = array('id' => $model->news->source_id, 'text' => $currentSource->source);
+                } else {
+                    $initSourceSelection = array('id' => $model->news->source_id, 'text' => $model->news->source_id);
+                }
+            }
+            $this->widget('amcwm.core.widgets.select2.ESelect2', array(
+                'model' => $model->news,
+                'attribute' => "source_id",
+                'initSelection' => $initSourceSelection,
+                'options' => array(
+                    "dropdownCssClass" => "bigdrop",
+                    "placeholder" => AmcWm::t('amcTools', 'Enter Search Keywords'),
+                    'ajax' => array(
+                        'dataType' => "json",
+                        "quietMillis" => 100,
+                        'url' => Html::createUrl('/backend/articles/default/ajax', array('do' => 'findSources')),
+                        'data' => 'js:function (term, page) { // page is the one-based page number tracked by Select2
                         return {
                                q: term, //search term
                                page: page, // page number                     
                            };
                        }',
-                            'results' => 'js:function (data, page) {
+                        'results' => 'js:function (data, page) {
                             var more = (page * ' . NewsSources::REF_PAGE_SIZE . ') < data.total; // whether or not there are more results available 
                             // notice we return the value of more so Select2 knows if more results can be loaded
                             return {results: data.records, more: more};
                           }',
-                        ),
                     ),
-                    'htmlOptions' => array(
-                        'style' => 'min-width:400px;',
-                    ),
-                ));
-                ?>
-            
+                ),
+                'htmlOptions' => array(
+                    'style' => 'min-width:400px;',
+                ),
+            ));
+            ?>
+
             <?php echo $form->error($model->news, 'source_id'); ?>
         </div>
         <div class="row">                       
             <?php echo $form->labelEx($model, 'section_id'); ?>            
             <?php
             $this->widget('amcwm.core.widgets.select2.ESelect2', array(
-                    'model' => $model,
-                    'attribute' => "section_id",
-                    'useSelect'=>true,
-                    'data'=>Sections::getSectionsList(),
-                    'options' => array(
-                        "dropdownCssClass" => "bigdrop",
-                        "placeholder" => AmcWm::t('amcTools', 'Enter Search Keywords'),                        
-                    ),
-                    'htmlOptions' => array(
-                        'style' => 'style="width:80%"',
-                    ),
-                ));
+                'model' => $model,
+                'attribute' => "section_id",
+                'useSelect' => true,
+                'data' => Sections::getSectionsList(),
+                'options' => array(
+                    "dropdownCssClass" => "bigdrop",
+                    "placeholder" => AmcWm::t('amcTools', 'Enter Search Keywords'),
+                ),
+                'htmlOptions' => array(
+                    'style' => 'style="width:80%"',
+                ),
+            ));
             ?>
             <?php echo $form->error($model, 'section_id'); ?>
         </div>
@@ -165,7 +173,7 @@
         <div class="row">
             <fieldset>
                 <legend><?php echo AmcWm::t("amcBack", "Publish to the social media sites"); ?>:</legend>
-                <?php //echo $form->labelEx($model, 'socialIds');       ?>
+                <?php //echo $form->labelEx($model, 'socialIds');        ?>
                 <span>
                     <?php echo $form->checkBoxList($model, 'socialIds', $this->getSocials(), array("separator" => "<br />", 'labelOptions' => array('class' => 'checkbox_label'))); ?>
                 </span>
