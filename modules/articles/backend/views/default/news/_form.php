@@ -162,7 +162,16 @@
         <div class="row">
             <?php echo $form->labelEx($model->news, 'source_id'); ?>
             <?php
-            $initSourceSelection = ($model->news->source) ? array('id' => $model->news->source_id, 'text' => $model->news->source->getCurrent()->source) : array();
+            $initSourceSelection = array();
+            if(($model->news->source_id)){
+                $currentSource = $model->news->source->getCurrent();
+                if($currentSource){
+                    $initSourceSelection = array('id' => $model->news->source_id, 'text' => $currentSource->source);
+                }
+                else{
+                    $initSourceSelection = array('id' => $model->news->source_id, 'text' => $model->news->source_id);
+                }
+            }            
             $this->widget('amcwm.core.widgets.select2.ESelect2', array(
                 'model' => $model->news,
                 'attribute' => "source_id",
