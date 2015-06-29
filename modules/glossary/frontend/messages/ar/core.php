@@ -10,7 +10,7 @@ return array(
     'Description' => 'الوصف',
     'No Result found' => 'عفوا ، لم يتم العثور علي اي مصطلحات',
     'Found rows {count}' => 'تم العثور علي عدد {count} مصطلح',
-    'Glossary Data' => 'مصطلحات التجارة الدولية والنقل البحرى',
+    'Glossary Data' => 'قاموس المصطلحات',
     'View all' => 'عرض الكل',
     '' => '',
     '' => '',

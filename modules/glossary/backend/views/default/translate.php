@@ -5,7 +5,7 @@ $this->breadcrumbs = array(
     AmcWm::t("msgsbase.core", "Glossary") => array('/backend/glossary/default/index'),
 );
 $toolsItems = array();
-$toolsItems[] = array('label' => AmcWm::t("msgsbase.core", 'Save'), 'js' => array('formId' => $formId), 'id' => 'edit_section', 'image_id' => 'save');
+$toolsItems[] = array('label' => AmcWm::t("amcTools", 'Save'), 'js' => array('formId' => $formId), 'id' => 'edit_section', 'image_id' => 'save');
 $toolsItems[] = array('label' => AmcWm::t("amcTools", 'Back'), 'url' => array('/backend/glossary/default/index'), 'id' => 'modules_list', 'image_id' => 'back');
 
 $this->breadcrumbs[] = AmcWm::t("amcTools", "Translate");
@@ -30,7 +30,7 @@ $this->widget('amcwm.core.widgets.tools.Tools', array(
     <p class="note"><?php echo AmcWm::t("amcBack", "Fields with {star} are required", array("{star}" => "<span class='required'>*</span>")); ?>.</p>
     <?php echo $form->errorSummary(array($model, $translatedModel)); ?>
     <fieldset>                
-        <legend><?php echo AmcWm::t("msgsbase.core", "Glossary data"); ?>:</legend>
+        <legend><?php echo AmcWm::t("msgsbase.core", "General Options"); ?>:</legend>
         <div class="row">
             <span class="translated_label">
                 <?php echo AmcWm::t("msgsbase.core", "Content Lang"); ?>

@@ -21,7 +21,7 @@ return array(
     'Content Lang' => 'اللغه',
     'Meaning' => 'المعني',
     'Add new Category' => 'اضافة تصنيف جديد',
-    '' => '',
+    'General Options' => 'إختيارات عامة',
     '' => '',
     '' => '',
     '' => '',
