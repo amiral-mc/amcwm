@@ -101,6 +101,7 @@
                         imgHeight = myImg.height;
                         $('#dialog_' + id).dialog('open');
                         $('#container_' + id).append(myImg);
+                        options.cropOptions.allowSelect = false;
                         $(myImg).Jcrop(options.cropOptions);
                     };
                     reader.readAsDataURL(file);
