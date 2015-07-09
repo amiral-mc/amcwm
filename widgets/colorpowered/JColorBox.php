@@ -22,7 +22,7 @@ class JColorBox extends CWidget
      *
      * @var string cookie name  
      */
-    public $cookieName = "amc.popup";
+    public $cookieName = "amc_popup";
 
     public function init() {
         $this->scriptUrl = Yii::app()->getAssetManager()->publish(dirname(__FILE__) . '/assets');
@@ -47,9 +47,10 @@ class JColorBox extends CWidget
     public function addInstance($selector, $options = array()) {
         self::$_instances++;
         $runMe = isset($options['open']) && $options['open'];
-        if ($runMe) {
+        if ($runMe) {            
             if ($this->cookieName) {
-                if (!isset(Yii::app()->request->cookies[$this->cookieName . self::$_instances]->value)) {
+//                Html::printR($_COOKIE, 1);
+                if (!isset(Yii::app()->request->cookies[$this->cookieName . self::$_instances]->value)) {                    
                     if (isset($options['remove'])) {
                         unset($options['remove']);
                     }
