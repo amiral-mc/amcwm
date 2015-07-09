@@ -6,7 +6,8 @@
  * @version 1.00
  * @author maimairel <maimairel@yahoo.com>
  */
-class JColorBox extends CWidget {
+class JColorBox extends CWidget
+{
 
     private static $_instances = 0;
     protected $scriptUrl;
@@ -21,7 +22,7 @@ class JColorBox extends CWidget {
      *
      * @var string cookie name  
      */
-    public $cookieName = "AMCPopup";
+    public $cookieName = "amc.popup";
 
     public function init() {
         $this->scriptUrl = Yii::app()->getAssetManager()->publish(dirname(__FILE__) . '/assets');
@@ -45,20 +46,23 @@ class JColorBox extends CWidget {
 
     public function addInstance($selector, $options = array()) {
         self::$_instances++;
-        $runMe = true;
-        if (isset($options['open']) && $options['open'] && $this->cookieName) {
-            if (!isset(Yii::app()->request->cookies[$this->cookieName . self::$_instances]->value)) {
-                if (isset($options['remove'])) {
-                    unset($options['remove']);
-                }
-                $cookie = new CHttpCookie($this->cookieName . self::$_instances, 1);
-                $cookie->expire = time() + $this->cookieExpiration; // expire after 3 days
-                $cookie->httpOnly = true;
-                Yii::app()->request->cookies[$this->cookieName . self::$_instances] = $cookie;
-            } else {
-                unset($options['open']);
-                if (isset($options['remove'])) {
-                    $runMe = false;
+        $runMe = isset($options['open']) && $options['open'];
+        if ($runMe) {
+            if ($this->cookieName) {
+                if (!isset(Yii::app()->request->cookies[$this->cookieName . self::$_instances]->value)) {
+                    if (isset($options['remove'])) {
+                        unset($options['remove']);
+                    }
+                    $cookie = new CHttpCookie($this->cookieName . self::$_instances, 1);
+                    $cookie->expire = time() + $this->cookieExpiration; // expire after 3 days
+                    $cookie->httpOnly = true;
+                    Yii::app()->request->cookies[$this->cookieName . self::$_instances] = $cookie;
+                    $runMe = true;
+                } else {
+                    unset($options['open']);
+                    if (isset($options['remove'])) {
+                        $runMe = false;
+                    }
                 }
             }
         }
@@ -67,6 +71,7 @@ class JColorBox extends CWidget {
             $id = __CLASS__ . '_' . sprintf("%x", crc32($selector . $options));
             Yii::app()->clientScript->registerScript($id, "jQuery('$selector').colorbox($options);");
         }
+
         return $this;
     }
 
