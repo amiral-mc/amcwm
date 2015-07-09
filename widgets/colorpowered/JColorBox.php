@@ -14,9 +14,9 @@ class JColorBox extends CWidget
     protected $scriptFile;
     public $cssFile;
     /*
-     * $cookieExpiration default to 3 days
+     * $cookieExpiration for example set to 259200 to expire after 3 days
      */
-    public $cookieExpiration = 259200;
+    public $cookieExpiration = 0;
 
     /**
      *
@@ -55,7 +55,9 @@ class JColorBox extends CWidget
                         unset($options['remove']);
                     }
                     $cookie = new CHttpCookie($this->cookieName . self::$_instances, 1);
-                    $cookie->expire = time() + $this->cookieExpiration; // expire after 3 days
+                    if($this->cookieExpiration){
+                        $cookie->expire = time() + $this->cookieExpiration;
+                    }
                     $cookie->httpOnly = true;
                     Yii::app()->request->cookies[$this->cookieName . self::$_instances] = $cookie;
                     $runMe = true;
