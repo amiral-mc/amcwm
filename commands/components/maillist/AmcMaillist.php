@@ -313,7 +313,7 @@ abstract class AmcMaillist {
         }
         if ($this->send) {
             foreach ($mailList AS $user) {
-                print_r($user);
+//                print_r($user);
                 if ($user['message_id']) {
                     $query = "update maillist_message_queue set sent = {$this->lastRun->format('U')} where maillist_id = {$user['id']} and message_id = {$this->msgDataset['message_id']};";
                 } else {
