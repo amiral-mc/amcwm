@@ -16,7 +16,7 @@ class JColorBox extends CWidget
     /*
      * $cookieExpiration default to 3 days
      */
-    public $cookieExpiration = '259200';
+    public $cookieExpiration = 259200;
 
     /**
      *
