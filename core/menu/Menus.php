@@ -13,7 +13,8 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class Menus extends Dataset {
+class Menus extends Dataset
+{
 
     /**
      * Setting instance generated from settings.php inside an application module folder
@@ -613,8 +614,8 @@ class Menus extends Dataset {
         $this->items['routes'] = array();
         $this->items['parents'] = array();
         //left join modules_components c on mc.component_id = c.component_id 
-
-        $this->query = sprintf("
+        if (!$this->items['list']) {
+            $this->query = sprintf("
             select t.item_id, t.parent_item, t.link, t.icon, t.page_img, l.label $cols
             from menu_items t
             left join menu_item_translation l on t.item_id = l.item_id                        
@@ -624,18 +625,19 @@ class Menus extends Dataset {
             and t.published = 1
             $wheres
             $orders"
-                , $this->_id
-                , Yii::app()->db->quoteValue($siteLanguage)
-        );
-        $menuItemsDataset = Yii::app()->db->createCommand($this->query)->queryAll();
-        foreach ($menuItemsDataset as $menuRow) {
-            $this->items['list'][$menuRow['item_id']]['label'] = $menuRow['label'];
-            $this->items['params'][$menuRow['item_id']] = $this->_generateParams($menuRow['item_id']);
-            $this->items['list'][$menuRow['item_id']]['icon'] = ($menuRow['icon']) ? "{$this->_iconsPath}/{$menuRow['item_id']}.{$menuRow['icon']}" : null;
-            $this->items['list'][$menuRow['item_id']]['pageImg'] = ($menuRow['page_img']) ? "{$this->_pageImagePath}/{$menuRow['item_id']}.{$menuRow['page_img']}" : null;
-            $this->items['list'][$menuRow['item_id']]['url'] = $menuRow['link'];
-            $this->items['list'][$menuRow['item_id']]['url'] = $this->_generateUrl($menuRow['item_id'], $this->items['list'][$menuRow['item_id']], $this->items['params'][$menuRow['item_id']]);
-            $this->_setChilds($this->items['list'][$menuRow['item_id']], $menuRow['item_id']);
+                    , $this->_id
+                    , Yii::app()->db->quoteValue($siteLanguage)
+            );
+            $menuItemsDataset = Yii::app()->db->createCommand($this->query)->queryAll();
+            foreach ($menuItemsDataset as $menuRow) {
+                $this->items['list'][$menuRow['item_id']]['label'] = $menuRow['label'];
+                $this->items['params'][$menuRow['item_id']] = $this->_generateParams($menuRow['item_id']);
+                $this->items['list'][$menuRow['item_id']]['icon'] = ($menuRow['icon']) ? "{$this->_iconsPath}/{$menuRow['item_id']}.{$menuRow['icon']}" : null;
+                $this->items['list'][$menuRow['item_id']]['pageImg'] = ($menuRow['page_img']) ? "{$this->_pageImagePath}/{$menuRow['item_id']}.{$menuRow['page_img']}" : null;
+                $this->items['list'][$menuRow['item_id']]['url'] = $menuRow['link'];
+                $this->items['list'][$menuRow['item_id']]['url'] = $this->_generateUrl($menuRow['item_id'], $this->items['list'][$menuRow['item_id']], $this->items['params'][$menuRow['item_id']]);
+                $this->_setChilds($this->items['list'][$menuRow['item_id']], $menuRow['item_id']);
+            }
         }
     }
 
