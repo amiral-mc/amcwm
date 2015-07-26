@@ -67,4 +67,5 @@ return array(
     'week' => 'اسبوع',
     'month' => 'شهر',
     'year' => 'سنه',
+    'All Channels' => 'إشتراك بالكل',
 );

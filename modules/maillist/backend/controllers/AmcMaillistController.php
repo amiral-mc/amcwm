@@ -10,7 +10,8 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class AmcMaillistController extends BackendController {
+class AmcMaillistController extends BackendController
+{
 
     protected function save(ActiveRecord $model) {
         // Uncomment the following line if AJAX validation is needed
@@ -25,7 +26,12 @@ class AmcMaillistController extends BackendController {
                 if ($model->save()) {
                     $model->maillistUsers->setAttribute('user_id', $model->id);
                     $model->maillistUsers->save();
-                    $model->saveAllChannels();
+                    $saveAllChannels = $this->module->appModule->options['default']['check']['saveAllChannels'];
+                    if ($saveAllChannels) {
+                        $success = $model->saveAllChannels();
+                    } else {
+                        $success = $model->saveSelectedChannels();
+                    }
                     Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t("msgsbase.core", 'E-mail has been saved')));
                     $this->redirect(array('view', 'id' => $model->id));
                 }
@@ -105,8 +111,7 @@ class AmcMaillistController extends BackendController {
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax']))
                 $this->redirect(array('index'));
-        }
-        else
+        } else
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 

@@ -137,6 +137,8 @@ class Maillist extends ActiveRecord {
 
     public function saveSelectedChannels() {
         $channels = Yii::app()->request->getParam('channels');
+        $removeQuery = sprintf("delete from maillist_channels_subscribe where subscriber_id = %d", $this->id);
+        Yii::app()->db->createCommand($removeQuery)->execute();
         $success = true;
         if (count($channels)) {
             foreach ($channels as $index => $channel) {
