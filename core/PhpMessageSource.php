@@ -16,6 +16,7 @@ class PhpMessageSource extends CPhpMessageSource {
 
     private $_files = array();
 
+    public $forceTranslation = true;
     /**
      * Determines the message file name based on the given category and language.
      * If the category name contains a dot, it will be split into the module class name and the category name.
