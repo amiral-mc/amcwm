@@ -17,13 +17,7 @@ AmcWm::import("widgets.search.AmcSearchWidget");
  * @version 1.0
  */
 class SearchWidget extends AmcSearchWidget {
-
-    /**
-     *
-     * @var string search route 
-     */
-    public $searchRoute = array('/site/search');
-    
+   
      /**
      * Render the widget and display the result
      * @access public

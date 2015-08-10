@@ -42,9 +42,9 @@ class AmcSearchWidget extends PageContentWidget {
     
     /**
      *
-     * @var array search route 
+     * @var string search route 
      */
-    public $searchRoute = array();
+    public $searchRoute = array('/site/search');
    
     /**
      * Advanced parameters array , used in adavanced search
