@@ -38,7 +38,7 @@ class AmcJobsController extends FrontendController {
     public function actionRequest() {
         $job_id = (int) AmcWm::app()->request->getParam('id');
         $options = $this->module->appModule->options;
-        $jobModel = Jobs::model()->findByPk($job_id);
+        $jobModel = Jobs::model()->findByPk($job_id);        
         if ($jobModel->allow_request) {
             if ($options['default']['integer']['allowUsersApply']) {
                 if (Yii::app()->user->isGuest) {
@@ -50,7 +50,7 @@ class AmcJobsController extends FrontendController {
                 $model = new JobsRequests;
                 $model->setAttribute('job_id', $job_id);
                 $this->save($model);
-                $this->render('jobRequest', array('model' => $model));
+                $this->render('jobRequest', array('model' => $model, 'jobModel'=>$jobModel));
             }
         }
         else{
