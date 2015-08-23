@@ -21,12 +21,19 @@ class SiteMap extends Dataset {
      * @static
      */
     private static $_instances = array();
+    /**
+     *
+     * @var array exclude menus from sitemap 
+     */
+    private $_excludeMenus = array();
 
     /**
      * Constructor, you should not call the constructor directly, but instead call the static registry factory method Menus.getInstance().<br />
+     * @param array $excludeMenus exclude menus from sitemap 
      * @access private
      */
-    private function __construct() {
+    private function __construct($excludeMenus = array()) {
+        $this->excludeMenus = $excludeMenus;
         $this->generate();
     }
 
@@ -35,9 +42,10 @@ class SiteMap extends Dataset {
      * If <var>$id</var> is not registered in <var>Menus.$_instances</var>, we create new Menus object then registered it.
      * @static
      * @access public
+     * @param array $excludeMenus exclude menus from sitemap 
      * @return Menus the Singleton instance of the given menu id
      */
-    public static function &getInstance() {
+    public static function &getInstance($excludeMenus = array()) {
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
         $cache = Yii::app()->getComponent('cache');
         if ($cache !== NULL) {
@@ -47,7 +55,7 @@ class SiteMap extends Dataset {
             }
         }
         if (!array_key_exists($siteLanguage, self::$_instances)) {
-            self::$_instances[$siteLanguage] = new self();
+            self::$_instances[$siteLanguage] = new self($excludeMenus);
             if ($cache !== NULL) {
                 $cache->set('sitemap', serialize(self::$_instances), Yii::app()->params["cacheDuration"]["static"]);
             }
@@ -63,7 +71,9 @@ class SiteMap extends Dataset {
     protected function setItems() {
         $menus = Menus::getMenus();
         foreach ($menus as $menu) {
-            $this->_setSiteMapItems($menu);
+            if(!in_array($menu->getName(), $this->excludeMenus)){
+                $this->_setSiteMapItems($menu);
+            }
         }
     }
 
