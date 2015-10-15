@@ -71,7 +71,7 @@ class ExtendableField extends Widget {
      * Calls {@link renderItem} to render the menu.
      */
     public function run() {
-        $this->baseScriptUrl = Yii::app()->getAssetManager()->publish($this->basePath . DIRECTORY_SEPARATOR . 'assets', true, -1, $this->forcePublish);
+        $this->baseScriptUrl = Yii::app()->getAssetManager()->publish($this->basePath . DIRECTORY_SEPARATOR . 'assets');
         $cs = Yii::app()->getClientScript();
         $cs->registerScriptFile($this->baseScriptUrl . '/jquery.extendableField.js');
         $output = '<div id="' . $this->getId() . "_extendable_area" . '">';

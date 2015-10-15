@@ -72,7 +72,7 @@ class AttachmentWidget extends Widget {
      * Calls {@link renderItem} to render the menu.
      */
     public function run() {
-        $this->baseScriptUrl = Yii::app()->getAssetManager()->publish($this->basePath . DIRECTORY_SEPARATOR . 'assets', true, -1, $this->forcePublish);
+        $this->baseScriptUrl = Yii::app()->getAssetManager()->publish($this->basePath . DIRECTORY_SEPARATOR . 'assets');
         $output = CHtml::openTag('div', $this->htmlOptions);
         if (!$this->attachOptions['translateOnly']) {
             $cs = Yii::app()->getClientScript();

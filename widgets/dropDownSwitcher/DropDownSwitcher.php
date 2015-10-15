@@ -98,7 +98,7 @@ class DropDownSwitcher extends Widget {
      */
     public function run() {
         $cs = Yii::app()->getClientScript();
-        $baseScriptUrl = Yii::app()->getAssetManager()->publish($this->basePath . DIRECTORY_SEPARATOR . 'assets', 0, -1, $this->forcePublish);
+        $baseScriptUrl = Yii::app()->getAssetManager()->publish($this->basePath . DIRECTORY_SEPARATOR . 'assets');
         if ($this->useMyCss) {
             $cs->registerCssFile($baseScriptUrl . '/style.css');
         }

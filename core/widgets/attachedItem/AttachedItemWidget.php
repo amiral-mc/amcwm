@@ -67,7 +67,7 @@ class AttachedItemWidget extends Widget {
      */
     public function init() {
 
-        $this->baseScriptUrl = Yii::app()->getAssetManager()->publish($this->basePath . DIRECTORY_SEPARATOR . 'assets', true, -1, $this->forcePublish);
+        $this->baseScriptUrl = Yii::app()->getAssetManager()->publish($this->basePath . DIRECTORY_SEPARATOR . 'assets');
 
         $this->htmlOptions['id'] = $this->getId();
         if (!isset($this->htmlOptions['class'])) {

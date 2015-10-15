@@ -24,19 +24,9 @@ class Widget extends CWidget {
      * @var string base path for extension
      */
     protected $messageFile = null;
-
-    /**
-     * $forcecopy whether we should copy the asset file or directory even if it is already
-     * published before. In case of publishing a directory old files will not be removed.
-     * This parameter is set true mainly during development stage when the original
-     * assets are being constantly changed.
-     * @var boolean 
-     */
-    protected $forcePublish = true;
-
+   
     /**
      * Constructor.
-     * @todo read the forcePublish from core settings
      * @param CBaseController $owner owner/creator of this widget. It could be either a widget or a controller.
      * If constructor is overridden, make sure the parent implementation is invoked.
      */
