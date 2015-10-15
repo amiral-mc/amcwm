@@ -1,15 +1,17 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @author Amiral Management Corporation amc.amiral.com
+ * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.
+ * @license http://amc.amiral.com/license/amcwm.txt
  */
 
 /**
- * Description of ExecuteAds
- *
- * @author abdallah
+ * Excute ads widget
+ * 
+ * @package AmcWm.modules.ads.frontend
+ * @author Amiral Management Corporation
+ * @version 1.0
  */
 Amcwm::import('amcwm.core.backend.models.Sections');
 
@@ -30,7 +32,7 @@ class ExecuteAds extends ExecuteWidget {
                     ->from('ads_zones a')
                     ->join('ads_servers_config c', 'a.server_id = c.server_id')
                     ->join('ads_zones_has_sections s', 'a.ad_id = s.ad_id')
-                    ->where('zone_id = ' . $this->zoneId)
+                    ->where('zone_id = ' . $this->zoneId . " and published = 1 and s.section_id = " . (int) $id)
                     ->queryAll();
             if(!$zones){
                 $zones = $this->_getDefaultInvocation();
@@ -43,12 +45,11 @@ class ExecuteAds extends ExecuteWidget {
 
     private function _getDefaultInvocation() {
         $zones = Yii::app()->db->createCommand()
-                ->select('a.ad_id, a.server_id, zone_id, invocation_code, header_code, published, server_name, section_id')
+                ->select('a.ad_id, a.server_id, zone_id, invocation_code, header_code, published, server_name, section_id')                
                 ->from('ads_zones a')
                 ->join('ads_servers_config c', 'a.server_id = c.server_id')
                 ->leftJoin('ads_zones_has_sections s', 'a.ad_id = s.ad_id')
-                ->where('zone_id = ' . $this->zoneId)
-                ->andWhere('section_id is null')
+                ->where('zone_id = ' . $this->zoneId . " and published = 1 and section_id is null")
                 ->queryAll();
         return $zones;
     }

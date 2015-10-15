@@ -64,6 +64,7 @@ class AdsZones extends ActiveRecord {
             'zone_id' => AmcWm::t('msgsbase.core', 'Zone'),
             'invocation_code' => AmcWm::t('msgsbase.core', 'Invocation Code'),
             'published' => AmcWm::t('msgsbase.core', 'Activate'),
+            'sections' => AmcWm::t('msgsbase.core', 'Sections'),            
         );
     }
 

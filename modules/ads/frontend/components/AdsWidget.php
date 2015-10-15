@@ -1,15 +1,18 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+
+/**
+ * @author Amiral Management Corporation amc.amiral.com
+ * @copyright Copyright &copy;2012, Amiral Management Corporation. All Rights Reserved.
+ * @license http://amc.amiral.com/license/amcwm.txt
  */
 
 /**
- * Description of AdsWidget
- *
- * @author abdallah
+ * Ads widget
+ * 
+ * @package AmcWm.modules.ads.frontend
+ * @author Amiral Management Corporation
+ * @version 1.0
  */
 class AdsWidget extends Widget{
     
