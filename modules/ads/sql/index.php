@@ -1,7 +1,7 @@
 <?php
 'CREATE TABLE IF NOT EXISTS `ads_servers_config` (
   `server_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `header_code` TEXT NOT NULL,
+  `header_code` TEXT NULL default NULL,
   `server_name` VARCHAR(35) NOT NULL,
   PRIMARY KEY (`server_id`))
 ENGINE = InnoDB

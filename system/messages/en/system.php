@@ -139,4 +139,10 @@ return array(
     '_ADS_CONTROLLER_' => "Ads",
     '_SERVERS_CONTROLLER_' => 'Ads Servers',
     '_EXCHANGE_MODULE_' => 'Exchange',
+    
+    '_ADS_MODULE_' => "Ads",
+    '_ADS_CONTROLLER_' => "Ads",
+    '_SERVERS_CONTROLLER_' => 'Servers',
+    '_ADS_DEFAULT_CONTROLLER_' => "Ads",
+    '_SERVERS_ACTION_'=> 'Servers',
 );

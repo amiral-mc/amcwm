@@ -13,45 +13,48 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-Amcwm::import('amcwm.core.backend.models.Sections');
 
-class ExecuteAds extends ExecuteWidget {
+class ExecuteAds extends CComponent {
 
-    /**
-     * @var type integer Zone ID
-     */
-    public $zoneId;
-
-    protected function prepareProperties() {
+    
+    public static function getAd($zoneId) {
         $route = AmcWm::app()->getController()->getRoute();
         $id = Yii::app()->request->getParam('id');
-        $zones = false;
+        $ads = false;
         if ($route == 'articles/default/sections' && $id) {
-            $zones = Yii::app()->db->createCommand()
+            $ads = Yii::app()->db->createCommand()
                     ->select()
                     ->from('ads_zones a')
                     ->join('ads_servers_config c', 'a.server_id = c.server_id')
                     ->join('ads_zones_has_sections s', 'a.ad_id = s.ad_id')
-                    ->where('zone_id = ' . $this->zoneId . " and published = 1 and s.section_id = " . (int) $id)
+                    ->where('zone_id = ' . $zoneId . " and published = 1 and s.section_id = " . (int) $id)
                     ->queryAll();
-            if(!$zones){
-                $zones = $this->_getDefaultInvocation();
+            if(!$ads){
+                $ads = self::_getDefaultInvocation($zoneId);
             }
         } else {
-            $zones = $this->_getDefaultInvocation();
+            $ads = self::_getDefaultInvocation($zoneId);
+        }        
+        if($ads){
+            $adIndex = array_rand($ads);
+            if($ads[$adIndex]['header_code']){
+                $cs = Yii::app()->clientScript;
+                $cs->registerScript('server_id_' . $ads[$adIndex]['server_id'] . '_' . $ads[$adIndex]['server_id'], $ads[$adIndex]['header_code'], CClientScript::POS_HEAD);
+            }
+            return $ads[$adIndex]['invocation_code'];
         }
-        $this->setProperty('zones', $zones);
+        
     }
 
-    private function _getDefaultInvocation() {
-        $zones = Yii::app()->db->createCommand()
+    private static function _getDefaultInvocation($zoneId) {
+        $ads = Yii::app()->db->createCommand()
                 ->select('a.ad_id, a.server_id, zone_id, invocation_code, header_code, published, server_name, section_id')                
                 ->from('ads_zones a')
                 ->join('ads_servers_config c', 'a.server_id = c.server_id')
                 ->leftJoin('ads_zones_has_sections s', 'a.ad_id = s.ad_id')
-                ->where('zone_id = ' . $this->zoneId . " and published = 1 and section_id is null")
+                ->where('zone_id = ' . $zoneId . " and published = 1 and section_id is null")
                 ->queryAll();
-        return $zones;
+        return $ads;
     }
 
 }
