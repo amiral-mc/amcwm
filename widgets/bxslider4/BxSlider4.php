@@ -112,6 +112,7 @@ class BxSlider4 extends Widget {
         $this->htmlOptions['id'] = $this->getId();
         $this->htmlOptions['class'] = $this->className;
         $this->options['pager'] = $this->drawThumbs;
+        $this->basePath = __DIR__;
     }
 
     /**
@@ -159,7 +160,13 @@ class BxSlider4 extends Widget {
             $itemClass = $this->itemClass ? ' class="' . $this->itemClass . '"' : "";
             foreach ($this->items as $image) {
                 $title = ($image['title']) ? ' title="' . $image['title'] . '"' : '';
-                $images .= '<' . $imageTagContainer . $itemClass . '><img src="' . $image['url'] . '" ' . $title . '  /></' . $imageTagContainer . '>';
+                $linkClosedTag = "";
+                $linkOpenTag = "";
+                if(!empty($image['link'])){
+                    $linkOpenTag = '<a href="' .$image['link']. '">';
+                    $linkClosedTag = "</a>";
+                }
+                $images .= $linkOpenTag . '<' . $imageTagContainer . $itemClass . '><img src="' . $image['url'] . '" ' . $title . '  />jjj</' . $imageTagContainer . '>' . $linkClosedTag;
                 if ($this->drawThumbs) {
                     $thumbs .= '<a data-slide-index="' . $index . '" href=""><img src="' . $image['thumb'] . '" ' . $title . ' /></a>';
                 }

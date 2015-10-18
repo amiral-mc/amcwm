@@ -13,7 +13,8 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class NewsSliderData extends ArticlesListData {
+class NewsSliderData extends ArticlesListData
+{
 
     /**
      * Counstructor, default content type is image
@@ -24,7 +25,7 @@ class NewsSliderData extends ArticlesListData {
         parent::__construct($tables = array(), $period = 0, $limit = 10, $sectionId = null);
         $this->type = SiteData::IAMGE_TYPE;
         $this->route = '/articles/default/view';
-        $this->mediaPath = Yii::app()->baseUrl . "/" . Yii::app()->params["multimedia"]['slider']['path'] . "/";
+        $this->mediaPath = Yii::app()->baseUrl . "/" . self::getSettings()->mediaPaths['slider']['path'] . "/";
     }
 
     /**
@@ -32,10 +33,11 @@ class NewsSliderData extends ArticlesListData {
      * @access public
      * @return array,  dataset of articles.
      */
-    public function generate() {        
+    public function generate() {
         $this->addOrder("t.create_date desc");
-        $this->addWhere("t.in_slider = 1");        
-        $this->addWhere("(t.thumb is not null or t.thumb <> 0)");
-        parent::generate();        
+        $this->addWhere("(t.in_slider is not null or t.in_slider <> 0)");
+        $this->addColumn("in_slider", "thumb");
+        parent::generate();
     }
+
 }
