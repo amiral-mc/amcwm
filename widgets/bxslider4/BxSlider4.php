@@ -166,7 +166,7 @@ class BxSlider4 extends Widget {
                     $linkOpenTag = '<a href="' .$image['link']. '">';
                     $linkClosedTag = "</a>";
                 }
-                $images .= $linkOpenTag . '<' . $imageTagContainer . $itemClass . '><img src="' . $image['url'] . '" ' . $title . '  />jjj</' . $imageTagContainer . '>' . $linkClosedTag;
+                $images .= $linkOpenTag . '<' . $imageTagContainer . $itemClass . '><img src="' . $image['url'] . '" ' . $title . '  /></' . $imageTagContainer . '>' . $linkClosedTag;
                 if ($this->drawThumbs) {
                     $thumbs .= '<a data-slide-index="' . $index . '" href=""><img src="' . $image['thumb'] . '" ' . $title . ' /></a>';
                 }
