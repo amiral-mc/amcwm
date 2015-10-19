@@ -42,7 +42,7 @@ abstract class AmcXmlSitemapData extends CComponent {
     /**    
      * @var integer Period time in seconds, 
      */
-    protected $period = 86400;       
+    protected $period = 3600;       
     
     /**
      *
