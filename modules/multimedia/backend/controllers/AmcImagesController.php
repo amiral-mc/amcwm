@@ -10,7 +10,8 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class AmcImagesController extends AmcGalleriesController {
+class AmcImagesController extends AmcGalleriesController
+{
 
     protected $isBackground = 0;
     protected $imageInfo = array();
@@ -65,9 +66,15 @@ class AmcImagesController extends AmcGalleriesController {
         if ($this->imageInfo['info']['exact'] && $this->imageInfo['info']['allowedUploadRatio'] == 1) {
             $model->imageFile->saveAs($path . $model->image_id . "." . $model->ext);
             chmod($path . $model->image_id . "." . $model->ext, 0777);
+            
         } else {
             $image = new Image($model->imageFile->getTempName());
+            Html::printR($this->imageInfo);
             $image->resize($this->imageInfo['info']['width'], $this->imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $path . $model->image_id . "." . $model->ext, array(), $watermarkOptions);
+            if (isset($this->imageInfo['info']['fullSizeRatio'])) {
+                $image = new Image($model->imageFile->getTempName());
+                $image->resize($this->imageInfo['info']['width'] * $this->imageInfo['info']['fullSizeRatio'], $this->imageInfo['info']['height'] * $this->imageInfo['info']['fullSizeRatio'], Image::RESIZE_BASED_ON_WIDTH, $path . $model->image_id . "-f." . $model->ext, array(), $watermarkOptions);
+            }
         }
         $image = new Image($path . $model->image_id . "." . $model->ext);
         $image->resizeCrop($this->imageInfo['info']['thumbSize']['width'], $this->imageInfo['info']['thumbSize']['height'], $path . DIRECTORY_SEPARATOR . $model->image_id . "-th." . $model->ext, array(), $watermarkOptions);
@@ -78,6 +85,9 @@ class AmcImagesController extends AmcGalleriesController {
                 }
                 if (is_file($path . DIRECTORY_SEPARATOR . $model->image_id . "-th." . $oldExt)) {
                     unlink($path . DIRECTORY_SEPARATOR . $model->image_id . "-th." . $oldExt);
+                }
+                if (is_file($path . DIRECTORY_SEPARATOR . $model->image_id . "-f." . $oldExt)) {
+                    unlink($path . DIRECTORY_SEPARATOR . $model->image_id . "-f." . $oldExt);
                 }
             }
         }
@@ -236,12 +246,16 @@ class AmcImagesController extends AmcGalleriesController {
                     $imgPath = str_replace("{gallery_id}", $galleryFolder, $imgPath);
                     $deleteImage = $imgPath . DIRECTORY_SEPARATOR . $model->image_id . "." . "{$model->ext}";
                     $deleteThumbImage = $imgPath . DIRECTORY_SEPARATOR . $model->image_id . "-th." . "{$model->ext}";
+                    $deleteFullImage = $imgPath . DIRECTORY_SEPARATOR . $model->image_id . "-f." . "{$model->ext}";
                     if (is_file($deleteThumbImage)) {
                         unlink($deleteThumbImage);
                     }
                     if (is_file($deleteImage)) {
                         unlink($deleteImage);
                     }
+                    if (is_file($deleteFullImage)) {
+                        unlink($deleteFullImage);
+                    }                    
                 }
             }
             if (count($messages['success'])) {

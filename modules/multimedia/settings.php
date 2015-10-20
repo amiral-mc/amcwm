@@ -113,7 +113,15 @@ return array(
             ),
             'images' => array(
                 'path' => 'multimedia/galleries/{gallery_id}/img',
-                'info' => array('width' => 800, 'height' => 600, 'exact' => false, 'allowedUploadRatio' => 8, 'size' => 1 * 1024 * 1024, 'extensions' => 'jpg, gif, png', 'thumbSize' => array('width' => 120, 'height' => 120),),
+                'info' => array(
+                    'width' => 800, 'height' => 600,
+                    'exact' => false, 
+                    'allowedUploadRatio' => 8, 
+                    'size' => 1 * 1024 * 1024, 
+                    'extensions' => 'jpg, gif, png', 
+                    // 'fullSizeRatio' => 2,
+                    'thumbSize' => array('width' => 120, 'height' => 120),
+                    ),
             ),
             'backgrounds' => array(
                 'path' => 'multimedia/galleries/{gallery_id}/bg',
