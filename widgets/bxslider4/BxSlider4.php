@@ -73,6 +73,12 @@ class BxSlider4 extends Widget {
      * @var string tag container 
      */
     public $tagContainer = "ul";
+    
+    /**
+     *
+     * @var string popup index in images array default is null to disable popup 
+     */
+    public $popupIndex = null;
 
     /**
      * @var array the initial JavaScript options that should be passed to the plugin.
@@ -159,10 +165,15 @@ class BxSlider4 extends Widget {
             $imageTagContainer = $this->tagContainer == 'ul' ? "li" : $this->tagContainer;
             $itemClass = $this->itemClass ? ' class="' . $this->itemClass . '"' : "";
             foreach ($this->items as $image) {
+                $image['title'] = CHtml::encode($image['title']);
                 $title = ($image['title']) ? ' title="' . $image['title'] . '"' : '';
                 $linkClosedTag = "";
                 $linkOpenTag = "";
-                if(!empty($image['link'])){
+                if($this->popupIndex && isset($image[$this->popupIndex])){
+                      $linkOpenTag = '<a data-caption="' . CHtml::encode($image['title']) . '" data-target="#image-lightbox" data-toggle="lightbox" href="'.  $image[$this->popupIndex] .'">';
+                      $linkClosedTag = "</a>";
+                }
+                else if(!empty($image['link'])){
                     $linkOpenTag = '<a href="' .$image['link']. '">';
                     $linkClosedTag = "</a>";
                 }
