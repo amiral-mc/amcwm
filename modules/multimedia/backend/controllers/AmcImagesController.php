@@ -69,7 +69,6 @@ class AmcImagesController extends AmcGalleriesController
             
         } else {
             $image = new Image($model->imageFile->getTempName());
-            Html::printR($this->imageInfo);
             $image->resize($this->imageInfo['info']['width'], $this->imageInfo['info']['height'], Image::RESIZE_BASED_ON_WIDTH, $path . $model->image_id . "." . $model->ext, array(), $watermarkOptions);
             if (isset($this->imageInfo['info']['fullSizeRatio'])) {
                 $image = new Image($model->imageFile->getTempName());
@@ -78,6 +77,9 @@ class AmcImagesController extends AmcGalleriesController
         }
         $image = new Image($path . $model->image_id . "." . $model->ext);
         $image->resizeCrop($this->imageInfo['info']['thumbSize']['width'], $this->imageInfo['info']['thumbSize']['height'], $path . DIRECTORY_SEPARATOR . $model->image_id . "-th." . $model->ext, array(), $watermarkOptions);
+        if (!isset($this->imageInfo['info']['fullSizeRatio']) && is_file($path . DIRECTORY_SEPARATOR . $model->image_id . "-f." . $model->ext)) {
+            unlink($path . DIRECTORY_SEPARATOR . $model->image_id . "-f." . $model->ext);               
+        }
         if ($oldExt) {
             if ($oldExt && $oldExt != $model->ext) {
                 if (is_file($path . DIRECTORY_SEPARATOR . $model->image_id . "." . $oldExt)) {
