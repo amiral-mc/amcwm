@@ -2,7 +2,8 @@
 
 Yii::import('bootstrap.components.Bootstrap');
 
-class MyBootstrap extends Bootstrap {
+class MyBootstrap extends Bootstrap
+{
 
     /**
      *
@@ -20,7 +21,6 @@ class MyBootstrap extends Bootstrap {
      *
      * @var string 
      */
-    protected $cssAppendName = null;
 
     /**
      * @var CClientScript Something which can register assets for later inclusion on page.
@@ -37,13 +37,19 @@ class MyBootstrap extends Bootstrap {
      */
     public function init() {
         $this->orientation = strtolower(Yii::app()->getLocale()->getOrientation());
-        if ($this->orientation == 'rtl') {
-            $this->cssAppendName = ".rtl";
-        }
         if (!$this->assetsRegistry)
             $this->assetsRegistry = Yii::app()->getClientScript();
         $this->addOurPackagesToYii();
         parent::init();
+    }
+
+    /**
+     * Registers all Bootstrap CSS and JavaScript.
+     * @since 2.1.0
+     */
+    public function register() {
+        $this->registerAllCss();
+        $this->registerCoreScripts();
     }
 
     /**
@@ -76,8 +82,7 @@ class MyBootstrap extends Bootstrap {
      * Registers the Bootstrap CSS.
      */
     public function registerCoreCss() {
-        $filename = YII_DEBUG ? "bootstrap{$this->cssAppendName}.css" : "bootstrap{$this->cssAppendName}.min.css";
-        Yii::app()->clientScript->registerCssFile($this->getAssetsUrl() . '/css/' . $filename);
+        $this->assetsRegistry->registerPackage("bootstrap");
     }
 
     /**
@@ -86,11 +91,9 @@ class MyBootstrap extends Bootstrap {
      */
     public function registerResponsiveCss() {
         if ($this->useResponsive) {
-            /** @var CClientScript $cs */
             $cs = Yii::app()->getClientScript();
             $cs->registerMetaTag('width=device-width, initial-scale=1.0', 'viewport');
-            $filename = YII_DEBUG ? "bootstrap-responsive{$this->cssAppendName}.css" : "bootstrap-responsive{$this->cssAppendName}.min.css";
-            $cs->registerCssFile($this->getAssetsUrl() . '/css/' . $filename);
+            $this->assetsRegistry->registerPackage("bootstrap.responsive");
         }
     }
 
@@ -117,6 +120,5 @@ class MyBootstrap extends Bootstrap {
     public function registerAssetJs($name, $position = CClientScript::POS_END) {
         $this->assetsRegistry->registerScriptFile($this->getAssetsUrl() . "/js/{$name}", $position);
     }
-    
 
 }
