@@ -144,6 +144,7 @@ class WebApplication extends CWebApplication {
             $aclClass = $config['components']['acl']['class'];
         }
         parent::__construct($config);
+        mb_internal_encoding($this->charset);
         $acl = unserialize($this->getGlobalState('acl'));
 //        $acl = null;
         if ($acl == null) {
