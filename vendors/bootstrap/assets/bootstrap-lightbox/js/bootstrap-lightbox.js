@@ -255,31 +255,37 @@
     {
         var $this = $(this);
         var href = $this.attr('href');
-        var dataTarget = $this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, '')); //strip for ie7
+        if ($this.prop('tagName') == "IMG") {
+            var href = $this.attr('src');
+            var dataTarget = $this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, '')); //strip for ie7    
+        }
+        else {
+            var dataTarget = $this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, '')); //strip for ie7    
+        }
         var captionText = $this.data('caption');
-        var $target = $(dataTarget);        
+        var $target = $(dataTarget);
         if ($target.length === 0) {
             var targetAttributes = {'class': "lightbox hide fade", "tabindex": "-1", "role": "dialog", "aria-hidden": "true"};
-            if(dataTarget[0] == '#'){
-                targetAttributes.id = dataTarget.substring(1);                                 
-            }            
-            else if(dataTarget[0] == '.'){
-                targetAttributes.class = targetAttributes.class + " " +dataTarget.substring(1);                
+            if (dataTarget[0] == '#') {
+                targetAttributes.id = dataTarget.substring(1);
+            }
+            else if (dataTarget[0] == '.') {
+                targetAttributes.class = targetAttributes.class + " " + dataTarget.substring(1);
             }
             var $target = $("<div>", targetAttributes);
             $target.html('<div class="lightbox-content"><img><div class="lightbox-caption"><p></p></div></div>');
-            $("body").append($target);            
+            $("body").append($target);
         }
         var img = $target.find("img");
-        var caption = $(".lightbox-caption > p", $target);        
-        if(img.length != 0){
+        var caption = $(".lightbox-caption > p", $target);
+        if (img.length != 0) {
             img.attr("src", href);
         }
-        
-        if(caption.length && captionText){
+
+        if (caption.length && captionText) {
             caption.text(captionText);
         }
-        
+
         var option = $target.data('lightbox') ? 'toggle' : $.extend({remote: !/#/.test(href) && href}, $target.data(), $this.data());
         e.preventDefault();
 
