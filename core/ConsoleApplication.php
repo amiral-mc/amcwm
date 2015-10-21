@@ -13,12 +13,24 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class ConsoleApplication extends CConsoleApplication {
+class ConsoleApplication extends CConsoleApplication
+{
 
     /**
      *
      * @var string default content language; 
      */
     public $contentLang = null;
+
+    /**
+     * Initializes the application.
+     * This method overrides the parent implementation by preloading the 'request' component.
+     * @access protected
+     * @return void
+     */
+    protected function init() {
+        mb_internal_encoding($this->charset);
+        parent::init();
+    }
 
 }
