@@ -22,7 +22,7 @@ class TwitterOAuth {
   /* Set timeout default. */
   public $timeout = 30;
   /* Set connect timeout. */
-  public $connecttimeout = 30; 
+  public $connecttimeout = 30;
   /* Verify SSL Cert. */
   public $ssl_verifypeer = FALSE;
   /* Respons format. */
@@ -35,7 +35,7 @@ class TwitterOAuth {
   public $useragent = 'TwitterOAuth v0.2.0-beta2';
   /* Immediately retry the API call if the response was not successful. */
   //public $retry = TRUE;
-
+  public $haveProxy = array();
 
 
 
@@ -43,8 +43,8 @@ class TwitterOAuth {
    * Set API URLS
    */
   function accessTokenURL()  { return 'https://api.twitter.com/oauth/access_token'; }
-  function authenticateURL() { return 'https://api.twitter.com/oauth/authenticate'; }
-  function authorizeURL()    { return 'https://api.twitter.com/oauth/authorize'; }
+  function authenticateURL() { return 'https://twitter.com/oauth/authenticate'; }
+  function authorizeURL()    { return 'https://twitter.com/oauth/authorize'; }
   function requestTokenURL() { return 'https://api.twitter.com/oauth/request_token'; }
 
   /**
@@ -72,9 +72,11 @@ class TwitterOAuth {
    *
    * @returns a key/value array containing oauth_token and oauth_token_secret
    */
-  function getRequestToken($oauth_callback) {
+  function getRequestToken($oauth_callback = NULL) {
     $parameters = array();
-    $parameters['oauth_callback'] = $oauth_callback; 
+    if (!empty($oauth_callback)) {
+      $parameters['oauth_callback'] = $oauth_callback;
+    }
     $request = $this->oAuthRequest($this->requestTokenURL(), 'GET', $parameters);
     $token = OAuthUtil::parse_parameters($request);
     $this->token = new OAuthConsumer($token['oauth_token'], $token['oauth_token_secret']);
@@ -106,9 +108,11 @@ class TwitterOAuth {
    *                "user_id" => "9436992",
    *                "screen_name" => "abraham")
    */
-  function getAccessToken($oauth_verifier) {
+  function getAccessToken($oauth_verifier = FALSE) {
     $parameters = array();
-    $parameters['oauth_verifier'] = $oauth_verifier;
+    if (!empty($oauth_verifier)) {
+      $parameters['oauth_verifier'] = $oauth_verifier;
+    }
     $request = $this->oAuthRequest($this->accessTokenURL(), 'GET', $parameters);
     $token = OAuthUtil::parse_parameters($request);
     $this->token = new OAuthConsumer($token['oauth_token'], $token['oauth_token_secret']);
@@ -123,7 +127,7 @@ class TwitterOAuth {
    *                "user_id" => "9436992",
    *                "screen_name" => "abraham",
    *                "x_auth_expires" => "0")
-   */  
+   */
   function getXAuthToken($username, $password) {
     $parameters = array();
     $parameters['x_auth_username'] = $username;
@@ -145,7 +149,7 @@ class TwitterOAuth {
     }
     return $response;
   }
-  
+
   /**
    * POST wrapper for oAuthRequest.
    */
@@ -202,7 +206,10 @@ class TwitterOAuth {
     curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, $this->ssl_verifypeer);
     curl_setopt($ci, CURLOPT_HEADERFUNCTION, array($this, 'getHeader'));
     curl_setopt($ci, CURLOPT_HEADER, FALSE);
-
+    if(count($this->haveProxy)){
+        curl_setopt($ci, CURLOPT_PROXY, $this->haveProxy['host']);
+        curl_setopt($ci, CURLOPT_PROXYPORT, $this->haveProxy['port']);
+    }
     switch ($method) {
       case 'POST':
         curl_setopt($ci, CURLOPT_POST, TRUE);
@@ -239,3 +246,5 @@ class TwitterOAuth {
     return strlen($header);
   }
 }
+
+?>

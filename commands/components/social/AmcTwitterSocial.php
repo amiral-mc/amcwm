@@ -11,18 +11,20 @@
  * @author Amiral Management Corporation amc.amiral.com
  * @version 1.0
  */
+class AmcTwitterSocial extends AmcSocial
+{
 
-class AmcTwitterSocial extends AmcSocial {
+    private $tweet;
 
-    private $tweet;    
-    
     public function connect() {
         $consumerKey = $this->socialInformations['consumerKey'];
         $consumerSecret = $this->socialInformations['consumerSecret'];
         $oAuthToken = $this->socialInformations['oAuthToken'];
         $oAuthSecret = $this->socialInformations['oAuthSecret'];
         $this->tweet = new TwitterOAuth($consumerKey, $consumerSecret, $oAuthToken, $oAuthSecret);
-        $this->tweet->haveProxy = Yii::app()->params['proxy'];        
+        if (isset(Yii::app()->params['proxy']) && count(Yii::app()->params['proxy'])) {
+            $this->tweet->haveProxy = Yii::app()->params['proxy'];    
+        }        
     }
 
     public function postData($data) {
@@ -44,8 +46,19 @@ class AmcTwitterSocial extends AmcSocial {
                 $myPostDataLink = $data['data']['link'];
                 break;
         }
+
+
+        if (isset($this->socialInformations['shortenUrlApi'])) {
+            $url = $this->shortenUrl($myPostDataLink);
+            if ($url) {
+                $myPostDataLink = $url;
+                $myPostDataHeader = mb_substr($myPostDataHeader, 0, 139 - mb_strlen($myPostDataLink));
+            }
+        }
+
         if (!$this->dontPost && $postMe) {
-               $output = $this->tweet->post('statuses/update', array('status' => $myPostDataHeader . " " . $myPostDataLink));
+            $output = $this->tweet->post('statuses/update', array('status' => $myPostDataHeader . "\r\n" . $myPostDataLink));
+            //print_r($output);
         } else {
             echo "Twitter: " . PHP_EOL;
             echo "\t Type: " . $data['type'] . PHP_EOL;

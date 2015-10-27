@@ -25,16 +25,28 @@ class AmcFacebookSocial extends AmcSocial {
     }
 
     private function postItem($header, $itemUrl, $itemImage, $type) {
-        $url = "https://graph.facebook.com/{$this->socialInformations['pageId']}/links";
-        $postFields['access_token'] = $this->socialInformations['pageAccessToken'];
+        if(isset($this->socialInformations['shortenUrlApi'])){
+            $url = $this->shortenUrl($itemUrl);
+            if($url){
+                $itemUrl = $url;
+            }
+        }
+        $url = "https://graph.facebook.com/{$this->socialInformations['pageId']}/feed";
+        $postFields['access_token'] = $this->socialInformations['pageAccessToken'];        
+        $facebookPostToTwitter =  isset(Yii::app()->params['facebookPostToTwitter']) ? Yii::app()->params['facebookPostToTwitter'] : false;
+        if($facebookPostToTwitter){
+            $header = mb_substr($header, 0, 139 - mb_strlen($itemUrl));
+        }
         $postFields['message'] = $header;
-        $postFields['picture'] = $itemImage;
-        $postFields['type'] = 'link';
-        $postFields['link'] = $itemUrl;
+        $postFields['message'] .="\r\n";
+        $postFields['message'] .= $itemUrl;
+        // $postFields['picture'] = $itemImage;
+        //$postFields['type'] = 'link';
+        //$postFields['link'] = $itemUrl;
         if (function_exists('curl_init') && !$this->dontPost) {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
-            if (count(Yii::app()->params['proxy'])) {
+            if (isset(Yii::app()->params['proxy']) && count(Yii::app()->params['proxy'])) {
                 curl_setopt($ch, CURLOPT_PROXY, Yii::app()->params['proxy']['host']);
                 curl_setopt($ch, CURLOPT_PROXYPORT, Yii::app()->params['proxy']['port']);
             }
@@ -45,7 +57,7 @@ class AmcFacebookSocial extends AmcSocial {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.5) Gecko/20041107 Firefox/1.0');
             $content = curl_exec($ch);
-            print_r($content);
+            //print_r($content);
             curl_close($ch);
         } else {
             echo 'Facebook' . PHP_EOL;

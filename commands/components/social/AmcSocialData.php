@@ -50,6 +50,12 @@ abstract class AmcSocialData extends CComponent {
      * @var integer current module id
      */
     protected $moduleId = 0;
+    
+    /**
+     *
+     * @var AmcSocial current social
+     */
+    protected $social;
 
     /**
      * 

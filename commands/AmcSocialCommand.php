@@ -34,6 +34,22 @@ class AmcSocialCommand extends CConsoleCommand {
         $socialsQuery = "select * from social_networks where enabled = 1";
         $socialsDataset = Yii::app()->db->createCommand($socialsQuery)->queryAll();
         $moduleClassData =  "Amc" . ucfirst($module) . ucfirst($sub) . "SocialData";        
+        $facebookPostToTwitter =  isset(Yii::app()->params['facebookPostToTwitter']) ? Yii::app()->params['facebookPostToTwitter'] : false;
+        if($facebookPostToTwitter){
+            $socialsQuery = "select * from social_networks where (class_name = 'facebook' or class_name = 'twitter') and enabled = 1";
+            $facebookTwiiterDataSet = Yii::app()->db->createCommand($socialsQuery)->queryAll();
+            if(count($facebookTwiiterDataSet) == 2){                
+                foreach ($socialsDataset as $index=>$social){
+                    if(strtolower($social['class_name']) == 'twitter'){                                                
+                        unset($socialsDataset[$index]);
+                    }
+                }        
+            }
+            else{
+                unset(Yii::app()->params['facebookPostToTwitter']);                
+            }
+        }
+
         $msg = '';
         foreach ($socialsDataset as $social) {
             $socialClass = "Amc" . ucfirst($social['class_name']) . "Social";

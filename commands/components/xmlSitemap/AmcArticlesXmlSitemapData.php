@@ -42,7 +42,7 @@ class AmcArticlesXmlSitemapData extends AmcXmlSitemapData {
         $list->setDateCompareField("publish_date");
         $list->setAutoGenerate(false);
         $list->addColumn("create_date");
-        $list->addColumn("publish_date");        
+        $list->addColumn("publish_date");
         if ($this->table == 'articles') {
             $articlesTables = ArticlesListData::getArticlesTables();
             foreach ($articlesTables as $articleTable) {
