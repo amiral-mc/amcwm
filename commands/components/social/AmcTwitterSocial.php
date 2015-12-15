@@ -58,7 +58,9 @@ class AmcTwitterSocial extends AmcSocial
 
         if (!$this->dontPost && $postMe) {
             $output = $this->tweet->post('statuses/update', array('status' => $myPostDataHeader . "\r\n" . $myPostDataLink));
-            //print_r($output);
+//            echo "Result: " ;
+//            print_r($output);
+//            echo PHP_EOL;
         } else {
             echo "Twitter: " . PHP_EOL;
             echo "\t Type: " . $data['type'] . PHP_EOL;

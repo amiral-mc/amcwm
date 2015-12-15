@@ -37,12 +37,13 @@ class AmcFacebookSocial extends AmcSocial {
         if($facebookPostToTwitter){
             $header = mb_substr($header, 0, 139 - mb_strlen($itemUrl));
         }
-        $postFields['message'] = $header;
-        $postFields['message'] .="\r\n";
-        $postFields['message'] .= $itemUrl;
-        // $postFields['picture'] = $itemImage;
+        $postFields['name'] = $header;
+        $postFields['link'] = $itemUrl;
+        if($itemImage){
+            $postFields['picture'] = $itemImage;
+        }
         //$postFields['type'] = 'link';
-        //$postFields['link'] = $itemUrl;
+        
         if (function_exists('curl_init') && !$this->dontPost) {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -57,7 +58,9 @@ class AmcFacebookSocial extends AmcSocial {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.5) Gecko/20041107 Firefox/1.0');
             $content = curl_exec($ch);
-            //print_r($content);
+//            echo "Result: " ;
+//            print_r($content);
+//            echo PHP_EOL;
             curl_close($ch);
         } else {
             echo 'Facebook' . PHP_EOL;
