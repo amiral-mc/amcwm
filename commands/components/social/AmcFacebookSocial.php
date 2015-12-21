@@ -39,9 +39,11 @@ class AmcFacebookSocial extends AmcSocial {
         }
         $postFields['name'] = $header;
         $postFields['link'] = $itemUrl;
+        $postFields['picture'] = "";
         if($itemImage){
             $postFields['picture'] = $itemImage;
         }
+        
         //$postFields['type'] = 'link';
         
         if (function_exists('curl_init') && !$this->dontPost) {
