@@ -2,8 +2,8 @@
 $mediaSettings = $this->module->appModule->mediaSettings;
 $options = $this->module->appModule->options;
 $menu = Yii::app()->request->getParam('menu');
-$categorySelect = Yii::app()->request->getParam('c');
-$id = Yii::app()->request->getParam('id');
+$categorySelect = (int)Yii::app()->request->getParam('c');
+$id = (int)Yii::app()->request->getParam('id');
 $urlParams = array();
 if($menu){
     $urlParams['menu']=$menu;
@@ -61,10 +61,7 @@ $this->beginClip('documentsList');
             ),
             'method' => 'get',
                 ));
-        ?>
-        <?php if($categorySelect):?>
-        <input type="hidden" name="c" value="<?php echo $categorySelect; ?>">
-        <?php endif;?>
+        ?>       
         <input type="text" class="search_box_input" name="q" value="<?php echo CHtml::encode(Yii::app()->request->getParam('q')); ?>">
         <input type="image" class="search_btn" value="" src="<?php echo Yii::app()->request->baseUrl; ?>/images/front/searchsubmit.gif">
         <?php $this->endWidget(); ?>

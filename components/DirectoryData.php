@@ -155,7 +155,8 @@ class DirectoryData extends ContentData {
      * @return void
      */
     private function _setKeywords($userInput) {
-        $userInput = stripslashes($userInput);
+        $userInput = str_replace(array('%'), '', $userInput);
+        $userInput = stripslashes($userInput);        
         $this->_keywords = array();
         if ($this->checkExtactMatch($userInput)) {
             $this->_keywords[0] = preg_replace('/[\^""\$]/', "", $userInput);

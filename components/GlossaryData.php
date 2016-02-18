@@ -122,6 +122,7 @@ class GlossaryData extends ContentData {
      * @return void
      */
     private function _setKeywords($userInput) {
+        $userInput = str_replace(array('%'), '', $userInput);
         $userInput = stripslashes($userInput);
         $this->_keywords = array();
         if ($this->checkExtactMatch($userInput)) {

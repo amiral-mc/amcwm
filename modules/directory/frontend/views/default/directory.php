@@ -1,8 +1,8 @@
 <?php
 $options = $this->module->appModule->options;
 $menu = Yii::app()->request->getParam('menu');
-$categorySelect = Yii::app()->request->getParam('c');
-$id = Yii::app()->request->getParam('id');
+$categorySelect = (int)Yii::app()->request->getParam('c');
+$id = (int)Yii::app()->request->getParam('id');
 $urlParams = array();
 if ($menu) {
     $urlParams['menu'] = $menu;
