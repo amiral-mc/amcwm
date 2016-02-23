@@ -71,6 +71,9 @@ class AmcSearchWidget extends PageContentWidget {
     public function createUrl($page = 1){
         
         $params = $this->searchRoute;
+        if(isset($this->searchRoute['ct'])){
+            $this->searchRoute['ct'] = CHtml::encode($this->searchRoute['ct']);
+        }
         $route = array_shift($params);
         return Html::createUrl($route, $params);
          

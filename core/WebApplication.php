@@ -116,7 +116,9 @@ class WebApplication extends CWebApplication {
         if (!isset($config['components']['request']['enableCookieValidation'])) {
             $config['components']['request']['enableCookieValidation'] = true;
         }
-
+        if (!isset($config['components']['request']['enableCsrfValidation'])) {
+            $config['components']['request']['enableCsrfValidation'] = true;
+        }
         if (!isset($config['components']['imageworkshop']['class'])) {
             $config['components']['imageworkshop']['class'] = "amcwm.vendors.PHPImageWorkshop.YiiImageWorkshop";
         }

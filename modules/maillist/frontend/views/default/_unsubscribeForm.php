@@ -2,7 +2,7 @@
     <?php
     $form = $this->beginWidget('CActiveForm', array(
         'id' => 'unsubscribe_form',
-        'action' => array("/maillist/default/unsubscribe"),
+        'action' => array("/maillist/default/unsubscribe", 'lang'=>AmcWm::app()->language),
         'enableAjaxValidation' => false,
         'enableClientValidation' => true,
         'clientOptions' => array(

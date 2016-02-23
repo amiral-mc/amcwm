@@ -13,7 +13,8 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class Controller extends CController {
+class Controller extends CController
+{
 
     /**
      * @var boolean default views in project , if wqual true then the current controller action view 
@@ -40,7 +41,8 @@ class Controller extends CController {
      * @access public
      * @return $void
      */
-    public function init() {
+    public function init()
+    {
         //        static $mysqlIni = false;
 //        if (!$mysqlIni) {
 //            $mysqlIni = true;
@@ -74,13 +76,22 @@ class Controller extends CController {
         parent::init();
     }
 
+    protected function beforeAction($action)
+    {
+        header("X-XSS-Protection: 1;mode=block");
+        header("X-Frame-Options: SAMEORIGIN");        
+        header("X-Content-Type-Options: nosniff");
+        return parent::beforeAction($action);
+    }
+
     /**
      * @todo need to review the algorithm and check forward module outside the backend or module is a virtual module
      * @access public
      * set current forward module
      * 
      */
-    public function getForwardModule() {
+    public function getForwardModule()
+    {
         $moduleId = Data::getForwardModParam();
         $forwardModules = amcwm::app()->acl->getForwardModules();
         $controllerModule = $this->getModule();
@@ -101,7 +112,8 @@ class Controller extends CController {
      * Set custom config 
      * @access private 
      */
-    private function setConfig() {
+    private function setConfig()
+    {
         try {
             $encodedConfig = Yii::app()->db->createCommand(sprintf("select config from configuration where content_lang = %s", Yii::app()->db->quoteValue(self::getCurrentLanguage())))->queryScalar();
             $config = unserialize(base64_decode($encodedConfig));
@@ -123,7 +135,8 @@ class Controller extends CController {
      * @param integer $statusCode the HTTP status code. Defaults to 302. See {@link http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html}
      * for details about HTTP status code.
      */
-    public function redirect($url, $terminate = true, $statusCode = 302) {
+    public function redirect($url, $terminate = true, $statusCode = 302)
+    {
         $redirect = $url;
         if (is_array($url)) {
             $route = $url[0];
@@ -157,7 +170,8 @@ class Controller extends CController {
     /**
      * @return array action filters
      */
-    public function filters() {
+    public function filters()
+    {
         return array(
             'accessControl', // perform access control for CRUD operations
         );
@@ -169,7 +183,8 @@ class Controller extends CController {
      * @todo add translate to action tables after correcting the transation concept for any acl tables
      * @return array access control rules
      */
-    public function accessRules() {
+    public function accessRules()
+    {
         $forward = $this->getForwardModule();
         $route = $this->getRoute();
         if ($this->getAction()->getId() == "translate") {
@@ -193,7 +208,8 @@ class Controller extends CController {
      * @access public
      * @return array      
      */
-    public function getLanguages() {
+    public function getLanguages()
+    {
         // $lang[''] = '';
         //array_merge($lang, Yii::app()->params['languages']);
         $langs = Yii::app()->params['languages'];
@@ -206,7 +222,8 @@ class Controller extends CController {
      * @access public
      * @return array      
      */
-    public function getTranslationLanguages() {
+    public function getTranslationLanguages()
+    {
         // $lang[''] = '';
         //array_merge($lang, Yii::app()->params['languages']);
         $langs = Yii::app()->params['languages'];
@@ -219,7 +236,8 @@ class Controller extends CController {
      * @access public
      * @return array      
      */
-    public function getCountries($addEmpty = false, $code = NULL, $contentLang = null) {
+    public function getCountries($addEmpty = false, $code = NULL, $contentLang = null)
+    {
         static $countries = NULL;
         if ($contentLang === null) {
             $contentLang = Controller::getContentLanguage();
@@ -242,7 +260,8 @@ class Controller extends CController {
         return $countries;
     }
 
-    protected static function setCurrentLanguage($currentLang = null) {
+    protected static function setCurrentLanguage($currentLang = null)
+    {
         $langParam = ($currentLang) ? $currentLang : Yii::app()->request->getParam('lang', $currentLang);
         if ($langParam) {
             self::$currentLang = $langParam;
@@ -287,16 +306,18 @@ class Controller extends CController {
         Yii::app()->setLanguage(self::$currentLang);
     }
 
-    public static function getCurrentLanguage() {
+    public static function getCurrentLanguage()
+    {
         if (!self::$currentLang) {
             self::setCurrentLanguage();
         }
         return self::$currentLang;
     }
 
-    public static function getContentLanguage() {
+    public static function getContentLanguage()
+    {
         $contentLang = null;
-        if(Yii::app()->hasComponent('user')){
+        if (Yii::app()->hasComponent('user')) {
             $contentLang = Yii::app()->user->getState('contentLang');
         }
         if (!$contentLang) {
@@ -310,7 +331,8 @@ class Controller extends CController {
      * @throws CException if the directory does not exist.
      * @access public
      */
-    public function setViewPath($path) {
+    public function setViewPath($path)
+    {
         $module = $this->getModule();
         if ($module === null) {
             Yii::app()->setViewPath($path);
@@ -319,7 +341,8 @@ class Controller extends CController {
         }
     }
 
-    public function getFlashMsg($container = array(), $jsAnimate = array('options' => array('opacity' => 1.0), 'duration' => 10000, 'animationMethod' => 'fadeOut', 'compelet' => null, 'beforeAnimate' => null), $jsPosition = CClientScript::POS_READY) {
+    public function getFlashMsg($container = array(), $jsAnimate = array('options' => array('opacity' => 1.0), 'duration' => 10000, 'animationMethod' => 'fadeOut', 'compelet' => null, 'beforeAnimate' => null), $jsPosition = CClientScript::POS_READY)
+    {
         $msg = '';
         if ($flashes = AmcWm::app()->user->getFlashes()) {
             $script = '';
@@ -365,7 +388,8 @@ class Controller extends CController {
      * @access public
      * @return void
      */
-    public function actionAjax($do) {
+    public function actionAjax($do)
+    {
         $methodName = "ajax{$do}";
         if (method_exists($this, $methodName)) {
             $this->$methodName();
@@ -392,7 +416,8 @@ class Controller extends CController {
      * @see renderPartial
      * @see getLayoutFile
      */
-    public function render($view, $data = null, $return = false) {
+    public function render($view, $data = null, $return = false)
+    {
         //$this->beforeRenderMethod($view, $data);
         $beforeMethod = "beforeRender" . ucfirst($this->getAction()->id);
         if (method_exists($this, $beforeMethod)) {
@@ -417,7 +442,8 @@ class Controller extends CController {
      * @access public
      * @return void
      */
-    public function daysNumbersList() {
+    public function daysNumbersList()
+    {
         $days = array();
         for ($i = 1; $i <= 31; $i++) {
             if ($i <= 9) {
@@ -433,7 +459,8 @@ class Controller extends CController {
      * @access public
      * @return void
      */
-    public function hoursList() {
+    public function hoursList()
+    {
         $list = array();
         for ($i = 0; $i <= 23; $i++) {
             if ($i <= 9) {
@@ -449,7 +476,8 @@ class Controller extends CController {
      * @access public
      * @return void
      */
-    public function minsList() {
+    public function minsList()
+    {
         $list = array();
         for ($i = 0; $i <= 59; $i++) {
             if ($i <= 9) {
@@ -466,7 +494,8 @@ class Controller extends CController {
      * @access public
      * @return void
      */
-    public function getDaysList() {
+    public function getDaysList()
+    {
         $rows = array(
             array('id' => '6'),
             array('id' => '0'),
@@ -489,7 +518,8 @@ class Controller extends CController {
      * @access public
      * @return array
      */
-    public function getYearsList($from = 1960) {
+    public function getYearsList($from = 1960)
+    {
         $years = array();
         $currentYear = date('Y');
         for ($year = $from; $year <= $currentYear; $year++) {
@@ -503,7 +533,8 @@ class Controller extends CController {
      * @access public
      * @return void
      */
-    public function getMonthsList() {
+    public function getMonthsList()
+    {
         return Yii::app()->getLocale()->getMonthNames();
     }
 
@@ -512,7 +543,8 @@ class Controller extends CController {
      * @access public
      * @return void
      */
-    public function getCurrencies() {
+    public function getCurrencies()
+    {
         $countries = CHtml::listData(Yii::app()->db->createCommand("select currency_code from currency")->queryAll(), 'currency_code', "currency_code");
         return $countries;
     }
