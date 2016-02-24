@@ -112,6 +112,10 @@ class WebApplication extends CWebApplication {
         if (!isset($config['components']['session']['cookieParams']['httponly'])) {
             $config['components']['session']['cookieParams']['httponly'] = true;
         }
+        
+        if (!isset($config['components']['request']['class'])) {
+            $config['components']['request']['class'] = "HttpRequest";
+        }
 
         if (!isset($config['components']['request']['enableCookieValidation'])) {
             $config['components']['request']['enableCookieValidation'] = true;
