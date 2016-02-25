@@ -112,8 +112,15 @@ class ESelect2 extends CInputWidget {
                     $this->initSelection['text'] = $this->value;
                 }
                 if (!$this->useSelect) {
+                    if($this->initSelection['id'] === null){
+                        $this->initSelection['id'] = '';
+                    }
+                    if($this->initSelection['text'] === null){
+                        $this->initSelection['text'] = '';
+                    }
+                    $data = CJSON::encode($this->initSelection);
                     $this->defaultOptions["initSelection"] = "js:function (element, callback) {
-                        var data = {id:'{$this->initSelection['id']}', text:'{$this->initSelection['text']}'};
+                        var data = {$data};
                         callback(data);
                     }";
                 }

@@ -211,7 +211,7 @@ class HomeFrontendController extends FrontendController
     public function actionDownload($f)
     {
         $ds = DIRECTORY_SEPARATOR;
-        $f = trim(str_replace('\\', '/', $f), "/..\\");
+        $f = trim(str_replace('\\', '/', $f), "/");        
         $webroot = Yii::getPathOfAlias("webroot");
         $paths = array(
             'files',
