@@ -23,6 +23,7 @@ return array(
                 'showSubSections' => false,
                 'applySubSectionViewLinks' => false,
                 'showMixed' => false,
+                'productsAsGallery' => false,
             ),
         ),
     ),

@@ -271,7 +271,7 @@ class SectionArticlesData extends Dataset {
         $cols = $this->generateColumns();
         $wheres = $this->generateWheres();
         $this->query = sprintf(
-                "select t.section_id , tt.section_name, image_ext {$cols} from sections t
+                "select t.section_id , tt.*, image_ext {$cols} from sections t
                  inner join sections_translation tt on t.section_id = tt.section_id
             {$this->joins}
             where t.published = %d
@@ -328,7 +328,11 @@ class SectionArticlesData extends Dataset {
                 $index++;
             }
             $items[$index]['sectionId'] = $section["section_id"];
-            $items[$index]['sectionTitle'] = $section["section_name"];            
+            $items[$index]['sectionTitle'] = $section["section_name"];     
+            if (!empty($section['meta_description'])) {
+                $items[$index]['metaDescription'] = $section["meta_description"];            
+            }
+            
             foreach ($forwardModules as $moduleId => $forwardModule) {
                 if ($this->getModuleName() == key($forwardModule)) {
                     $urlParams['module'] = $moduleId;

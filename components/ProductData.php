@@ -426,9 +426,7 @@ class ProductData extends Dataset {
             $cols = $this->generateColumns();
             $wheres = $this->generateWheres();
             $currentDate = date("Y-m-d H:i:s");
-            $this->query = sprintf("SELECT t.*,
-                    tt.product_brief, tt.product_name,
-                    tt.product_specifications, tt.product_description, tt.tags
+            $this->query = sprintf("SELECT t.*,tt.*                    
                     $cols 
                 FROM products t
                 JOIN products_translation tt ON t.product_id = tt.product_id

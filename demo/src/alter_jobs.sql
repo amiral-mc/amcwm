@@ -1,1 +1,0 @@
-alter table jobs add `allow_request` boolean DEFAULT '1';

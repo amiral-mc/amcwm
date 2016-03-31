@@ -26,8 +26,7 @@ class SearchWidget extends AmcSearchWidget {
     public function setContentData() {        
         $output = "";
         $searchTabs = array();
-        $activeTab = $this->contentType . "SearchTab";
-        
+        $activeTab = $this->contentType . "SearchTab";        
         $this->searchRoute['q'] = $this->keywords;
         if ($this->advancedParams['contentType']['news'] && isset($this->routers['news'])) {
             $this->searchRoute['ct'] = 'news';
@@ -57,8 +56,15 @@ class SearchWidget extends AmcSearchWidget {
             $this->searchRoute['ct'] = 'images';
             $searchTabs["imagesSearchTab"] = array('title' => AmcWm::t("{$this->basePath}.core", 'Images'));
             $searchTabs["imagesSearchTab"]['url'] = $this->createUrl();
-        }                    
+        }                     
+        if(!isset($searchTabs[$activeTab])){
+            $this->contentType = "news";
+            $this->searchRoute['ct'] = 'news';
+            unset($searchTabs[$activeTab]);
+           $activeTab = "newsSearchTab";
 
+        }
+        
         if ($this->items['pager']['count']) {
             $articlesOutput = '<table border="0" cellspacing="1" cellpadding="2" width="100%">';
             $articlesOutput .= '<tr>';
@@ -99,7 +105,6 @@ class SearchWidget extends AmcSearchWidget {
                 $articlesOutput .= CHtml::closeTag('td') . "\n";
                 $articlesOutput .= CHtml::closeTag('tr') . "\n";
             }
-
             $articlesOutput .= CHtml::closeTag('table') . "\n";
             $pages = new CPagination($this->items['pager']['count']);
             $pages->setPageSize($this->items['pager']['pageSize']);
@@ -116,7 +121,6 @@ class SearchWidget extends AmcSearchWidget {
             $articlesOutput .= '</table>';
             $searchTabs[$activeTab]['content'] = $articlesOutput;
         }
-//        die(print_r($searchTabs));
 //        $this->contentData =  CHtml::openTag('div', $this->htmlOptions) . "\n";
         $this->contentData .= $this->widget('TabView', array('activeTab' => $activeTab, 'tabs' => $searchTabs), true);
 //        $this->contentData .= CHtml::closeTag('div') . "\n";

@@ -152,6 +152,7 @@ class SearchData extends SearchContentData {
      * @return void
      */
     private function _setKeywords($userInput) {
+        $userInput = str_replace(array('%'), '', $userInput);
         $userInput = stripslashes($userInput);
         $this->keywords = array();
         if ($this->checkExtactMatch($userInput)) {
