@@ -72,6 +72,6 @@ return array(
     'category_settings_radio_showSubSections_' => 'عرض الاقسام الفرعيه',
     'category_settings_radio_applySubSectionViewLinks_' => 'عرض الاقسام الفرعيه علي هيئة روابط',
     'category_settings_radio_showMixed_' => 'عرض الاقسام الفرعيه والمقالات',    
-    '' => '',
+    'category_settings_radio_productsAsGallery_' => 'عرض المنتجات كمعرض صور',
     '' => '',
 );

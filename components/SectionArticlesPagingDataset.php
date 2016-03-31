@@ -140,6 +140,9 @@ class SectionArticlesPagingDataset extends PagingDataset {
             $data['sectionId'] = $section['sectionId'];
             $data['sectionTitle'] = $section['sectionTitle'];
             $data['sectionDescription'] = $section['description'];
+            if(!empty($section['metaDescription'])){
+                $data['metaDescription'] = $section['metaDescription'];    
+            }            
             $data['parentSection'] = $section['parentSection'];            
             $data['sectionImage'] = $section['sectionImage'];
         }

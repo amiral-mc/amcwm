@@ -477,8 +477,7 @@ class ArticleData extends Dataset {
             $currentDate = date("Y-m-d H:i:s");
 
             $this->query = sprintf("select t.* , 
-                    tt.article_detail , tt.article_header, 
-                    tt.article_pri_header, tt.image_description, tt.tags  
+                    tt.*
                     , pa.page_img as parent_img
                     $cols 
                 from articles t
