@@ -148,14 +148,14 @@ class ProductsListData extends SiteData {
                 if (is_array($this->sectionId)) {
                     $sections = $this->sectionId;
                     foreach ($sections as $section) {
-                        $sectionList = Data::getInstance()->getSectionSubIds($section);
+                        $sectionList = Data::getInstance()->getSectionIds($section);
                         $sectionList[] = (int) $section;
                         if (is_array($sectionList) && $sectionList) {
                             $sectionsList = array_merge($sectionsList, $sectionList);
                         }
                     }
                 } else {
-                    $sectionsList = Data::getInstance()->getSectionSubIds($this->sectionId);
+                    $sectionsList = Data::getInstance()->getSectionIds($this->sectionId);
                     $sectionsList[] = (int) $this->sectionId;
                 }
                 $this->addWhere("(t.section_id IN (" . implode(',', $sectionsList) . "))");
