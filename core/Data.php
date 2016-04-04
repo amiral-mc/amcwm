@@ -35,6 +35,12 @@ class Data {
      * @var array 
      */
     private $_sections = array();
+    
+    /**
+     * Sections ids array used in the system
+     * @var array 
+     */
+    private $_sectionsIds = array();
 
     /**
      * Constructor, this Data implementation is a Singleton.
@@ -44,12 +50,21 @@ class Data {
      * @throws Error Error if you call the constructor directly
      */
     private function __construct() {
-
+        $sectionsIds = array();
         foreach (Yii::app()->params['languages'] as $language => $languageName) {
             $this->_sections[$language] = array();
-            $this->_setSections($language, $this->_sections[$language]);
-            //$this->_setSections($language);
+            
+            $this->_setSections($language, $this->_sections[$language], $sectionsIds);
         }
+                
+        foreach ($sectionsIds as $sectionId=>$subSections){
+            $this->_sectionsIds[$sectionId] = $subSections;
+            foreach ($subSections as $subSectionId){
+                if(isset($sectionsIds[$subSectionId])){
+                    $this->_sectionsIds[$sectionId] = $this->_sectionsIds[$sectionId] + $sectionsIds[$subSectionId];
+                }
+            }
+        }        
     }
 
     /**
@@ -95,6 +110,21 @@ class Data {
 
     /**
      * 
+     * Get sub-sections ids for a given section
+     * @todo need to enhance this method
+     * @access public
+     * @param string $id
+     * @return array
+     */
+    public function getSectionIds($id) {
+        if (isset($this->_sectionsIds[$id])) {
+            return $this->_sectionsIds[$id];
+        }
+    }
+
+    
+    /**
+     * 
      * Get sub-sections ids as array list for the given section $id
      * @todo need to enhance this method
      * @access public
@@ -102,7 +132,7 @@ class Data {
      * @return array
      */
     public function getSectionSubIds($id, $sections = array(), &$subs = array()) {
-        $siteLanguage = Yii::app()->user->getCurrentLanguage();
+        $siteLanguage = Yii::app()->user->getCurrentLanguage();        
         if (!$sections && isset($this->_sections[$siteLanguage][$id]['childs']) && $this->_sections[$siteLanguage][$id]['childs']) {
             $sections = $this->_sections[$siteLanguage][$id]['childs'];
         }
@@ -142,10 +172,8 @@ class Data {
     public function getSection($id) {
         $section = array();
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
-        if (isset($this->_sections[$siteLanguage])) {
-            if (isset($this->_sections[$siteLanguage][$id])) {
-                $section = $this->_sections[$siteLanguage][$id];
-            }
+        if (isset($this->_sections[$siteLanguage][$id])) {
+            $section = $this->_sections[$siteLanguage][$id];
         }
         return $section;
     }
@@ -183,7 +211,7 @@ class Data {
      * @access private
      * @return void
      */
-    private function _setSections($siteLanguage, &$sectuonsTree = array(), $parent = null) {
+    private function _setSections($siteLanguage, &$sectuonsTree = array(), &$sectionIds = array(), $parent = null) {
         if ($parent) {
             $parentWhere = " and s.parent_section = {$parent}";
         } else {
@@ -206,7 +234,10 @@ class Data {
             foreach ($sections As $section) {
                 $sectuonsTree[$section['section_id']]['data'] = $section;
                 $sectuonsTree[$section['section_id']]['childs'] = array();
-                $this->_setSections($siteLanguage, $sectuonsTree[$section['section_id']]['childs'], $section['section_id']);
+                if($parent){
+                    $sectionIds[$parent][$section['section_id']] = $section['section_id'];
+                }
+                $this->_setSections($siteLanguage, $sectuonsTree[$section['section_id']]['childs'], $sectionIds, $section['section_id']);
             }
         }
     }
