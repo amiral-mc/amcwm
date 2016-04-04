@@ -35,7 +35,7 @@ class ProductsCategoryBreadcrumbs extends BreadcrumbsData {
             if (!$appended) {
                 $this->setPath($section['parent_section']);
             }
-            $this->path[] = array("label" => $section["section_name"], "url" => array(0 => $this->route['0'], "id" => $section["section_id"]));
+            $this->path[] = array("label" => $section["section_name"], "url" => array(0 => $this->route['0'], "id" => $section["section_id"], "title" => $section["section_name"]));
         }
     }
 
