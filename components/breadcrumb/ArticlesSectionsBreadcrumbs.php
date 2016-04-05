@@ -41,6 +41,7 @@ class ArticlesSectionsBreadcrumbs extends BreadcrumbsData {
             $routeParams = $this->route;
             array_shift($routeParams);
             $routeParams['id'] = $section["section_id"];
+            $routeParams['title'] = $section["section_name"];
             array_unshift($routeParams, $this->route[0]);
             $this->path[] = array("label" => $section["section_name"], "url" => $routeParams);
         }
