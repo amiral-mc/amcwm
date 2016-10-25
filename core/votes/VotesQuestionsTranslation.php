@@ -102,22 +102,23 @@ class VotesQuestionsTranslation extends ChildTranslatedActiveRecord {
 
     /**
      * Get poll results for the current model
-     * @param int $pollId
      * @access public
      * @return array
      */
     public function getResults() {
-        $poll = array("total" => 0, "votes" => array());
-        foreach ($this->votesOptions as $option) {
-            $optionCount  = (int)Yii::app()->db->createCommand("select count(*) from voters where option_id = " . (int) $option->option_id)->queryScalar();
-            if ($optionCount) {
-                $poll['total'] += $optionCount;
-                $poll['votes'][$option->option_id]['votes'] = $optionCount;
-            } else {
-                $poll['votes'][$option->option_id]['votes'] = 0;
-            }
-            $poll['votes'][$option->option_id]['option'] = $option->value;
+        $optionsCounts = Yii::app()->db->createCommand()
+                ->select("count(voted_on) votes, value AS `option`, o.option_id")
+                ->from("votes_options o")
+                ->join("votes_questions_translation v", "o.ques_id = v.ques_id and o.content_lang = v.content_lang")
+                ->leftJoin('voters vt', 'o.option_id = vt.option_id')                
+                ->where("v.ques_id =:id AND o.content_lang=:lang", array(":id"=> $this->ques_id, ":lang"=> $this->content_lang))
+                ->group('o.option_id')
+                ->queryAll();
+       $poll = array("total" => 0, "votes" => array()); 
+        foreach ($optionsCounts as $optionCount) {
+                $poll['total'] += $optionCount['votes'];
+                $poll['votes'][$optionCount['option_id']] = $optionCount;
         }
         return $poll;
-    }
+    }    
 }

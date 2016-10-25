@@ -10,13 +10,15 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class Votes {
+class Votes
+{
 
     /**
      *
      * @var string inner widget used for results and form 
      */
     protected $innerWidget = '';
+
     /**
      * The dataset of current active vote 
      * @var Array
@@ -63,7 +65,8 @@ class Votes {
      * @access protected
      * @throws Error Error if you call the constructor directly or PDO could not connect to MySQL server
      */
-    protected function __construct(Controller $controller, $innerWidget = 'amcwm.core.votes.VotesWidget', $id = "votes") {
+    protected function __construct(Controller $controller, $innerWidget = 'amcwm.core.votes.VotesWidget', $id = "votes")
+    {
         $this->innerWidget = $innerWidget;
         $date = date("Y-m-d H:i:s");
         $this->id = $id;
@@ -76,25 +79,26 @@ class Votes {
          where t.published = 1 
          and t.publish_date <='$date' 
          and tt.content_lang = %s
-         and (t.expire_date >=NOW() or t.expire_date is null)                     
+         and (t.expire_date >='$date' or t.expire_date is null)                     
          order by creation_date desc limit 0, 1
         ", Yii::app()->db->quoteValue($siteLanguage));
-        $question = Yii::app()->db->createCommand($query)->queryRow();
-        if (count($question)) {
-            $query = sprintf("select o.value, o.option_id
-            from votes_options o 
-            where o.ques_id =%d and o.content_lang = %s
-        ", $question['id'], Yii::app()->db->quoteValue($siteLanguage));
-            $question['options'] = Yii::app()->db->createCommand($query)->queryAll();
-            if (count($question['options']) > 1) {
-                $i = 0;
-                foreach ($question['options'] as $option) {
-                    $question['optionsList'][$option['option_id']] = $option['value'];
-                    $i++;
+        $this->data = Yii::app()->db->createCommand($query)->queryRow();
+        if ($this->data) {
+            $options = Yii::app()->db->createCommand()
+                    ->select("count(voted_on) votes, value AS `option`, o.option_id")
+                    ->from("votes_options o")
+                    ->join("votes_questions_translation v", "o.ques_id = v.ques_id and o.content_lang = v.content_lang")
+                    ->leftJoin('voters vt', 'o.option_id = vt.option_id')
+                    ->where("v.ques_id =:id AND o.content_lang=:lang", array(":id" => $this->data['id'], ":lang" => $siteLanguage))
+                    ->group('o.option_id')
+                    ->queryAll();
+            if ($options) {
+                $this->data['results'] = array("total" => 0, "votes" => array()); 
+                foreach ($options as $option) {
+                    $this->data['optionsList'][$option['option_id']] = $option['option'];
+                    $this->data['results']['total'] += $option['votes'];
+                    $this->data['results']['votes'][$option['option_id']] = $option;
                 }
-                $this->data = $question;
-                $quesModel = VotesQuestionsTranslation::model()->findByPk(array("ques_id" => $question['id'], 'content_lang' => $siteLanguage));
-                $this->data['results'] = $quesModel->getResults();
             }
         }
     }
@@ -104,7 +108,8 @@ class Votes {
      * @access public
      * @return array 
      */
-    public function getData() {
+    public function getData()
+    {
         return $this->data;
     }
 
@@ -113,7 +118,8 @@ class Votes {
      * @access public
      * @return boolean 
      */
-    public function save() {
+    public function save()
+    {
         if (isset($_POST['VoteForm']) && isset($_POST['VoteForm']['option'])) {
             $this->voteForm->attributes = $_POST['VoteForm'];
             $voter = new Voters();
@@ -161,7 +167,8 @@ class Votes {
      * @access public
      * @return Votes the Singleton instance of the Votes
      */
-    public static function &getInstance(Controller $controller, $innerWidget = 'amcwm.core.votes.VotesWidget') {
+    public static function &getInstance(Controller $controller, $innerWidget = 'amcwm.core.votes.VotesWidget')
+    {
         if (self::$_instance == NULL) {
             self::$_instance = new self($controller, $innerWidget);
         }
@@ -176,7 +183,8 @@ class Votes {
      * @access public
      * @return string
      */
-    public function viewResults($resultMode = false, $return = false, $displayResultBar = true) {
+    public function viewResults($resultMode = false, $return = false, $displayResultBar = true)
+    {
         $output = null;
         if (count($this->data)) {
             if ($this->data['suspend']) {
@@ -190,7 +198,7 @@ class Votes {
                 'parentId' => $this->id,
                 'model' => $this->voteForm,
                 'class' => 'voting_widget',
-                'displayResultBar'=>$displayResultBar,
+                'displayResultBar' => $displayResultBar,
                 'resultClass' => 'pollContainer',
                 'formClass' => 'form',
                 'resultMode' => $resultMode,
@@ -198,12 +206,11 @@ class Votes {
                 'resultAction' => array('/site/voteResults', 'lang' => Controller::getCurrentLanguage()),
                 'items' => $this->data,
             );
-            if($return){
-               $output =  $this->controller->widget($this->innerWidget, $voteOptions, true);
-            }
-            else{
+            if ($return) {
+                $output = $this->controller->widget($this->innerWidget, $voteOptions, true);
+            } else {
                 $this->controller->widget($this->innerWidget, $voteOptions);
-            }            
+            }
         }
         return $output;
     }
@@ -213,7 +220,8 @@ class Votes {
      * @access public
      * @return boolean
      */
-    public function isVoted() {
+    public function isVoted()
+    {
         if (Yii::app()->user->isGuest) {
             $voted = isset(Yii::app()->request->cookies["votes_{$this->data['id']}"]);
         } else {
@@ -234,10 +242,11 @@ class Votes {
      * @access public
      * @return string
      */
-    public function view($return = false, $displayResultBar = true) {
+    public function view($return = false, $displayResultBar = true)
+    {
         $returnOutput = null;
         $output = CHtml::openTag('div', array('id' => $this->id));
-        $output .= $this->viewResults(false, $return , $displayResultBar);
+        $output .= $this->viewResults(false, $return, $displayResultBar);
         $output .= CHtml::closeTag('div');
         if (count($this->data)) {
             $output .= '<div class="voting_widget_action" style="display:none;" id="' . $this->id . '_inside_show_form">';

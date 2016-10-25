@@ -79,7 +79,7 @@ class Controller extends CController
     protected function beforeAction($action)
     {
         header("X-XSS-Protection: 1;mode=block");
-        header("X-Frame-Options: SAMEORIGIN");        
+        header("X-Frame-Options: SAMEORIGIN");
         header("X-Content-Type-Options: nosniff");
         return parent::beforeAction($action);
     }
@@ -115,8 +115,20 @@ class Controller extends CController
     private function setConfig()
     {
         try {
-            $encodedConfig = Yii::app()->db->createCommand(sprintf("select config from configuration where content_lang = %s", Yii::app()->db->quoteValue(self::getCurrentLanguage())))->queryScalar();
-            $config = unserialize(base64_decode($encodedConfig));
+            $cache = Yii::app()->getComponent('cache');
+            $config = null;
+            if ($cache !== NULL) {
+                    $config = unserialize($cache->get("configuration"));
+                    if ($config == null) {
+                        $encodedConfig = Yii::app()->db->createCommand(sprintf("select config from configuration where content_lang = %s", Yii::app()->db->quoteValue(self::getCurrentLanguage())))->queryScalar();    
+                        $config = unserialize(base64_decode($encodedConfig));                        
+                        $cache->set('configuration', serialize($config), Yii::app()->params["cacheDuration"]["static"]);
+                    } 
+            }
+            else {
+                $encodedConfig = Yii::app()->db->createCommand(sprintf("select config from configuration where content_lang = %s", Yii::app()->db->quoteValue(self::getCurrentLanguage())))->queryScalar();    
+                $config = unserialize(base64_decode($encodedConfig));
+            }                       
             if (is_array($config)) {
                 Yii::app()->setParams($config);
             }

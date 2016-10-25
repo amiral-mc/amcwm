@@ -10,14 +10,16 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
+class AmcConfigurationController extends BackendController
+{
 
-class AmcConfigurationController extends BackendController {
-    
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $this->render('view');
     }
 
-    public function actionUpdate() {
+    public function actionUpdate()
+    {
         $model = new ConfigurationForm();
 
         $configProperties = AmcWm::app()->params['configProperties'];
@@ -43,40 +45,45 @@ class AmcConfigurationController extends BackendController {
 
                 $confQueryNew = array();
                 foreach ($languages as $lang => $name) {
-                    
+
                     $formElements = $_POST["ConfigurationForm"]["configProperties"][$lang];
                     if (count($formElements)) {
                         foreach ($formElements as $element => $value) {
                             $confDataArray['custom']['front']['site'][$element] = $value;
                         }
                         $config = base64_encode(serialize($confDataArray));
-                    }else{
+                    } else {
                         $config = '';
                     }
-                    
+
 
                     $confQuery = sprintf("select count(*) from configuration where content_lang = '$lang'");
                     $issetData = AmcWm::app()->db->createCommand($confQuery)->queryScalar();
-                    if($issetData == 0){
+                    if ($issetData == 0) {
                         $confQueryNew[] = sprintf("insert into `configuration` (`config`, content_lang) values(%s, %s) "
                                 , AmcWm::app()->db->quoteValue($config)
                                 , AmcWm::app()->db->quoteValue($lang)
                         );
-                    }else{
+                    } else {
                         $confQueryNew[] = sprintf("update `configuration` set `config` = %s where content_lang = %s "
                                 , AmcWm::app()->db->quoteValue($config)
                                 , AmcWm::app()->db->quoteValue($lang)
                         );
                     }
                 }
-                
-                if(count($confQueryNew)){
+
+                if (count($confQueryNew)) {
                     AmcWm::app()->db->createCommand(implode(";", $confQueryNew))->execute();
+                    $cache = Yii::app()->getComponent('cache');
+                    if ($cache !== NULL) {
+                        $cache->delete("configuration");
+                    }
                 }
-                AmcWm::app()->user->setFlash('success', array('class' => 'flash-success', 'content' =>AmcWm::t('msgsbase.core','Configuration has been updated successfully')));
+                AmcWm::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t('msgsbase.core', 'Configuration has been updated successfully')));
                 $this->redirect(array('index'));
             }
         }
         $this->render('update', array('model' => $model, 'configProperties' => $configProperties));
     }
+
 }
