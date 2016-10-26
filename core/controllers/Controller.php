@@ -118,12 +118,16 @@ class Controller extends CController
             $cache = Yii::app()->getComponent('cache');
             $config = null;
             if ($cache !== NULL) {
-                    $config = unserialize($cache->get("configuration"));
-                    if ($config == null) {
+                    $configCache = unserialize($cache->get("configuration"));
+                    if($configCache == null){
+                        $configCache = array();
+                    }
+                    if (!isset($config[self::getCurrentLanguage()])) {                        
                         $encodedConfig = Yii::app()->db->createCommand(sprintf("select config from configuration where content_lang = %s", Yii::app()->db->quoteValue(self::getCurrentLanguage())))->queryScalar();    
-                        $config = unserialize(base64_decode($encodedConfig));                        
-                        $cache->set('configuration', serialize($config), Yii::app()->params["cacheDuration"]["static"]);
-                    } 
+                        $configCache[self::getCurrentLanguage()][self::getCurrentLanguage()] = unserialize(base64_decode($encodedConfig));                        
+                        $cache->set('configuration', serialize($configCache[self::getCurrentLanguage()]), Yii::app()->params["cacheDuration"]["static"]);
+                    }                     
+                    $config = $configCache[self::getCurrentLanguage()];
             }
             else {
                 $encodedConfig = Yii::app()->db->createCommand(sprintf("select config from configuration where content_lang = %s", Yii::app()->db->quoteValue(self::getCurrentLanguage())))->queryScalar();    
