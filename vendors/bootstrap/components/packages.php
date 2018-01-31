@@ -8,9 +8,8 @@
  *
  * @author Ruslan Fadeev <fadeevr@gmail.com>
  * copid from http://yiibooster.clevertech.biz/
- * @var MyBootstrap $this
+ * @var Bootstrap $this
  */
-$cssAppendName = ($this->getOrientation() == "rtl") ? ".rtl" : "";
 return array(
     //widgets start
     'datepicker' => array(
@@ -43,29 +42,10 @@ return array(
             ),
         
     ),
-    'bootstrap' => array(
-        'baseUrl' => $this->getAssetsUrl(),
-        'js' => array(YII_DEBUG ? 'js/bootstrap.js' : 'js/bootstrap.min.js'),
-        'css' => array(YII_DEBUG ? "css/bootstrap{$cssAppendName}.css" : "css/bootstrap{$cssAppendName}.min.css"),
-        'depends' => array('jquery')
-    ),
-                
-    'bootstrap.responsive' => array(
-        'baseUrl' => $this->getAssetsUrl(),
-        'css' => array(YII_DEBUG ? "css/bootstrap-responsive{$cssAppendName}.css" : "css/bootstrap-responsive{$cssAppendName}.min.css"),
-        'depends' => array('boootstrap')
-    ),
     'timepicker' => array(
         'baseUrl' => $this->getAssetsUrl() . '/bootstrap-timepicker',
         'js' => array(YII_DEBUG ? 'js/bootstrap-timepicker.js' : 'js/bootstrap-timepicker.min.js'),
         'css' => array(YII_DEBUG ? 'css/bootstrap-timepicker.css' : 'css/bootstrap-timepicker.min.css'),
-        'depends' => array('bootstrap')
-    ),
-    
-    'lightbox' => array(
-        'baseUrl' => $this->getAssetsUrl() . '/bootstrap-lightbox',
-        'js' => array(YII_DEBUG ? 'js/bootstrap-lightbox.js' : 'js/bootstrap-lightbox.min.js'),
-        'css' => array(YII_DEBUG ? 'css/bootstrap-lightbox.css' : 'css/bootstrap-lightbox.min.css'),
         'depends' => array('bootstrap.js')
     ),
 );
