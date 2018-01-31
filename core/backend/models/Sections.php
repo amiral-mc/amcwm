@@ -243,11 +243,7 @@ class Sections extends ParentTranslatedActiveRecord {
             unlink($dataFile);
         }
         $info = new SocialInfo('sections', 1 , $this->section_id);     
-        $info->saveSocial($this->socialIds);
-        $dataFile = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR . "data.bin";
-        if(is_file($dataFile)){
-            unlink($dataFile);
-        }
+        $info->saveSocial($this->socialIds);       
         parent::afterSave();
     }
 
