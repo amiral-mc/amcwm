@@ -553,7 +553,7 @@ class AmcDirectoryController extends BackendController {
             $person->users->published = 1;
             $person->users->role_id = amcwm::app()->acl->getRoleId(Acl::REGISTERED_ROLE);
             $password = $this->generatePassword();
-            $person->users->passwd = md5($password);
+            $person->users->passwd = CPasswordHelper::hashPassword($password);
             $person->save();
             $person->users->user_id = $person->person_id;
             $person->users->save();

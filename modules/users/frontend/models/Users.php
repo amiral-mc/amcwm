@@ -68,7 +68,7 @@ class Users extends ActiveRecord {
             array('username', 'length', 'max' => 65, 'min' => 4),
             array('username', 'UserCharacters'),
             array('username', 'UserExist', 'errorMessage' => 'Username already exist, please choose another username'),
-            array('passwd', 'length', 'max' => 32, 'min' => 8),
+            array('passwd', 'length', 'max' => 255, 'min' => 8),
             //array('role_id', 'VaildateSystemUser', 'on' => 'update' ,'errorMessage'=>AmcWm::t("msgsbase.core",'Can not change system user')),
             array('role_id', 'VaildateSystemUser', 'on' => 'update', 'errorMessage' => AmcWm::t("msgsbase.core", 'Can not change system user')),
             array('is_system', 'default',
@@ -177,7 +177,7 @@ class Users extends ActiveRecord {
         $resetAttributes = array(
             'user_id' => $this->user_id,
             'reset_date' => date("Y-m-d"),
-            'reset_key' => sprintf('%x', crc32(uniqid(md5("{$this->person->email}{$this->user_id}{$reset->reset_date}") . ".", true)))
+            'reset_key' => hash("sha512","{$this->person->email}{$this->user_id}{$reset->reset_date}"),
         );
         $reset->attributes = $resetAttributes;        
         if ($reset->validate()) {
@@ -193,7 +193,7 @@ class Users extends ActiveRecord {
         if (parent::beforeSave()) {
             $userParams = Yii::app()->request->getParam('Users');
             if (isset($userParams['passwd']) && trim($userParams['passwd']) != '') {
-                $this->setAttribute('passwd', md5($this->passwd));
+                $this->setAttribute('passwd', CPasswordHelper::hashPassword($this->passwd));
             }
         }
         return true;

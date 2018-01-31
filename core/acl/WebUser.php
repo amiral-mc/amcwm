@@ -59,22 +59,22 @@ class WebUser extends CWebUser {
     }
 
     /**
-     * login to system using the given $userName and $password
-     * @param string $userName
+     * login to system using the given $username and $password
+     * @param string $username
      * @param string $password
      * @return int
      */
-    public function authenticate($userName, $password) {
-        if ($userName && $password) {
+    public function authenticate($username, $password) {
+        if ($username && $password) {
             $statement = sprintf("
-                    select u.published, u.role_id, u.user_id user_id, u.username, p.email
+                    select u.published, u.role_id, u.user_id user_id, u.username, u.passwd, p.email
                     from users u
                     inner join persons p on u.user_id = p.person_id
-                    where u.passwd = %s and u.username =%s
-                ", Yii::app()->db->quoteValue(md5($password)), Yii::app()->db->quoteValue($userName));
+                    where u.username =%s
+                ", Yii::app()->db->quoteValue($username));            
             $record = Yii::app()->db->createCommand($statement)->queryRow();
             $errorCode = UserIdentity::ERROR_USERNAME_INVALID;
-            if (is_array($record)) {
+            if (is_array($record) && Data::getInstance()->verifyPassword($password, $record['passwd'], $username)) {
                 $this->setId($record['user_id']);
                 $log = new LogManager();
                 $lastLogIp = $log->getLastIP();
@@ -254,7 +254,7 @@ class WebUser extends CWebUser {
 
     /**
      * This method is called after the user is successfully logged in.
-     * You may override this method to do some postprocessing (e.g. log the user
+     * You may override this method to do some post-processing (e.g. log the user
      * login IP and time; load the user permission information).
      * @param boolean $fromCookie whether the login is based on cookie.
      * @since 1.1.3

@@ -1,0 +1,2 @@
+alter table users change passwd passwd varchar(255);
+alter table reset_passwods change reset_key reset_key varchar(255);

@@ -92,7 +92,7 @@ class ResetPasswordForm extends CFormModel {
     }
 
     public function savePasswd() {
-        $this->person->users->setAttribute('passwd', md5($this->passwd));
+        $this->person->users->setAttribute('passwd', CPasswordHelper::hashPassword($this->passwd));
         $this->person->users->save();
         ResetPasswods::model()->deleteAllByAttributes(array('user_id' => $this->person->users->user_id));
     }

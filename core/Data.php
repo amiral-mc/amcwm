@@ -640,4 +640,30 @@ class Data {
         return $starts;
     }
 
+    /**
+     * 
+     * Verify a password against a hash.
+     * @param string $password The password to verify. If password is empty or not a string, method will return false.
+     * @param string $hash The hash to verify the password against.
+     * @param string $username the current username
+     * @return bool True if the password matches the hash.
+     */
+    public function verifyPassword($password, $hash, $username = null){
+
+        if(strlen($hash) == 32){
+            if(CPasswordHelper::same(md5($password), $hash)){
+                if($username){
+                    AmcWm::app()->db->createCommand()->update("users", array("passwd" => CPasswordHelper::hashPassword($password)), "username=:username", array(":username"=>$username));
+                }
+                return true;
+            }            
+        }
+        else{
+            return CPasswordHelper::verifyPassword($password, $hash);                
+        }
+        return false;
+        
+    }
+            
+            
 }

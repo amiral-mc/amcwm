@@ -13,7 +13,8 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class ErrorHandler extends CErrorHandler {
+class ErrorHandler extends CErrorHandler
+{
 
     /**
      * Custom error
@@ -36,15 +37,18 @@ class ErrorHandler extends CErrorHandler {
      * @return array the error details. Null if there is no error.
      * @since 1.0.6
      */
-    public function getError() {
+    public function getError()
+    {
         $error = parent::getError();
-        switch ($error['type']) {
-            case 'CDbException':
-                $error['message'] = null;
-                break;
-        }
-        if (!$error && $this->_attachedError['code']) {
-            $error = $this->_attachedError;
+        if (!YII_DEBUG) {
+            switch ($error['type']) {
+                case 'CDbException':
+                    $error['message'] = null;
+                    break;
+            }
+            if (!$error && $this->_attachedError['code']) {
+                $error = $this->_attachedError;
+            }
         }
         return $error;
     }
@@ -55,13 +59,13 @@ class ErrorHandler extends CErrorHandler {
      * @param string $message 
      * @return void
      */
-    public function attachError($code, $message) {
+    public function attachError($code, $message)
+    {
         $code = (int) $code;
         if ($code && trim($message)) {
             $this->_attachedError['code'] = $code;
-            $this->_attachedError['message'] = $message;            
+            $this->_attachedError['message'] = $message;
         }
     }
 
 }
-
