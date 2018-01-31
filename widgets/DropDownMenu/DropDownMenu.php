@@ -19,7 +19,7 @@ Yii::import('zii.widgets.CMenu');
 class DropDownMenu extends CMenu {
 
     public $style = 'default'; // can be changed to vertical or navbar
-    public $cssFile = 'superfish.css';
+    public $cssFile = 'superfish';
     public $position = CClientScript::POS_HEAD;
 
     public function init() {
@@ -73,12 +73,12 @@ class DropDownMenu extends CMenu {
         $baseUrl = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias('amcwm.widgets.DropDownMenu.assets'));
         $cs = Yii::app()->clientScript;
         $cs->registerCoreScript('jquery');
-        $cs->registerCssFile($baseUrl . '/css/' . $this->cssFile);
+        $cs->registerCssFile("{$baseUrl}/css/{$this->cssFile}.css");
         /**
          * Rtl added by ashrafakl@yahoo.com
          */
         if(Yii::app()->getLocale()->getOrientation() == 'rtl'){
-            $cs->registerCssFile($baseUrl . "/css/superfish-rtl.css");
+            $cs->registerCssFile("{$baseUrl}/css/{$this->cssFile}-rtl.css");
         }
         if ($this->style == 'navbar')
             $cs->registerCssFile($baseUrl . '/css/' . 'superfish-navbar.css');

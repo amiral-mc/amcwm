@@ -1,0 +1,45 @@
+-- Revise components folder
+/var/www/html/lib/amcwm/components/InFocusListData.php
+/var/www/html/lib/amcwm/components/MostReadAndCommentData.php
+
+-- -- check header in online sites
+/var/www/html/lib/amcwm/components/RelatedArticlesData.php
+/var/www/html/lib/amcwm/components/SearchData.php
+
+-- -- Check metaDescription
+/var/www/html/lib/amcwm/components/SectionArticlesData.php
+-- -- Check metaDescription
+/var/www/html/lib/amcwm/components/SectionArticlesPagingDataset.php
+/var/www/html/lib/amcwm/components/SectionsListData.php
+/var/www/html/lib/amcwm/components/TickerData.php
+/var/www/html/lib/amcwm/components/TopEssaysArticles.php
+-- -- Check metaDescription
+/var/www/html/lib/amcwm/components/task/ArticlesSectionsDefaultTask.php
+
+-- Revise core folder
+/var/www/html/lib/amcwm/core/acl/WebUser.php
+/var/www/html/lib/amcwm/core/Data.php
+
+-- -- check header in online sites
+/var/www/html/lib/amcwm/modules/multimedia/components/RelatedVideosData.php
+
+-- revise modules
+
+/var/www/html/lib/amcwm/modules/exchange/frontend/components/StockInfoGraph.php
+/var/www/html/lib/amcwm/modules/exchange/frontend/components/StockInfoTicker.php
+/var/www/html/lib/amcwm/modules/exchange/frontend/controllers/AmcStockController.php
+
+/var/www/html/lib/amcwm/modules/jobs/frontend/controllers/AmcJobsController.php
+/var/www/html/lib/amcwm/modules/jobs/models/JobsRequests.php
+
+/var/www/html/lib/amcwm/modules/multimedia/components/MediaDetailsData.php
+/var/www/html/lib/amcwm/modules/multimedia/components/MediaListData.php
+-- -- check header in online sites
+/var/www/html/lib/amcwm/modules/multimedia/components/RelatedVideosData.php
+
+/var/www/html/lib/amcwm/modules/rss/frontend/components/RssSections.php
+/var/www/html/lib/amcwm/modules/rss/frontend/controllers/AmcRssController.php
+
+-- check dominion 
+/var/www/html/lib/amcwm/vendors/bootstrap/components/MyBootstrap.php
+/var/www/html/lib/amcwm/vendors/bootstrap/components/packages.php
