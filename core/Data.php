@@ -186,7 +186,7 @@ class Data {
     static public function &getInstance() {
 
         $dataFile = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR . "data.bin";
-        if(is_file($dataFile)){
+        if(is_readable($dataFile)){            
             self::$_instance = unserialize(file_get_contents($dataFile));
         }
         if (self::$_instance == null) {            
