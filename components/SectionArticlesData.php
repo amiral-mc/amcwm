@@ -106,6 +106,9 @@ class SectionArticlesData extends Dataset {
      */
     protected $toDate = NULL;
 
+    public $forceUseIndex;
+    
+    private $_useCount = true;
     /**
      * Counstructor
      * @todo fix bug if $articlesLimit = 0
@@ -259,6 +262,14 @@ class SectionArticlesData extends Dataset {
         $this->setItems();
     }
 
+    
+     /**
+     * Use count 
+     * @param boolean $ok
+     */
+    public function setUseCount($ok){
+        $this->_useCount = $ok;
+    }
     /**
      * Set the articles array list
      * @access private
@@ -271,7 +282,7 @@ class SectionArticlesData extends Dataset {
         $cols = $this->generateColumns();
         $wheres = $this->generateWheres();
         $this->query = sprintf(
-                "select t.section_id , tt.*, image_ext {$cols} from sections t
+                "select t.section_id , tt.section_name, image_ext {$cols} from sections t
                  inner join sections_translation tt on t.section_id = tt.section_id
             {$this->joins}
             where t.published = %d
@@ -292,6 +303,8 @@ class SectionArticlesData extends Dataset {
                 $articlesTables = array($this->_table);
             }
             $articles = new ArticlesListData($articlesTables, $this->period, $this->limit, $section['section_id']);
+            $articles->forceUseIndex = $this->forceUseIndex;
+            $articles->setUseCount($this->_useCount);
             if ($this->articleMediaPath) {
                 $articles->setMediaPath($this->articleMediaPath);
             }
@@ -328,7 +341,7 @@ class SectionArticlesData extends Dataset {
                 $index++;
             }
             $items[$index]['sectionId'] = $section["section_id"];
-            $items[$index]['sectionTitle'] = $section["section_name"];     
+            $items[$index]['sectionTitle'] = $section["section_name"];            
             if (!empty($section['meta_description'])) {
                 $items[$index]['metaDescription'] = $section["meta_description"];            
             }

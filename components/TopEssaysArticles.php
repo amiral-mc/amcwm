@@ -50,7 +50,7 @@ class TopEssaysArticles extends SiteData {
      * Default sorting for sticky articles
      * @var string
      */
-    protected $stickyOrder = 't.update_date desc';
+    protected $stickyOrder = 't.create_date desc';
 
     /**
      * Writer Image
@@ -150,7 +150,7 @@ class TopEssaysArticles extends SiteData {
             $this->addWhere("t.{$this->dateCompareField} <='{$this->toDate}'");
         }
         if (!count($this->orders)) {
-            $this->addOrder("update_date desc");
+            $this->addOrder("t.create_date desc");
         }
         switch ($this->archive) {
             case 1:
@@ -233,17 +233,20 @@ class TopEssaysArticles extends SiteData {
         }
         $this->addColumn('pt.name', 'name');
         $cols = $this->generateColumns();
-        $wheres = sprintf("tt.content_lang = %s
+        $wheres = sprintf("
+         tt.content_lang = %s
+         and pt.content_lang = %s
          and t.publish_date <= '{$currentDate}'            
          and (t.expire_date  >= '{$currentDate}' or t.expire_date is null)  
-         and t.published = %d", Yii::app()->db->quoteValue($this->language), ActiveRecord::PUBLISHED);
+         and t.published = %d", Yii::app()->db->quoteValue($this->language), Yii::app()->db->quoteValue($this->language), ActiveRecord::PUBLISHED);
+       
         $wheres .= $this->generateWheres();
+        
         $command = AmcWm::app()->db->createCommand();
-        $command->from("articles t force index (articles_create_date_idx)");
-        $command->join = ' inner join articles_translation tt on t.article_id = tt.article_id';
-        $command->join .= ' left join writers w on t.writer_id = w.writer_id';
-        $command->join .= ' left join persons p on t.writer_id = p.person_id';
-        $command->join .= sprintf(' left join persons_translation pt on p.person_id = pt.person_id and pt.content_lang = %s', AmcWm::app()->db->quoteValue(AmcWm::app()->getLanguage()));
+        $command->from("articles t use index(articles_create_date_idx)");
+        $command->join = ' join articles_translation tt on t.article_id = tt.article_id';
+        $command->join .= ' join persons p on t.writer_id = p.person_id';
+        $command->join .= ' join persons_translation pt on p.person_id = pt.person_id';
         $command->join .= $this->joins;
         $command->select("t.article_id, t.hits, tt.article_header $cols");
 
@@ -253,7 +256,7 @@ class TopEssaysArticles extends SiteData {
         $stickyCommand->order = $this->stickyOrder;
         $command->order = $orders;
         if ($this->limit) {
-            $command->limit($this->limit, $this->fromRecord);
+            $command->limit($this->limit);
         }
 
         // get sticky items in 1st query
@@ -263,15 +266,19 @@ class TopEssaysArticles extends SiteData {
         // get non-sticky items in 2nd query
         $noneStickyWheres = " {$wheres} and essays.sticky = 0";
         $command->where($noneStickyWheres);
+        $stickyCommand->limit($this->limit);
 
-        $this->count = Yii::app()->db->createCommand("select count(*) from articles t {$command->join} where {$command->where}")->queryScalar();
+        $this->count = $this->limit;
         if ($this->generateDataset) {
             $stickyArticles = $stickyCommand->queryAll();
             if (count($stickyArticles) && $this->limit) {
                 $this->limit = $this->limit - count($stickyArticles);
-                $command->limit($this->limit, $this->fromRecord);
+                $command->limit($this->limit);
             }
             $articles = $command->queryAll();
+            if($articles || $stickyArticles){
+                $this->count = $this->limit;
+            }
             $this->setDataset($stickyArticles);
             $this->setDataset($articles);            
         }

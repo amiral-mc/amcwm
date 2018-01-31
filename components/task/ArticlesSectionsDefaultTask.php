@@ -15,6 +15,7 @@
  */
 class ArticlesSectionsDefaultTask extends ArticlesControllerTask {
 
+    
     /**
      * Run this task
      * @param boolean $displayResult
@@ -44,19 +45,15 @@ class ArticlesSectionsDefaultTask extends ArticlesControllerTask {
                     $render = true;
                     $this->render('index', array('sections' => $sections));
                 }
+                
             } else {
                 $articleList = new ArticlesListData(array($this->table), 0, $limit);
+                $articleList->forceUseIndex = "use index (articles_create_date_idx)";
                 $articleList->addColumn("publish_date");
                 $articleList->addColumn("article_detail");
                 $articleList->addColumn("section_name");
-                if (isset($this->extraParams['routeParams'])) {
-                    foreach ($this->extraParams['routeParams'] as $key => $value) {
-                        $articleList->addParam($key, $value);
-                    }
-                }
-
                 $articleList->addJoin("left join sections_translation sectionst on sectionst.section_id = t.section_id and tt.content_lang = sectionst.content_lang");
-                if ($this->table == "news") {
+                if ($this->table == "news") {                    
                     $articleList->addJoin("left join news_sources_translation ns on ns.source_id = news.source_id and ns.content_lang = tt.content_lang");
                     $articleList->addColumn("source");
                 }
@@ -70,7 +67,7 @@ class ArticlesSectionsDefaultTask extends ArticlesControllerTask {
                     }
                 }
                 $pagingDataset = new PagingDataset($articleList, $limit, Yii::app()->request->getParam("page"));
-
+                
                 $itemsList = $pagingDataset->getData();
                 if ($this->displayResult && $itemsList['pager']['count']) {
                     $render = true;
@@ -117,9 +114,6 @@ class ArticlesSectionsDefaultTask extends ArticlesControllerTask {
         if ($this->displayResult) {
             $itemsList = $pagingDataset->getData();
             $itemsList['top'] = $pagingDataset->getTopArticles();
-            if (!empty($itemsList['metaDescription'])) {
-                Yii::app()->clientScript->registerMetaTag($itemsList['metaDescription'], "description");
-            }
             if ($itemsList['pager']['count'] || count($itemsList['top'])) {
                 $render = true;
                 $data['pageSiteTitle'] = $itemsList['sectionTitle'];
@@ -146,6 +140,7 @@ class ArticlesSectionsDefaultTask extends ArticlesControllerTask {
      */
     private function _runBlocksCols($limit) {
         $render = false;
+        return $render;
         $articlesTables = $this->settings->extendsTables;
         if ($this->table == 'articles') {
             $articlesTable = null;
@@ -158,6 +153,8 @@ class ArticlesSectionsDefaultTask extends ArticlesControllerTask {
         } else {
             $sectionDataset = new SectionArticlesData($this->table, $this->params['id'], 10);
         }
+        $sectionDataset->forceUseIndex = "use index (articles_create_date_idx)";
+        $sectionDataset->setUseCount(false);
         $sectionDataset->setModuleName($this->module);
         $sectionDataset->useRecordIdAsKey(false);
         if ($this->viewType == "blocks") {
@@ -232,3 +229,4 @@ class ArticlesSectionsDefaultTask extends ArticlesControllerTask {
     }
 
 }
+

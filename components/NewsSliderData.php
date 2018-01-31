@@ -17,7 +17,7 @@ class NewsSliderData extends ArticlesListData
 {
 
     /**
-     * Counstructor, default content type is image
+     * Constructor, default content type is image
      * If the constructor is overridden, make sure the parent implementation is invoked.
      * @access public
      */

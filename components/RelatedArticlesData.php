@@ -20,6 +20,7 @@ class RelatedArticlesData extends ArticlesListData {
      * @var integer 
      */
     private $_articleId = null;
+
     /**
      * associated array contain's list of tags to find related articles according to list values.
      * @var array 
@@ -36,7 +37,7 @@ class RelatedArticlesData extends ArticlesListData {
      * @access public
      */
     public function __construct($tables, $period = 25920000, $limit = 10, $sectionId = null) {
-        parent::__construct($tables, $period, $limit, $sectionId);        
+        parent::__construct($tables, $period, $limit, $sectionId);
     }
 
     /**
@@ -51,8 +52,8 @@ class RelatedArticlesData extends ArticlesListData {
             $keywords = explode(PHP_EOL, $tags);
         } else if (is_array($tags)) {
             $keywords = $tags;
-        }        
-        if(is_array($keywords)) {
+        }
+        if (is_array($keywords)) {
             foreach ($keywords as $tag) {
                 $this->addTag($tag);
             }
@@ -104,32 +105,49 @@ class RelatedArticlesData extends ArticlesListData {
      */
     public function generate() {
         $tagsWheres = array();
+        $this->setUseCount(false);
         $this->setTitleLength(70);
-        foreach ($this->_tags as $keyword) {
-            $keyword = trim($keyword);            
-            if ($keyword) {
-                $keyword = str_replace("%", "\%%", $keyword);
-                $keywordLike = "like " . Yii::app()->db->quoteValue("%%{$keyword}%%");
-                $keywordLocate = Yii::app()->db->quoteValue($keyword);
-                $tagsWheres[] = "tt.tags {$keywordLike}";
-                $tagsWheres[] = "tt.article_header {$keywordLike}";
-                //$tagsWheres[] = "t.article_detail {$keywordLike}";
+        if (AmcWm::app()->db->useFullText) {
+            if ($this->_tags) {
+                $keywords = "+" . array_shift($this->_tags) . " " . implode(" ", $this->_tags);
+                $keywords = Yii::app()->db->quoteValue(trim($keywords));
+                $weight = "match(tags, article_header,article_detail) against ({$keywords} in boolean mode)";
+                $this->addColumn($weight, "weight");
+                $tagsWheres[] = $weight;
+                $this->addOrder(" weight desc ");
+            }
+        } else {
+            $this->forceUseIndex = "";
+            foreach ($this->_tags as $keyword) {
+                $keyword = trim($keyword);
+                if ($keyword) {
+                    $keyword = str_replace("%", "\%%", $keyword);
+                    $keywordLike = "like " . Yii::app()->db->quoteValue("%{$keyword}%");
+                    $keywordLocate = Yii::app()->db->quoteValue($keyword);
+                    $tagsWheres[] = "tt.tags {$keywordLike}";
+                    //$tagsWheres[] = "tt.article_header {$keywordLike}";
+                    //$tagsWheres[] = "t.article_detail {$keywordLike}";
 //                    $weights[] = "if(locate($keywordLocate,tags)>0," . Html::utfStringLength($keyword) . ",0) ";
 //                    $weights[] = "if(locate($keywordLocate,article_header)>0," . Html::utfStringLength($keyword) . ",0) ";
-                //$weights[] = "if(locate($keywordLocate,article_detail)>0," . Html::utfStringLength($keyword) . ",0) ";
-                $weights[] = "if(tt.tags {$keywordLike},5,0) ";
-                $weights[] = "if(tt.article_header {$keywordLike},10,0) ";
-                //$weights[] = "if(t.article_detail {$keywordLike},15,0) ";
+                    //$weights[] = "if(locate($keywordLocate,article_detail)>0," . Html::utfStringLength($keyword) . ",0) ";
+//                $weights[] = "if(tt.tags {$keywordLike},5,0) ";
+//                $weights[] = "if(tt.article_header {$keywordLike},10,0) ";
+                    //$weights[] = "if(t.article_detail {$keywordLike},15,0) ";
+                }
+                $this->addOrder(" hits desc ");
             }
         }
         if (count($tagsWheres)) {
-            $this->addColumn(sprintf("%s", implode("+", $weights)), "weight");
-            $this->addOrder(" weight desc ");
+//            $this->addColumn(sprintf("%s", implode("+", $weights)), "weight");
+            //$this->addOrder(" weight desc ");
+
             if ($this->_articleId) {
                 $this->addWhere("t.article_id <> " . $this->_articleId);
             }
             $this->addWhere("(" . implode(" or ", $tagsWheres) . ")");
             parent::generate();
-        }        
+//            die($this->query->text);
+        }
     }
+
 }

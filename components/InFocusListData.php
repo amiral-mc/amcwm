@@ -21,6 +21,7 @@ class InFocusListData extends SiteData {
      * @var array
      */
     private static $_settings = null;
+    private $_useCount = true;
 
     /**
      * Counstructor
@@ -51,7 +52,15 @@ class InFocusListData extends SiteData {
         }
         return self::$_settings;
     }
-    
+
+    /**
+     * Use count 
+     * @param boolean $ok
+     */
+    public function setUseCount($ok) {
+        $this->_useCount = $ok;
+    }
+
     /**
      *
      * Generate infocus list
@@ -92,6 +101,7 @@ class InFocusListData extends SiteData {
      * @return void
      */
     protected function setItems() {
+        $cmdCount = null;
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
         $currentDate = date("Y-m-d H:i:s");
         if ($this->sectionId) {
@@ -103,27 +113,26 @@ class InFocusListData extends SiteData {
                 $this->addWhere("t.section_id = {$this->sectionId}");
             }
         }
-        $orders = $this->generateOrders();
         $cols = $this->generateColumns();
         $wheres = $this->generateWheres();
+        $this->query = Yii::app()->db->createCommand()
+                ->select("t.infocus_id, tt.header, t.thumb {$cols}")
+                ->from("infocus t");
+        $this->query->join = 'join infocus_translation tt on t.infocus_id = tt.infocus_id';
+        $this->query->join .= $this->joins;
+        $this->query->where("tt.content_lang = :lang
+            and t.publish_date <= :date            
+            and (t.expire_date  >= :date or t.expire_date is null)  
+            and t.published = :published {$wheres}", array(":lang" => $siteLanguage, ":date" => $currentDate, ":published" => ActiveRecord::PUBLISHED));
+            
+         if ($this->_useCount) {
+            $cmdCount = clone $this->query;
+        }    
+        $this->query->order($this->orders)->limit($this->limit, $this->fromRecord);
+//  
+        
+        $items = $this->query->queryAll();
 
-        $this->query = sprintf("SELECT sql_calc_found_rows            
-            t.infocus_id, tt.header, t.thumb $cols
-            FROM  infocus t
-            inner join infocus_translation tt on t.infocus_id = tt.infocus_id    
-            {$this->joins}
-            where tt.content_lang = %s
-            and t.publish_date <= %s            
-            and (t.expire_date  >= %s or t.expire_date is null)  
-            and t.published = %d
-            $wheres
-            $orders
-            LIMIT {$this->fromRecord} , {$this->limit}
-            ",  Yii::app()->db->quoteValue($siteLanguage), 
-                Yii::app()->db->quoteValue($currentDate),
-                Yii::app()->db->quoteValue($currentDate),
-                ActiveRecord::PUBLISHED);
-        $items = Yii::app()->db->createCommand($this->query)->queryAll();
         $index = -1;
         foreach ($items As $item) {
             if ($this->recordIdAsKey) {
@@ -135,12 +144,15 @@ class InFocusListData extends SiteData {
             $this->items[$index]['title'] = $item["header"];
             $this->items[$index]['link'] = Html::createUrl($this->getRoute(), array('id' => $item['infocus_id'], 'title' => $item["header"]));
             $this->items[$index]['image'] = $this->mediaPath . $item["infocus_id"] . "." . $item["thumb"];
-            
+
             foreach ($this->cols as $colIndex => $col) {
                 $this->items[$index][$colIndex] = $item[$colIndex];
             }
         }
-        $this->count = Yii::app()->db->createCommand('select found_rows()')->queryScalar();
+        if ($cmdCount !== null && $items && $this->_useCount) {
+            $cmdCount->select("count(*)");
+            $this->count = $cmdCount->queryScalar();
+        }
     }
 
 }

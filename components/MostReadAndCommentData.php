@@ -73,7 +73,7 @@ class MostReadAndCommentData extends CComponent {
      * @var int 
      */
     protected $period = 0;
-    
+
     /**
      *      
      * @var array add custom where 
@@ -84,7 +84,7 @@ class MostReadAndCommentData extends CComponent {
      * Title length , if greater than 0 then we get the first titleLength characters from content tite
      * @var integer 
      */
-    protected $titleLength = 70;       
+    protected $titleLength = 70;
 
     /**
      * Counstructor
@@ -106,12 +106,12 @@ class MostReadAndCommentData extends CComponent {
 
         //$this->sharedArticles = $shared->getItems();
     }
-    
+
     /**
      * Add where to wheres array
      */
-    public function setWheres($where){
-        $this->wheres[md5($where)] = $where; 
+    public function setWheres($where) {
+        $this->wheres[md5($where)] = $where;
     }
 
     /**
@@ -129,10 +129,12 @@ class MostReadAndCommentData extends CComponent {
         if (!$this->commentsArticles) {
             $comments = new ArticlesListData($this->tables, $this->period, $this->limit, $this->sectionId);
             $comments->setMediaPath ( Yii::app()->baseUrl . "/" . ArticlesListData::getSettings()->mediaPaths[$mediaPathIndex]['path'] . "/");
+            $comments->forceUseIndex = '';
+            $comments->setUseCount(false);
             $comments->addOrder('comments desc');
             $comments->addColumn('comments', 'info');
             $comments->setTitleLength($this->titleLength);
-            foreach($this->wheres as $where){
+            foreach ($this->wheres as $where) {
                 $comments->addWhere($where);
             }
             $comments->generate();
@@ -155,11 +157,13 @@ class MostReadAndCommentData extends CComponent {
     public function getReadArticles($mediaPathIndex = 'list') {
         if (!$this->readArticles) {
             $read = new ArticlesListData($this->tables, $this->period, $this->limit, $this->sectionId);
+            $read->forceUseIndex = '';
+            $read->setUseCount(false);
             $read->setMediaPath ( Yii::app()->baseUrl . "/" . ArticlesListData::getSettings()->mediaPaths[$mediaPathIndex]['path'] . "/");
             $read->addOrder('hits desc');
             $read->addColumn('hits', 'info');
             $read->setTitleLength($this->titleLength);
-            foreach($this->wheres as $where){
+            foreach ($this->wheres as $where) {
                 $read->addWhere($where);
             }
             $read->generate();
@@ -182,11 +186,13 @@ class MostReadAndCommentData extends CComponent {
     public function getSharedArticles($mediaPathIndex = 'list') {
         if (!$this->sharedArticles) {
             $shared = new ArticlesListData($this->tables, $this->period, $this->limit, $this->sectionId);
-            $shared->setMediaPath ( Yii::app()->baseUrl . "/" . ArticlesListData::getSettings()->mediaPaths[$mediaPathIndex]['path'] . "/");
+            $shared->forceUseIndex = '';
+            $shared->setUseCount(false);
+            $read->setMediaPath ( Yii::app()->baseUrl . "/" . ArticlesListData::getSettings()->mediaPaths[$mediaPathIndex]['path'] . "/");
             $shared->addOrder('shared desc');
             $shared->addColumn('shared', 'info');
             $shared->setTitleLength($this->titleLength);
-            foreach($this->wheres as $where){
+            foreach ($this->wheres as $where) {
                 $shared->addWhere($where);
             }
             $shared->generate();

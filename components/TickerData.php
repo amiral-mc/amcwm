@@ -62,10 +62,12 @@ class TickerData {
         $resultBreaking = false;
         if ($settings['check']['addToBreaking']) {
             $this->articles->setModuleName("news");
+            $this->articles->forceUseIndex = "";
             $this->articles->addOrder("t.create_date desc");
             $this->articles->addWhere("news.is_breaking = 1");
             $this->articles->setDateCompareField('publish_date');
             $this->articles->setFromDate(date("Y-m-d H:i:s", time() - $settings['integer']['breakingExpiredAfter']));
+            $this->articles->setUseCount(false);
             $this->articles->generate();
             $items = $this->articles->getItems();
             $resultBreaking = (bool) count($items);
@@ -81,8 +83,10 @@ class TickerData {
                 $this->articles->setLanguage($lang);
             }
             $this->articles->setModuleName("news");
+            $this->articles->forceUseIndex = "";
             $this->articles->addOrder("t.create_date desc");
-            $this->articles->addWhere("news.is_breaking <> 1 and in_ticker = 1");
+            $this->articles->addWhere("news.is_breaking = 0 and in_ticker = 1");
+            $this->articles->setUseCount(false);
             $this->articles->generate();
             $items = $this->articles->getItems();
             $this->type = self:: NEWS;

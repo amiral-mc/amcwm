@@ -42,7 +42,7 @@ class ArticlesListData extends SiteData {
 
     /**
      *
-     * @var boolean , execlude articles  with empty details
+     * @var boolean , exclude articles  with empty details
      */
     protected $detailsIsNotEmpty = true;
     
@@ -51,6 +51,9 @@ class ArticlesListData extends SiteData {
      * @var boolean 
      */
     protected $generateDataset = true;
+    
+    private $_useCount = true;
+    public $forceUseIndex = "";
 
     /**
      * Counstructor
@@ -92,7 +95,7 @@ class ArticlesListData extends SiteData {
             $this->addWhere("(" . implode(" or ", $wheresForTables) . ")");
         }
 
-        $this->addWhere("(t.in_list = 1)");
+        $this->addWhere("(t.in_list = 1)");        
         if (isset(Yii::app()->useIssue) && Yii::app()->useIssue) {
             $currentIssue = Issue::getInstance()->getCurrentIssueId();
             $this->joins .= " inner JOIN issues_articles isa ON t.article_id = isa.article_id ";
@@ -129,6 +132,14 @@ class ArticlesListData extends SiteData {
      */
     public function setAutoGenerate($ok){
         $this->generateDataset = $ok;
+    }
+    
+     /**
+     * Use count 
+     * @param boolean $ok
+     */
+    public function setUseCount($ok){
+        $this->_useCount = $ok;
     }
     /**
      *
@@ -257,19 +268,21 @@ class ArticlesListData extends SiteData {
          and (t.expire_date  >= '{$currentDate}' or t.expire_date is null)  
          and t.published = %d", Yii::app()->db->quoteValue($this->language), ActiveRecord::PUBLISHED);
         $wheres .= $this->generateWheres();
-        $command = AmcWm::app()->db->createCommand();
-        $command->from("articles t force index (articles_create_date_idx)");
+        $command = AmcWm::app()->db->createCommand();        
+        $command->from("articles t {$this->forceUseIndex}");
         $command->join = 'inner join articles_translation tt on t.article_id = tt.article_id';
         $command->join .= $this->joins;
         $command->select("t.article_id, t.hits, t.thumb, tt.article_header $cols");
         $command->where($wheres);
         $command->order = $orders;
-        $this->count = Yii::app()->db->createCommand("select count(*) from articles t {$command->join} where {$command->where}")->queryScalar();
+        if($this->_useCount){                        
+            $this->count = Yii::app()->db->createCommand("select count(*) from articles t {$command->join} where {$command->where}")->queryScalar();
+        }
         if ($this->limit !== null) {
             $command->limit($this->limit, $this->fromRecord);
         }
         if ($this->generateDataset) {
-            $articles = $command->queryAll();
+            $articles = $command->queryAll();            
             $this->setDataset($articles);
         }
         $this->query = $command;

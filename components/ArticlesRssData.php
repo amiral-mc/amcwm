@@ -86,7 +86,6 @@ class ArticlesRssData extends RssSiteData {
                 $this->items[$index][$colIndex] = $article[$colIndex];
             }
         }
-        $this->count = Yii::app()->db->createCommand('select found_rows()')->queryScalar();
     }
 
     /**
