@@ -67,7 +67,7 @@ class MediaDetailsData extends Dataset {
     /**
      * Counstructor, the content type
      * @param integer $id 
-     * @param integer $$mediaType videos or images 
+     * @param integer $mediaType videos or images 
      * @param boolean $autoGenerate if true then call the generate method from counstructor
      * @access public
      * 
@@ -124,7 +124,7 @@ class MediaDetailsData extends Dataset {
      * Set the multimedia array list    
      * @return void
      */
-    protected function setVideoData() {
+    protected function setVideoData($logHits = true) {
         $cols = "t.video_id item_id
                 ,t.hits
                 ,t.creation_date created
@@ -136,8 +136,7 @@ class MediaDetailsData extends Dataset {
                 ,tt.tags
                 ,it.video_ext
                 , it.img_ext
-                , et.video
-                , comments {$this->generateColumns()}";
+                , et.video {$this->generateColumns()}";
         $wheres = $this->generateWheres();
         $this->query = sprintf("select {$cols} from videos t
             inner join videos_translation tt on t.video_id = tt.video_id
@@ -153,13 +152,15 @@ class MediaDetailsData extends Dataset {
         $row = Yii::app()->db->createCommand($this->query)->queryRow();
         if ($row) {
             $this->count = 1;
-            $cookieName = "hits_videos_{$this->_id}";
-            if (!isset(Yii::app()->request->cookies[$cookieName]->value)) {
-                Yii::app()->db->createCommand("update videos set hits=hits+1 where video_id = {$this->_id} ")->execute();
-                $cookie = new CHttpCookie($cookieName, $cookieName);
-                $cookie->expire = time() + 3600;
-                $cookie->httpOnly = true;
-                Yii::app()->request->cookies[$cookieName] = $cookie;
+            if ($logHits) {
+                $cookieName = "hits_videos_{$this->_id}";
+                if (!isset(Yii::app()->request->cookies[$cookieName]->value)) {
+                    Yii::app()->db->createCommand("update videos set hits=hits+1 where video_id = {$this->_id} ")->execute();
+                    $cookie = new CHttpCookie($cookieName, $cookieName);
+                    $cookie->expire = time() + 3600;
+                    $cookie->httpOnly = true;
+                    Yii::app()->request->cookies[$cookieName] = $cookie;
+                }
             }
             $this->setDataset($row);
         }
@@ -170,7 +171,7 @@ class MediaDetailsData extends Dataset {
      * Set the multimedia array list    
      * @return void
      */
-    protected function setImageData() {
+    protected function setImageData($logHits = true) {
         $cols = "t.image_id item_id
                 ,t.hits
                 , t.comments 
@@ -195,13 +196,15 @@ class MediaDetailsData extends Dataset {
         $row = Yii::app()->db->createCommand($this->query)->queryRow();
         if ($row) {
             $this->count = 1;
-            $cookieName = "hits_images_{$this->_id}";
-            if (!isset(Yii::app()->request->cookies[$cookieName]->value)) {
-                Yii::app()->db->createCommand("update images set hits=hits+1 where image_id = {$this->_id} ")->execute();
-                $cookie = new CHttpCookie($cookieName, $cookieName);
-                $cookie->expire = time() + 3600;
-                $cookie->httpOnly = true;
-                Yii::app()->request->cookies[$cookieName] = $cookie;
+            if ($logHits) {
+                $cookieName = "hits_images_{$this->_id}";
+                if (!isset(Yii::app()->request->cookies[$cookieName]->value)) {
+                    Yii::app()->db->createCommand("update images set hits=hits+1 where image_id = {$this->_id} ")->execute();
+                    $cookie = new CHttpCookie($cookieName, $cookieName);
+                    $cookie->expire = time() + 3600;
+                    $cookie->httpOnly = true;
+                    Yii::app()->request->cookies[$cookieName] = $cookie;
+                }
             }
             $this->setDataset($row);
         }
@@ -225,7 +228,7 @@ class MediaDetailsData extends Dataset {
         $this->items['description'] = $row["description"];
         $this->items['type'] = $this->type;
         $options = MediaListData::getSettings()->options;
-        $useSeoImages = isset($options['default']['check']['seoImages']) && $options['default']['check']['seoImages'] ? $options['default']['check']['seoImages'] : false ;
+        $useSeoImages = isset($options['default']['check']['seoImages']) && $options['default']['check']['seoImages'] ? $options['default']['check']['seoImages'] : false;
         $seoTitle = ($useSeoImages) ? Html::seoTitle($row["title"]) . "." : "";
         switch ($this->type) {
             case SiteData::VIDEO_TYPE:
@@ -252,7 +255,7 @@ class MediaDetailsData extends Dataset {
 
         foreach ($this->cols as $colIndex => $col) {
             $this->items[$colIndex] = $row[$colIndex];
-        }       
+        }
     }
 
 }

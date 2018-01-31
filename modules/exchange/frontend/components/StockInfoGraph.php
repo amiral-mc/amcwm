@@ -14,6 +14,7 @@
 class StockInfoGraph extends Dataset {
 
     private $_exchangeId;
+    private $_useCount = true;
 
     public function __construct($exchangeId, $limit = null) {
         $this->_exchangeId =(int) $exchangeId;
@@ -24,6 +25,14 @@ class StockInfoGraph extends Dataset {
         }
     }
 
+    /**
+     * Use count 
+     * @param boolean $ok
+     */
+    public function setUseCount($ok) {
+        $this->_useCount = $ok;
+    }
+    
     public function generate() {
         $this->setItems();
     }
@@ -44,8 +53,11 @@ class StockInfoGraph extends Dataset {
         if ($this->limit !== null) {
             $this->query->limit($this->limit, $this->fromRecord);
         }
-        $this->count = Yii::app()->db->createCommand("select count(*) from exchange e {$this->query->join} where {$this->query->where}")->queryScalar();
         $this->items = $this->query->queryAll();
+        if($this->items && $this->_useCount){
+            $this->count = Yii::app()->db->createCommand("select count(*) from exchange e {$this->query->join} where {$this->query->where}")->queryScalar();
+        }
+        
     }
 
     public function getRow($index) {

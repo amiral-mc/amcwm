@@ -146,7 +146,7 @@ class DefaultController extends BackendController {
                     $system = isset($config['options']['system']) ? $config['options']['system'] : 0;
                 }
                 $query = sprintf(
-                        "insert into modules(parent_module, module, virtual, enabled, system, workflow_enabled) 
+                        "insert into modules(`parent_module`, `module`, `virtual`, enabled, `system`, workflow_enabled) 
                     values (%s, %s , 0, %d, %d, %d);"
                         , $backendId
                         , AmcWm::app()->db->quoteValue($name)

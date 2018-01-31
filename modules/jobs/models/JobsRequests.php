@@ -103,7 +103,7 @@ class JobsRequests extends ActiveRecord {
      * @param array $params
      */
     public function checkDateOfBirth($attribute, $params){
-        if (!checkdate($this->dobMonth, $this->dobDay, $this->dobYear)) {
+        if ((int)$this->dobMonth && (int)$this->dobDay && (int)$this->dobYear && !checkdate($this->dobMonth, $this->dobDay, $this->dobYear)) {
             $this->addError($attribute, AmcWm::t("msgsbase.request", 'Invalid date'));
         }
     }

@@ -14,9 +14,10 @@
 class StockInfoTicker extends Dataset {
 
     private $_exchangeId;
+    private $_useCount = true;
 
     public function __construct($exchangeId, $limit = null) {
-        $this->_exchangeId = (int)$exchangeId;
+        $this->_exchangeId = (int) $exchangeId;
         if ($limit !== NULL) {
             $this->limit = (int) $limit;
         } else {
@@ -28,11 +29,20 @@ class StockInfoTicker extends Dataset {
         $this->setItems();
     }
 
+    /**
+     * Use count 
+     * @param boolean $ok
+     */
+    public function setUseCount($ok) {
+        $this->_useCount = $ok;
+    }
+
     protected function setItems() {
         $currentDate = date("Y-m-d");
         $cols = $this->generateColumns();
         $stock = new StockInfoGraph($this->_exchangeId, 1);
-        $stock->generate();
+        $stock->setUseCount(false);
+        $stock->generate();        
         $stockData = $stock->getRow(0);
         if (isset($stockData['exchange_date'])) {
             $wheres = "exchange_trading_exchange_id = {$this->_exchangeId}";
@@ -51,8 +61,11 @@ class StockInfoTicker extends Dataset {
             if ($this->limit !== null) {
                 $this->query->limit($this->limit, $this->fromRecord);
             }
-            $this->count = Yii::app()->db->createCommand("select count(*) from exchange_trading_companies etc {$this->query->join} where {$this->query->where}")->queryScalar();
             $this->items = $this->query->queryAll();
+            if ($this->items && $this->_useCount) {
+                $this->count = Yii::app()->db->createCommand("select count(*) from exchange_trading_companies etc {$this->query->join} where {$this->query->where}")->queryScalar();
+            }
+            
         }
     }
 

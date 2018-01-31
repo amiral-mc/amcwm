@@ -20,6 +20,7 @@ class RelatedVideosData extends MediaListData {
      * @var integer
      */
     private $_videoId = null;
+
     /**
      * Associative array containing a list of tags to find related video according to list values.
      * @var array 
@@ -36,7 +37,7 @@ class RelatedVideosData extends MediaListData {
      * @access public
      */
     public function __construct($galleryId = null, $mediaType = SiteData::VIDEO_TYPE, $period = 0, $limit = 10) {
-        parent::__construct($galleryId, $mediaType, $period, $limit);        
+        parent::__construct($galleryId, $mediaType, $period, $limit);
     }
 
     /**
@@ -51,7 +52,7 @@ class RelatedVideosData extends MediaListData {
             $keywords = explode(PHP_EOL, $tags);
         } else if (is_array($tags)) {
             $keywords = $tags;
-        }        
+        }
         if(is_array($keywords)) {
             foreach ($keywords as $tag) {
                 $this->addTag($tag);
@@ -105,16 +106,28 @@ class RelatedVideosData extends MediaListData {
     public function generate() {
         $tagsWheres = array();
         $this->setTitleLength(70);
-        foreach ($this->_tags as $keyword) {
-            $keyword = trim($keyword);
-            if ($keyword) {
-                $keyword = str_replace("%", "\%%", $keyword);
-                $keywordLike = "like " . Yii::app()->db->quoteValue("%%{$keyword}%%");
-                $keywordLocate = Yii::app()->db->quoteValue($keyword);
-                $tagsWheres[] = "tt.tags {$keywordLike}";
-                $tagsWheres[] = "tt.video_header {$keywordLike}";
-                $weights[] = "if(tt.tags {$keywordLike},5,0) ";
-                $weights[] = "if(tt.video_header {$keywordLike},10,0) ";
+        if (AmcWm::app()->db->useFullText) {
+            if ($this->_tags) {
+                $keywords = "+" . array_shift($this->_tags) . " " . implode(" ", $this->_tags);
+                $keywords = Yii::app()->db->quoteValue(trim($keywords));
+                $weight = "match(tags, video_header,description) against ({$keywords} in boolean mode)";
+                $this->addColumn($weight, "weight");
+                $tagsWheres[] = $weight;
+                $this->addOrder(" weight desc ");
+            }
+        } else {
+            $this->forceUseIndex = "";
+            foreach ($this->_tags as $keyword) {
+                $keyword = trim($keyword);
+                if ($keyword) {
+                    $keyword = str_replace("%", "\%%", $keyword);
+                    $keywordLike = "like " . Yii::app()->db->quoteValue("%%{$keyword}%%");
+                    $keywordLocate = Yii::app()->db->quoteValue($keyword);
+                    $tagsWheres[] = "tt.tags {$keywordLike}";
+//                $tagsWheres[] = "tt.video_header {$keywordLike}";
+//                $weights[] = "if(tt.tags {$keywordLike},5,0) ";
+//                $weights[] = "if(tt.video_header {$keywordLike},10,0) ";
+                }
             }
         }
         if (count($tagsWheres)) {
@@ -127,4 +140,5 @@ class RelatedVideosData extends MediaListData {
             parent::generate();
         }
     }
+
 }

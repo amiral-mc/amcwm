@@ -84,7 +84,7 @@ class AmcJobsController extends FrontendController {
 
                 $headers = "From: {$model->email}\r\nReply-To: {$model->email}";
                 mail(Yii::app()->params['adminEmail'], 'New Job Request', '', $headers);
-                if (AmcWm::app()->frontend['bootstrap']['use']) {
+                if (AmcWm::app()->frontend['bootstrap']['use'] || AmcWm::app()->frontend['bootstrap']['customUse']) {
                     Yii::app()->user->setFlash('success', AmcWm::t('msgsbase.request', 'Thank you, your request has been sent, and we will respond if you has been accepted'));
                 } else {
                     Yii::app()->user->setFlash('success', array('class' => 'flash-success', 'content' => AmcWm::t('msgsbase.request', 'Thank you, your request has been sent, and we will respond if you has been accepted')));

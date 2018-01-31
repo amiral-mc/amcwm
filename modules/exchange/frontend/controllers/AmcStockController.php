@@ -53,6 +53,7 @@ class AmcStockController extends FrontendController {
         $isJson = Yii::app()->request->getParam('is_json', 0);
         $exchangeId = (int) Yii::app()->request->getParam('exchange_id');
         $stock = new StockInfoTicker($exchangeId);
+        $stock->setUseCount(false);
         $stock->generate();
         $data = $stock->getData();
         if ($isJson && $data) {

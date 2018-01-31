@@ -43,7 +43,7 @@ class AmcRssController extends FrontendController {
     }
 
     private function _rssList() {
-        $this->render('index', array('sections' => RssSections::DrowSections()));
+        $this->render('index', array('sections' => Data::getInstance()->getSectionsTree()));
     }
 
     private function __getUserAccess() {
@@ -88,6 +88,11 @@ class AmcRssController extends FrontendController {
             $storyType = Yii::app()->request->getParam("st", RssSiteData::SHORT_STORY);
             $table = Yii::app()->request->getParam("tb", 'news');
             $rssData = new ArticlesRssData(array($table), 0, $limit, $sectionId);
+            $rssData->setUseCount(false);
+            if($table == 'news'){
+                $rssData->forceUseIndex = '';
+                $rssData->addOrder('publish_date desc');
+            }
             $rssData->setStoryType($storyType);
             $rssData->generate();
             $this->_draw($rssData->getItems(), $limit, $start, $sectionId);
@@ -99,6 +104,7 @@ class AmcRssController extends FrontendController {
     public function actionBreaking($limit = 100, $start = 0, $sectionId = null) {
         $storyType = Yii::app()->request->getParam("st", RssSiteData::SHORT_STORY);
         $rssData = new ArticlesRssData(array("news"), 0, $limit, $sectionId);
+        $rssData->setUseCount(false);
         $rssData->setStoryType(RssSiteData::SHORT_STORY);
         $rssData->setIsBreaking(true);
         $rssData->generate();

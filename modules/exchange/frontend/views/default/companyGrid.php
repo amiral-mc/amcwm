@@ -12,7 +12,7 @@ $output .= "</tr>";
 foreach ($data as $key => $value) {
     $class = $key % 2 == 1 ? "odd" : "even";
     $output .= "<tr class =" . $class . ">";
-    $output .= "<td>" . $value['company_name'] . "</td>";
+    $output .= '<td class="company-name">' . $value['company_name'] . "</td>";
     if($value['difference_percentage'] > 0) {
         $colorClass = 'p-up';
         $output .= "<td class =" . $colorClass . ">" . number_format($value['opening_value'], 2, $floatingSeparator, $thousandSeparator) . "</td>";

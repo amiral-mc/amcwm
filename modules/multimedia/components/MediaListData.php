@@ -13,8 +13,7 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class MediaListData extends SiteData
-{
+class MediaListData extends SiteData {
 
     /**
      * Setting instance generated from settings.php inside an application module folder
@@ -64,6 +63,7 @@ class MediaListData extends SiteData
      * @var boolean 
      */
     protected $useFullImgae = false;
+    private $_useCount = true;
 
     /**
      * Counstructor
@@ -98,15 +98,23 @@ class MediaListData extends SiteData
             $this->mediaTable = "images";
             $this->mediaSetterMethod = "setImagesItems";
             $this->route = '/multimedia/images/view';
-            $this->useFullImage =  isset($mediaPaths['images']['info']['fullSizeRatio']) ? true : false;
+            $this->useFullImage = isset($mediaPaths['images']['info']['fullSizeRatio']) ? true : false;
         }
-        $this->mediaPath = $mediaPaths[$this->mediaTable]['path'] . "/";
+        $this->mediaPath = AmcWm::app()->params['staticUrl'] . "/" . $mediaPaths[$this->mediaTable]['path'] . "/";
         if (isset($mediaPaths[$this->mediaTable]['thumb']['path'])) {
-            $this->thumbMediaPath = $mediaPaths[$this->mediaTable]['thumb']['path'] . "/";
+            $this->thumbMediaPath = AmcWm::app()->params['staticUrl'] . "/" . $mediaPaths[$this->mediaTable]['thumb']['path'] . "/";
         }
     }
 
-     /**
+    /**
+     * Use count 
+     * @param boolean $ok
+     */
+    public function setUseCount($ok) {
+        $this->_useCount = $ok;
+    }
+
+    /**
      * set media path      
      * @param string $path 
      * @access public 
@@ -114,13 +122,12 @@ class MediaListData extends SiteData
      */
     public function setMediaPath($path) {
         $pos = strpos($path, Yii::app()->baseUrl);
-        if($pos === 0){
+        if ($pos === 0) {
             $path = substr($path, $pos + strlen(Yii::app()->baseUrl));
-        }        
+        }
         $this->mediaPath = trim($path, "/") . "/";
     }
 
-    
     /**
      * return current gallery id used in the system
      * @return ingteger
@@ -217,8 +224,7 @@ class MediaListData extends SiteData
                 ,tt.video_header title
                 ,it.video_ext
                 , it.img_ext
-                , et.video
-                , comments {$this->generateColumns()}";
+                , et.video {$this->generateColumns()}";
         $wheres = $this->generateWheres();
         $limit = null;
         if ($this->limit !== null) {
@@ -239,7 +245,9 @@ class MediaListData extends SiteData
             ", Yii::app()->db->quoteValue($this->language), ActiveRecord::PUBLISHED);
 
         $query = "select {$cols} $querySearch $orders $limit";
-        $this->count = Yii::app()->db->createCommand("select count(*) {$querySearch}")->queryScalar();
+        if ($this->_useCount) {
+            $this->count = Yii::app()->db->createCommand("select count(*) {$querySearch}")->queryScalar();
+        }
         $this->query = Yii::app()->db->createCommand($query);
         if ($this->generateDataset) {
             $rows = $this->query->queryAll();
@@ -293,8 +301,7 @@ class MediaListData extends SiteData
                 ,t.comments
                 ,t.publish_date
                 ,t.gallery_id
-                ,tt.image_header title
-                , comments {$this->generateColumns()}";
+                ,tt.image_header title {$this->generateColumns()}";
         $wheres = $this->generateWheres();
         $limit = null;
         if ($this->limit !== null) {
@@ -314,7 +321,9 @@ class MediaListData extends SiteData
 
         $query = "select {$cols} $querySearch $orders $limit";
         $this->query = Yii::app()->db->createCommand($query);
-        $this->count = Yii::app()->db->createCommand("select count(*) {$querySearch}")->queryScalar();
+        if ($this->_useCount) {
+            $this->count = Yii::app()->db->createCommand("select count(*) {$querySearch}")->queryScalar();
+        }
         if ($this->generateDataset) {
             $rows = $this->query->queryAll();
             $this->setDataset($rows);
@@ -361,26 +370,25 @@ class MediaListData extends SiteData
             $seoTitle = ($useSeoImages) ? Html::seoTitle($this->items[$index]['title']) . "." : "";
             $mediaPath = str_replace("{gallery_id}", $row['gallery_id'], $this->mediaPath);
             $thumbMediaPath = str_replace("{gallery_id}", $row['gallery_id'], $this->thumbMediaPath);
-            switch ($this->type) {                
+            switch ($this->type) {
                 case SiteData::VIDEO_TYPE:
                     if (isset($row['video_ext'])) {
-                        $this->items[$index]['url'] = Yii::app()->baseUrl . "/" . $mediaPath . "{$row['item_id']}.{$row['video_ext']}";
-                        $this->items[$index]['thumb'] = Yii::app()->baseUrl . "/" .$thumbMediaPath . "{$seoTitle}{$row['item_id']}.{$row['img_ext']}?t=" . time();
+                        $this->items[$index]['url'] = $mediaPath . "{$row['item_id']}.{$row['video_ext']}";
+                        $this->items[$index]['thumb'] = $thumbMediaPath . "{$seoTitle}{$row['item_id']}.{$row['img_ext']}?t=" . time();
                     } else {
                         $this->items[$index]['internal'] = false;
                         $this->items[$index]['url'] = $row['video'];
                         $this->items[$index]['thumb'] = "http://img.youtube.com/vi/" . self::getVideoCode($row['video']) . "/default.jpg";
                     }
                     break;
-                case SiteData::IAMGE_TYPE:                    
-                    $this->items[$index]['url'] = Yii::app()->baseUrl . "/" .$mediaPath . "{$seoTitle}{$row['item_id']}.{$row['ext']}?t=" . time();
-                    if ($this->useFullImage && is_file(AmcWm::getPathOfAlias("webroot") ."/{$mediaPath }{$row['item_id']}-f.{$row['ext']}")) {                        
-                        $this->items[$index]['full'] = Yii::app()->baseUrl . "/" .$mediaPath . "{$seoTitle}{$row['item_id']}-f.{$row['ext']}?t=" . time();
-                    }
-                    else{
+                case SiteData::IAMGE_TYPE:
+                    $this->items[$index]['url'] = $mediaPath . "{$seoTitle}{$row['item_id']}.{$row['ext']}?t=" . time();
+                    if ($this->useFullImage && is_file(AmcWm::getPathOfAlias("webroot") . "/{$mediaPath }{$row['item_id']}-f.{$row['ext']}")) {
+                        $this->items[$index]['full'] = $mediaPath . "{$seoTitle}{$row['item_id']}-f.{$row['ext']}?t=" . time();
+                    } else {
                         $this->items[$index]['full'] = $this->items[$index]['url'];
                     }
-                    $this->items[$index]['thumb'] = Yii::app()->baseUrl . "/" .$mediaPath . "{$seoTitle}{$row['item_id']}-th.{$row['ext']}?t=" . time();                    
+                    $this->items[$index]['thumb'] = $mediaPath . "{$seoTitle}{$row['item_id']}-th.{$row['ext']}?t=" . time();
                     break;
             }
             if ($this->checkIsActive) {
