@@ -75,15 +75,20 @@ class WebUser extends CWebUser {
             $record = Yii::app()->db->createCommand($statement)->queryRow();
             $errorCode = UserIdentity::ERROR_USERNAME_INVALID;
             if (is_array($record) && Data::getInstance()->verifyPassword($password, $record['passwd'], $username)) {
-                $this->setId($record['user_id']);
-                $log = new LogManager();
-                $lastLogIp = $log->getLastIP();
-                if (!$lastLogIp) {
-                    $lastLogIp = $log->getUserIP();
-                }
-                $this->setState('lastLogIp', $lastLogIp);
-                $errorCode = ($record['published']) ? UserIdentity::ERROR_NONE : UserIdentity::ERROR_ACCOUNT_IS_INACTIVE;
-                $log->log();
+                 if ($record['published']) {
+                    $this->setId($record['user_id']);
+                    $log = new LogManager();
+                    $lastLogIp = $log->getLastIP();
+                    if (!$lastLogIp) {
+                        $lastLogIp = $log->getUserIP();
+                    }
+                    $this->setState('lastLogIp', $lastLogIp);
+                    $log->log();
+
+                    $errorCode = UserIdentity::ERROR_NONE;
+                } else {
+                    $errorCode = UserIdentity::ERROR_ACCOUNT_IS_INACTIVE;
+                }                             
             }
         }
         return $errorCode;

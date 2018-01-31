@@ -10,14 +10,12 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class HomeFrontendController extends FrontendController
-{
+class HomeFrontendController extends FrontendController {
 
     /**
      * Declares class-based actions.
      */
-    public function actions()
-    {
+    public function actions() {
         return array(
             // captcha action renders the CAPTCHA image displayed on the contact page
             'captcha' => array(
@@ -39,8 +37,7 @@ class HomeFrontendController extends FrontendController
      * This is the default 'index' action that is invoked
      * when an action is not explicitly requested by users.
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $this->isHomePage = true;
         Yii::app()->clientScript->registerMetaTag(Yii::app()->params['custom']['front']['site']['description'], "description");
         Yii::app()->clientScript->registerMetaTag(Data::getInstance()->generatHomeKeywords(), "keywords");
@@ -55,8 +52,7 @@ class HomeFrontendController extends FrontendController
     /**
      * This is the action to handle external exceptions.
      */
-    public function actionError()
-    {
+    public function actionError() {
         if ($error = Yii::app()->errorHandler->error) {
             if (Yii::app()->request->isAjaxRequest)
                 echo $error['message'];
@@ -66,11 +62,35 @@ class HomeFrontendController extends FrontendController
     }
 
     /**
+     * Log hits
+     */
+    public function actionLogHits() {
+        $tables = array("article_id" => "articles", "image_id" => "images", "video_id" => "videos");
+        if (isset($tables[$_POST['t']]) && isset($_POST['id'])) {
+            $id = $_POST['id'];
+            $table = $tables[$_POST['t']];
+            $table_id = str_replace("'", "", Yii::app()->db->quoteValue($_POST['t']));
+            $cookieName = "{$table}_hits_{$id}";
+            $updated = 0;
+            if (!isset(Yii::app()->request->cookies[$cookieName]->value)) {
+                $updated = Yii::app()->db->createCommand("update {$table} set hits=hits+1 where {$table_id}=:id")->execute(array(":id" => $id));
+                $cookie = new CHttpCookie($cookieName, $cookieName);
+                $cookie->expire = time() + 3600;
+                $cookie->httpOnly = true;
+                Yii::app()->request->cookies[$cookieName] = $cookie;
+            }
+        }
+        header("Content-type:application/json");
+        echo CJSON::encode(array('updated'=>$updated));
+        Yii::app()->end();
+    }
+
+    /**
      * Displays the contact page
      */
-    public function actionContact()
-    {
+    public function actionContact() {
         $model = new ContactForm;
+        $class = (AmcWm::app()->frontend['bootstrap']['use'] || AmcWm::app()->frontend['bootstrap']['customUse']) ? "success" : "contact";
         if (isset($_POST['ContactForm'])) {
             $model->attributes = $_POST['ContactForm'];
             if ($model->validate()) {
@@ -83,7 +103,7 @@ class HomeFrontendController extends FrontendController
                     $toEmail = Yii::app()->params['adminEmail'];
                 }
                 mail($toEmail, $model->subject, $model->body, $headers);
-                Yii::app()->user->setFlash('contact', Yii::t('contact', 'Thank you for contacting us. We will respond to you as soon as possible.'));
+                Yii::app()->user->setFlash($class, Yii::t('contact', 'Thank you for contacting us. We will respond to you as soon as possible.'));
                 $this->refresh();
             }
         } else {
@@ -95,8 +115,7 @@ class HomeFrontendController extends FrontendController
     /**
      * Displays the login page
      */
-    public function actionLogin()
-    {
+    public function actionLogin() {
         if (Yii::app()->user->isGuest) {
             $model = $this->loginModel();
             // if it is ajax validation request
@@ -131,14 +150,12 @@ class HomeFrontendController extends FrontendController
     /**
      * Logs out the current user and redirect to homepage.
      */
-    public function actionLogout()
-    {
+    public function actionLogout() {
         Yii::app()->user->logout();
         $this->redirect(Yii::app()->homeUrl);
     }
 
-    public function actionVote($view = 0)
-    {
+    public function actionVote($view = 0) {
         if ($view) {
             Votes::getInstance($this)->viewResults();
         } else {
@@ -146,13 +163,11 @@ class HomeFrontendController extends FrontendController
         }
     }
 
-    public function actionVoteResults()
-    {
+    public function actionVoteResults() {
         Votes::getInstance($this)->viewResults(true);
     }
 
-    public function ajaxServices()
-    {
+    public function ajaxServices() {
         $city = AmcWm::app()->request->getParam("city", 1);
         $query4Services = sprintf("
             
@@ -184,8 +199,7 @@ class HomeFrontendController extends FrontendController
         Yii::app()->end();
     }
 
-    public function actionSearch($q)
-    {
+    public function actionSearch($q) {
         $contentType = Yii::app()->request->getParam('ct', 'news');
         $keywords = Yii::app()->request->getParam('q');
         $search = new SearchData($keywords, $contentType, 10);
@@ -201,17 +215,15 @@ class HomeFrontendController extends FrontendController
         ));
     }
 
-    public function actionStockData()
-    {
+    public function actionStockData() {
         //$uaeStockData = new StockInfo;
         //echo $uaeStockData->generate();
         Yii::app()->end();
     }
 
-    public function actionDownload($f)
-    {
+    public function actionDownload($f) {
         $ds = DIRECTORY_SEPARATOR;
-        $f = trim(str_replace('\\', '/', $f), "/");        
+        $f = trim(str_replace('\\', '/', $f), "/");
         $webroot = Yii::getPathOfAlias("webroot");
         $paths = array(
             'files',
@@ -228,7 +240,7 @@ class HomeFrontendController extends FrontendController
             $file = "files/{$f}";
             $downloadPath = "{$webroot}{$ds}files";
         }
-        $fileRealPath = realpath(Yii::app()->basePath . "{$ds}..{$ds}{$file}");        
+        $fileRealPath = realpath(Yii::app()->basePath . "{$ds}..{$ds}{$file}");
         if (strpos($fileRealPath, $downloadPath) === 0 && is_file($fileRealPath)) {
             Yii::app()->request->sendFile(basename($fileRealPath), file_get_contents($fileRealPath));
         } else {
@@ -236,14 +248,12 @@ class HomeFrontendController extends FrontendController
         }
     }
 
-    public function actionSiteMap()
-    {
+    public function actionSiteMap() {
         $this->layout = null;
         $this->render('siteMap', array('siteMapItems' => SiteMap::getInstance()->getItems()));
     }
 
-    public function actionGetSideItemsList()
-    {
+    public function actionGetSideItemsList() {
         $sisterOptions = Yii::app()->request->getParam("params");
         $sister = new SistersRelatedManager($sisterOptions['type'], $sisterOptions['id']);
         if ($sister->hasItems()) {
@@ -260,8 +270,7 @@ class HomeFrontendController extends FrontendController
      * ajaxWeather retrun the weather forcasting 
      * to the ajax requests when change the cities
      */
-    public function ajaxWeather()
-    {
+    public function ajaxWeather() {
         echo WeatherInfo::execute("widgets.WeatherWidget", array('defaultCity' => 1), array('contentOnly' => true), true);
         Yii::app()->end();
     }

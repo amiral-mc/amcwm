@@ -29,7 +29,9 @@ class ConsoleApplication extends CConsoleApplication
      * @return void
      */
     protected function init() {
-        mb_internal_encoding($this->charset);
+        if (function_exists("mb_internal_encoding")) {
+            mb_internal_encoding($this->charset);
+        } 
         parent::init();
     }
 

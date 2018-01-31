@@ -18,6 +18,12 @@ class DbConnection extends CDbConnection {
      * @var boolean 
      */
     public $useCache = false;
+    
+    /**
+     *
+     * @var boolean use fulltext  inedex
+     */
+    public $useFullText = false;
 
     /**
      * Creates a command for execution.

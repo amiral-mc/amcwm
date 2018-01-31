@@ -10,8 +10,8 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-
-class VotesWidget extends CWidget {
+class VotesWidget extends CWidget
+{
 
     /**
      * @var array list of new sticker items.
@@ -60,14 +60,16 @@ class VotesWidget extends CWidget {
      * Initializes the scroller widget.
      * If this method is overridden, make sure the parent implementation is invoked.
      */
-    public function init() {
+    public function init()
+    {
         $this->htmlOptions['id'] = $this->getId();
     }
 
     /**
      * 
      */
-    public function run() {
+    public function run()
+    {
         $cs = Yii::app()->getClientScript();
         $cs->registerCoreScript('jquery');
         if ($this->resultMode) {
@@ -79,7 +81,8 @@ class VotesWidget extends CWidget {
         }
     }
 
-    protected function runResults() {
+    protected function runResults()
+    {
         echo CHtml::openTag("div", $this->htmlOptions);
         echo '<h1>' . $this->items['ques'] . '</h1>';
         if (count($this->items['results']['votes'])) {
@@ -104,28 +107,31 @@ class VotesWidget extends CWidget {
      * @access private 
      * @return string
      */
-    protected function runForm() {
-        echo CHtml::openTag("div", $this->htmlOptions);
-        $form = $this->beginWidget('CActiveForm', array('action' => $this->formAction, 'id' => $this->getId() . "_form"));
-        echo CHtml::hiddenField('lang', Controller::getCurrentLanguage(), array('id' => 'vote_lang'));
-        //echo $form->errorSummary($this->model);
-        echo '<div class="' . $this->class . '">';
-        echo '<div class="voting_error">';
-        echo $form->error($this->model, 'question');
-        echo '</div>';
-        echo '<h1>' . $this->items['ques'] . '</h1>';
-        echo $form->hiddenField($this->model, 'question', array('value' => $this->items['id']));        
-        echo '<div class="voting_options">';
-        echo $form->radioButtonList($this->model, 'option', $this->items['optionsList'], array('separator' => '', 'template' => "<p>{input} {label}</p>", 'uncheckValue' => NULL));
-        echo '</div>';
-        echo '<div class="' . $this->class . '_action">';
-        echo CHtml::ajaxSubmitButton(AmcWm::t("amcFront", 'Vote'), $this->formAction, array("update" => "#{$this->parentId}"), array('id' => $this->getId() . "_submit"));
-        echo CHtml::ajaxLink(AmcWm::t("amcFront", 'Vote Results'), $this->resultAction, array("update" => "#{$this->parentId}"), array('id' => $this->getId() . "_result", 'onclick' => "$('#" . $this->getId() . "_show_form').show();"));
-        echo '</div>';
-        echo '</div>';
-        $this->endWidget();
+    protected function runForm()
+    {
+        if ($this->items) {
+            echo CHtml::openTag("div", $this->htmlOptions);
+            $form = $this->beginWidget('CActiveForm', array('action' => $this->formAction, 'id' => $this->getId() . "_form"));
+            echo CHtml::hiddenField('lang', Controller::getCurrentLanguage(), array('id' => 'vote_lang'));
+            //echo $form->errorSummary($this->model);
+            echo '<div class="' . $this->class . '">';
+            echo '<div class="voting_error">';
+            echo $form->error($this->model, 'question');
+            echo '</div>';
+            echo '<h1>' . $this->items['ques'] . '</h1>';
+            echo $form->hiddenField($this->model, 'question', array('value' => $this->items['id']));
+            echo '<div class="voting_options">';
+            echo $form->radioButtonList($this->model, 'option', $this->items['optionsList'], array('separator' => '', 'template' => "<p>{input} {label}</p>", 'uncheckValue' => NULL));
+            echo '</div>';
+            echo '<div class="' . $this->class . '_action">';
+            echo CHtml::ajaxSubmitButton(AmcWm::t("amcFront", 'Vote'), $this->formAction, array("update" => "#{$this->parentId}"), array('id' => $this->getId() . "_submit"));
+            echo CHtml::ajaxLink(AmcWm::t("amcFront", 'Vote Results'), $this->resultAction, array("update" => "#{$this->parentId}"), array('id' => $this->getId() . "_result", 'onclick' => "$('#" . $this->getId() . "_show_form').show();"));
+            echo '</div>';
+            echo '</div>';
+            $this->endWidget();
 
-        echo CHtml::closeTag("div");
+            echo CHtml::closeTag("div");
+        }
     }
 
 }

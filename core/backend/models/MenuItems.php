@@ -226,9 +226,9 @@ class MenuItems extends ParentTranslatedActiveRecord {
      * @return void
      */
     public function afterSave() {
-        $cache = Yii::app()->getComponent('cache');
-        if ($cache !== null) {
-            $cache->delete('menus');
+        $dataFile = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR . "menus.bin";
+        if (is_writable($dataFile)) {        
+            unlink($dataFile);
         }
         parent::afterSave();
     }

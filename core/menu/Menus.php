@@ -13,8 +13,7 @@
  * @author Amiral Management Corporation
  * @version 1.0
  */
-class Menus extends Dataset
-{
+class Menus extends Dataset {
 
     /**
      * Setting instance generated from settings.php inside an application module folder
@@ -115,23 +114,21 @@ class Menus extends Dataset
      */
     public static function setMenu($id, $isMain = false) {
         $siteLanguage = Yii::app()->user->getCurrentLanguage();
-        $cache = Yii::app()->getComponent('cache');
-        if ($cache !== NULL) {
-            self::$_instances = unserialize($cache->get("menus"));
+        $dataFile = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR . "menus.bin";
+        if (is_readable($dataFile)) {
+            self::$_instances = unserialize(file_get_contents($dataFile));
             if (self::$_instances == null) {
                 self::$_instances = array();
             }
-        }
+        }        
         if (!array_key_exists($siteLanguage, self::$_instances)) {
-            self::$_instances[$siteLanguage] = array();
+            self::$_instances[$siteLanguage] = array();            
         }
         if (!array_key_exists($id, self::$_instances[$siteLanguage])) {
             self::$_instances[$siteLanguage][$id] = new self($id, $isMain);
-            if ($cache !== NULL) {
-                $cache->set('menus', serialize(self::$_instances), Yii::app()->params["cacheDuration"]["static"]);
-            }
+            file_put_contents($dataFile, serialize(self::$_instances));
         }
-    }
+    }    
 
     /**
      * Get the given menu $id instance

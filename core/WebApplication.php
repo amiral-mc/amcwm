@@ -112,7 +112,7 @@ class WebApplication extends CWebApplication {
         if (!isset($config['components']['session']['cookieParams']['httponly'])) {
             $config['components']['session']['cookieParams']['httponly'] = true;
         }
-        
+
         if (!isset($config['components']['request']['class'])) {
             $config['components']['request']['class'] = "HttpRequest";
         }
@@ -129,6 +129,9 @@ class WebApplication extends CWebApplication {
 
         if (!isset($config['backend']['bootstrap']['use'])) {
             $config['backend']['bootstrap']['use'] = false;
+        }
+        if (!isset($config['backend']['bootstrap']['customUse'])) {
+            $config['backend']['bootstrap']['customUse'] = false;
         }
         if (!isset($config['backend']['bootstrap']['useResponsive'])) {
             $config['backend']['bootstrap']['useResponsive'] = false;
@@ -150,7 +153,9 @@ class WebApplication extends CWebApplication {
             $aclClass = $config['components']['acl']['class'];
         }
         parent::__construct($config);
-        mb_internal_encoding($this->charset);
+        if (function_exists("mb_internal_encoding")) {
+            mb_internal_encoding($this->charset);
+        }        
         $acl = unserialize($this->getGlobalState('acl'));
 //        $acl = null;
         if ($acl == null) {
@@ -260,7 +265,7 @@ class WebApplication extends CWebApplication {
      * @return ApplicationModule 
      */
     public function getApplicationModule($id, $parentModule = null) {
-        $module = null;        
+        $module = null;
         if (isset($this->_applicationModules[$id])) {
             if ($this->_applicationModules[$id]['instance'] === null) {
                 $class = $this->_applicationModules[$id]['class'];

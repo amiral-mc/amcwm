@@ -35,7 +35,7 @@ class Data {
      * @var array 
      */
     private $_sections = array();
-    
+
     /**
      * Sections ids array used in the system
      * @var array 
@@ -53,18 +53,18 @@ class Data {
         $sectionsIds = array();
         foreach (Yii::app()->params['languages'] as $language => $languageName) {
             $this->_sections[$language] = array();
-            
+
             $this->_setSections($language, $this->_sections[$language], $sectionsIds);
         }
-                
-        foreach ($sectionsIds as $sectionId=>$subSections){
+
+        foreach ($sectionsIds as $sectionId => $subSections) {
             $this->_sectionsIds[$sectionId] = $subSections;
-            foreach ($subSections as $subSectionId){
-                if(isset($sectionsIds[$subSectionId])){
+            foreach ($subSections as $subSectionId) {
+                if (isset($sectionsIds[$subSectionId])) {
                     $this->_sectionsIds[$sectionId] = $this->_sectionsIds[$sectionId] + $sectionsIds[$subSectionId];
                 }
             }
-        }        
+        }
     }
 
     /**
@@ -73,7 +73,7 @@ class Data {
      * @access public
      */
     public function __sleep() {
-        return array("_sections");
+        return array("_sections", "_sectionsIds");
     }
 
     /**
@@ -122,7 +122,6 @@ class Data {
         }
     }
 
-    
     /**
      * 
      * Get sub-sections ids as array list for the given section $id
@@ -132,7 +131,7 @@ class Data {
      * @return array
      */
     public function getSectionSubIds($id, $sections = array(), &$subs = array()) {
-        $siteLanguage = Yii::app()->user->getCurrentLanguage();        
+        $siteLanguage = Yii::app()->user->getCurrentLanguage();
         if (!$sections && isset($this->_sections[$siteLanguage][$id]['childs']) && $this->_sections[$siteLanguage][$id]['childs']) {
             $sections = $this->_sections[$siteLanguage][$id]['childs'];
         }
@@ -186,23 +185,16 @@ class Data {
      */
     static public function &getInstance() {
 
-        $cache = Yii::app()->getComponent('cache');
-        if ($cache !== NULL) {
-            if (self::$_instance == NULL) {
-                $data = unserialize($cache->get("data"));
-                if ($data == null) {
-                    self::$_instance = new self();
-                    $cache->set('data', serialize(self::$_instance), Yii::app()->params["cacheDuration"]["static"]);
-                } else {
-                    self::$_instance = $data;
-                }
-            }
+        $dataFile = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR . "data.bin";
+        if(is_file($dataFile)){
+            self::$_instance = unserialize(file_get_contents($dataFile));
         }
-        if (self::$_instance == NULL) {
+        if (self::$_instance == null) {            
             self::$_instance = new self();
-        }
+            file_put_contents($dataFile, serialize(self::$_instance));                    
+        }            
         return self::$_instance;
-    }
+    }    
 
     /**
      * Sets the sections tree
@@ -234,7 +226,7 @@ class Data {
             foreach ($sections As $section) {
                 $sectuonsTree[$section['section_id']]['data'] = $section;
                 $sectuonsTree[$section['section_id']]['childs'] = array();
-                if($parent){
+                if ($parent) {
                     $sectionIds[$parent][$section['section_id']] = $section['section_id'];
                 }
                 $this->_setSections($siteLanguage, $sectuonsTree[$section['section_id']]['childs'], $sectionIds, $section['section_id']);
@@ -610,7 +602,7 @@ class Data {
             $cookie = new CHttpCookie($cookieName, $recordId);
             $cookie->expire = time() + 3600;
             $cookie->httpOnly = true;
-            Yii::app()->request->cookies[$cookieName] = $cookie;            
+            Yii::app()->request->cookies[$cookieName] = $cookie;
             if ($score > 5) {
                 $score = 5;
             }
@@ -654,7 +646,7 @@ class Data {
             if(CPasswordHelper::same(md5($password), $hash)){
                 if($username){
                     AmcWm::app()->db->createCommand()->update("users", array("passwd" => CPasswordHelper::hashPassword($password)), "username=:username", array(":username"=>$username));
-                }
+}
                 return true;
             }            
         }

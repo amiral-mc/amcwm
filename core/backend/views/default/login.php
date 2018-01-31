@@ -20,7 +20,7 @@ $form = $this->beginWidget('CActiveForm', array(
 );
 ?>
 <fieldset>
-    <h1 id="logo"><a href="#">AMC Web Manager</a></h1>
+    <h1 id="logo"><a href="#">Web Manager</a></h1>
     <div class="form">
         <div class="form_inner">				
             <div class="row">

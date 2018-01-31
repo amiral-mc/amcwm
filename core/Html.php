@@ -33,18 +33,18 @@ class Html {
         }
         return $string;
     }
-    
-      /**
+
+    /**
      * print array in format mode
      * @param array $array
      */
     public static function printR($array, $stop = false) {
-       echo '<pre>';
-       print_r($array);
-       echo '</pre>';
-       if($stop){
-           AmcWm::app()->end();
-       }
+        echo '<pre>';
+        print_r($array);
+        echo '</pre>';
+        if ($stop) {
+            AmcWm::app()->end();
+        }
     }
 
     /**
@@ -100,13 +100,12 @@ class Html {
      * @param type $params
      * @return string
      */
-    public static function createConsoleUrl($url, $route, $params = array()) {            
-        
+    public static function createConsoleUrl($url, $route, $params = array()) {
+
         $createUrl = self::createUrl($route, $params);
-        if(Yii::app()->request->baseUrl){
-            $createUrl =   str_replace(Yii::app()->request->baseUrl, $url, $createUrl);
-        }
-        else{
+        if (Yii::app()->request->baseUrl) {
+            $createUrl = str_replace(Yii::app()->request->baseUrl, $url, $createUrl);
+        } else {
             $createUrl = $url . $createUrl;
         }
         return $createUrl;
@@ -174,9 +173,10 @@ class Html {
         if ($striptags) {
             $string = strip_tags($string);
         }
-
         if (function_exists("mb_substr")) {
             $rString = mb_substr($string, $from, $length, "UTF-8");
+        } else if (function_exists("iconv_substr")) {
+            $rString = iconv_substr($string, $from, $length, "UTF-8");
         } else {
             $from = $from + 1;
             $rString = Yii::app()->db->createCommand(sprintf("select substring(%s,%d,%d) str;", Yii::app()->db->quoteValue($string), $from, $length))->queryScalar();
@@ -195,7 +195,11 @@ class Html {
     public static function utfStringLength($string) {
         if (function_exists("mb_strlen")) {
             $length = mb_strlen($string, "UTF-8");
-        } else {
+        } 
+        else if (function_exists("iconv_strlen")) {
+            $rString = iconv_strlen($string, "UTF-8");
+        }
+        else {
             $length = Yii::app()->db->createCommand(sprintf("select length(%s) l;", Yii::app()->db->quoteValue($string)))->queryScalar();
         }
         return $length;
@@ -257,14 +261,14 @@ class Html {
     /**
      * Get image real content from image seo url
      */
-    public static function drawSeoImage() {                
+    public static function drawSeoImage() {
         if (isset($_GET['file']) && isset($_GET['f'])) {
-            
-            $fileName = $_GET['f'];            
+
+            $fileName = $_GET['f'];
             $realFile = trim($_GET['file'], "/");
             $info = pathinfo($realFile);
-            
-            $fullName = $info['dirname'] .'/'. $fileName;
+
+            $fullName = $info['dirname'] . '/' . $fileName;
 //            preg_match_all("|^(.*\.)([0-9]+\.\w{3,4})$|", $_GET['file'], $matches);
 //             die(print_r($matches));
 //            $imageId = NULL;
@@ -290,4 +294,5 @@ class Html {
             exit;
         }
     }
+
 }
