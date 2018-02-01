@@ -66,7 +66,7 @@ class HttpSession extends CHttpSession {
         }
         $hashedString .= $_SERVER['REMOTE_ADDR'];
         $hashedString .= empty($_SERVER['HTTP_USER_AGENT']) ? '' : $_SERVER['HTTP_USER_AGENT'];
-        return md5($hashedString);
+        return HASH("sha512", $hashedString);
     }
 
 }
