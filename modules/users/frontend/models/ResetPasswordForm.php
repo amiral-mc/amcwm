@@ -32,8 +32,8 @@ class ResetPasswordForm extends CFormModel {
             array('key', 'isValidKey', 'msg' => AmcWm::t("msgsbase.core", 'The key does not exist')),
             array('email', 'isEmailInList', 'msg' => AmcWm::t("msgsbase.core", 'The email does not exist')),
             array('email', 'length', 'max' => 65),
-            array('passwd', 'length', 'max' => 32, 'min' => 8),
-            array('key', 'length', 'max' => 8, 'min' => 8),
+            array('passwd', 'length', 'max' => 255, 'min' => 8),
+            array('key', 'length', 'max' => 255, 'min' => 8),
             array('passwdRepeat', 'compare', 'compareAttribute' => 'passwd', 'operator' => '='),
             array('verifyCode', 'captcha', 'allowEmpty' => !CCaptcha::checkRequirements()),
         );

@@ -39,7 +39,7 @@ class ResetPasswods extends ActiveRecord {
         return array(
             array('user_id, reset_key, reset_date', 'required'),
             array('user_id', 'length', 'max' => 10),
-            array('reset_key', 'length', 'max' => 8),
+            array('reset_key', 'length', 'max' => 255),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('reset_id, user_id, reset_key, reset_date', 'safe', 'on' => 'search'),
