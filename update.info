@@ -1,4 +1,6 @@
 -- Revise components folder
+/var/www/html/lib/amcwm/components/ArticleData.php
+/var/www/html/lib/amcwm/components/ArticlesListData.php
 /var/www/html/lib/amcwm/components/InFocusListData.php
 /var/www/html/lib/amcwm/components/MostReadAndCommentData.php
 

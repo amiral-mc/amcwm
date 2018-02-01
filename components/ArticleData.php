@@ -38,6 +38,8 @@ class ArticleData extends Dataset {
      * @var FacebookComments
      */
     private $_facebookComments;
+    public $useArticleComments = true;
+    public $logHits = true;
 
     /**
      * Counstructor, the content type
@@ -301,14 +303,14 @@ class ArticleData extends Dataset {
         $facebookCommentsCount = 0; // $this->_facebookComments->getCommentsCount();
         $commentsCount = 0;
         $this->_initItem();
-        if ($this->_cache !== null) {
+        if ($this->useArticleComments && $this->_cache !== null) {
             $dependencyQuery = sprintf("select count(*) from comments c 
             inner join articles_comments ac on ac.article_comment_id = c.comment_id
             where c.published = %d 
             and (c.hide = 0 OR c.force_display=1) 
             and ac.article_id = %d", ActiveRecord::PUBLISHED, $this->_id);
             $dependencyComments = Yii::app()->db->createCommand($dependencyQuery)->queryScalar();
-            $this->items = $this->_cache->get('article_'  . AmcWm::app()->getLanguage() . $this->_id);
+            $this->items = $this->_cache->get('article_' . AmcWm::app()->getLanguage() . $this->_id);
             if (!$this->items || !isset($this->items['record']) || !$this->items['record']) {
                 $this->_initItem();
             } else {
@@ -320,27 +322,32 @@ class ArticleData extends Dataset {
             $this->setItems();
             $cacheMe = true;
         }
-        if ($dependencyComments != $this->items['comments']['pager']['count'] || $dependencyComments === null) {
+        if ($this->useArticleComments && ($dependencyComments != $this->items['comments']['pager']['count'] || $dependencyComments === null)) {
             $this->_setComments();
             $cacheMe = true;
         }
         if ($this->items['record']) {
-            if (!$this->items['comments']['content']['id']) {
-                $this->items['comments']['content']['id'] = $this->_id;
-                $this->items['comments']['content']['title'] = $this->items['record']['article_header'];
+            if ($this->useArticleComments) {
+                if (!$this->items['comments']['content']['id']) {
+                    $this->items['comments']['content']['id'] = $this->_id;
+                    $this->items['comments']['content']['title'] = $this->items['record']['article_header'];
+                }
+                $commentsCount = $this->items['comments']['pager']['count'] + $facebookCommentsCount;
+                $this->items['comments']['pager']['count'] = $commentsCount;
+                $this->items['record']['comments'] = $commentsCount;
+
+                $correctedCommentsQuery = sprintf('update articles set comments = %d where comments <> %d and article_id = %d', $commentsCount, $commentsCount, $this->_id);
+                Yii::app()->db->createCommand($correctedCommentsQuery)->execute();
             }
-            $commentsCount = $this->items['comments']['pager']['count'] + $facebookCommentsCount;
-            $this->items['comments']['pager']['count'] = $commentsCount;
-            $this->items['record']['comments'] = $commentsCount;
-            $correctedCommentsQuery = sprintf('update articles set comments = %d where comments <> %d and article_id = %d', $commentsCount, $commentsCount, $this->_id);
-            Yii::app()->db->createCommand($correctedCommentsQuery)->execute();
-            $cookieName = "hits_{$this->_id}";
-            if (!isset(Yii::app()->request->cookies[$cookieName]->value)) {
-                Yii::app()->db->createCommand("update articles set hits=hits+1 where article_id = {$this->_id} ")->execute();
-                $cookie = new CHttpCookie($cookieName, $cookieName);
-                $cookie->expire = time() + 3600;
-                $cookie->httpOnly = true;
-                Yii::app()->request->cookies[$cookieName] = $cookie;
+            if ($this->logHits) {
+                $cookieName = "hits_{$this->_id}";
+                if (!isset(Yii::app()->request->cookies[$cookieName]->value)) {
+                    Yii::app()->db->createCommand("update articles set hits=hits+1 where article_id = {$this->_id} ")->execute();
+                    $cookie = new CHttpCookie($cookieName, $cookieName);
+                    $cookie->expire = time() + 3600;
+                    $cookie->httpOnly = true;
+                    Yii::app()->request->cookies[$cookieName] = $cookie;
+                }
             }
         }
         if ($this->_cache !== null && $cacheMe) {
@@ -542,7 +549,7 @@ class ArticleData extends Dataset {
                                 and tt.content_lang = %s', ActiveRecord::PUBLISHED, Yii::app()->db->quoteValue($currentDate), Yii::app()->db->quoteValue($currentDate), Yii::app()->db->quoteValue($siteLanguage)
                 );
 
-                $subsWhere .=" order by article_sort "; 
+                $subsWhere .=" order by article_sort ";
                 $qSubs = 'select t.article_id, t.thumb, t.section_id, tt.article_header, tt.article_pri_header, tt.article_detail from articles t
                     inner join articles_translation tt on t.article_id = tt.article_id
                     where t.parent_article = ' . $this->items['record']["article_id"] . $subsWhere;

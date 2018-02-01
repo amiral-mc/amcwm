@@ -100,9 +100,9 @@ class MediaListData extends SiteData {
             $this->route = '/multimedia/images/view';
             $this->useFullImage = isset($mediaPaths['images']['info']['fullSizeRatio']) ? true : false;
         }
-        $this->mediaPath = AmcWm::app()->params['staticUrl'] . "/" . $mediaPaths[$this->mediaTable]['path'] . "/";
+        $this->mediaPath = Yii::app()->baseUrl . "/" . $mediaPaths[$this->mediaTable]['path'] . "/";
         if (isset($mediaPaths[$this->mediaTable]['thumb']['path'])) {
-            $this->thumbMediaPath = AmcWm::app()->params['staticUrl'] . "/" . $mediaPaths[$this->mediaTable]['thumb']['path'] . "/";
+            $this->thumbMediaPath = Yii::app()->baseUrl . "/" . $mediaPaths[$this->mediaTable]['thumb']['path'] . "/";
         }
     }
 
